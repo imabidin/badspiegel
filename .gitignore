@@ -1,0 +1,66 @@
+# WordPress Development Environment .gitignore
+
+# WordPress Dateien (werden lokal generiert)
+wordpress/
+!config/wordpress
+!wordpress/.gitkeep
+# Ausnahme: bsawesome Theme soll in Git verfolgt werden
+!wordpress/wp-content/themes/bsawesome/
+
+# Persistente Daten
+data/
+!data/.gitkeep
+
+# Logs
+logs/
+!logs/.gitkeep
+
+# Backups
+backups/
+!backups/.gitkeep
+
+# Imports
+kinsta-import/
+!kinsta-import/.gitkeep
+
+# Umgebungsvariablen (falls sensible Daten enthalten)
+.env.local
+.env.production
+
+# Docker
+.docker/
+
+# Temporäre Dateien
+*.tmp
+*.temp
+*.log
+
+# IDE/Editor Dateien
+.idea/
+*.swp
+*.swo
+*~
+
+# OS Dateien
+.DS_Store
+Thumbs.db
+*.bak
+
+# Node.js (falls für Theme-Development verwendet)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# PHP
+vendor/
+composer.lock
+
+# SSL Zertifikate (falls lokal generiert)
+*.pem
+*.key
+*.crt
+
+# Cache Dateien
+.cache/
+cache/

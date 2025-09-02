@@ -1,0 +1,53 @@
+{
+  // General editor settings
+  "editor.formatOnSave": true,
+  "editor.rulers": [80, 120],
+  "files.trimTrailingWhitespace": true,
+
+  // File associations
+  "files.associations": {
+    "*.php": "php"
+  },
+
+  // File exclusions (Performance)
+  "files.exclude": {
+    "**/data": true,
+    "**/logs": true,
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true
+  },
+  "search.exclude": {
+    "**/data": true,
+    "**/logs": true,
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/vendor": true
+  },
+
+  // PHP basic configuration
+  "php.suggest.basic": false,
+  "php.validate.enable": false,
+
+  // PHP intelephense
+  "intelephense.environment.phpVersion": "8.2.0",
+  "intelephense.stubs": ["Core", "standard", "json", "mysqli", "PDO", "curl", "gd", "mbstring", "openssl", "session", "xml", "zip", "wordpress"],
+  "intelephense.files.exclude": ["**/.git/**", "**/.svn/**", "**/.hg/**", "**/CVS/**", "**/.DS_Store/**", "**/node_modules/**", "**/bower_components/**", "**/vendor/**/{Tests,tests}/**", "**/.history/**", "**/vendor/**/vendor/**"],
+  "intelephense.format.braces": "k&r",
+  "intelephense.completion.triggerParameterHints": true,
+  "intelephense.completion.insertUseDeclaration": true,
+
+  // Language specific settings
+  "[php]": {
+    "editor.defaultFormatter": "bmewburn.vscode-intelephense-client",
+    "editor.tabSize": 4,
+    "editor.insertSpaces": false
+  },
+
+  // Emmet
+  "emmet.includeLanguages": {
+    "php": "html"
+  }
+}

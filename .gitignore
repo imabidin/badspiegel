@@ -53,6 +53,23 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# BSAwesome Theme spezifische Dateien
+# Node modules
+wordpress/wp-content/themes/bsawesome/node_modules/
+
+# Build-Ausgaben
+wordpress/wp-content/themes/bsawesome/dist/
+
+# Source Maps
+wordpress/wp-content/themes/bsawesome/**/*.map
+
+# Excel-Dateien (Konfiguration)
+wordpress/wp-content/themes/bsawesome/inc/configurator/*.xlsx
+wordpress/wp-content/themes/bsawesome/inc/configurator/~$*.xlsx
+
+# Andere temporäre Dateien
+wordpress/wp-content/themes/bsawesome/package-lock.json
+
 # PHP
 vendor/
 composer.lock

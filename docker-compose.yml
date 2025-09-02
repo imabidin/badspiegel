@@ -22,6 +22,7 @@ services:
     build: . # Verwendet unser Dockerfile mit Xdebug
     container_name: wordpress-app
     restart: unless-stopped
+    user: "1000:1000" # Verwende deine User ID und Group ID
     depends_on:
       - db
       - redis

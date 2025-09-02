@@ -1,0 +1,57 @@
+<div class="has-arrow-overlay position-relative d-inline-block border mb-3">
+  <?php echo do_shortcode('[img id="1159" size="thumbnail"]'); ?>
+</div>
+
+<h4 class="mb-3">Beschreibung:</h4>
+<div class="callout callout-primary mb-3">
+  <ul class="ms-n3 mb-last-0">
+    <li>
+      <div class="fw-medium">Dezenter Look</div>
+      <span class="text-muted">Fügt sich nahtlos in ein modernes, minimalistisches Baddesign ein.</span>
+    </li>
+    <li>
+      <div class="fw-medium">Ideal für kleinere Bäder</div>
+      <span class="text-muted">Da sie nicht zu wuchtig wirkt, oder wenn Sie ein zurückhaltendes Design bevorzugen.</span>
+    </li>
+  </ul>
+</div>
+
+<h4 class="mb-3">Hinweis:</h4>
+<div class="callout callout-warning" role="alert">
+  <p class="mb-last-0">
+    Die von Ihnen gewählte <span class="fw-semibold">Stärke ist bereits in der Gesamthöhe</span> des Waschtischs berücksichtigt. Sie müssen also nichts dazurechnen.
+  </p>
+</div>
+
+<style>
+  .has-arrow-overlay {
+    position: relative;
+  }
+
+  /* Arrow overlay */
+  .has-arrow-overlay::before,
+  .has-arrow-overlay::after {
+    content: '';
+    position: absolute;
+    background-color: var(--bs-warning);
+  }
+
+  /* Arrow line */
+  .has-arrow-overlay::after {
+    width: 35%;
+    height: .25rem;
+    left: 15%;
+    top: 25%;
+    transform: rotate(45deg);
+  }
+
+  /* Arrow tip */
+  .has-arrow-overlay::before {
+    width: .75rem;
+    height: 1rem;
+    left: calc(43.5%);
+    top: calc(36%);
+    transform: rotate(45deg);
+    clip-path: polygon(100% 50%, 0 0, 0 100%);
+  }
+</style>

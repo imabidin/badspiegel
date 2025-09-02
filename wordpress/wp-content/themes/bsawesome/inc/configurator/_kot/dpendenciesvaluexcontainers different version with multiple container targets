@@ -1,0 +1,63 @@
+export function dependenciesValuesXcontainers(
+    triggerName,
+    condition,
+    targetIdSuffixes = [],
+    debug = false
+) {
+    const log = (...args) => debug && console.log('[ValuesXcontainers]', ...args);
+    const warn = (...args) => debug && console.warn('[ValuesXcontainers]', ...args);
+
+    const containers = targetIdSuffixes.map(suffix => document.getElementById(`option_${suffix}`)).filter(Boolean);
+
+    if (!containers.length) {
+        warn('Keine gültigen Container gefunden:', targetIdSuffixes);
+        return;
+    }
+
+    const handleChange = function () {
+        const match = condition(this.value);
+        log('Trigger', this.value, '-> condition', match);
+
+        containers.forEach(container => {
+            if (match) {
+                container.classList.remove('d-none');
+                ['number', 'text'].forEach(type => {
+                    const input = container.querySelector(`input[type="${type}"]`);
+                    if (input && input.value.trim() === '') {
+                        const fallback = input.getAttribute(type === 'number' ? 'min' : 'placeholder') || '';
+                        input.value = fallback;
+                        input.classList.replace('no-input', 'yes-input');
+                        setTimeout(() => input.classList.add('focus', 'focus-ring', 'focus-ring-secondary'), 300);
+                        setTimeout(() => input.classList.remove('focus', 'focus-ring', 'focus-ring-secondary'), 3300);
+                    }
+                });
+                const allInputs = Array.from(container.querySelectorAll('input'));
+                autoSelect(allInputs, () => applyFocusEffect(container, 'focus-ring-secondary'));
+            } else {
+                container.classList.add('d-none');
+                container.querySelectorAll('input').forEach(input => {
+                    if (['number', 'text'].includes(input.type)) {
+                        input.value = '';
+                        input.classList.replace('yes-input', 'no-input');
+                    }
+                });
+                const empty = container.querySelector('input[value=""]');
+                if (empty) {
+                    empty.checked = true;
+                    empty.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+            }
+        });
+    };
+
+    document.body.addEventListener('change', event => {
+        const tgt = event.target;
+        if (tgt.matches(`input[name="${triggerName}"]`)) {
+            handleChange.call(tgt, event);
+        }
+    });
+
+    document
+        .querySelectorAll(`input[name="${triggerName}"]:checked`)
+        .forEach(input => handleChange.call(input, null));
+}

@@ -1,10 +1,11 @@
 # WordPress Development Environment .gitignore
 
-# WordPress Dateien (werden lokal generiert)
-wordpress/
-!config/wordpress
-!wordpress/.gitkeep
-# Ausnahme: bsawesome Theme soll in Git verfolgt werden
+# WordPress Dateien (werden lokal generiert), außer Theme BSAWESOME
+wordpress/*
+!wordpress/wp-content/
+wordpress/wp-content/*
+!wordpress/wp-content/themes
+wordpress/wp-content/themes/*
 !wordpress/wp-content/themes/bsawesome/
 
 # Persistente Daten

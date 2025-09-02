@@ -1,0 +1,6 @@
+
+    <div class="col-auto mb-2 me-2 border-end px-2 d-none">
+        <button type="button" class="btn btn-sm btn-link p-0 border-0" id="productConfiguratorReset">
+            <i class="fa-sharp fa-light fa-rotate-left me-1" aria-hidden="true"></i>Konfiguration neustarten
+        </button>
+    </div>

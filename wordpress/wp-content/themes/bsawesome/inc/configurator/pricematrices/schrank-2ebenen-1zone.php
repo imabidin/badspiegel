@@ -1,0 +1,55 @@
+<?php
+// Kontrollpreise:
+// 200x200 => not found in CSV
+// 400x400 => 0.00
+// 800x600 => 84.95
+// 1200x800 => 103.30
+// 2500x1500 => 164.71
+// Generated price matrix
+return array(
+    '400x400' => array('label' => '400mm x 400mm', 'price' => 0),
+    '400x500' => array('label' => '400mm x 500mm', 'price' => 7),
+    '400x600' => array('label' => '400mm x 600mm', 'price' => 10),
+    '400x700' => array('label' => '400mm x 700mm', 'price' => 77),
+    '400x800' => array('label' => '400mm x 800mm', 'price' => 81),
+    '500x400' => array('label' => '500mm x 400mm', 'price' => 6),
+    '500x500' => array('label' => '500mm x 500mm', 'price' => 10),
+    '500x600' => array('label' => '500mm x 600mm', 'price' => 13),
+    '500x700' => array('label' => '500mm x 700mm', 'price' => 80),
+    '500x800' => array('label' => '500mm x 800mm', 'price' => 83),
+    '600x400' => array('label' => '600mm x 400mm', 'price' => 9),
+    '600x500' => array('label' => '600mm x 500mm', 'price' => 12),
+    '600x600' => array('label' => '600mm x 600mm', 'price' => 16),
+    '600x700' => array('label' => '600mm x 700mm', 'price' => 83),
+    '600x800' => array('label' => '600mm x 800mm', 'price' => 86),
+    '700x400' => array('label' => '700mm x 400mm', 'price' => 75),
+    '700x500' => array('label' => '700mm x 500mm', 'price' => 79),
+    '700x600' => array('label' => '700mm x 600mm', 'price' => 82),
+    '700x700' => array('label' => '700mm x 700mm', 'price' => 86),
+    '700x800' => array('label' => '700mm x 800mm', 'price' => 89),
+    '800x400' => array('label' => '800mm x 400mm', 'price' => 78),
+    '800x500' => array('label' => '800mm x 500mm', 'price' => 81),
+    '800x600' => array('label' => '800mm x 600mm', 'price' => 85),
+    '800x700' => array('label' => '800mm x 700mm', 'price' => 88),
+    '800x800' => array('label' => '800mm x 800mm', 'price' => 92),
+    '900x400' => array('label' => '900mm x 400mm', 'price' => 81),
+    '900x500' => array('label' => '900mm x 500mm', 'price' => 84),
+    '900x600' => array('label' => '900mm x 600mm', 'price' => 88),
+    '900x700' => array('label' => '900mm x 700mm', 'price' => 91),
+    '900x800' => array('label' => '900mm x 800mm', 'price' => 95),
+    '1000x400' => array('label' => '1000mm x 400mm', 'price' => 84),
+    '1000x500' => array('label' => '1000mm x 500mm', 'price' => 87),
+    '1000x600' => array('label' => '1000mm x 600mm', 'price' => 91),
+    '1000x700' => array('label' => '1000mm x 700mm', 'price' => 94),
+    '1000x800' => array('label' => '1000mm x 800mm', 'price' => 98),
+    '1100x400' => array('label' => '1100mm x 400mm', 'price' => 87),
+    '1100x500' => array('label' => '1100mm x 500mm', 'price' => 90),
+    '1100x600' => array('label' => '1100mm x 600mm', 'price' => 93),
+    '1100x700' => array('label' => '1100mm x 700mm', 'price' => 97),
+    '1100x800' => array('label' => '1100mm x 800mm', 'price' => 100),
+    '1200x400' => array('label' => '1200mm x 400mm', 'price' => 89),
+    '1200x500' => array('label' => '1200mm x 500mm', 'price' => 93),
+    '1200x600' => array('label' => '1200mm x 600mm', 'price' => 96),
+    '1200x700' => array('label' => '1200mm x 700mm', 'price' => 100),
+    '1200x800' => array('label' => '1200mm x 800mm', 'price' => 103),
+);

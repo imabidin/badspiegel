@@ -1014,6 +1014,9 @@ function apply_dynamic_ranges_to_option($option, $ranges) {
  * but don't already have these options applied through normal filtering.
  * Uses the base templates from options.php and applies dynamic ranges.
  * 
+ * OPTIMIZATION: For products in dachschraege categories, delegates to 
+ * add_dynamic_dachschraege_options() to add specialized dachschraege fields instead.
+ * 
  * @param array $all_options All available options from options.php
  * @param int $product_id Product ID for targeting
  * @param array $dynamic_ranges Dynamic ranges from price matrix
@@ -1021,6 +1024,15 @@ function apply_dynamic_ranges_to_option($option, $ranges) {
  */
 function add_dynamic_width_height_options($all_options, $product_id, $dynamic_ranges) {
     $dynamic_options = array();
+    
+    // Check if product is in dachschraege categories that need special fields
+    $dachschraege_categories = array('badspiegel-fuer-dachschraege', 'spiegelschaenke-fuer-dachschraege');
+    $product_categories = wp_get_post_terms($product_id, 'product_cat', array('fields' => 'slugs'));
+    
+    if (!is_wp_error($product_categories) && array_intersect($product_categories, $dachschraege_categories)) {
+        // Product is in dachschraege category - add special dachschraege fields instead
+        return add_dynamic_dachschraege_options($all_options, $product_id, $dynamic_ranges);
+    }
     
     // Base templates for width/height options from options.php
     $base_width_option = $all_options['breite'] ?? null;
@@ -1033,7 +1045,8 @@ function add_dynamic_width_height_options($all_options, $product_id, $dynamic_ra
         // Apply dynamic ranges
         $width_option['min'] = (string)$dynamic_ranges['input_width_start'];
         $width_option['max'] = (string)$dynamic_ranges['input_width_end'];
-        $width_option['placeholder'] = (string)$dynamic_ranges['input_width_start'];
+        // Use options.php placeholder if available, otherwise use min value as fallback
+        $width_option['placeholder'] = $width_option['placeholder'] ?? (string)$dynamic_ranges['input_width_start'];
         
         // Target this specific product
         $width_option['applies_to']['products'] = array($product_id);
@@ -1050,7 +1063,8 @@ function add_dynamic_width_height_options($all_options, $product_id, $dynamic_ra
         // Apply dynamic ranges
         $height_option['min'] = (string)$dynamic_ranges['input_height_start'];
         $height_option['max'] = (string)$dynamic_ranges['input_height_end'];
-        $height_option['placeholder'] = (string)$dynamic_ranges['input_height_start'];
+        // Use options.php placeholder if available, otherwise use min value as fallback
+        $height_option['placeholder'] = $height_option['placeholder'] ?? (string)$dynamic_ranges['input_height_start'];
         
         // Target this specific product
         $height_option['applies_to']['products'] = array($product_id);
@@ -1058,6 +1072,62 @@ function add_dynamic_width_height_options($all_options, $product_id, $dynamic_ra
         // Create unique key to avoid conflicts
         $height_option_key = 'dynamic_hoehe_' . $product_id;
         $dynamic_options[$height_option_key] = $height_option;
+    }
+    
+    return $dynamic_options;
+}
+
+/**
+ * Add dynamic dachschraege options for products in dachschraege categories
+ * 
+ * Creates breite_oben, breite_unten, hoehe_links, hoehe_rechts options automatically 
+ * for products in dachschraege categories that have price matrices.
+ * Uses the base templates from options.php and applies dynamic ranges.
+ * 
+ * @param array $all_options All available options from options.php
+ * @param int $product_id Product ID for targeting
+ * @param array $dynamic_ranges Dynamic ranges from price matrix
+ * @return array Array of dynamic dachschraege options to add
+ */
+function add_dynamic_dachschraege_options($all_options, $product_id, $dynamic_ranges) {
+    $dynamic_options = array();
+    
+    // Base templates for dachschraege options from options.php
+    $dachschraege_fields = array(
+        'breite_oben' => 'dynamic_breite_oben_' . $product_id,
+        'breite_unten' => 'dynamic_breite_unten_' . $product_id,
+        'hoehe_links' => 'dynamic_hoehe_links_' . $product_id,
+        'hoehe_rechts' => 'dynamic_hoehe_rechts_' . $product_id
+    );
+    
+    foreach ($dachschraege_fields as $field_name => $dynamic_key) {
+        $base_option = $all_options[$field_name] ?? null;
+        
+        if ($base_option) {
+            // Create dynamic dachschraege option
+            $dachschraege_option = $base_option;
+            
+            // Apply dynamic ranges based on field type (width vs height)
+            if (strpos($field_name, 'breite') !== false) {
+                // Width-related field
+                $dachschraege_option['min'] = (string)$dynamic_ranges['input_width_start'];
+                $dachschraege_option['max'] = (string)$dynamic_ranges['input_width_end'];
+                // Use options.php placeholder if available, otherwise use min value as fallback
+                $dachschraege_option['placeholder'] = $dachschraege_option['placeholder'] ?? (string)$dynamic_ranges['input_width_start'];
+            } else {
+                // Height-related field
+                $dachschraege_option['min'] = (string)$dynamic_ranges['input_height_start'];
+                $dachschraege_option['max'] = (string)$dynamic_ranges['input_height_end'];
+                // Use options.php placeholder if available, otherwise use min value as fallback
+                $dachschraege_option['placeholder'] = $dachschraege_option['placeholder'] ?? (string)$dynamic_ranges['input_height_start'];
+            }
+            
+            // Target this specific product
+            $dachschraege_option['applies_to']['products'] = array($product_id);
+            
+            // Add to dynamic options
+            $dynamic_options[$dynamic_key] = $dachschraege_option;
+        }
     }
     
     return $dynamic_options;

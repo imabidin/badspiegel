@@ -28,8 +28,18 @@ document.addEventListener("DOMContentLoaded", function () {
   /**
    * Special field references for relational validation
    * These fields have interdependencies that require custom validation logic
+   * For Dachschrägen (sloped roof configurations):
+   * - breite_unten: bottom width (base reference)
+   * - breite_oben: top width (must not exceed bottom width)
+   * - hoehe_links: left height
+   * - hoehe_rechts: right height
    */
-  const breiteField = document.querySelector('input[name="breite"]');
+  const breiteUntenField = document.querySelector('input[name="breite_unten"]');
+  const breiteObenField = document.querySelector('input[name="breite_oben"]');
+  const hoeheLinksField = document.querySelector('input[name="hoehe_links"]');
+  const hoeheRechtsField = document.querySelector('input[name="hoehe_rechts"]');
+
+  // Legacy field support (for shelf width validation)
   const ablageBreiteField = document.querySelector(
     'input[name="ablage_breite"]'
   );
@@ -125,29 +135,49 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
-    // 3. Custom relational validation rules
+    // 3. Custom relational validation rules for Dachschrägen
 
-    // Validate upper width against main width
-    if (field.name === "obere_breite") {
-      const obereBreite = parseFloat(field.value) || 0;
-      const breite =
-        parseFloat(document.querySelector('input[name="breite"]')?.value) || 0;
-      if (obereBreite > breite) {
+    // Validate top width against bottom width (Dachschräge)
+    if (field.name === "breite_oben") {
+      const breiteOben = parseFloat(field.value) || 0;
+      const breiteUnten =
+        parseFloat(document.querySelector('input[name="breite_unten"]')?.value) || 0;
+      if (breiteOben > breiteUnten) {
         messages.push(
-          'Die "obere Breite" darf nicht größer sein als die Breite.'
+          'Die "Breite oben" darf nicht größer sein als die "Breite unten".'
         );
       }
     }
 
-    // Validate shorter height against main height
-    if (field.name === "kuerze_hoehe") {
-      const kuerzeHoehe = parseFloat(field.value) || 0;
-      const hoehe =
-        parseFloat(document.querySelector('input[name="hoehe"]')?.value) || 0;
-      if (kuerzeHoehe > hoehe) {
-        messages.push(
-          'Die "kürzere Höhe" darf nicht größer sein als die Haupthöhe.'
-        );
+    // Validate left height against right height (ensure reasonable difference)
+    if (field.name === "hoehe_links") {
+      const hoeheLinks = parseFloat(field.value) || 0;
+      const hoeheRechts =
+        parseFloat(document.querySelector('input[name="hoehe_rechts"]')?.value) || 0;
+      // Optional: Add validation if one height should not exceed the other by too much
+      // Example: if (Math.abs(hoeheLinks - hoeheRechts) > someMaxDifference) { ... }
+    }
+
+    // Validate right height against left height (ensure reasonable difference)
+    if (field.name === "hoehe_rechts") {
+      const hoeheRechts = parseFloat(field.value) || 0;
+      const hoeheLinks =
+        parseFloat(document.querySelector('input[name="hoehe_links"]')?.value) || 0;
+      // Optional: Add validation if one height should not exceed the other by too much
+      // Example: if (Math.abs(hoeheRechts - hoeheLinks) > someMaxDifference) { ... }
+    }
+
+    // Cross-validate bottom width (base reference for other measurements)
+    if (field.name === "breite_unten") {
+      const breiteUnten = parseFloat(field.value) || 0;
+      const breiteOben =
+        parseFloat(document.querySelector('input[name="breite_oben"]')?.value) || 0;
+      if (breiteOben > breiteUnten) {
+        // Trigger validation on the dependent field
+        const breiteObenField = document.querySelector('input[name="breite_oben"]');
+        if (breiteObenField) {
+          setTimeout(() => validateField(breiteObenField), 0);
+        }
       }
     }
 
@@ -205,19 +235,19 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   /**
-   * Updates the max attribute of shelf width field based on main width
-   * Ensures shelf width cannot exceed main width and corrects values if needed
+   * Updates the max attribute of shelf width field based on bottom width
+   * Ensures shelf width cannot exceed bottom width and corrects values if needed
    * This provides dynamic constraint updates for related fields
    */
   function updateAblageBreiteMax() {
-    if (breiteField && ablageBreiteField) {
-      const breiteValue = parseFloat(breiteField.value) || 0;
-      ablageBreiteField.setAttribute("max", breiteValue);
+    if (breiteUntenField && ablageBreiteField) {
+      const breiteUntenValue = parseFloat(breiteUntenField.value) || 0;
+      ablageBreiteField.setAttribute("max", breiteUntenValue);
 
-      // Auto-correct shelf width if it exceeds main width
+      // Auto-correct shelf width if it exceeds bottom width
       const ablageBreiteValue = parseFloat(ablageBreiteField.value) || 0;
-      if (ablageBreiteValue > breiteValue) {
-        ablageBreiteField.value = breiteValue;
+      if (ablageBreiteValue > breiteUntenValue) {
+        ablageBreiteField.value = breiteUntenValue;
       }
 
       // Update classes and validation after correction
@@ -246,8 +276,20 @@ document.addEventListener("DOMContentLoaded", function () {
       updateClasses(field);
 
       // Handle width field changes for relational validation
-      if (field.name === "breite") {
+      if (field.name === "breite_unten") {
         updateAblageBreiteMax();
+        // Also trigger validation on dependent top width field
+        if (breiteObenField) {
+          setTimeout(() => validateField(breiteObenField), 0);
+        }
+      }
+
+      // Trigger cross-validation for height fields
+      if (field.name === "hoehe_links" && hoeheRechtsField) {
+        setTimeout(() => validateField(hoeheRechtsField), 0);
+      }
+      if (field.name === "hoehe_rechts" && hoeheLinksField) {
+        setTimeout(() => validateField(hoeheLinksField), 0);
       }
 
       // Show 'is-valid' state during typing when no errors exist

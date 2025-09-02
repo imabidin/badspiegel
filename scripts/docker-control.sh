@@ -39,6 +39,10 @@ case "$1" in
         echo "🔧 Korrigiere Dateiberechtigungen..."
         ./scripts/fix-permissions.sh
         ;;
+    cleanup)
+        echo "🧹 Post-Import Cleanup wird ausgeführt..."
+        ./scripts/post-import-cleanup.sh
+        ;;
     status)
         echo "📊 Status aller Container:"
         docker ps -a --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" --filter "name=wordpress"
@@ -54,7 +58,7 @@ case "$1" in
     *)
         echo "WordPress Docker Control Script"
         echo ""
-        echo "Verwendung: $0 {start|stop|restart|status|logs|permissions}"
+        echo "Verwendung: $0 {start|stop|restart|status|logs|permissions|cleanup}"
         echo ""
         echo "Kommandos:"
         echo "  start       - Startet alle WordPress Services"
@@ -63,6 +67,7 @@ case "$1" in
         echo "  status      - Zeigt Status aller Container"
         echo "  logs        - Zeigt aktuelle Logs"
         echo "  permissions - Fixe Dateiberechtigungen (perms)"
+        echo "  cleanup     - Post-Import Cleanup (deaktiviert Production-Plugins)"
         echo ""
         echo "Alle Services haben 'restart: unless-stopped' konfiguriert"
         echo "und starten automatisch mit Docker Desktop."

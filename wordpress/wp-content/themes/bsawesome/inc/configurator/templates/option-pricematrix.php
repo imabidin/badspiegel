@@ -31,7 +31,7 @@
 $classes = ['option-group'];
 
 // Debug mode - set to true to show all price matrix options
-$debug_mode = false;
+$debug_mode = true;
 
 if (!$debug_mode) {
     $classes[] = 'd-none';

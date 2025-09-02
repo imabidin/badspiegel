@@ -5161,8 +5161,18 @@ document.addEventListener("DOMContentLoaded", function () {
   /**
    * Special field references for relational validation
    * These fields have interdependencies that require custom validation logic
+   * For Dachschrägen (sloped roof configurations):
+   * - breite_unten: bottom width (base reference)
+   * - breite_oben: top width (must not exceed bottom width)
+   * - hoehe_links: left height
+   * - hoehe_rechts: right height
    */
-  var breiteField = document.querySelector('input[name="breite"]');
+  var breiteUntenField = document.querySelector('input[name="breite_unten"]');
+  var breiteObenField = document.querySelector('input[name="breite_oben"]');
+  var hoeheLinksField = document.querySelector('input[name="hoehe_links"]');
+  var hoeheRechtsField = document.querySelector('input[name="hoehe_rechts"]');
+
+  // Legacy field support (for shelf width validation)
   var ablageBreiteField = document.querySelector('input[name="ablage_breite"]');
 
   /**
@@ -5253,25 +5263,49 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
-    // 3. Custom relational validation rules
+    // 3. Custom relational validation rules for Dachschrägen
 
-    // Validate upper width against main width
-    if (field.name === "obere_breite") {
+    // Validate top width against bottom width (Dachschräge)
+    if (field.name === "breite_oben") {
       var _document$querySelect;
-      var obereBreite = parseFloat(field.value) || 0;
-      var breite = parseFloat((_document$querySelect = document.querySelector('input[name="breite"]')) === null || _document$querySelect === void 0 ? void 0 : _document$querySelect.value) || 0;
-      if (obereBreite > breite) {
-        messages.push('Die "obere Breite" darf nicht größer sein als die Breite.');
+      var breiteOben = parseFloat(field.value) || 0;
+      var breiteUnten = parseFloat((_document$querySelect = document.querySelector('input[name="breite_unten"]')) === null || _document$querySelect === void 0 ? void 0 : _document$querySelect.value) || 0;
+      if (breiteOben > breiteUnten) {
+        messages.push('Die "Breite oben" darf nicht größer sein als die "Breite unten".');
       }
     }
 
-    // Validate shorter height against main height
-    if (field.name === "kuerze_hoehe") {
+    // Validate left height against right height (ensure reasonable difference)
+    if (field.name === "hoehe_links") {
       var _document$querySelect2;
-      var kuerzeHoehe = parseFloat(field.value) || 0;
-      var hoehe = parseFloat((_document$querySelect2 = document.querySelector('input[name="hoehe"]')) === null || _document$querySelect2 === void 0 ? void 0 : _document$querySelect2.value) || 0;
-      if (kuerzeHoehe > hoehe) {
-        messages.push('Die "kürzere Höhe" darf nicht größer sein als die Haupthöhe.');
+      var hoeheLinks = parseFloat(field.value) || 0;
+      var hoeheRechts = parseFloat((_document$querySelect2 = document.querySelector('input[name="hoehe_rechts"]')) === null || _document$querySelect2 === void 0 ? void 0 : _document$querySelect2.value) || 0;
+      // Optional: Add validation if one height should not exceed the other by too much
+      // Example: if (Math.abs(hoeheLinks - hoeheRechts) > someMaxDifference) { ... }
+    }
+
+    // Validate right height against left height (ensure reasonable difference)
+    if (field.name === "hoehe_rechts") {
+      var _document$querySelect3;
+      var _hoeheRechts = parseFloat(field.value) || 0;
+      var _hoeheLinks = parseFloat((_document$querySelect3 = document.querySelector('input[name="hoehe_links"]')) === null || _document$querySelect3 === void 0 ? void 0 : _document$querySelect3.value) || 0;
+      // Optional: Add validation if one height should not exceed the other by too much
+      // Example: if (Math.abs(hoeheRechts - hoeheLinks) > someMaxDifference) { ... }
+    }
+
+    // Cross-validate bottom width (base reference for other measurements)
+    if (field.name === "breite_unten") {
+      var _document$querySelect4;
+      var _breiteUnten = parseFloat(field.value) || 0;
+      var _breiteOben = parseFloat((_document$querySelect4 = document.querySelector('input[name="breite_oben"]')) === null || _document$querySelect4 === void 0 ? void 0 : _document$querySelect4.value) || 0;
+      if (_breiteOben > _breiteUnten) {
+        // Trigger validation on the dependent field
+        var _breiteObenField = document.querySelector('input[name="breite_oben"]');
+        if (_breiteObenField) {
+          setTimeout(function () {
+            return validateField(_breiteObenField);
+          }, 0);
+        }
       }
     }
 
@@ -5329,19 +5363,19 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   /**
-   * Updates the max attribute of shelf width field based on main width
-   * Ensures shelf width cannot exceed main width and corrects values if needed
+   * Updates the max attribute of shelf width field based on bottom width
+   * Ensures shelf width cannot exceed bottom width and corrects values if needed
    * This provides dynamic constraint updates for related fields
    */
   function updateAblageBreiteMax() {
-    if (breiteField && ablageBreiteField) {
-      var breiteValue = parseFloat(breiteField.value) || 0;
-      ablageBreiteField.setAttribute("max", breiteValue);
+    if (breiteUntenField && ablageBreiteField) {
+      var breiteUntenValue = parseFloat(breiteUntenField.value) || 0;
+      ablageBreiteField.setAttribute("max", breiteUntenValue);
 
-      // Auto-correct shelf width if it exceeds main width
+      // Auto-correct shelf width if it exceeds bottom width
       var ablageBreiteValue = parseFloat(ablageBreiteField.value) || 0;
-      if (ablageBreiteValue > breiteValue) {
-        ablageBreiteField.value = breiteValue;
+      if (ablageBreiteValue > breiteUntenValue) {
+        ablageBreiteField.value = breiteUntenValue;
       }
 
       // Update classes and validation after correction
@@ -5370,8 +5404,26 @@ document.addEventListener("DOMContentLoaded", function () {
       updateClasses(field);
 
       // Handle width field changes for relational validation
-      if (field.name === "breite") {
+      if (field.name === "breite_unten") {
         updateAblageBreiteMax();
+        // Also trigger validation on dependent top width field
+        if (breiteObenField) {
+          setTimeout(function () {
+            return validateField(breiteObenField);
+          }, 0);
+        }
+      }
+
+      // Trigger cross-validation for height fields
+      if (field.name === "hoehe_links" && hoeheRechtsField) {
+        setTimeout(function () {
+          return validateField(hoeheRechtsField);
+        }, 0);
+      }
+      if (field.name === "hoehe_rechts" && hoeheLinksField) {
+        setTimeout(function () {
+          return validateField(hoeheLinksField);
+        }, 0);
       }
 
       // Show 'is-valid' state during typing when no errors exist

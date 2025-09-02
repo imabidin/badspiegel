@@ -1,0 +1,47 @@
+{
+  "version": "2.3.0",
+  "name": "bsawesome",
+  "description": "Badspiegel goes Awesome",
+  "author": "Abidin Alkilinc",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/imabidin/badspiegel.git"
+  },
+  "main": "global.js",
+  "scripts": {
+    "dev": "webpack --mode development",
+    "build": "webpack --mode production"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.25.2",
+    "@babel/preset-env": "^7.25.4",
+    "autoprefixer": "^10.4.20",
+    "babel-loader": "^9.2.1",
+    "chokidar": "^4.0.1",
+    "core-js": "^3.38.1",
+    "css-loader": "^6.8.1",
+    "css-minimizer-webpack-plugin": "^5.0.1",
+    "mini-css-extract-plugin": "^2.7.6",
+    "postcss": "^8.4.47",
+    "postcss-loader": "^8.1.1",
+    "sass": "^1.66.1",
+    "sass-loader": "^13.3.2",
+    "style-loader": "^3.3.3",
+    "terser-webpack-plugin": "^5.3.7",
+    "webpack": "^5.95.0",
+    "webpack-bundle-analyzer": "^4.10.2",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.1.0",
+    "webpackbar": "^6.0.1"
+  },
+  "dependencies": {
+    "@awesome.me/kit-6fb05257fe": "^1.0.37",
+    "bootstrap": "^5.3.3",
+    "bourbon": "^7.3.0",
+    "dompurify": "^3.2.5",
+    "lottie-web": "^5.12.2",
+    "mdb-ui-kit": "^8.0.0",
+    "simplebar": "^6.2.7",
+    "susy": "^2.2.14"
+  }
+}

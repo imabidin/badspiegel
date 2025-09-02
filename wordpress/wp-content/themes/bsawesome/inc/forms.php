@@ -1,4 +1,14 @@
 <?php
+
+/**
+ * Forms customization
+ *
+ * @package BSAwesome
+ * @subpackage Forms
+ * @since 1.0.0
+ * @author BS Awesome Team
+ * @version 2.3.0
+ */
 add_filter('woocommerce_form_field', 'custom_customize_checkout_fields', 10, 4);
 
 function custom_customize_checkout_fields($field, $key, $args, $value)

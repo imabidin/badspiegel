@@ -171,7 +171,7 @@ if (!empty($posted_value)) {
                             $none_is_selected = true;
                         }
                         ?>
-                        <label class="btn btn-outline-secondary link-body-emphasis bg-body text-hind fw-normal <?php echo !empty($option_placeholder_image) ? 'ps-3 p-2 pe-4' : 'ps-4 py-3 pe-3'; ?><?php echo ($option_type === 'offdrops-child') ? ' d-none' : ''; ?>"
+                        <label style="--bs-btn-disabled-color: var(--bs-body-color);" class="btn btn-outline-secondary link-body-emphasis bg-body text-hind fw-normal <?php echo !empty($option_placeholder_image) ? 'ps-3 p-2 pe-4' : 'ps-4 py-3 pe-3'; ?><?php echo ($option_type === 'offdrops-child') ? ' d-none' : ''; ?>"
                             for="<?= esc_attr($value_none_id); ?>">
                             <span class="row g-0 align-items-center">
                                 <!-- Radio Button -->
@@ -203,14 +203,16 @@ if (!empty($posted_value)) {
                                 <!-- Placeholder Description Button -->
                                 <?php if (!empty($option_placeholder_description_file)):
                                     // Generate modal link for placeholder description file
-                                    $placeholder_modal_link = 'configurator/newers/' . pathinfo($option_placeholder_description_file, PATHINFO_FILENAME);
+                                    // Preserve subfolder structure by removing only .html extension
+                                    $placeholder_filename_without_ext = preg_replace('/\.html$/', '', $option_placeholder_description_file);
+                                    $placeholder_modal_link = 'configurator/' . $placeholder_filename_without_ext;
                                 ?>
                                     <span class="col-auto">
                                         <button type="button"
                                             data-bs-tooltip="true"
                                             title="<?= esc_attr($option_placeholder_description); ?>"
                                             class="btn btn-link text-hind p-2 ms-1"
-                                            style="--bs-bt-color: var(--bs-secondary-color);--bs-btn-hover-bg: transparent; --bs-btn-active-bg: transparent;"
+                                            style="--bs-bt-color: var(--bs-body-color);--bs-btn-hover-bg: transparent; --bs-btn-active-bg: transparent;"
                                             data-modal-link="<?= esc_attr($placeholder_modal_link); ?>"
                                             data-modal-title="<?= !empty($option_placeholder) ? esc_attr($option_placeholder) : esc_attr__('Keins', 'my-product-configurator'); ?>">
                                             <i class="fa-sharp fa-lg mt-1 fa-light fa-circle-question" aria-hidden="true"></i>
@@ -220,11 +222,24 @@ if (!empty($posted_value)) {
                                     <!-- Fallback: Show tooltip only if no description file but description exists -->
                                     <span class="col-auto">
                                         <span class="btn btn btn-link text-hind p-2 ms-1"
-                                            style="--bs-bt-color: var(--bs-secondary-color); --bs-btn-hover-color: var(--bs-secondary-color); --bs-btn-active-color: var(--bs-secondary-color); --bs-btn-hover-bg: transparent; --bs-btn-active-bg: transparent;"
+                                            style="--bs-bt-color: var(--bs-body-color); --bs-btn-hover-color: var(--bs-body-color); --bs-btn-active-color: var(--bs-body-color); --bs-btn-hover-bg: transparent; --bs-btn-active-bg: transparent;"
                                             data-bs-tooltip="true"
                                             title="<?= esc_attr($option_placeholder_description); ?>">
                                             <i class="fa-sharp fa-lg mt-1 fa-light fa-circle-info" aria-hidden="true"></i>
                                         </span>
+                                    </span>
+                                <?php elseif (!empty($option_placeholder_image)): ?>
+                                    <!-- Image zoom modal fallback for placeholder when no description but image exists -->
+                                    <span class="col-auto">
+                                        <button type="button"
+                                            data-bs-tooltip="true"
+                                            title="<?= esc_attr__('Bild vergrößern', 'my-product-configurator'); ?>"
+                                            class="btn btn-link text-hind p-2 ms-1"
+                                            style="--bs-bt-color: var(--bs-body-color);--bs-btn-hover-bg: transparent; --bs-btn-active-bg: transparent;"
+                                            data-modal-image="<?= esc_attr($option_placeholder_image); ?>"
+                                            data-modal-title="<?= !empty($option_placeholder) ? esc_attr($option_placeholder) : esc_attr__('Keins', 'my-product-configurator'); ?>">
+                                            <i class="fa-sharp fa-lg mt-1 fa-light fa-magnifying-glass" aria-hidden="true"></i>
+                                        </button>
                                     </span>
                                 <?php endif; ?>
                             </span>
@@ -264,7 +279,7 @@ if (!empty($posted_value)) {
                             $is_selected = true;
                         }
                     ?>
-                        <label class="btn btn-outline-secondary bg-body text-body text-hind fw-normal<?php echo !empty($sub_image) ? ' ps-3 p-2 pe-4' : ' ps-4 py-3 pe-4'; ?>"
+                        <label style="--bs-btn-disabled-color: var(--bs-body-color);" class="btn btn-outline-secondary bg-body text-body text-hind fw-normal<?php echo !empty($sub_image) ? ' ps-3 p-2 pe-4' : ' ps-4 py-3 pe-4'; ?>"
                             for="<?= esc_attr($sub_option_id); ?>">
                             <span class="row g-0 align-items-center">
                                 <!-- Radio Button -->
@@ -301,14 +316,16 @@ if (!empty($posted_value)) {
                                 <?php if (!empty($sub_description_file)): ?>
                                     <?php
                                     // Generate modal link for value description file using same pattern as option descriptions
-                                    $value_modal_link = 'configurator/newers/' . pathinfo($sub_description_file, PATHINFO_FILENAME);
+                                    // Preserve subfolder structure by removing only .html extension
+                                    $filename_without_ext = preg_replace('/\.html$/', '', $sub_description_file);
+                                    $value_modal_link = 'configurator/' . $filename_without_ext;
                                     ?>
                                     <span class="col-auto">
                                         <button type="button"
                                             data-bs-tooltip="true"
                                             title="<?= esc_attr($sub_description); ?>"
                                             class="btn btn-link text-hind p-2 ms-1"
-                                            style="--bs-bt-color: var(--bs-secondary-color);--bs-btn-hover-bg: transparent; --bs-btn-active-bg: transparent;"
+                                            style="--bs-bt-color: var(--bs-body-color);--bs-btn-hover-bg: transparent; --bs-btn-active-bg: transparent;"
                                             data-modal-link="<?= esc_attr($value_modal_link); ?>"
                                             data-modal-title="<?= esc_attr($sub_label); ?>">
                                             <i class="fa-sharp fa-lg mt-1 fa-light fa-circle-question" aria-hidden="true"></i>
@@ -318,11 +335,24 @@ if (!empty($posted_value)) {
                                     <!-- Fallback: Show tooltip only if no description file but description exists -->
                                     <span class="col-auto">
                                         <span class="btn btn btn-link text-hind p-2 ms-1"
-                                            style="--bs-bt-color: var(--bs-secondary-color); --bs-btn-hover-color: var(--bs-secondary-color); --bs-btn-active-color: var(--bs-secondary-color); --bs-btn-hover-bg: transparent; --bs-btn-active-bg: transparent;"
+                                            style="--bs-bt-color: var(--bs-body-color); --bs-btn-hover-color: var(--bs-body-color); --bs-btn-active-color: var(--bs-body-color); --bs-btn-hover-bg: transparent; --bs-btn-active-bg: transparent;"
                                             data-bs-tooltip="true"
                                             title="<?= esc_attr($sub_description); ?>">
                                             <i class="fa-sharp fa-lg mt-1 fa-light fa-circle-info" aria-hidden="true"></i>
                                         </span>
+                                    </span>
+                                <?php elseif (!empty($sub_image)): ?>
+                                    <!-- Image zoom modal fallback when no description but image exists -->
+                                    <span class="col-auto">
+                                        <button type="button"
+                                            data-bs-tooltip="true"
+                                            title="<?= esc_attr__('Bild vergrößern', 'my-product-configurator'); ?>"
+                                            class="btn btn-link text-hind p-2 ms-1"
+                                            style="--bs-bt-color: var(--bs-body-color);--bs-btn-hover-bg: transparent; --bs-btn-active-bg: transparent;"
+                                            data-modal-image="<?= esc_attr($sub_image); ?>"
+                                            data-modal-title="<?= esc_attr($sub_label); ?>">
+                                            <i class="fa-sharp fa-lg mt-1 fa-light fa-magnifying-glass" aria-hidden="true"></i>
+                                        </button>
                                     </span>
                                 <?php else: ?>
                                     <!-- Fallback: Show empty span when neither description file nor description exists -->

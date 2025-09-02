@@ -1,1 +1,1 @@
-{"version":3,"file":"css/cart.css","mappings":";;;AAGE;EACE;AAFJ,C","sources":["webpack://bsawesome/./assets/scss/cart.scss"],"sourcesContent":["// cart.scss\r\n\r\n.woocommerce-cart {\r\n  .includes_tax {\r\n    display: none;\r\n  }\r\n}"],"names":[],"sourceRoot":""}
+{"version":3,"file":"css/cart.css","mappings":";;;AAGE;EACE;AAFJ,C","sources":["webpack://bsawesome/./assets/scss/cart.scss"],"sourcesContent":["// cart.scss\r\n\r\n.woocommerce-cart {\r\n  .includes_tax {\r\n    display: none;\r\n  }\r\n}\r\n"],"names":[],"sourceRoot":""}

@@ -1,6 +1,6 @@
 <?php
 // ============================================================
-// Date: 2025-08-06 17:16:58
+// Date: 2025-08-28 19:30:23
 // Key: holzrahmenspiegel-led-loru
 // File: holzrahmenspiegel-led-loru.php
 //

@@ -1,9 +1,18 @@
 <?php defined('ABSPATH') || exit;
 
 /**
- * Overriding order-tax html to add "text-end" class for matching theme, specifically "woocommerce-checkout-review-order-table".
+ * Germanized mods
+ *
+ * @package BSAwesome
+ * @subpackage Germanized
+ * @since 1.0.0
+ * @author BS Awesome Team
+ * @version 2.3.0
  */
 
+/**
+ * Overriding order-tax html to add "text-end" class for matching theme, specifically "woocommerce-checkout-review-order-table".
+ */
 function woocommerce_gzd_template_cart_total_tax()
 {
 

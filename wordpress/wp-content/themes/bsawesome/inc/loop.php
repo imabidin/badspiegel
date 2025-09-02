@@ -8,10 +8,11 @@
  * and handles the display logic for product loops and grids.
  * 
  * @package BSAwesome
- * @subpackage ProductLoop
+ * @subpackage Loop
  * @since 1.0.0
  * @author BS Awesome Team
- * @version 1.0.0
+ * @version 2.3.0
+ * @feature Product Hover Images
  */
 
 /**

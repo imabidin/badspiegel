@@ -94,6 +94,17 @@ services:
     networks:
       - wordpress-network
 
+  # MailHog für E-Mail Testing
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: wordpress-mailhog
+    restart: unless-stopped
+    ports:
+      - "${MAILHOG_SMTP_PORT:-1025}:1025"
+      - "${MAILHOG_WEB_PORT:-8025}:8025"
+    networks:
+      - wordpress-network
+
   # WP-CLI für WordPress Management
   wp-cli:
     image: wordpress:cli-php8.2

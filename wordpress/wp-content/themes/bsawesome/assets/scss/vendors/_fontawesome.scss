@@ -1,0 +1,33 @@
+// vendors/_fontawesome.scss
+
+// @import "~@awesome.me/kit-6fb05257fe/icons/css/all.css";
+// @import "~@awesome.me/kit-6fb05257fe/icons/css/sharp-thin.css";
+// @import "~@awesome.me/kit-6fb05257fe/icons/css/sharp-light.css";
+
+// $fa-style-family: "Font Awesome 6 Sharp";
+// $fa-style-regular: 600;
+// $fa-style-light: 300;
+// $fa-style-thin: 100;
+
+// customize variables
+@use "./fontawesome/variables" with (
+  // customizing $font-path - make sure it points to where your webfonts are stored in your project
+  $font-path: "../fonts/fontawesome"
+);
+
+// load Font Awesome core
+@use "./fontawesome/fontawesome";
+
+// load and make available Font Awesome helpers (mixins, functions, and variables)
+@use "./fontawesome/fa" as fa;
+
+// load individual Font Awesome styles
+@use "./fontawesome/solid" as fa-solid;
+@use "./fontawesome/sharp-solid" as fa-sharp-solid;
+@use "./fontawesome/regular" as fa-regular;
+@use "./fontawesome/sharp-regular" as fa-sharp-regular;
+@use "./fontawesome/light" as fa-light;
+@use "./fontawesome/sharp-light" as fa-sharp-light;
+@use "./fontawesome/thin" as fa-thin;
+@use "./fontawesome/sharp-thin" as fa-sharp-thin;
+@use "./fontawesome/brands" as fa-brands;

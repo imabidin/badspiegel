@@ -1,0 +1,9 @@
+# Node modules
+node_modules/
+
+# Build-Ausgaben
+dist/
+
+# Andere temporäre Dateien
+package-lock.json
+inc/configurator/~$options.xlsx

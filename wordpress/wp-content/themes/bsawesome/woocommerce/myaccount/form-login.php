@@ -42,9 +42,43 @@ do_action('woocommerce_before_customer_login_form'); ?>
 			<div class="mt-3"><a href="<?php echo esc_url(wp_lostpassword_url()); ?>"><?php esc_html_e('Lost your password?', 'woocommerce'); ?></a></div>
 		</div>
 		<div class="col-12 collapse" id="username_email_invalid">
+
+			<div class="card mb-3">
+			<div class="card-body">
+				<h5 class="card-title mb-3">Vorteile als Mitglied</h5>
+				
+				<ul class="list-unstyled mb-last-0">
+				<li class="d-flex align-items-start mb-3">
+					<i class="fa-light fa-sharp fa-rocket fa-fw me-2 mt-1 text-primary"></i>
+					<div>
+					<strong class="fw-medium">Blitzschnell zur Kasse</strong>
+					<small class="d-block text-muted">Adressen und Zahlungsdaten sicher für den nächsten Einkauf speichern.</small>
+					</div>
+				</li>
+				
+				<li class="d-flex align-items-start mb-3">
+					<i class="fa-light fa-sharp fa-heart fa-fw me-2 mt-1 text-primary"></i>
+					<div>
+					<strong class="fw-medium">Wunschliste erstellen</strong>
+					<small class="d-block text-muted">Produkte merken und später einfach wiederfinden.</small>
+					</div>
+				</li>
+				
+				<li class="d-flex align-items-start">
+					<i class="fa-light fa-sharp fa-star fa-fw me-2 mt-1 text-primary"></i>
+					<div>
+					<strong class="fw-medium">Exklusive Angebote</strong>
+					<small class="d-block text-muted">Zugang zu speziellen Rabatten nur für Mitglieder erhalten.</small>
+					</div>
+				</li>
+				</ul>
+				
+			</div>
+			</div>
 			<p class="mb-0 small text-muted">
 				Wenn Sie ein Konto erstellen, stimmen Sie unseren <a href="/agb/" rel="nofollow noopener">Nutzungsbedingungen</a> zu. Sie erfahren in unserer <a href="/datenschutz/" rel="nofollow noopener" target="_blank">Datenschutzerklärung</a>, wie wir Ihre Daten verarbeiten.
 			</p>
+
 		</div>
 		<div class="col-12">
 			<button type="button" class="btn btn-dark col-12 col-sm-auto" id="continue-btn"><?php esc_html_e('Next', 'woocommerce'); ?></button>

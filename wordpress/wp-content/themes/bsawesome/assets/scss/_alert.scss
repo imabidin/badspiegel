@@ -1,0 +1,160 @@
+.site-content {
+  // Necessary for alerts outside of the content-area
+  > div.woocommerce {
+    // div. is required to avoid conflicts with the .woocommerce class in body
+    [role="alert"] {
+      @extend .my;
+    }
+  }
+}
+
+//
+// Mixins
+//
+@mixin alert-display {
+  display: flex;
+  align-items: center;
+  // justify-content: space-between;
+  // margin-bottom: 0;
+
+  &:focus-visible {
+    outline: 0;
+  }
+
+  // @include media-breakpoint-down(md) {
+  //   margin-bottom: 1.5rem;
+  // }
+  // @include media-breakpoint-up(md) {
+  //   margin-bottom: 3rem;
+  // }
+}
+
+@mixin alert-icon {
+  padding-left: calc(var(--bs-alert-padding-x) * 3);
+
+  &::before {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-family: "Font Awesome 7 Sharp";
+    font-weight: 600;
+
+    position: absolute;
+    left: calc(var(--bs-alert-padding-x) + 0.25rem);
+  }
+}
+
+@mixin alert-typo {
+  strong {
+    font-weight: 600;
+  }
+}
+
+@mixin alert-link {
+  a {
+    order: 2;
+
+    @extend .alert-link;
+    font-weight: 600;
+
+    padding-left: var(--bs-alert-padding-x);
+    margin-left: var(--bs-alert-padding-x);
+    border-left: 1px solid var(--bs-alert-border-color);
+  }
+}
+
+//
+// Fixing gap between alerts
+//
+@include media-breakpoint-down(md) {
+  .alert + .alert {
+    margin-top: -0.5rem;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .alert + .alert {
+    margin-top: -2rem;
+  }
+}
+
+//
+// Global
+//
+.woocommerce-error,
+.woocommerce-info,
+.woocommerce-message {
+  @include alert-display;
+  @include alert-typo;
+  // @include alert-icon;
+}
+
+// .woocommerce-error li,
+// .woocommerce-info,
+// .woocommerce-message {
+//   @include alert-icon;
+// }
+
+.woocommerce-info,
+.woocommerce-message {
+  @include alert-link;
+}
+
+//
+// Error
+//
+.woocommerce-error {
+  // @extend .alert;
+  // @extend .alert-danger;
+  // @include list-unstyled;
+
+  flex-wrap: wrap;
+
+  li {
+    width: 100%;
+  }
+  //
+  // Icon
+  // li::before {
+  //   content: "\f06a";
+  // }
+}
+
+//
+// Info
+//
+.woocommerce-info {
+  // @extend .alert;
+  // @extend .alert-info;
+  //
+  // Icon
+  // &::before {
+  //   content: "\f05a";
+  // }
+}
+
+//
+// Message
+//
+.woocommerce-message {
+  // @extend .alert;
+  // @extend .alert-success;
+  //
+  // Icon
+  // &::before {
+  //   content: "\f058";
+  // }
+}
+
+.woocommerce-notices-wrapper {
+  @extend .col-12; // Important to fix alerts above loop in example.
+  @extend .m-0;
+}
+
+// //
+// // Return to shop
+// //
+// .return-to-shop {
+//   margin-bottom: 0;
+// }

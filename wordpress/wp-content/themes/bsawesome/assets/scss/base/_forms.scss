@@ -1,0 +1,70 @@
+//
+// Forms
+//
+
+//
+// Input & Textarea
+//
+
+input[type="search"],
+input[type="text"],
+input[type="email"],
+input[type="url"],
+input[type="password"],
+input[type="search"],
+input[type="number"],
+input[type="tel"],
+input[type="range"],
+input[type="date"],
+input[type="month"],
+input[type="week"],
+input[type="time"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="color"],
+textarea {
+  // Validation
+  .woocommerce-invalid & {
+    @extend .is-invalid;
+  }
+  .woocommerce-validated & {
+    @extend .is-valid;
+  }
+}
+
+//
+// Select
+//
+
+select {
+  // Validation
+  .woocommerce-invalid & {
+    @extend .is-invalid;
+  }
+  .woocommerce-validated & {
+    @extend .is-valid;
+  }
+}
+
+//
+// Check and Radio
+//
+
+input[type="checkbox"]:not([id*="createaccount"]),
+input[type="radio"] {
+  // Validation
+  .woocommerce-invalid & {
+    @extend .is-invalid;
+  }
+  .woocommerce-validated & {
+    @extend .is-valid;
+  }
+}
+
+//
+// Required
+//
+
+.required {
+  color: var(--bs-danger);
+}

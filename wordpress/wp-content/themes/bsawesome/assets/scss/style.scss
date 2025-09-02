@@ -1,0 +1,118 @@
+// style.scss
+
+.edit-link {
+  display: none;
+}
+
+//
+// DEBUG: Page Title Color Change for Mobile Testing
+// Version: 6.0 - Teal (Front Mode Flicker Fix)
+//
+.woocommerce-products-header__title,
+.page-title {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--bs-primary), var(--bs-primary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent; // fallback
+  filter: drop-shadow(.25rem .25rem .125rem rgba(0, 0, 0, .03125));
+}
+
+//
+// Vendors
+//
+
+@import "vendors/fontawesome";
+@import "vendors/bootstrap";
+@import "vendors/simplebar";
+
+//
+// Abstracts
+//
+
+@import "abstracts/utilities";
+
+//
+// Base
+//
+
+@import "base/typography";
+@import "base/links";
+@import "base/media";
+@import "base/forms";
+@import "base/scrollbar";
+
+//
+// Utils
+//
+
+@import "backdrop";
+
+//
+// Layout
+//
+
+@import "layout/layout";
+@import "layout/navigation";
+
+//
+// Pages
+//
+
+@import "pages/product/gallery";
+// @import "pages/account/password";
+
+//
+// WooCommerce
+//
+
+@import "logo";
+@import "buttons";
+@import "quantity";
+@import "alert";
+@import "filter";
+@import "spinner";
+
+//
+// Loop
+//
+
+@import "loop/loop";
+@import "loop/hover";
+
+//
+// Favourites
+//
+
+@import "favourites";
+
+//
+// Mailpoet
+//
+
+@import "mailpoet";
+
+//
+// Zendesk
+//
+
+@import "zendesk";
+
+//
+// Borlabs
+//
+
+// @import "borlabs";
+
+//
+// Quick fixes
+//
+
+// Fix for the coupon error notice triggered by JS
+.coupon-error-notice {
+  display: block;
+  width: 100%;
+  color: $danger;
+  margin: 0;
+  margin-top: calc($spacer / 2);
+}

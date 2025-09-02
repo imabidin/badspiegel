@@ -1,0 +1,25 @@
+//
+// Spinner background.
+//
+.blockUI,
+.loader {
+  width: calc(100% + 0.5rem) !important;
+  left: -0.25rem !important;
+}
+
+//
+// Spinner icon.
+//
+.blockUI::before,
+.loader::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -0.5em;
+  margin-top: -0.5em;
+
+  @extend .spinner-border;
+  --bs-text-opacity: 1;
+  color: rgba(var(--bs-info-rgb), var(--bs-text-opacity)) !important;
+}

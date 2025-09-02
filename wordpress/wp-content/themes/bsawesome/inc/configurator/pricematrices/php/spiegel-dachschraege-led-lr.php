@@ -1,6 +1,6 @@
 <?php
 // ============================================================
-// Date: 2025-08-06 17:17:01
+// Date: 2025-08-28 19:30:28
 // Key: spiegel-dachschraege-led-lr
 // File: spiegel-dachschraege-led-lr.php
 //

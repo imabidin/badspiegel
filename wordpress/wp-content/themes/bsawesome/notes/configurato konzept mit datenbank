@@ -1,0 +1,292 @@
+
+Das ist ein hervorragender und sehr pragmatischer Ansatz, der perfekt zu Ihrem Entwickler-Workflow passt. Sie behalten die einfache Datenpflege in Excel bei und gewinnen gleichzeitig die massive Performance und Skalierbarkeit einer optimierten Datenbanklösung.
+
+Hier ist das komplette Konzept, wie Sie diesen "Push-to-Database"-Workflow implementieren können. Wir bauen eine Brücke zwischen Ihrem Python-Skript und der WordPress-Datenbank.
+
+### Der neue Workflow im Überblick
+
+1.  **Excel (Quelle der Wahrheit):** Bleibt unverändert. Hier pflegen Sie alle Optionen.
+2.  **Python-Skript (Generator):** Wird leicht angepasst. Statt einer riesigen PHP-Datei generiert es jetzt eine `JSON`-Datei für jedes Produkt, das eigene Optionen hat.
+3.  **Custom Database Table (Speicher):** Wir erstellen eine dedizierte, hochoptimierte Tabelle in der WordPress-Datenbank, um die Optionsdaten aufzunehmen.
+4.  **WP-CLI Command (Der Importer):** Wir erstellen einen benutzerdefinierten WP-CLI-Befehl. Dies ist der professionellste Weg, um Daten sicher und performant in WordPress zu importieren. Sie können diesen Befehl dann von Ihrem Python-Skript oder einem Deployment-Skript aufrufen lassen.
+5.  **WordPress/WooCommerce (Der Konsument):** Ihre render.php und andere Funktionen werden angepasst, um die Daten aus der neuen Custom Table zu lesen, anstatt die `options.php` zu inkludieren.
+
+---
+
+### Schritt 1: Die Custom Database Table erstellen
+
+Dies ist der Kern der Performance-Optimierung. Wir erstellen eine Tabelle, die exakt auf Ihre Daten zugeschnitten ist. Fügen Sie diesen Code in die functions.php Ihres Themes oder in ein seitenspezifisches Plugin ein. Er wird bei der Aktivierung des Themes/Plugins einmalig ausgeführt.
+
+```php
+// ...existing code...
+
+/**
+ * Creates the custom database table for product configurator options upon theme activation.
+ */
+function bs_create_options_table() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'bs_product_options';
+    $charset_collate = $wpdb->get_charset_collate();
+
+    // Check if the table already exists
+    if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") == $table_name) {
+        return;
+    }
+
+    $sql = "CREATE TABLE $table_name (
+        id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+        product_id BIGINT(20) UNSIGNED NOT NULL,
+        option_key VARCHAR(100) NOT NULL,
+        option_group VARCHAR(100) NOT NULL,
+        option_order INT(11) DEFAULT 0 NOT NULL,
+        option_data LONGTEXT NOT NULL,
+        last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        PRIMARY KEY  (id),
+        UNIQUE KEY product_option (product_id, option_key),
+        KEY product_id (product_id),
+        KEY option_group (option_group)
+    ) $charset_collate;";
+
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    dbDelta($sql);
+}
+add_action('after_switch_theme', 'bs_create_options_table');
+
+// ...existing code...
+```
+
+**Erläuterung der Spalten:**
+*   `product_id`: Die ID des WooCommerce-Produkts.
+*   `option_key`: Der eindeutige Schlüssel (`lichtfarbe`, `breite_kristall`).
+*   `option_group`: Die Gruppe (`beleuchtung`, `korpus`).
+*   `option_order`: Die Sortierreihenfolge.
+*   `option_data`: Hier speichern wir den Rest des Options-Arrays (inkl. der Unter-Optionen) als JSON-String. Das ist ein guter Kompromiss zwischen normalisierter Struktur und einfacher Handhabung.
+*   `UNIQUE KEY`: Das ist entscheidend! Es stellt sicher, dass es pro Produkt jede Option nur einmal geben kann und ermöglicht uns einen einfachen "UPDATE bei Duplikat"-Mechanismus.
+
+### Schritt 2: Python-Skript anpassen
+
+Ihr Python-Skript muss jetzt statt einer PHP-Datei eine JSON-Datei pro Produkt generieren.
+
+**Beispiel-Output für `product-123.json`:**
+```json
+[
+    {
+        "key": "lichtfarbe",
+        "order": 4200,
+        "required": true,
+        "type": "offdrops",
+        "price": 0,
+        "group": "beleuchtung",
+        "label": "Lichtfarbe",
+        "description": "Erfahren Sie mehr über Lichtfarbe.",
+        "description_file": "lichtfarbe.html",
+        "applies_to": {
+            "excluded_categories": ["badspiegel-mit-leuchte"]
+        },
+        "options": {
+            "warmweiss": { "key": "warmweiss", "price": 0, "label": "Warmweiß" },
+            "neutralweiss": { "key": "neutralweiss", "price": 0, "label": "Neutralweiß" }
+        }
+    },
+    {
+        "key": "breite_kristall",
+        "order": 100,
+        "group": "abmessungen",
+        "label": "Breite Kristallspiegel",
+        "..." : "..."
+    }
+]
+```
+
+### Schritt 3: Der WP-CLI Importer (Das Herzstück)
+
+WP-CLI ist das Kommandozeilen-Interface für WordPress. Es ist der Standard für solche Automatisierungsaufgaben.
+
+Fügen Sie diesen Code in Ihre functions.php oder ein Plugin ein:
+
+```php
+// (diese Datei dann in functions.php includen)
+
+if ( ! class_exists( 'WP_CLI' ) ) {
+    return;
+}
+
+/**
+ * Manages the import of product configurator options from JSON files.
+ */
+class BS_Options_Importer_Command {
+    /**
+     * Imports or updates product options from a JSON file.
+     *
+     * ## OPTIONS
+     *
+     * <product_id>
+     * : The ID of the WooCommerce product to associate the options with.
+     *
+     * <file>
+     * : The path to the JSON file containing the options array.
+     *
+     * ## EXAMPLES
+     *
+     *     wp bs-options import 123 /path/to/product-123.json
+     *
+     * @when after_wp_load
+     */
+    public function import( $args, $assoc_args ) {
+        list( $product_id, $file_path ) = $args;
+
+        if ( ! file_exists( $file_path ) ) {
+            WP_CLI::error( "File not found: $file_path" );
+            return;
+        }
+
+        $json_content = file_get_contents( $file_path );
+        $options = json_decode( $json_content, true );
+
+        if ( json_last_error() !== JSON_ERROR_NONE ) {
+            WP_CLI::error( "Invalid JSON in file: " . json_last_error_msg() );
+            return;
+        }
+
+        if ( ! wc_get_product( $product_id ) ) {
+            WP_CLI::warning( "Product with ID $product_id not found. Skipping." );
+            return;
+        }
+
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'bs_product_options';
+        $imported_count = 0;
+        $updated_count = 0;
+
+        // Get all existing keys for this product to detect deletions
+        $existing_keys = $wpdb->get_col( $wpdb->prepare( "SELECT option_key FROM $table_name WHERE product_id = %d", $product_id ) );
+        $new_keys = [];
+
+        foreach ( $options as $option ) {
+            $key = $option['key'] ?? null;
+            if ( !$key ) continue;
+
+            $new_keys[] = $key;
+            $data = [
+                'product_id'   => $product_id,
+                'option_key'   => $key,
+                'option_group' => $option['group'] ?? 'default',
+                'option_order' => $option['order'] ?? 0,
+                'option_data'  => wp_json_encode( $option ), // Store the full original option as JSON
+            ];
+
+            // This is the magic: INSERT ... ON DUPLICATE KEY UPDATE (Upsert)
+            $result = $wpdb->query(
+                $wpdb->prepare(
+                    "INSERT INTO $table_name (product_id, option_key, option_group, option_order, option_data)
+                     VALUES (%d, %s, %s, %d, %s)
+                     ON DUPLICATE KEY UPDATE
+                        option_group = VALUES(option_group),
+                        option_order = VALUES(option_order),
+                        option_data = VALUES(option_data)",
+                    $data['product_id'], $data['option_key'], $data['option_group'], $data['option_order'], $data['option_data']
+                )
+            );
+            
+            // $wpdb->insert_id is only set on a true INSERT
+            if ($wpdb->insert_id) {
+                $imported_count++;
+            } else if ($result !== false) {
+                $updated_count++;
+            }
+        }
+        
+        // Handle deletions: options that were in the DB but not in the new JSON
+        $keys_to_delete = array_diff( $existing_keys, $new_keys );
+        if ( ! empty( $keys_to_delete ) ) {
+            $placeholders = implode( ', ', array_fill( 0, count( $keys_to_delete ), '%s' ) );
+            $params = array_merge( [$product_id], $keys_to_delete );
+            $wpdb->query( $wpdb->prepare( "DELETE FROM $table_name WHERE product_id = %d AND option_key IN ($placeholders)", $params ) );
+            WP_CLI::line( "Deleted " . count($keys_to_delete) . " obsolete options." );
+        }
+
+        WP_CLI::success( "Import complete for product $product_id. New: $imported_count, Updated: $updated_count." );
+    }
+}
+
+WP_CLI::add_command( 'bs-options', 'BS_Options_Importer_Command' );
+```
+
+**Verwendung im Terminal:**
+Sie können Ihr Python-Skript jetzt so erweitern, dass es diesen Befehl aufruft:
+```bash
+# In Ihrem DevKinsta/Docker-Container
+wp bs-options import 123 /path/to/product-123.json
+wp bs-options import 456 /path/to/product-456.json
+```
+
+### Schritt 4: render.php anpassen, um aus der DB zu lesen
+
+Zuletzt müssen wir die Funktion `get_product_options()` so umschreiben, dass sie unsere neue Tabelle abfragt. Die alte `options.php` und `groups.php` können dann gelöscht werden.
+
+```php
+/**
+ * Retrieves product-specific options from the custom database table.
+ * Implements a static cache to avoid multiple DB queries per request.
+ *
+ * @param WC_Product|int $product The product object or ID.
+ * @return array An array of options for the given product.
+ */
+function get_product_options( $product ) {
+    $product_id = is_object($product) ? $product->get_id() : $product;
+
+    if ( !$product_id ) {
+        return [];
+    }
+
+    // Static cache for the duration of a single page load
+    static $options_cache = [];
+    if ( isset( $options_cache[$product_id] ) ) {
+        return $options_cache[$product_id];
+    }
+
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'bs_product_options';
+
+    // Query the database for all options associated with this product
+    $results = $wpdb->get_results(
+        $wpdb->prepare(
+            "SELECT option_key, option_data FROM $table_name WHERE product_id = %d",
+            $product_id
+        ),
+        ARRAY_A // Return as associative array
+    );
+
+    $product_options = [];
+    if ( $results ) {
+        foreach ( $results as $row ) {
+            // Decode the JSON data and add it to our final array, keyed by the option_key
+            $option_data = json_decode( $row['option_data'], true );
+            if ( is_array($option_data) ) {
+                $product_options[ $row['option_key'] ] = $option_data;
+            }
+        }
+    }
+
+    // The rest of your code in render.php expects the options to be sorted.
+    // The grouping and sorting logic in render.php can remain as it is,
+    // as it operates on the array returned by this function.
+    // uasort($product_options, 'compare_order'); // This sorting is already done inside render.php
+
+    $options_cache[$product_id] = $product_options;
+    return $product_options;
+}
+
+// Sie benötigen auch eine neue Version von get_all_product_option_groups()
+function get_all_product_option_groups() {
+    // Diese können Sie entweder fest codieren oder ebenfalls aus der DB generieren
+    return [
+        'abmessungen' => ['label' => 'Abmessungen', 'order' => 100],
+        'beleuchtung' => ['label' => 'Beleuchtung', 'order' => 200],
+        'korpus' => ['label' => 'Korpus', 'order' => 300],
+        // ... etc.
+    ];
+}
+```
+
+Mit diesem Setup haben Sie eine extrem performante, skalierbare und entwicklerfreundliche Lösung, die sich perfekt in Ihren bestehenden Workflow integriert.

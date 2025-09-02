@@ -1,0 +1,155 @@
+//
+// Typography
+//
+
+//
+// Margin Last Child
+//
+
+.mb-last-0:last-child {
+  margin-bottom: 0;
+}
+
+//
+// Montserrat
+//
+
+.text-montserrat {
+  font-family: "Montserrat", $font-family-sans-serif;
+}
+
+// thin
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 100;
+  font-display: block;
+  src: url("/assets/fonts/montserrat/Montserrat-Thin.woff2") format("woff2");
+}
+
+// extra light
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 200;
+  font-display: block;
+  src: url("/assets/fonts/montserrat/Montserrat-ExtraLight.woff2")
+    format("woff2");
+}
+
+// light
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 300;
+  font-display: block;
+  src: url("/assets/fonts/montserrat/Montserrat-Light.woff2") format("woff2");
+}
+
+// regular
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("/assets/fonts/montserrat/Montserrat-Regular.woff2") format("woff2");
+}
+
+// medium
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-display: block;
+  src: url("/assets/fonts/montserrat/Montserrat-Medium.woff2") format("woff2");
+}
+
+// semi bold
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-display: block;
+  src: url("/assets/fonts/montserrat/Montserrat-SemiBold.woff2") format("woff2");
+}
+
+// bold
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 700;
+  font-display: block;
+  src: url("/assets/fonts/montserrat/Montserrat-Bold.woff2") format("woff2");
+}
+
+// extra bold
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 800;
+  font-display: block;
+  src: url("/assets/fonts/montserrat/Montserrat-ExtraBold.woff2")
+    format("woff2");
+}
+
+// black
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 900;
+  font-display: block;
+  src: url("/assets/fonts/montserrat/Montserrat-Black.woff2") format("woff2");
+}
+
+//
+// Hind
+//
+
+.text-hind {
+  font-family: "Hind", $font-family-sans-serif;
+}
+
+// light
+@font-face {
+  font-family: "Hind";
+  font-style: normal;
+  font-weight: 300;
+  font-display: block;
+  src: url("/assets/fonts/hind/Hind-Light.woff2") format("woff2");
+}
+
+// regular
+@font-face {
+  font-family: "Hind";
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+  src: url("/assets/fonts/hind/Hind-Regular.woff2") format("woff2");
+}
+
+// medium
+@font-face {
+  font-family: "Hind";
+  font-weight: 500;
+  font-style: normal;
+  font-display: block;
+  src: url("/assets/fonts/hind/Hind-Medium.woff2") format("woff2");
+}
+
+// semibold
+@font-face {
+  font-family: "Hind";
+  font-weight: 600;
+  font-style: normal;
+  font-display: block;
+  src: url("/assets/fonts/hind/Hind-SemiBold.woff2") format("woff2");
+}
+
+// bold
+@font-face {
+  font-family: "Hind";
+  font-weight: 700;
+  font-style: normal;
+  font-display: block;
+  src: url("/assets/fonts/hind/Hind-Bold.woff2") format("woff2");
+}

@@ -72,7 +72,8 @@ function render_option(array $option, $posted_value, $product_id, &$option_order
     // }
 
     // Generate modal link for option descriptions
-    $modal_link = 'configurator/newers/' . pathinfo($option_description_file, PATHINFO_FILENAME);
+    // Preserve subfolder structure by removing only .html extension (like in option-offdrops.php)
+    $modal_link = 'configurator/' . preg_replace('/\.html$/', '', $option_description_file);
 
     // Start output buffering for template rendering
     ob_start();

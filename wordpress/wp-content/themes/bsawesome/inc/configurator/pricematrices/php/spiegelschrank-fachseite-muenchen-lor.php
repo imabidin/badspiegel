@@ -1,6 +1,6 @@
 <?php
 // ============================================================
-// Date: 2025-08-06 17:17:07
+// Date: 2025-08-28 19:30:34
 // Key: spiegelschrank-fachseite-muenchen-lor
 // File: spiegelschrank-fachseite-muenchen-lor.php
 //

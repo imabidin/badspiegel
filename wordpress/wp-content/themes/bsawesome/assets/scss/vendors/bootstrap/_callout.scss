@@ -1,0 +1,66 @@
+//
+// Base styles
+//
+
+.callout {
+  // scss-docs-start callout-css-vars
+  --#{$prefix}callout-bg: transparent;
+  --#{$prefix}callout-padding-x: #{$alert-padding-x};
+  --#{$prefix}callout-padding-y: #{$alert-padding-y};
+  --#{$prefix}callout-margin-bottom: #{$alert-margin-bottom};
+  --#{$prefix}callout-color: inherit;
+  --#{$prefix}callout-border-color: transparent;
+  --#{$prefix}callout-border: 6px solid var(--#{$prefix}callout-border-color);
+  --#{$prefix}callout-border-radius: #{$alert-border-radius};
+  --#{$prefix}callout-link-color: inherit;
+  // scss-docs-end callout-css-vars
+
+  position: relative;
+  padding: var(--#{$prefix}callout-padding-y) var(--#{$prefix}callout-padding-x);
+  // margin-bottom: var(--#{$prefix}callout-margin-bottom);
+  color: var(--#{$prefix}callout-color);
+  background-color: var(--#{$prefix}callout-bg);
+  border-left: var(--#{$prefix}callout-border);
+  @include border-radius(var(--#{$prefix}callout-border-radius));
+}
+
+// Headings for larger alerts
+.callout-heading {
+  // Specified to prevent conflicts of changing $headings-color
+  color: inherit;
+}
+
+// Provide class for links that match alerts
+.callout-link {
+  font-weight: $alert-link-font-weight;
+  color: var(--#{$prefix}callout-link-color);
+}
+
+// Dismissible alerts
+//
+// Expand the right padding and account for the close button's positioning.
+
+.callout-dismissible {
+  padding-right: $alert-dismissible-padding-r;
+
+  // Adjust close link position
+  .btn-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: $stretched-link-z-index + 1;
+    padding: $alert-padding-y * 1.25 $alert-padding-x;
+  }
+}
+
+// scss-docs-start callout-modifiers
+// Generate contextual modifier classes for colorizing the alert
+@each $state in map-keys($theme-colors) {
+  .callout-#{$state} {
+    --#{$prefix}callout-color: var(--#{$prefix}#{$state}-text-emphasis);
+    --#{$prefix}callout-bg: var(--#{$prefix}#{$state}-bg-subtle);
+    --#{$prefix}callout-border-color: var(--#{$prefix}#{$state}-border-subtle);
+    --#{$prefix}callout-link-color: var(--#{$prefix}#{$state}-text-emphasis);
+  }
+}
+// scss-docs-end callout-modifiers

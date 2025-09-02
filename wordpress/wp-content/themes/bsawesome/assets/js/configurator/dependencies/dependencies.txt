@@ -1,0 +1,16 @@
+## Kantenpolierung
+- Wenn Facettenschliff ausgewählt wird, "Facette" aufklappen
+- Facettenschliff braucht "ab Preise" basierend Facette 10mm
+
+## Rahmenfarbe vs Rahmenbreite
+- Basierend Rahmenfarbe, die entsprechende Farbe bzw Bild bei Rahmenbreite anzeigen
+
+## TV Gerät vs Breite und Höhe
+
+## Schrankart Einbau
+- Einbaurahmen ja nein?
+Bei Schrankart Halbeinbau -> Aufjedenfall Einbaurahmen
+- Wenn einbaurahmen für halbeinbau, dann einbaurahmen 
+- Wenn Einbaurahmen, "vorab einbaurahmen erhalten" anzeigen
+
+# Auflage vs Auflage Keramik

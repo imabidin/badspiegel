@@ -1,0 +1,149 @@
+.btn-favourite-loop {
+  backdrop-filter: blur(4px);
+
+  //   // --bs-btn-color: var(--bs-body-bg);
+  //   // --bs-btn-hover-color: var(--bs-warning);
+  //   // --bs-btn-active-color: var(--bs-warning);
+  //   // --bs-btn-disabled-color: rgba(38, 37, 34, 0.5) !important;
+  --bs-btn-bg: rgba(38, 37, 34, 0.25) !important;
+  --bs-btn-hover-bg: rgba(70.55, 69.7, 67.15, 0.25) !important;
+  --bs-btn-active-bg: rgba(81.4, 80.6, 78.2, 0.25) !important;
+  --bs-btn-disabled-bg: rgba(38, 37, 34, 0.25) !important;
+
+  --bs-btn-disabled-opacity: 1;
+  --bs-btn-border-width: 0;
+
+  i::before {
+    filter: drop-shadow(0px 0px 4px rgba(0, 0, 0, 0.25));
+    transition: color 0.3s ease-in-out;
+  }
+}
+
+// // Favourites page styles
+// .favourites-container {
+
+//   .favourites-login-notice {
+//     border-radius: 0.5rem;
+//   }
+
+//   .favourites-empty {
+//     border-radius: 0.75rem;
+//     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+
+//     i {
+//       opacity: 0.7;
+//     }
+//   }
+
+//   .favourites-header {
+//     border-bottom: 1px solid var(--bs-border-color);
+//     padding-bottom: 1rem;
+//   }
+
+//   .favourite-product-card {
+//     transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+//     &:hover {
+//       transform: translateY(-2px);
+//       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+//     }
+
+//     .btn-favourite-loop {
+//       transition: all 0.2s ease;
+
+//       &:hover {
+//         transform: scale(1.1);
+//       }
+//     }
+//   }
+
+//   // Custom 5-column layout
+//   .col-lg-2-4 {
+//     @media (min-width: 992px) {
+//       flex: 0 0 auto;
+//       width: 20%;
+//     }
+//   }
+
+//   .favourites-pagination {
+//     .pagination {
+//       .page-link {
+//         border-radius: 0.375rem;
+//         margin: 0 2px;
+//         border: 1px solid var(--bs-border-color);
+
+//         &:hover {
+//           background-color: var(--bs-primary);
+//           border-color: var(--bs-primary);
+//           color: white;
+//         }
+
+//         &.current {
+//           background-color: var(--bs-primary);
+//           border-color: var(--bs-primary);
+//         }
+//       }
+//     }
+//   }
+// }
+
+// // Loading states
+// .btn[disabled] {
+//   opacity: 0.6;
+//   cursor: not-allowed;
+// }
+
+// // Fade out animation for removed products
+// .favourite-product-card.removing {
+//   opacity: 0.5;
+//   transform: scale(0.95);
+//   transition: all 0.3s ease;
+// }
+
+// // Header favourites badge
+// #favourites-header-link {
+//   .badge {
+//     font-size: 0.65rem;
+//     padding: 0.2em 0.4em;
+//     min-width: 18px;
+//     height: 18px;
+//     line-height: 1.2;
+
+//     // Animation for count changes
+//     transition: all 0.3s ease;
+
+//     &.animate__pulse {
+//       animation-duration: 0.6s;
+//     }
+//   }
+
+//   // Heart icon changes based on favourites count
+//   i {
+//     transition: all 0.2s ease;
+//   }
+
+//   &:hover {
+//     .badge {
+//       transform: scale(1.1);
+//     }
+//   }
+// }
+
+// // Animate.css pulse animation (falls nicht global verfügbar)
+// @keyframes pulse {
+//   from {
+//     transform: scale3d(1, 1, 1);
+//   }
+//   50% {
+//     transform: scale3d(1.05, 1.05, 1.05);
+//   }
+//   to {
+//     transform: scale3d(1, 1, 1);
+//   }
+// }
+
+// .animate__pulse {
+//   animation-name: pulse;
+//   animation-duration: 1s;
+//   animation-fill-mode: both;
+// }

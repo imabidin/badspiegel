@@ -1,0 +1,86 @@
+// pages/_home.scss
+
+.single-product {
+  //
+  // Product lightbox
+  //
+  .pswp__caption {
+    //
+    // Hide image caption
+    display: none;
+  }
+  //
+  // Product gallery
+  //
+  .flex-viewport {
+    @include media-breakpoint-down(md) {
+      width: 100vw;
+      margin-left: -50vw;
+      left: 50%;
+    }
+  }
+  //
+  // Product gallery/Swatches thumbs
+  //
+  .flex-control-thumbs,
+  .product-swatches-thumbs {
+    //
+    // Remove list style
+    @include list-unstyled();
+    //
+    // Display grid
+    display: grid;
+    //
+    // Images cursor pointer
+    img {
+      cursor: pointer;
+    }
+  }
+  //
+  // Product gallery thumbs
+  //
+  .flex-control-thumbs {
+    //
+    // Background
+    // background-color: $secondary-light;
+    //
+    // Spacing
+    margin-top: $spacer;
+    @include media-breakpoint-down(md) {
+      margin-left: $spacer;
+      margin-right: $spacer;
+    }
+    margin-bottom: 0;
+    //
+    // Display grid
+    grid-template-columns: repeat(4, 1fr);
+    @include media-breakpoint-up(lg) {
+      grid-template-columns: repeat(6, 1fr);
+    }
+    gap: calc($spacer / 1);
+    //
+    // Images styling
+    img {
+      //
+      // State styling
+      transition: opacity 0.25s;
+      opacity: 0.5;
+      &:hover {
+        opacity: 0.75;
+      }
+      &:active {
+        opacity: 1;
+      }
+      &.flex-active,
+      &.active {
+        opacity: 1;
+        &:hover {
+          opacity: 1;
+        }
+        &:active {
+          opacity: 0.75;
+        }
+      }
+    }
+  }
+}

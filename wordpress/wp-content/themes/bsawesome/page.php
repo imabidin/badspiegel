@@ -11,7 +11,7 @@
  * @subpackage Templates
  * @since 1.0.0
  * @author BS Awesome Team
- * @version 1.0.0
+ * @version 2.3.0
  * 
  * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
  */
@@ -31,10 +31,10 @@ get_header();
 			<!-- <header class="entry-header"></header> -->
 
 			<?php
-			// Array der Slugs, bei denen die H1-Überschrift entfernt werden soll.
+			// Array of slugs where the H1 heading should be removed.
 			$remove_title_slugs = array('b2b','montage','agb','datenschutz','impressum','widerruf','sicherheit','zahlung','versand');
 
-			// Hole den aktuellen Seiten-Slug.
+			// Get the current page slug.
 			$current_slug = '';
 			if (is_page()) {
 				global $post;
@@ -43,8 +43,7 @@ get_header();
 				}
 			}
 
-			// Überschrift nur anzeigen, wenn es nicht die Front Page ist
-			// und der aktuelle Slug nicht im Array enthalten ist.
+			 // Display page title conditionally
 			if (! is_front_page() && ! in_array($current_slug, $remove_title_slugs, true)) {
 				the_title('<h1 class="entry-title mb">', '</h1>');
 			}

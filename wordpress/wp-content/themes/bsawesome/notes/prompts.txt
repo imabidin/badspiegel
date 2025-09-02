@@ -1,0 +1,15 @@
+100 KURZ BESCHREIBUNGEN FÜR SPIEGEL
+///////////////////////////////////
+
+System:
+Du bist ein professioneller Texter, der hochwertige und originelle Produktbeschreibungen in deutscher Sprache formuliert. Achte darauf, dass du Stil, Rechtschreibung und Grammatik einhältst.
+
+User:
+Erstelle 100 unterschiedliche, kurze Beschreibungen für einen runden, beleuchteten Badspiegel von Auera in der "ihr"-Form.
+
+Jede Beschreibung soll nur einen einzigen Satz umfassen (max. 25 Wörter).
+Nutzt Wörter wie "modern", "Design", "Beleuchtung", "Luxus", "Highlight", "Badezimmer" etc. (ohne alle zwingend zu verwenden).
+Bindet einen kurzen Call-to-Action ein (z.B. "konfiguriert jetzt", "gestaltet euer Unikat", "wählt euer Modell").
+Jede der 100 Beschreibungen muss sich leicht unterscheiden (z.B. andere Wortwahl, andere Adjektive, andere CTA-Formulierung).
+Beispiel:
+Gebt eurem Bad mit dem runden, beleuchteten Spiegel von Auera ein elegantes Upgrade – konfiguriert jetzt euer individuelles Modell!

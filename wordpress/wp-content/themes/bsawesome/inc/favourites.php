@@ -6,7 +6,7 @@ defined('ABSPATH') || exit;
  * Favourites System for BS Awesome Theme
  * Production-ready favourites system with config code support
  * 
- * @version 2.2.0
+ * @version 2.3.0
  */
 
 // Configuration
@@ -1212,7 +1212,7 @@ function bsawesome_display_empty_favourites($type = 'empty', $is_logged_user = t
         }
 
         echo '<div class="d-flex flex-column-reverse flex-sm-row gap-2 justify-content-center mt-3">';
-        echo '<button type="button" class="btn btn-dark" onclick="history.back()">';
+        echo '<button type="button" class="btn btn-dark" id="back-button" onclick="handleBackNavigation()" style="display:none;">';
         echo '<i class="fa-sharp fa-light fa-arrow-left me-2"></i>' . __('Zurück', 'bsawesome');
         echo '</button>';
         if (function_exists('wc_get_page_permalink')) {

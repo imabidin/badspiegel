@@ -1,9 +1,13 @@
 <?php defined('ABSPATH') || exit;
 
 /**
- * Zendesk.
- * 
- * Updated 14/04/2025
+ * Zendesk Chat Integration
+ *
+ * @package BSAwesome
+ * @subpackage Templates
+ * @since 1.0.0
+ * @author BS Awesome Team
+ * @version 2.3.0
  */
 
 function zendesk_chat()

@@ -1,0 +1,110 @@
+- Check auto highlight styles -> türüberstand türüberstand unten in mm wird falsch highlighted und türüberstand position wird garnicht highlighted
+-- yes-input muss hinzugefügt werden automatisch
+
+- Install Font Awesome through JS.
+- Dequeue Germanized Storefront Tempalte.
+- Optimize tabindex order und focus visuals, remove simplebar.
+- Add d-print, optimize printing view.
+- Aurea Modelle: Badspiegel mit Hintergrundbeleuchtung
+- MailPoet Premium, um Emails zu optimieren
+- Linkjuice und Fluss optimieren.
+- Simplebar z-index optimieren damit cursor hover effekt funktionoert.
+- "Spiegel mit Rahmen" Varianten untereinander verlinken
+- Fix Offcanvas Close Buttons on Prodact Page
+- Product Configurator Abbr mit Bootstrap Klassen Hover
+- Montagehilfe Link auf Produkt Seite hinzufügen
+- Fixen: Invalid Text Style issues in porduct Konfigurator
+- Payment Icons unter Warenkorb Button im Warenkorb anzeigen lassen, Visa und Maestra und Master Card Icons für hellen hintergrund anpassen
+Bei allen PHP Dateien hninzufügen
+if (! defined('ABSPATH')) {
+    exit;
+}
+
+- add alert dismissings
+
+- Product page: Tab Button Icons open close feedback for font awesome arrow down -> 
+
+- Yoast, Website Bild einfügen, nach dem Hero Image fertig ist. https://www.badspiegel.de/wp-admin/admin.php?page=wpseo_page_settings#/site-basics
+- Yoast, Social Bild einfügen, nach dem Hero Image fertig ist. https://www.badspiegel.de/wp-admin/admin.php?page=wpseo_page_settings#/post-type/pages
+- Yoast, MailPoet Bild einfügen, nach dem Hero Image fertig ist. https://www.badspiegel.de/wp-admin/admin.php?page=wpseo_page_settings#/post-type/mailpoet_page
+- Yoast, hübsche URLs für WooCommerce Suche. https://www.badspiegel.de/wp-admin/admin.php?page=wpseo_page_settings#/crawl-optimization
+- Leistungsplugins aktivieren. https://www.badspiegel.de/wp-admin/options-general.php?page=performance-lab
+- Borlabs Scan durchführen. https://www.badspiegel.de/wp-admin/admin.php?page=borlabs-cookie-cloud-scan
+- Boralbs Styles deaktivieren, neu stylen und bootstrap matchen.
+- Versandberechnung umkehren, Versandklassen optimieren, Kostenloser Versand standard und Große Pakete mit Aufpreis. Aktuell umgekehrt.- Versandberechnung umkehren, Versandklassen optimieren, Kostenloser Versand standard und Große Pakete mit Aufpreis. Aktuell umgekehrt. https://www.badspiegel.de/wp-admin/admin.php?page=wc-settings&tab=shipping&zone_id=1
+
+- Ablagen /Schrank aus anderem Korpus
+
+- Impressum "zum Hilfeportal" Link fixen, sobald Hilfeportal fertig ist.
+- Paypal Kontoeinstellungen prüfen, Kundenservice Nummer hinzufügen und Daten ergänzen, sobald Bochum fest ist
+
+- zendesk proaktive nachrichten einstellen, ai bot mehr optimieren, wissensdatenbank optimieren
+- zendesk adresse anpassen, konto übertragen, bochum festnetznummer beantragen für badspiegel.de
+
+============================================
+============================================
+
+Fix before Version 2:
+
+- Update paypal messaging according the product configurator price
+
+============================================
+============================================
+
+Version 2 To Do:
+
+- SimpleBar buttons on main navigation ??
+- Clipboard.js optimization via AI (Deepseek)
+- Filter.js optimizition via AI (Deepseek)
+
+============================================
+============================================
+
+Dependencies To Do:
+
+- Ablage Breite x Breite
+
+============================================
+= HOBBY FIXES =
+============================================
+
+- Navbar resize issue: simplebar is not initialising the correct width, by resizing down. Resizing up works well. The "conficode load" button is outside the container by resizing down.
+
+
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LOGIN FORM CHECK, with new mail adress its not wroking on local, how is the registriation in live
+
+
+
+WEITERE KATEGORIEN:
+
+- Badspiegel mit Spiegelheizung (Neu)
+
+- Badspiegel mit Steckdose (Neu)
+
+- Badspiegel mit Ablage (Neu)
+
+- Badspiegel mit Kosmetikspiegel (Neu)
+
+- Badspiegel mit Fernseher
+
+- Smart Spiegel (Neu)
+
+- Badspiegel im Landhausstil
+
+-- Badspiegel mit schwarzem Rahmen (Neu)
+
+-- Badspiegel mit Holzrahmen (Neu)
+
+-- Badspiegel mit goldenem Rahmen
+
+- Rahmenloser Badspiegel
+
+- Gäste-WC Spiegel
+
+- Spiegel für Doppelwaschtisch
+
+ Hotelspiegel & Objektspiegel
+
+ - Kristallspiegel (Ratgeber) (Neu zur Qualitäts-Kommunikation)

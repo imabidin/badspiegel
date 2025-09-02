@@ -1,6 +1,6 @@
 <?php
 // ============================================================
-// Date: 2025-08-06 17:17:00
+// Date: 2025-08-28 19:30:31
 // Key: spiegel-rundbogen-led-loru
 // File: spiegel-rundbogen-led-loru.php
 //

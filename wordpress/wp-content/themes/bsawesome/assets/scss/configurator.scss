@@ -1,0 +1,371 @@
+//
+// Configurator
+//
+
+//
+// Dependency styles
+//
+
+.show-only-sideboard {
+  display: none;
+}
+.product_cat-sideboards .show-only-sideboard {
+  display: block;
+}
+
+.show-only-lowboard {
+  display: none;
+}
+.product_cat-lowboards .show-only-lowboard {
+  display: block;
+}
+
+.show-only-hochschrank {
+  display: none;
+}
+.product_cat-hochschraenke .show-only-hochschrank {
+  display: block;
+}
+
+.show-only-spiegelschrank {
+  display: none;
+}
+.product_cat-spiegelschraenke .show-only-spiegelschrank {
+  display: block;
+}
+
+.show-only-spiegelschrank-aus-holz {
+  display: none;
+}
+.product_cat-spiegelschraenke-aus-holz .show-only-spiegelschrank-aus-holz {
+  display: block;
+}
+
+.show-only-spiegelschrank-aus-aluminium {
+  display: none;
+}
+.product_cat-spiegelschraenke-aus-aluminium
+  .show-only-spiegelschrank-aus-aluminium {
+  display: block;
+}
+
+.show-only-unterschrank {
+  display: none;
+}
+.product_cat-unterschraenke .show-only-unterschrank {
+  display: block;
+}
+
+.show-only-badspiegel {
+  display: none;
+}
+.product_cat-badspiegel .show-only-badspiegel {
+  display: block;
+}
+.product_cat-badspiegel .hide-only-badspiegel {
+  display: none;
+}
+
+.show-only-badspiegel-areaeffekt {
+  display: none;
+}
+.product_cat-badspiegel-mit-aureaeffekt .show-only-badspiegel-areaeffekt {
+  display: block;
+}
+
+.show-only-spiegelschrank {
+  display: none;
+}
+
+.product_cat-spiegelschraenke .show-only-spiegelschrank {
+  display: block;
+}
+
+.show-only-spiegelschrank-dachschraege {
+  display: none;
+}
+.product_cat-spiegelschrank-mit-dachschraege
+  .show-only-spiegelschrank-dachschraege {
+  display: block;
+}
+
+//
+// Add to cart button shine effect after configurator is finished
+//
+
+.btn-shine-effect {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-25deg);
+  pointer-events: none;
+}
+
+@keyframes shine {
+  100% {
+    left: 150%;
+  }
+}
+
+//
+// Indicator styles
+// - hide scroll indicators by default
+// - show scroll indicators on buttons-visible class
+// - show scroll indicators on focus
+// - show scroll indicators on hover
+// - show scroll indicators on touch devices
+//
+
+#scrollIndicatorsLeft,
+#scrollIndicatorsRight {
+  // scroll indicator bootstrap button styles
+  --bs-btn-color: var(--bs-link-color);
+  --bs-btn-hover-color: var(--bs-link-hover-color);
+  --bs-btn-active-color: var(--bs-link-hover-color);
+  --bs-btn-bg: var(--bs-body-bg);
+  --bs-btn-hover-bg: var(--bs-body-bg);
+  --bs-btn-active-bg: var(--bs-body-bg);
+  --bs-btn-border-color: var(--bs-secondary-border-subtle);
+  --bs-btn-hover-border-color: var(--bs-primary-border-subtle);
+  --bs-btn-active-border-color: var(--bs-primary-border-subtle);
+
+  opacity: 0; // hide scroll indicators by default
+
+  // fixing opacity transition
+  transition: opacity 0.3s ease-in-out, color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out, border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+}
+
+.buttons-visible #scrollIndicatorsLeft,
+.buttons-visible #scrollIndicatorsRight,
+#scrollIndicatorsLeft:focus,
+#scrollIndicatorsRight:focus {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  #scrollIndicatorsLeft,
+  #scrollIndicatorsRight {
+    opacity: 1;
+  }
+}
+
+//
+// Form floating labels
+// - reset label position for non selections and non inputs
+// - renew focus ring color and border color
+// - give focus ring success color for just selected options
+// - fix focus ring color for invalid options
+//
+
+.form-floating {
+  > .form-select.no-selection ~ label,
+  > .form-control.no-input:not(:focus) ~ label,
+  > .form-control.no-input:not(:focus-visible) ~ label {
+    color: inherit;
+    transform: none;
+  }
+
+  > .form-select.on-selection,
+  > .form-control.on-input {
+    border-color: var(--bs-primary);
+    --bs-focus-ring-color: rgba(
+      var(--bs-primary-rgb),
+      var(--bs-focus-ring-opacity)
+    );
+  }
+
+  > .form-select.no-selection:not(.on-selection),
+  > .form-control.no-input:not(.on-input) {
+    border-color: var(--bs-secondary-border-subtle);
+  }
+
+  > .form-select.yes-selection:not(.on-selection),
+  > .form-control.yes-input:not(.on-input) {
+    border-color: var(--bs-secondary);
+  }
+
+  > .form-select.yes-selection,
+  > .form-control.yes-input,
+  > .form-select.no-selection,
+  > .form-control.no-input {
+    &:focus {
+      border-color: var(--bs-primary);
+      --bs-focus-ring-color: rgba(
+        var(--bs-primary-rgb),
+        var(--bs-focus-ring-opacity)
+      );
+    }
+  }
+
+  > .form-select.no-selection.just-selected {
+    border-color: var(--bs-secondary);
+    --bs-focus-ring-color: rgba(
+      var(--bs-secondary-rgb),
+      var(--bs-focus-ring-opacity)
+    );
+  }
+
+  > .form-select.yes-selection.just-selected {
+    border-color: var(--bs-success);
+    --bs-focus-ring-color: rgba(
+      var(--bs-success-rgb),
+      var(--bs-focus-ring-opacity)
+    );
+  }
+
+  > .form-select.is-valid,
+  > .form-control.is-valid {
+    border-color: var(--bs-success) !important;
+    --bs-focus-ring-color: rgba(
+      var(--bs-success-rgb),
+      var(--bs-focus-ring-opacity)
+    ) !important;
+  }
+
+  > .form-select.is-invalid,
+  > .form-control.is-invalid {
+    border-color: var(--bs-danger) !important;
+    --bs-focus-ring-color: rgba(
+      var(--bs-danger-rgb),
+      var(--bs-focus-ring-opacity)
+    ) !important;
+  }
+}
+//
+// Fixing focus ring for focus through summary
+//
+.form-floating,
+.btn-group {
+  &.focus-ring {
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  }
+}
+
+//
+// Option value label
+// - set label position
+//
+
+.option-value-label {
+  padding: 1.625rem 2.25rem 0.625rem 0.75rem;
+}
+
+//
+// Child options
+// - add margin left for child options
+// - add arrow icon for child options
+// - fix dropdown width for child options
+//
+
+.option-group.option-group-child {
+  margin-left: 2rem;
+  width: calc(100% - 2rem);
+  position: relative;
+
+  &::after {
+    content: "\e3d6"; // Font Awesome Pro sharp arrow down-right
+    font-family: "Font Awesome 7 Sharp";
+    position: absolute;
+    left: -1.5rem;
+    top: 2rem;
+    color: var(--bs-secondary);
+  }
+
+  .dropdown-menu {
+    width: calc(100% - 1rem);
+  }
+}
+
+.option-group.option-group-child.option-btngroup {
+  margin-left: 2rem;
+  width: calc(100% - 2rem);
+  position: relative;
+
+  > .row {
+    align-items: center;
+    flex-wrap: nowrap;
+
+    > label {
+      flex: 0 0 auto;
+      width: auto;
+      min-width: 10.5ch;
+    }
+
+    > .values-group {
+      margin-top: 0;
+      flex: 0 0 auto;
+      width: auto;
+    }
+  }
+
+  &::after {
+    top: 1.5rem;
+  }
+}
+
+//
+// Custom child options
+//
+
+#option_tuer_1_anschlagrichtung {
+  margin-top: 1rem;
+  &::before {
+    content: "Anschlagrichtungen";
+    display: block;
+    font-weight: 500;
+  }
+  &::after {
+    top: 0rem;
+  }
+  [data-modal-link="configurator/anschlagrichtung"] {
+    position: absolute;
+    top: -0.5rem;
+    left: 9rem;
+  }
+}
+#option_tuer_2_anschlagrichtung,
+#option_tuer_3_anschlagrichtung,
+#option_tuer_4_anschlagrichtung,
+#option_tuer_5_anschlagrichtung,
+#option_tuer_6_anschlagrichtung {
+  > .row {
+    margin-top: 0.5rem;
+  }
+  &::after {
+    content: "";
+  }
+}
+
+//
+// Option search
+// Styles for option search in dropdown mode and responsive adjustments
+// - margin and background for dropdown mode
+// - border color for dropdown mode and md breakpoint and up
+// - margin and background for md breakpoint and up
+//
+
+.option-search-wrapper {
+  position: relative;
+  background-color: var(--bs-secondary-bg-subtle);
+  @media (min-width: 768px) {
+    // md breakpoint and up
+    background-color: var(--bs-body-bg);
+    border-bottom: 1px solid var(--bs-secondary-border-subtle);
+  }
+  // input[type="search"]::-webkit-search-decoration,
+  // input[type="search"]::-webkit-search-<cancel-button,
+  // input[type="search"]::-webkit-search-results-button,
+  // input[type="search"]::-webkit-search-results-decoration {
+  //   display: none;
+  // }
+}

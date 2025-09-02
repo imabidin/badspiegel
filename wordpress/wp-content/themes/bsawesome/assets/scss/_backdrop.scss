@@ -1,0 +1,24 @@
+.backdrop-blur {
+  background-color: RGBA(var(--bs-primary-rgb), 0.75);
+  backdrop-filter: blur(8px);
+}
+
+// Generate .backdrop-blur-{color} classes for each Bootstrap theme color
+@each $color, $value in $theme-colors {
+  .backdrop-blur-#{$color} {
+    background-color: rgba(var(--bs-#{$color}-rgb), 0.75);
+    backdrop-filter: blur(8px);
+  }
+}
+
+.backdrop-blur-light {
+  // Dark translucent backdrop with blur effect
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.backdrop-blur-dark {
+  // Dark translucent backdrop with blur effect
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}

@@ -1,0 +1,76 @@
+<div class="text-center mb">
+  <div class="has-arrow-overlay position-relative d-inline-block border border-light-subtle shadow-sm">
+    <?php echo do_shortcode('[img id="1159" size="thumbnail"]'); ?>
+  </div>
+</div>
+
+<div class="callout callout-info mb">
+  <h5 class="mb-2">
+    19 mm Stärke
+  </h5>
+  <p class="mb-0">Die schlanke 19 mm Abdeckplatte fügt sich nahtlos in ein modernes, minimalistisches Baddesign ein und eignet sich besonders für kleinere Bäder oder zurückhaltende Designs.</p>
+</div>
+
+<div class="row g-3 mb">
+  <div class="col-md-6">
+    <div class="card h-100 border border-light-subtle shadow-sm">
+      <div class="card-body">
+        <h6 class="card-title text-primary">
+          Dezenter Look
+        </h6>
+        <p class="card-text small">Fügt sich nahtlos in ein modernes, minimalistisches Baddesign ein.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card h-100 border border-light-subtle shadow-sm">
+      <div class="card-body">
+        <h6 class="card-title text-primary">
+          Ideal für kleinere Bäder
+        </h6>
+        <p class="card-text small">Da sie nicht zu wuchtig wirkt, oder wenn Sie ein zurückhaltendes Design bevorzugen.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="callout callout-warning">
+  <h6 class="mb-2">
+    <i class="fa-light fa-sharp fa-info-circle me-2"></i>Hinweis
+  </h6>
+  <p class="mb-0">Die von Ihnen gewählte <span class="fw-semibold">Stärke ist bereits in der Gesamthöhe</span> des Waschtischs berücksichtigt. Sie müssen also nichts dazurechnen.</p>
+</div>
+
+<style>
+  .has-arrow-overlay {
+    position: relative;
+  }
+
+  /* Arrow overlay */
+  .has-arrow-overlay::before,
+  .has-arrow-overlay::after {
+    content: '';
+    position: absolute;
+    background-color: var(--bs-warning);
+  }
+
+  /* Arrow line */
+  .has-arrow-overlay::after {
+    width: 35%;
+    height: .25rem;
+    left: 15%;
+    top: 25%;
+    transform: rotate(45deg);
+  }
+
+  /* Arrow tip */
+  .has-arrow-overlay::before {
+    width: .75rem;
+    height: 1rem;
+    left: calc(43.5%);
+    top: calc(36%);
+    transform: rotate(45deg);
+    clip-path: polygon(100% 50%, 0 0, 0 100%);
+  }
+</style>

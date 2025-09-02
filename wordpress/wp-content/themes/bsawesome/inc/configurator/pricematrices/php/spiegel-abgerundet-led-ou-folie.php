@@ -1,6 +1,6 @@
 <?php
 // ============================================================
-// Date: 2025-08-06 17:16:58
+// Date: 2025-08-28 19:30:27
 // Key: spiegel-abgerundet-led-ou-folie
 // File: spiegel-abgerundet-led-ou-folie.php
 //

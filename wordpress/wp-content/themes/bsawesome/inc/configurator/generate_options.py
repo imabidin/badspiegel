@@ -56,11 +56,22 @@ VALUE_COLUMNS = {
     "exclude attributes":   ("excluded_attributes", "array"),
 }
 
+DEKOR_COLUMNS = {
+    "visibile":             ("visible", "bool"),  # Tippfehler in Excel - das ist der wichtige Eintrag
+    "value":                ("value", "string"),
+    "price":                ("price", "float"),
+    "image":                ("image", "string"),
+    "description":          ("description", "string"),
+    "description file":     ("description_file", "string"),
+    "exclude categories":   ("excluded_categories", "array"),
+    "exclude attributes":   ("excluded_attributes", "array"),
+}
+
 # ------------------------------------------------------------------------
 # 3) Functions
 # ------------------------------------------------------------------------
 
-def parse_cell_value(raw_value: str, field_type: str):
+def parse_cell_value(raw_value, field_type: str):
     """
     - "string" => unchanged (after .strip())
     - "bool"   => True/False
@@ -68,6 +79,12 @@ def parse_cell_value(raw_value: str, field_type: str):
     - "float"  => float "0.0"
     - "array"  => comma separated values
     """
+    # Handle non-string values (from pandas)
+    if raw_value is None or (isinstance(raw_value, float) and pd.isna(raw_value)):
+        raw_value = ""
+    elif not isinstance(raw_value, str):
+        raw_value = str(raw_value)
+    
     raw_value = raw_value.strip()
     
     # Default values
@@ -91,7 +108,9 @@ def parse_cell_value(raw_value: str, field_type: str):
         return raw_value
     
     elif field_type == "bool":
-        return (raw_value.upper() == "TRUE") 
+        # Handle various boolean representations
+        upper_value = raw_value.upper()
+        return upper_value in ["TRUE", "1", "1.0", "YES", "Y", "JA", "J"]
     
     elif field_type == "int":
         try:
@@ -188,6 +207,7 @@ def check_description_file_exists(filename: str) -> str:
     """
     Prüft, ob eine description_file existiert. Fügt .html hinzu falls nötig.
     Sucht in verschiedenen Unterordnern der html-Struktur.
+    Unterstützt Unterordner mit "/" Notation (z.B. "leuchte/pandora-31").
     Gibt den korrekten Dateinamen zurück oder leeren String falls nicht gefunden.
     """
     global missing_files
@@ -205,8 +225,10 @@ def check_description_file_exists(filename: str) -> str:
     html_base_dir = os.path.join(script_dir, '..', '..', 'html')
     
     # Verschiedene mögliche Pfade durchsuchen
+    # WICHTIG: filename kann bereits Unterordner enthalten (z.B. "leuchte/pandora-31.html")
     search_paths = [
-        os.path.join(html_base_dir, 'configurator', 'newers', filename),
+        # os.path.join(html_base_dir, 'configurator', 'newers', filename),
+        os.path.join(html_base_dir, 'configurator', filename),  # Unterstützt jetzt Unterordner
     ]
     
     # Prüfen ob Datei in einem der Pfade existiert
@@ -217,6 +239,41 @@ def check_description_file_exists(filename: str) -> str:
     # Datei nicht gefunden - zu Set hinzufügen
     missing_files.add(original_filename)
     return ""
+
+def process_dekor_values(df_dekor):
+    """
+    Verarbeitet das Dekor-Sheet und gibt die Dekor-Values zurück,
+    die für alle Dekor-Optionen verwendet werden können.
+    Berücksichtigt die 'visible' Spalte und vergibt automatisch die Reihenfolge.
+    """
+    if df_dekor is None or df_dekor.empty:
+        return []
+    
+    dekor_values = []
+    order_counter = 1
+    
+    for _, row in df_dekor.iterrows():
+        val_dict = {}
+        for xlsx_col, (internal_key, field_type) in DEKOR_COLUMNS.items():
+            raw_value = row.get(xlsx_col, '')
+            val_dict[internal_key] = parse_cell_value(raw_value, field_type)
+        
+        # Nur Zeilen mit einem value verarbeiten
+        if not val_dict.get('value'):
+            continue
+        
+        # Prüfen ob visible = True (oder 1) ist
+        is_visible = val_dict.get('visible', False)
+        if not is_visible:
+            continue  # Nicht sichtbare Dekore überspringen
+        
+        # Automatische Reihenfolge vergeben (basierend auf Position in Excel)
+        val_dict['order'] = order_counter
+        order_counter += 1
+        
+        dekor_values.append(val_dict)
+    
+    return dekor_values
 
 # ------------------------------------------------------------------------
 # 4) Generate PHP
@@ -399,6 +456,17 @@ def main():
         df_values = pd.read_excel(CONFIG_XLSX_PATH, sheet_name='values', dtype=str).fillna('')
         df_pxd = pd.read_excel(CONFIG_XLSX_PATH, sheet_name='pxd', dtype=str).fillna('')
         df_pxt = pd.read_excel(CONFIG_XLSX_PATH, sheet_name='pxt', dtype=str).fillna('')
+        
+        # Dekor-Sheet laden (falls vorhanden und nicht leer)
+        df_dekor = None
+        try:
+            df_dekor = pd.read_excel(CONFIG_XLSX_PATH, sheet_name='decor', dtype=str).fillna('')
+            # Prüfen ob das Sheet leer ist oder keine relevanten Spalten hat
+            if df_dekor.empty or not any(col in df_dekor.columns for col in DEKOR_COLUMNS.keys()):
+                df_dekor = None
+        except Exception:
+            df_dekor = None
+            
     except Exception as e:
         print(f"Fehler beim Laden von {CONFIG_XLSX_PATH}: {e}")
         return
@@ -414,6 +482,16 @@ def main():
 
     # 5b) values_dict (typkonvertiert)
     values_dict = {}
+    
+    # Dekor-Values verarbeiten (falls Dekor-Sheet vorhanden)
+    dekor_values = process_dekor_values(df_dekor) if df_dekor is not None else []
+    
+    # Dynamisch alle Optionen finden, die mit "Dekor" anfangen (case-insensitive)
+    dekor_option_names = []
+    for opt in options_list:
+        option_name = opt.get('option', '').strip()
+        if option_name and option_name.lower().startswith('dekor'):
+            dekor_option_names.append(option_name)
     
     # Erst normale values verarbeiten
     for _, row in df_values.iterrows():
@@ -463,6 +541,12 @@ def main():
             if apply_option not in values_dict:
                 values_dict[apply_option] = []
             values_dict[apply_option].append(val_dict)
+    
+    # Dekor-Values zu allen Dekor-Optionen hinzufügen (überschreibt existierende values)
+    if dekor_values and dekor_option_names:
+        for dekor_option in dekor_option_names:
+            values_dict[dekor_option] = dekor_values.copy()
+        # print(f"✅ {len(dekor_values)} Dekor-Values für {len(dekor_option_names)} Dekor-Optionen geladen")
 
     # 5c) Erzeuge die PHP-Datei
     generate_main_options_php(options_list, values_dict)

@@ -1,6 +1,6 @@
 <?php
 // ============================================================
-// Date: 2025-08-06 17:16:56
+// Date: 2025-08-28 19:30:24
 // Key: klappspiegel-led-lor-folie
 // File: klappspiegel-led-lor-folie.php
 //

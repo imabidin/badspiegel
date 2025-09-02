@@ -3,7 +3,7 @@
 /**
  * Security Headers for AJAX endpoints
  * 
- * @version 2.2.0
+ * @version 2.3.0
  */
 
 // Add security headers for AJAX requests

@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" id="global-style-css"
+        href="https://www.badspiegel.de/wp-content/themes/bsawesome/dist/css/global.css?ver=1755124976" media="all">
+    <style>
+        .preview-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .drag-drop-area {
+            border: 2px dashed #007cba;
+            border-radius: 6px;
+            padding: 1rem;
+            text-align: center;
+            background-color: #f8f9fa;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .drag-drop-area.dragover {
+            background-color: #e3f2fd;
+            border-color: #0056b3;
+        }
+
+        .drag-drop-area:hover {
+            background-color: #e9ecef;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .file-tabs {
+            display: flex;
+            gap: 0.25rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .file-tab {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px 6px 0 0;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            max-width: 200px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            user-select: none;
+        }
+
+        .file-tab.dragging {
+            opacity: 0.5;
+            transform: scale(0.98);
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .file-tab.drag-over {
+            border-left: 4px solid #007cba;
+            background: #e3f2fd;
+            transform: translateX(2px);
+        }
+
+        .file-tab .drag-handle {
+            cursor: grab;
+            color: #6c757d;
+            margin-right: 0.25rem;
+            font-size: 0.75rem;
+        }
+
+        .file-tab .drag-handle:hover {
+            color: #007cba;
+        }
+
+        .file-tab .drag-handle:active {
+            cursor: grabbing;
+        }
+
+        .file-tab:hover {
+            background: #e9ecef;
+        }
+
+        .file-tab.active {
+            background: white;
+            border-bottom-color: white;
+            border-top: 2px solid #007cba;
+        }
+
+        .file-tab .tab-name {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 0.875rem;
+        }
+
+        .file-tab .close-btn {
+            background: none;
+            border: none;
+            color: #6c757d;
+            cursor: pointer;
+            padding: 0;
+            margin-left: auto;
+            font-size: 1rem;
+            line-height: 1;
+        }
+
+        .file-tab .close-btn:hover {
+            color: #dc3545;
+        }
+
+        .file-tab .tab-type {
+            font-size: 0.75rem;
+            opacity: 0.7;
+            font-weight: normal;
+        }
+
+        .file-tab .refresh-btn {
+            background: none;
+            border: none;
+            color: #6c757d;
+            cursor: pointer;
+            padding: 0;
+            font-size: 0.875rem;
+            line-height: 1;
+            margin-right: 0.25rem;
+            transition: all 0.2s ease;
+        }
+
+        .file-tab .refresh-btn:hover {
+            color: #007cba;
+            transform: rotate(90deg);
+        }
+
+        .file-tab .refresh-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .file-tab .refresh-btn.auto-refresh {
+            color: #28a745;
+        }
+
+        .file-tab .refresh-btn.auto-refresh:hover {
+            color: #20c997;
+        }
+
+        .view-controls {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .split-view {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .split-view.split-horizontal {
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-rows: auto; /* Nur eine Zeile, alle nebeneinander */
+            max-height: none; /* Keine Höhenbegrenzung */
+            overflow-x: auto; /* Horizontal scrollen wenn nötig */
+            overflow-y: visible;
+        }
+
+        .split-view.split-vertical {
+            grid-template-columns: 1fr;
+            grid-template-rows: repeat(auto-fit, minmax(300px, auto));
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .split-view.grid-view {
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            grid-template-rows: repeat(auto-fit, minmax(350px, auto));
+            max-height: 80vh;
+            overflow-y: auto;
+            align-items: start; /* Grid-Items am Anfang ausrichten */
+        }
+
+        .content-panel {
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 1rem;
+            background: white;
+            min-height: 400px;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .content-panel:hover {
+            border-color: #007cba;
+            box-shadow: 0 2px 8px rgba(0, 124, 186, 0.1);
+        }
+
+        .content-panel.active {
+            border-color: #007cba;
+            box-shadow: 0 0 0 2px rgba(0, 124, 186, 0.2);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .panel-title {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #495057;
+            display: flex;
+            align-items: center;
+        }
+
+        .panel-controls {
+            display: flex;
+            gap: 0.25rem;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .content-panel:hover .panel-controls {
+            opacity: 1;
+        }
+
+        .panel-btn {
+            background: none;
+            border: none;
+            color: #6c757d;
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 3px;
+            font-size: 0.75rem;
+        }
+
+        .panel-btn:hover {
+            background: #f8f9fa;
+            color: #007cba;
+        }
+
+        .view-controls .btn.active {
+            background-color: #007cba;
+            border-color: #007cba;
+            color: white;
+        }
+
+        /* File List Accordion Styles */
+        .file-list-item {
+            padding: 0;
+            border: none;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-align: left;
+            width: 100%;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .file-list-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .file-list-item.active {
+            background-color: #e3f2fd;
+            border-left: 4px solid #007cba;
+        }
+
+        .file-list-item .file-info {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+        }
+
+        .file-list-item .file-icon {
+            color: #007cba;
+            margin-right: 0.5rem;
+            width: 16px;
+            text-align: center;
+        }
+
+        .file-list-item .file-details {
+            flex-grow: 1;
+        }
+
+        .file-list-item .file-name {
+            font-weight: 500;
+            color: #495057;
+            margin: 0;
+            font-size: 0.875rem;
+        }
+
+        .file-list-item .file-type-badge {
+            font-size: 0.75rem;
+            margin-top: 0.125rem;
+        }
+
+        .file-list-item .file-actions {
+            display: flex;
+            gap: 0.25rem;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .file-list-item:hover .file-actions {
+            opacity: 1;
+        }
+
+        .file-list-item .file-action-btn {
+            background: none;
+            border: none;
+            color: #6c757d;
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 3px;
+            font-size: 0.75rem;
+            transition: all 0.2s ease;
+        }
+
+        .file-list-item .file-action-btn:hover {
+            background: #e9ecef;
+            color: #007cba;
+        }
+
+        .file-list-item .file-action-btn.refresh-btn.auto-refresh {
+            color: #28a745;
+        }
+
+        .file-list-item .file-action-btn.refresh-btn.auto-refresh:hover {
+            color: #20c997;
+            background: #d4edda;
+        }
+
+        .accordion-button {
+            font-size: 0.875rem;
+            padding: 0.75rem 1rem;
+        }
+
+        .accordion-button:not(.collapsed) {
+            background-color: #e3f2fd;
+            border-color: #007cba;
+            color: #007cba;
+        }
+
+        .accordion-button:focus {
+            border-color: #007cba;
+            box-shadow: 0 0 0 0.2rem rgba(0, 124, 186, 0.25);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .split-view.split-horizontal {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
+            }
+            
+            .split-view.grid-view {
+                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)) !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .split-view.split-horizontal,
+            .split-view.grid-view {
+                grid-template-columns: 1fr !important;
+            }
+            
+            .content-panel {
+                min-height: 300px;
+            }
+
+            .view-controls {
+                flex-wrap: wrap;
+                gap: 0.25rem;
+            }
+
+            .view-controls .btn {
+                font-size: 0.75rem;
+                padding: 0.25rem 0.5rem;
+            }
+
+            .file-tab .drag-handle {
+                display: none; /* Hide drag handle on mobile */
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="preview-container">
+        <div class="controls">
+            <div class="drag-drop-area" id="dragDropArea">
+                <i class="fas fa-cloud-upload-alt fa-2x text-muted mb-2"></i>
+                <h6>HTML-Dateien hier hineinziehen</h6>
+                <p class="text-muted mb-1">oder klicken zum Durchsuchen</p>
+                <small class="text-muted">Unterstützte Dateitypen: .html, .htm</small>
+                <input type="file" id="fileInput" class="file-input" accept=".html,.htm" multiple>
+            </div>
+        </div>
+        <!-- File Tabs -->
+        <div class="file-tabs" id="fileTabs"></div>
+        
+        <!-- File List Accordion -->
+        <div class="accordion mb-3" id="fileListAccordion" style="display: none;">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="fileListHeading">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                            data-bs-target="#fileListCollapse" aria-expanded="false" aria-controls="fileListCollapse">
+                        <i class="fas fa-list me-2"></i>
+                        Dateiübersicht (<span id="fileCount">0</span> Dateien)
+                    </button>
+                </h2>
+                <div id="fileListCollapse" class="accordion-collapse collapse" 
+                     aria-labelledby="fileListHeading" data-bs-parent="#fileListAccordion">
+                    <div class="accordion-body">
+                        <div id="fileList" class="list-group list-group-flush">
+                            <!-- File list items will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- View Controls -->
+        <div class="view-controls" id="viewControls" style="display: none;">
+            <button class="btn btn-sm btn-outline-secondary" id="singleViewBtn">
+                <i class="fas fa-window-maximize me-1"></i>Einzelansicht
+            </button>
+            <button class="btn btn-sm btn-outline-secondary" id="splitHorizontalBtn">
+                <i class="fas fa-columns me-1"></i>Horizontal (eine Zeile)
+            </button>
+            <button class="btn btn-sm btn-outline-secondary" id="splitVerticalBtn">
+                <i class="fas fa-window-restore me-1"></i>Vertikal (eine Spalte)
+            </button>
+            <button class="btn btn-sm btn-outline-secondary" id="gridViewBtn">
+                <i class="fas fa-th me-1"></i>Raster (mehrere Zeilen/Spalten)
+            </button>
+            <div class="vr"></div>
+            <button class="btn btn-sm btn-outline-danger" id="closeAllBtn">
+                <i class="fas fa-times me-1"></i>Alle schließen
+            </button>
+        </div>
+        <div id="content">
+            <p>Ziehen Sie eine HTML-Datei in den Bereich oben oder wählen Sie ein Preset aus.</p>
+        </div>
+    </div>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Configuration
+        const CONFIG = {
+            ACCEPTED_EXTENSIONS: ['.html', '.htm'],
+            AUTO_RELOAD_INTERVAL: 2000
+        };
+
+        // DOM Elements
+        const DOM = {
+            contentDiv: document.getElementById('content'),
+            dragDropArea: document.getElementById('dragDropArea'),
+            fileInput: document.getElementById('fileInput'),
+            fileTabs: document.getElementById('fileTabs'),
+            fileListAccordion: document.getElementById('fileListAccordion'),
+            fileList: document.getElementById('fileList'),
+            fileCount: document.getElementById('fileCount'),
+            viewControls: document.getElementById('viewControls'),
+            singleViewBtn: document.getElementById('singleViewBtn'),
+            splitHorizontalBtn: document.getElementById('splitHorizontalBtn'),
+            splitVerticalBtn: document.getElementById('splitVerticalBtn'),
+            gridViewBtn: document.getElementById('gridViewBtn'),
+            closeAllBtn: document.getElementById('closeAllBtn')
+        };
+
+        // Global State
+        const State = {
+            openFiles: new Map(),
+            fileOrder: [], // Array to maintain file order for drag & drop
+            activeFileId: null,
+            viewMode: 'single', // 'single', 'split-horizontal', 'split-vertical', 'grid-view'
+            fileCounter: 0
+        };
+
+        // Utility Functions
+        const Utils = {
+            formatFileName: (filename) => filename.replace('.html', '').replace(/-/g, ' '),
+
+            isValidFile: (file) => {
+                const extension = file.name.toLowerCase();
+                return CONFIG.ACCEPTED_EXTENSIONS.some(ext => extension.endsWith(ext));
+            },
+
+            showLoading: () => {
+                DOM.contentDiv.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Laden...</span></div></div>';
+            },
+
+            showError: (message) => {
+                DOM.contentDiv.innerHTML = `<div class="alert alert-danger"><i class="fas fa-exclamation-triangle me-2"></i>${message}</div>`;
+            },
+
+            showWarning: (message) => {
+                DOM.contentDiv.innerHTML = `<div class="alert alert-warning"><i class="fas fa-exclamation-circle me-2"></i>${message}</div>`;
+            },
+
+            clearSelections: () => {
+                DOM.fileInput.value = '';
+            }
+        };
+
+        // File Management
+        const FileManager = {
+            addFile: (filename, content, type = 'local', fileHandle = null) => {
+                const fileId = `file_${++State.fileCounter}`;
+                const fileData = {
+                    id: fileId,
+                    name: filename,
+                    content: content,
+                    type: type, // 'local', 'preset'
+                    processedContent: ContentProcessor.simulateWordPressShortcodes(content),
+                    fileHandle: fileHandle // Store the file handle for refresh
+                };
+
+                State.openFiles.set(fileId, fileData);
+                State.fileOrder.push(fileId); // Add to order array
+                TabManager.createTab(fileData);
+                FileListManager.updateFileList(); // Update file list
+                FileManager.setActiveFile(fileId);
+
+                return fileId;
+            },
+
+            removeFile: (fileId) => {
+                if (!State.openFiles.has(fileId)) return;
+
+                State.openFiles.delete(fileId);
+                State.fileOrder = State.fileOrder.filter(id => id !== fileId); // Remove from order array
+                TabManager.removeTab(fileId);
+                FileListManager.updateFileList(); // Update file list
+
+                // Set new active file
+                if (State.activeFileId === fileId) {
+                    if (State.fileOrder.length > 0) {
+                        FileManager.setActiveFile(State.fileOrder[State.fileOrder.length - 1]);
+                    } else {
+                        State.activeFileId = null;
+                        ViewManager.showEmptyState();
+                    }
+                }
+            },
+
+            setActiveFile: (fileId) => {
+                if (!State.openFiles.has(fileId)) return;
+
+                State.activeFileId = fileId;
+                TabManager.updateActiveTab(fileId);
+                FileListManager.updateActiveItem(fileId); // Update active item in list
+                ViewManager.updateContent();
+            },
+
+            closeAll: () => {
+                State.openFiles.clear();
+                State.fileOrder = []; // Clear order array
+                State.activeFileId = null;
+                TabManager.clearTabs();
+                FileListManager.updateFileList(); // Update file list
+                ViewManager.showEmptyState();
+            },
+
+            refreshFile: async (fileId) => {
+                if (!State.openFiles.has(fileId)) return;
+                
+                const fileData = State.openFiles.get(fileId);
+                
+                // Nur für lokale Dateien, nicht für Vorlagen
+                if (fileData.type !== 'local') {
+                    Utils.showWarning('Nur lokal geladene Dateien können aktualisiert werden.');
+                    return;
+                }
+                
+                const tab = DOM.fileTabs.querySelector(`[data-file-id="${fileId}"]`);
+                const refreshBtn = tab?.querySelector('.refresh-btn');
+                
+                try {
+                    // Zeige Loading-Status
+                    if (refreshBtn) {
+                        refreshBtn.innerHTML = '⟳';
+                        refreshBtn.style.color = '#007cba';
+                        refreshBtn.disabled = true;
+                    }
+                    
+                    // Versuche die ursprüngliche Datei neu zu laden, falls File Handle verfügbar ist
+                    if (fileData.fileHandle && typeof fileData.fileHandle.getFile === 'function') {
+                        try {
+                            const file = await fileData.fileHandle.getFile();
+                            const text = await file.text();
+                            
+                            // Aktualisiere den Dateiinhalt
+                            fileData.content = text;
+                            fileData.processedContent = ContentProcessor.simulateWordPressShortcodes(text);
+                            
+                            // Aktualisiere die Ansicht wenn diese Datei aktiv ist
+                            if (State.activeFileId === fileId) {
+                                ViewManager.updateContent();
+                            }
+                            
+                            // Erfolgsfeedback
+                            if (refreshBtn) {
+                                refreshBtn.innerHTML = '✓';
+                                refreshBtn.style.color = '#28a745';
+                                setTimeout(() => {
+                                    refreshBtn.innerHTML = '↻';
+                                    refreshBtn.style.color = '';
+                                    refreshBtn.disabled = false;
+                                }, 1000);
+                            }
+                            
+                            console.log(`Datei "${fileData.name}" automatisch aktualisiert`);
+                            return;
+                        } catch (fileError) {
+                            console.warn('File Handle nicht mehr gültig, verwende Fallback:', fileError);
+                        }
+                    }
+                    
+                    // Modernerer Fallback: File System Access API verwenden
+                    if ('showOpenFilePicker' in window) {
+                        try {
+                            const fileHandles = await window.showOpenFilePicker({
+                                types: [{
+                                    description: 'HTML files',
+                                    accept: { 'text/html': ['.html', '.htm'] }
+                                }],
+                                multiple: false,
+                                startIn: 'documents'
+                            });
+                            
+                            if (fileHandles.length > 0) {
+                                const fileHandle = fileHandles[0];
+                                const file = await fileHandle.getFile();
+                                const text = await file.text();
+                                
+                                // Aktualisiere den Dateiinhalt
+                                fileData.content = text;
+                                fileData.name = file.name;
+                                fileData.processedContent = ContentProcessor.simulateWordPressShortcodes(text);
+                                fileData.fileHandle = fileHandle; // Speichere für zukünftige Updates
+                                
+                                // Update Tab-Name falls sich geändert hat
+                                if (tab) {
+                                    const tabName = tab.querySelector('.tab-name');
+                                    tabName.textContent = file.name;
+                                    tabName.title = file.name;
+                                }
+                                
+                                // Aktualisiere die Ansicht
+                                if (State.activeFileId === fileId) {
+                                    ViewManager.updateContent();
+                                }
+                                
+                                // Erfolgsfeedback
+                                if (refreshBtn) {
+                                    refreshBtn.innerHTML = '✓';
+                                    refreshBtn.style.color = '#28a745';
+                                    setTimeout(() => {
+                                        refreshBtn.innerHTML = '↻';
+                                        refreshBtn.style.color = '';
+                                        refreshBtn.disabled = false;
+                                    }, 1000);
+                                }
+                                
+                                console.log(`Datei "${fileData.name}" aktualisiert`);
+                                return;
+                            }
+                        } catch (pickerError) {
+                            if (pickerError.name !== 'AbortError') {
+                                console.warn('File picker failed:', pickerError);
+                            } else {
+                                // User cancelled - das ist OK
+                                if (refreshBtn) {
+                                    refreshBtn.innerHTML = '↻';
+                                    refreshBtn.style.color = '';
+                                    refreshBtn.disabled = false;
+                                }
+                                return;
+                            }
+                        }
+                    }
+                    
+                    // Letzter Fallback: Traditioneller File Input (sollte normalerweise nicht erreicht werden)
+                    Utils.showWarning('Automatische Aktualisierung nicht verfügbar. Bitte laden Sie die Datei erneut über Drag & Drop.');
+                    
+                } catch (error) {
+                    console.error('Refresh-Fehler:', error);
+                    Utils.showError(`Fehler beim Aktualisieren der Datei: ${error.message}`);
+                } finally {
+                    // Reset Button falls noch nicht geschehen
+                    if (refreshBtn) {
+                        refreshBtn.innerHTML = '↻';
+                        refreshBtn.style.color = '';
+                        refreshBtn.disabled = false;
+                    }
+                }
+            },
+
+            reorderFiles: (fromIndex, toIndex) => {
+                console.log('reorderFiles called:', fromIndex, '->', toIndex);
+                console.log('Current fileOrder:', State.fileOrder);
+                
+                if (fromIndex === toIndex || fromIndex < 0 || toIndex < 0 || 
+                    fromIndex >= State.fileOrder.length || toIndex >= State.fileOrder.length) {
+                    console.log('Invalid indices, aborting reorder');
+                    return;
+                }
+
+                // Reorder the array
+                const fileId = State.fileOrder.splice(fromIndex, 1)[0];
+                State.fileOrder.splice(toIndex, 0, fileId);
+                
+                console.log('New fileOrder:', State.fileOrder);
+
+                // Rebuild tabs in new order
+                TabManager.rebuildTabs();
+                
+                // Update view if not in single mode
+                if (State.viewMode !== 'single') {
+                    ViewManager.updateContent();
+                }
+            }
+        };
+
+        // File List Management
+        const FileListManager = {
+            updateFileList: () => {
+                // Update file count
+                DOM.fileCount.textContent = State.openFiles.size;
+                
+                // Show/hide accordion
+                DOM.fileListAccordion.style.display = State.openFiles.size > 0 ? 'block' : 'none';
+                
+                if (State.openFiles.size === 0) {
+                    DOM.fileList.innerHTML = '';
+                    return;
+                }
+
+                // Build file list in order
+                const listItems = State.fileOrder.map(fileId => {
+                    const fileData = State.openFiles.get(fileId);
+                    if (!fileData) return '';
+
+                    const isActive = fileId === State.activeFileId;
+                    const hasFileHandle = fileData.fileHandle && typeof fileData.fileHandle.getFile === 'function';
+                    const refreshClass = hasFileHandle ? 'file-action-btn refresh-btn auto-refresh' : 'file-action-btn refresh-btn';
+                    const refreshTitle = hasFileHandle ? 
+                        'Datei automatisch aktualisieren' : 
+                        'Datei aktualisieren';
+
+                    // Bestimme Dateityp-Label
+                    let typeLabel = 'Lokale Datei';
+                    let typeBadgeClass = 'bg-primary';
+                    
+                    if (fileData.type === 'preset') {
+                        typeLabel = 'Vorlage';
+                        typeBadgeClass = 'bg-success';
+                    }
+
+                    return `
+                        <div class="file-list-item ${isActive ? 'active' : ''}" data-file-id="${fileId}">
+                            <div class="file-info">
+                                <i class="fas fa-file-code file-icon"></i>
+                                <div class="file-details">
+                                    <div class="file-name">${fileData.name}</div>
+                                    <div class="file-type-badge d-none">
+                                        <span class="badge ${typeBadgeClass}">${typeLabel}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="file-actions">
+                                <button class="${refreshClass}" title="${refreshTitle}" 
+                                        onclick="FileManager.refreshFile('${fileId}')">↻</button>
+                                <button class="file-action-btn" title="Als Hauptansicht anzeigen" 
+                                        onclick="ViewManager.setViewMode('single'); FileManager.setActiveFile('${fileId}')">
+                                    <i class="fas fa-expand"></i>
+                                </button>
+                                <button class="file-action-btn" title="Datei schließen" 
+                                        onclick="FileManager.removeFile('${fileId}')">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                DOM.fileList.innerHTML = listItems;
+
+                // Add click events to list items
+                DOM.fileList.querySelectorAll('.file-list-item').forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        // Nur wenn nicht auf einen Button geklickt wurde
+                        if (!e.target.closest('.file-action-btn') && !e.target.closest('.file-actions')) {
+                            const fileId = item.dataset.fileId;
+                            FileManager.setActiveFile(fileId);
+                        }
+                    });
+                });
+            },
+
+            updateActiveItem: (fileId) => {
+                // Remove active class from all items
+                DOM.fileList.querySelectorAll('.file-list-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+
+                // Add active class to current item
+                const activeItem = DOM.fileList.querySelector(`[data-file-id="${fileId}"]`);
+                if (activeItem) {
+                    activeItem.classList.add('active');
+                }
+            }
+        };
+
+        // Tab Management
+        const TabManager = {
+            createTab: (fileData) => {
+                const tab = document.createElement('div');
+                tab.className = 'file-tab';
+                tab.dataset.fileId = fileData.id;
+
+                // Bestimme Refresh-Button Klasse und Tooltip
+                const hasFileHandle = fileData.fileHandle && typeof fileData.fileHandle.getFile === 'function';
+                const refreshClass = hasFileHandle ? 'refresh-btn auto-refresh' : 'refresh-btn';
+                const refreshTitle = hasFileHandle ? 
+                    'Datei automatisch aktualisieren (direkt von Festplatte)' : 
+                    'Datei aktualisieren (Datei auswählen)';
+
+                // Bestimme Dateityp-Label
+                let typeLabel = 'Lokal';
+                if (fileData.type === 'preset') {
+                    typeLabel = 'Vorlage';
+                }
+
+                tab.innerHTML = `
+                    <span class="drag-handle" title="Tab ziehen" draggable="true">⋮⋮</span>
+                    <span class="tab-name" title="${fileData.name}">${fileData.name}</span>
+                    <span class="tab-type">${typeLabel}</span>
+                    <button class="${refreshClass}" title="${refreshTitle}">↻</button>
+                    <button class="close-btn" title="Schließen">×</button>
+                `;
+
+                // Tab click event
+                tab.addEventListener('click', (e) => {
+                    if (!e.target.classList.contains('close-btn') && 
+                        !e.target.classList.contains('refresh-btn') &&
+                        !e.target.classList.contains('drag-handle')) {
+                        FileManager.setActiveFile(fileData.id);
+                    }
+                });
+
+                // Drag and drop events - nur auf das drag-handle
+                const dragHandle = tab.querySelector('.drag-handle');
+                TabManager.addDragEvents(tab, dragHandle);
+
+                // Refresh button event
+                tab.querySelector('.refresh-btn').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    FileManager.refreshFile(fileData.id);
+                });
+
+                // Close button event
+                tab.querySelector('.close-btn').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    FileManager.removeFile(fileData.id);
+                });
+
+                DOM.fileTabs.appendChild(tab);
+                TabManager.updateVisibility();
+            },
+
+            removeTab: (fileId) => {
+                const tab = DOM.fileTabs.querySelector(`[data-file-id="${fileId}"]`);
+                if (tab) {
+                    tab.remove();
+                }
+                TabManager.updateVisibility();
+            },
+
+            updateActiveTab: (fileId) => {
+                // Remove active class from all tabs
+                DOM.fileTabs.querySelectorAll('.file-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+
+                // Add active class to current tab
+                const activeTab = DOM.fileTabs.querySelector(`[data-file-id="${fileId}"]`);
+                if (activeTab) {
+                    activeTab.classList.add('active');
+                }
+            },
+
+            clearTabs: () => {
+                DOM.fileTabs.innerHTML = '';
+                TabManager.updateVisibility();
+            },
+
+            updateVisibility: () => {
+                const hasFiles = State.openFiles.size > 0;
+                DOM.viewControls.style.display = hasFiles ? 'flex' : 'none';
+            },
+
+            addDragEvents: (tab, dragHandle) => {
+                // Drag events auf das drag-handle
+                dragHandle.addEventListener('dragstart', (e) => {
+                    const draggedIndex = Array.from(DOM.fileTabs.children).indexOf(tab);
+                    tab.classList.add('dragging');
+                    
+                    // Store data globally for access in other events
+                    window.dragState = {
+                        draggedElement: tab,
+                        draggedIndex: draggedIndex,
+                        fileId: tab.dataset.fileId
+                    };
+                    
+                    // Set drag data
+                    e.dataTransfer.effectAllowed = 'move';
+                    e.dataTransfer.setData('text/plain', tab.dataset.fileId);
+                    
+                    console.log('Drag started:', tab.dataset.fileId, 'Index:', draggedIndex);
+                });
+
+                dragHandle.addEventListener('dragend', (e) => {
+                    tab.classList.remove('dragging');
+                    
+                    // Remove drag-over class from all tabs
+                    DOM.fileTabs.querySelectorAll('.file-tab').forEach(t => {
+                        t.classList.remove('drag-over');
+                    });
+                    
+                    // Clean up global state
+                    window.dragState = null;
+                    
+                    console.log('Drag ended');
+                });
+
+                // Drop events auf das gesamte tab
+                tab.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                    
+                    if (window.dragState && window.dragState.draggedElement !== tab) {
+                        tab.classList.add('drag-over');
+                    }
+                });
+
+                tab.addEventListener('dragleave', (e) => {
+                    // Only remove drag-over if we're really leaving this element
+                    if (!tab.contains(e.relatedTarget)) {
+                        tab.classList.remove('drag-over');
+                    }
+                });
+
+                tab.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    tab.classList.remove('drag-over');
+                    
+                    if (window.dragState && window.dragState.draggedElement !== tab) {
+                        const dropIndex = Array.from(DOM.fileTabs.children).indexOf(tab);
+                        console.log('Drop at index:', dropIndex, 'from index:', window.dragState.draggedIndex);
+                        FileManager.reorderFiles(window.dragState.draggedIndex, dropIndex);
+                    }
+                });
+            },
+
+            rebuildTabs: () => {
+                // Clear existing tabs
+                DOM.fileTabs.innerHTML = '';
+                
+                // Rebuild tabs in the correct order
+                State.fileOrder.forEach(fileId => {
+                    const fileData = State.openFiles.get(fileId);
+                    if (fileData) {
+                        TabManager.createTab(fileData);
+                    }
+                });
+                
+                // Update active tab
+                if (State.activeFileId) {
+                    TabManager.updateActiveTab(State.activeFileId);
+                }
+            }
+        };
+
+        // View Management
+        const ViewManager = {
+            updateContent: () => {
+                if (!State.activeFileId || !State.openFiles.has(State.activeFileId)) {
+                    ViewManager.showEmptyState();
+                    return;
+                }
+
+                const activeFile = State.openFiles.get(State.activeFileId);
+
+                if (State.viewMode === 'single') {
+                    ViewManager.showSingleView(activeFile);
+                } else {
+                    ViewManager.showSplitView();
+                }
+            },
+
+            showSingleView: (fileData) => {
+                DOM.contentDiv.className = '';
+                DOM.contentDiv.innerHTML = `
+                    <div class="content-panel active">
+                        <div class="panel-header">
+                            <div class="panel-title">
+                                <i class="fas fa-file-code me-1"></i>${fileData.name}
+                                <span class="badge bg-secondary ms-2">${fileData.type}</span>
+                            </div>
+                            <div class="panel-controls">
+                                <button class="panel-btn" title="Datei in neuem Tab fokussieren" onclick="FileManager.setActiveFile('${fileData.id}')">
+                                    <i class="fas fa-expand"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="panel-content">${fileData.processedContent}</div>
+                    </div>
+                `;
+            },
+
+            showSplitView: () => {
+                // Use ordered files instead of random order
+                const files = State.fileOrder.map(fileId => State.openFiles.get(fileId)).filter(Boolean);
+                if (files.length < 2) {
+                    ViewManager.showSingleView(files[0]);
+                    return;
+                }
+
+                // Zeige alle Dateien basierend auf dem View-Modus
+                let className = `split-view ${State.viewMode.replace('split-', '')}`;
+                
+                // Adaptiere Grid-Layout basierend auf Anzahl der Dateien
+                if (State.viewMode === 'grid-view') {
+                    const fileCount = files.length;
+                    let cols = Math.ceil(Math.sqrt(fileCount));
+                    
+                    // Optimiere Spaltenanzahl für bessere Darstellung im Raster
+                    if (fileCount <= 4) cols = 2;
+                    else if (fileCount <= 9) cols = 3;
+                    else cols = 4;
+                    
+                    className = 'split-view grid-view';
+                    DOM.contentDiv.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+                    DOM.contentDiv.style.gridTemplateRows = 'repeat(auto-fit, minmax(350px, auto))';
+                    DOM.contentDiv.style.maxHeight = '80vh';
+                    DOM.contentDiv.style.overflowY = 'auto';
+                    DOM.contentDiv.style.overflowX = 'visible';
+                } else if (State.viewMode === 'split-horizontal') {
+                    // Für horizontale Ansicht: ALLE nebeneinander in einer Zeile
+                    className = 'split-view split-horizontal';
+                    DOM.contentDiv.style.gridTemplateColumns = `repeat(${files.length}, minmax(350px, 1fr))`;
+                    DOM.contentDiv.style.gridTemplateRows = 'auto';
+                    DOM.contentDiv.style.maxHeight = 'none';
+                    DOM.contentDiv.style.overflowY = 'visible';
+                    DOM.contentDiv.style.overflowX = 'auto';
+                } else if (State.viewMode === 'split-vertical') {
+                    // Für vertikale Ansicht: Eine Spalte, alle untereinander
+                    className = 'split-view split-vertical';
+                    DOM.contentDiv.style.gridTemplateColumns = '1fr';
+                    DOM.contentDiv.style.gridTemplateRows = `repeat(${files.length}, minmax(300px, auto))`;
+                    DOM.contentDiv.style.maxHeight = '80vh';
+                    DOM.contentDiv.style.overflowY = 'auto';
+                    DOM.contentDiv.style.overflowX = 'visible';
+                }
+
+                DOM.contentDiv.className = className;
+
+                const panels = files.map((file) => `
+                    <div class="content-panel ${file.id === State.activeFileId ? 'active' : ''}" data-file-id="${file.id}">
+                        <div class="panel-header">
+                            <div class="panel-title">
+                                <i class="fas fa-file-code me-1"></i>${file.name}
+                                <span class="badge bg-secondary ms-2">${file.type}</span>
+                            </div>
+                            <div class="panel-controls">
+                                <button class="panel-btn" title="Als Hauptansicht anzeigen" onclick="ViewManager.setViewMode('single'); FileManager.setActiveFile('${file.id}')">
+                                    <i class="fas fa-expand"></i>
+                                </button>
+                                <button class="panel-btn" title="Datei schließen" onclick="FileManager.removeFile('${file.id}')">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="panel-content">${file.processedContent}</div>
+                    </div>
+                `).join('');
+
+                DOM.contentDiv.innerHTML = panels;
+
+                // Add click events to panels
+                DOM.contentDiv.querySelectorAll('.content-panel').forEach(panel => {
+                    panel.addEventListener('click', (e) => {
+                        // Nur wenn nicht auf einen Button geklickt wurde
+                        if (!e.target.closest('.panel-btn')) {
+                            const fileId = panel.dataset.fileId;
+                            FileManager.setActiveFile(fileId);
+                        }
+                    });
+                });
+            },
+
+            showEmptyState: () => {
+                DOM.contentDiv.className = '';
+                DOM.contentDiv.innerHTML = '<p>Ziehen Sie eine HTML-Datei in den Bereich oben oder wählen Sie ein Preset aus.</p>';
+            },
+
+            setViewMode: (mode) => {
+                State.viewMode = mode;
+
+                // Update button states
+                DOM.singleViewBtn.classList.toggle('active', mode === 'single');
+                DOM.splitHorizontalBtn.classList.toggle('active', mode === 'split-horizontal');
+                DOM.splitVerticalBtn.classList.toggle('active', mode === 'split-vertical');
+                DOM.gridViewBtn.classList.toggle('active', mode === 'grid-view');
+
+                ViewManager.updateContent();
+            }
+        };
+
+        // Content Processing
+        const ContentProcessor = {
+            simulateWordPressShortcodes: (html) => {
+                let result = html
+                    // HTML-kommentierte PHP shortcodes mit ID
+                    .replace(
+                        /<!--\?php echo do_shortcode\('\[img id="(\d+)"[^']*'\); \?-->/g,
+                        '<img src="https://placehold.co/400x400/007cba/ffffff?text=Bild+ID+$1" class="img-fluid" alt="Bild $1" style="width: 100%;">'
+                    )
+                    // Variante mit double quotes
+                    .replace(
+                        /<!--\?php echo do_shortcode\("\[img id="(\d+)"[^"]*"\); \?-->/g,
+                        '<img src="https://placehold.co/400x400/007cba/ffffff?text=Bild+ID+$1" class="img-fluid" alt="Bild $1" style="width: 100%;">'
+                    )
+                    // Flexiblere Variante für verschiedene Attribute
+                    .replace(
+                        /<!--\?php echo do_shortcode\(['"]\[img[^'"]*id=['"'](\d+)['"'][^'"]*['"]\); \?-->/g,
+                        '<img src="https://placehold.co/400x400/007cba/ffffff?text=Bild+ID+$1" class="img-fluid" alt="Bild $1" style="width: 100%;">'
+                    )
+                    // Normale PHP-Tags (nicht kommentiert)
+                    .replace(
+                        /\<\?php echo do_shortcode\('\[img id="(\d+)"[^']*'\); \?\>/g,
+                        '<img src="https://placehold.co/400x400/007cba/ffffff?text=Bild+ID+$1" class="img-fluid" alt="Bild $1" style="width: 100%;">'
+                    )
+                    // Alle anderen img shortcodes ohne spezifische ID
+                    .replace(
+                        /<!--\?php echo do_shortcode\(['"]\[img[^'"]*['"]\); \?-->/g,
+                        '<img src="https://placehold.co/400x400/007cba/ffffff?text=Placeholder+Bild" class="img-fluid" alt="Placeholder Bild" style="width: 100%;">'
+                    )
+                    // WordPress functions
+                    .replace(
+                        /get_template_directory_uri\(\)/g,
+                        'https://placehold.co/assets'
+                    )
+                    // WordPress asset paths
+                    .replace(
+                        /wp-content\/themes\/[^"'\s]*/g,
+                        'https://placehold.co/assets'
+                    )
+                    // Kaputte oder leere img tags
+                    .replace(
+                        /<img([^>]*?)src=["']([^"']*?)["']([^>]*?)>/g,
+                        (match, before, src, after) => {
+                            if (!src || src.includes('placeholder.com') || src.includes('example.com')) {
+                                return `<img${before}src="https://placehold.co/400x400/007cba/ffffff?text=Placeholder"${after}>`;
+                            }
+                            return match;
+                        }
+                    )
+                    // Allgemeine PHP-Kommentare
+                    .replace(
+                        /<!--\?php[^>]*\?-->/g,
+                        '<span class="badge bg-info"><i class="fab fa-php me-1"></i>PHP Code</span>'
+                    )
+                    // Normale PHP tags
+                    .replace(
+                        /\<\?php[^>]*\?\>/g,
+                        '<span class="badge bg-info"><i class="fab fa-php me-1"></i>PHP Code</span>'
+                    );
+                
+                return result;
+            }
+        };
+
+        // UI Management
+        const UI = {
+            updateDragDropArea: (fileName = null) => {
+                const content = fileName ? {
+                    icon: 'fas fa-file-code fa-2x text-success mb-2',
+                    title: `${fileName}`,
+                    subtitle: 'Weitere Dateien hinzufügen möglich',
+                    inputHtml: ''
+                } : {
+                    icon: 'fas fa-cloud-upload-alt fa-2x text-muted mb-2',
+                    title: 'HTML-Dateien hier hineinziehen',
+                    subtitle: 'oder klicken zum Durchsuchen',
+                    inputHtml: '<input type="file" id="fileInput" class="file-input" accept=".html,.htm" multiple>'
+                };
+
+                DOM.dragDropArea.innerHTML = `
+                    <i class="${content.icon}"></i>
+                    <h6 class="${fileName ? 'text-success' : ''}">${content.title}</h6>
+                    <p class="text-muted mb-1">${content.subtitle}</p>
+                    ${!fileName ? '<small class="text-muted">Unterstützte Dateitypen: .html, .htm</small>' : ''}
+                    ${content.inputHtml}
+                `;
+
+                if (!fileName) {
+                    FileHandler.bindFileInputEvents();
+                }
+            }
+        };
+
+        // File Handling
+        const FileHandler = {
+            handleFileSelection: async (file) => {
+                if (!Utils.isValidFile(file)) {
+                    alert('Bitte wählen Sie eine HTML-Datei aus.');
+                    return;
+                }
+
+                let fileHandle = null;
+                
+                // Try to get file handle if File System Access API is available
+                if ('showOpenFilePicker' in window && file.handle) {
+                    fileHandle = file.handle;
+                }
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    FileManager.addFile(file.name, e.target.result, 'local', fileHandle);
+                    Utils.clearSelections();
+                    UI.updateDragDropArea(file.name);
+                };
+                reader.onerror = () => Utils.showError('Fehler beim Lesen der Datei.');
+                reader.readAsText(file);
+            },
+
+            handleMultipleFiles: async (fileList) => {
+                const files = Array.from(fileList);
+                const validFiles = files.filter(file => Utils.isValidFile(file));
+                
+                if (validFiles.length === 0) {
+                    alert('Keine gültigen HTML-Dateien gefunden. Bitte wählen Sie HTML-Dateien aus.');
+                    return;
+                }
+
+                // Load all valid files
+                let loadedCount = 0;
+                let lastFileName = '';
+
+                validFiles.forEach((file, index) => {
+                    let fileHandle = null;
+                    
+                    // Try to get file handle if File System Access API is available
+                    if ('showOpenFilePicker' in window && file.handle) {
+                        fileHandle = file.handle;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        FileManager.addFile(file.name, e.target.result, 'local', fileHandle);
+                        lastFileName = file.name;
+                        loadedCount++;
+                        
+                        // Update UI when all files are loaded
+                        if (loadedCount === validFiles.length) {
+                            Utils.clearSelections();
+                            UI.updateDragDropArea(`${loadedCount} Dateien geladen`);
+                        }
+                    };
+                    reader.onerror = () => {
+                        console.error(`Fehler beim Lesen der Datei: ${file.name}`);
+                        loadedCount++;
+                        if (loadedCount === validFiles.length) {
+                            Utils.clearSelections();
+                            UI.updateDragDropArea(`${loadedCount} Dateien verarbeitet`);
+                        }
+                    };
+                    reader.readAsText(file);
+                });
+
+                // Show loading indicator
+                Utils.showLoading();
+
+                if (validFiles.length < files.length) {
+                    const skipped = files.length - validFiles.length;
+                    Utils.showError(`${skipped} Datei(en) übersprungen (nur HTML-Dateien werden unterstützt).`);
+                }
+            },
+
+            // Modern File System Access API for better file handling
+            openFileWithPicker: async () => {
+                if (!('showOpenFilePicker' in window)) {
+                    // Fallback to traditional file input
+                    document.getElementById('fileInput').click();
+                    return;
+                }
+
+                try {
+                    const fileHandles = await window.showOpenFilePicker({
+                        types: [{
+                            description: 'HTML files',
+                            accept: { 'text/html': ['.html', '.htm'] }
+                        }],
+                        multiple: true
+                    });
+
+                    for (const fileHandle of fileHandles) {
+                        const file = await fileHandle.getFile();
+                        if (Utils.isValidFile(file)) {
+                            const content = await file.text();
+                            FileManager.addFile(file.name, content, 'local', fileHandle);
+                        }
+                    }
+
+                    Utils.clearSelections();
+                    UI.updateDragDropArea(fileHandles.length === 1 ? 
+                        fileHandles[0].name : 
+                        `${fileHandles.length} Dateien geladen`);
+
+                } catch (error) {
+                    if (error.name !== 'AbortError') {
+                        console.error('Error opening file:', error);
+                        Utils.showError('Fehler beim Öffnen der Datei.');
+                    }
+                }
+            },
+
+            bindFileInputEvents: () => {
+                const fileInput = document.getElementById('fileInput');
+                if (fileInput) {
+                    fileInput.setAttribute('multiple', 'true');
+                    fileInput.addEventListener('change', (e) => {
+                        if (e.target.files.length > 0) {
+                            if (e.target.files.length === 1) {
+                                FileHandler.handleFileSelection(e.target.files[0]);
+                            } else {
+                                FileHandler.handleMultipleFiles(e.target.files);
+                            }
+                        }
+                    });
+                }
+            }
+        };
+
+        // Event Handlers
+        const EventHandlers = {
+            initDragAndDrop: () => {
+                // Click to upload
+                DOM.dragDropArea.addEventListener('click', () => {
+                    FileHandler.openFileWithPicker();
+                });
+
+                // Drag and drop events
+                ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                    DOM.dragDropArea.addEventListener(eventName, (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        if (eventName === 'dragenter' || eventName === 'dragover') {
+                            DOM.dragDropArea.classList.add('dragover');
+                        } else if (eventName === 'dragleave') {
+                            // Only remove dragover if we're leaving the dragDropArea itself
+                            if (!DOM.dragDropArea.contains(e.relatedTarget)) {
+                                DOM.dragDropArea.classList.remove('dragover');
+                            }
+                        } else if (eventName === 'drop') {
+                            DOM.dragDropArea.classList.remove('dragover');
+                            const files = e.dataTransfer.files;
+                            if (files.length > 0) {
+                                FileHandler.handleMultipleFiles(files);
+                            }
+                        }
+                    });
+                });
+            },
+
+            initViewControls: () => {
+                DOM.singleViewBtn.addEventListener('click', () => {
+                    ViewManager.setViewMode('single');
+                });
+
+                DOM.splitHorizontalBtn.addEventListener('click', () => {
+                    ViewManager.setViewMode('split-horizontal');
+                });
+
+                DOM.splitVerticalBtn.addEventListener('click', () => {
+                    ViewManager.setViewMode('split-vertical');
+                });
+
+                DOM.gridViewBtn.addEventListener('click', () => {
+                    ViewManager.setViewMode('grid-view');
+                });
+
+                DOM.closeAllBtn.addEventListener('click', () => {
+                    if (confirm('Alle geöffneten Dateien schließen?')) {
+                        FileManager.closeAll();
+                    }
+                });
+            }
+        };
+
+        // Auto-reload functionality
+        const AutoReload = {
+            lastModified: {},
+
+            checkForChanges: () => {
+                if (DOM.presetSelect.value) {
+                    // TODO: Implement file modification checking
+                    // This would require server-side support to check file timestamps
+                }
+            },
+
+            init: () => {
+                setInterval(AutoReload.checkForChanges, CONFIG.AUTO_RELOAD_INTERVAL);
+            }
+        };
+
+        // Application Initialization
+        const App = {
+            init: () => {
+                UI.updateDragDropArea();
+                EventHandlers.initDragAndDrop();
+                EventHandlers.initViewControls();
+                AutoReload.init();
+
+                // Set initial view mode
+                ViewManager.setViewMode('single');
+
+                console.log('Configurator Preview Tool initialized successfully');
+            }
+        };
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', App.init);
+    </script>
+</body>
+
+</html>

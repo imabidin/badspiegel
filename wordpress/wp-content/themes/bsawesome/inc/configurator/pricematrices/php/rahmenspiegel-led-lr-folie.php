@@ -1,6 +1,6 @@
 <?php
 // ============================================================
-// Date: 2025-08-06 17:16:59
+// Date: 2025-08-28 19:30:26
 // Key: rahmenspiegel-led-lr-folie
 // File: rahmenspiegel-led-lr-folie.php
 //

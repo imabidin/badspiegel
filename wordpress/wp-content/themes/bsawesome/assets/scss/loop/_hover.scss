@@ -1,0 +1,171 @@
+//
+// Loop product hover image styles
+//
+
+// Main product image container
+.product-image-main {
+  // transition: opacity 0.3s ease-in-out; // is getting added via JS, here as reference
+}
+
+// Hover image container
+.product-image-hover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+  // transition: opacity 0.3s ease-in-out; // is getting added via JS, here as reference
+  pointer-events: none;
+}
+
+// Hover effect for devices that support hover (desktop/laptop with mouse)
+@media (hover: hover) and (pointer: fine) {
+  .product-image-main {
+    &:hover {
+      + .product-image-hover {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+// Touch devices: explicit control via JavaScript class
+// This handles mobile/tablet where hover doesn't work properly
+@media (hover: none) and (pointer: coarse) {
+  .product-image-main {
+    // Remove any hover states on touch devices
+    &:hover {
+      + .product-image-hover {
+        opacity: 0;
+      }
+    }
+    
+    // Only show hover image when explicitly triggered via JS
+    &.touch-active {
+      + .product-image-hover {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+// Fallback for devices that can hover but use coarse pointer (e.g., touch laptops)
+@media (hover: hover) and (pointer: coarse) {
+  .product-image-main {
+    &:hover {
+      + .product-image-hover {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+// JavaScript-controlled hover state (device-specific behavior)
+// Only allow .hover class to work on non-touch devices OR when explicitly in hover mode
+.hover-capable-device .product-image-main,
+.hybrid-device .product-image-main,
+.image-mode-hover .product-image-main {
+  &.hover {
+    + .product-image-hover {
+      opacity: 1;
+    }
+  }
+}
+
+// Touch-only devices: only respond to .touch-active in "Seite" mode
+.touch-only-device .image-mode-main .product-image-main {
+  &.touch-active {
+    + .product-image-hover {
+      opacity: 1;
+    }
+  }
+  
+  // Explicitly disable .hover class on touch-only devices in "Seite" mode
+  &.hover {
+    + .product-image-hover {
+      opacity: 0 !important;
+    }
+  }
+}
+
+// // Ensure smooth loading for lazy-loaded hover images
+// .product-image-hover img[loading="lazy"] {
+//   transition: opacity 0.3s ease-in-out;
+// }
+
+// Device-specific optimizations
+.touch-only-device {
+  .product-image-hover {
+    // Optimize for touch devices - faster transitions
+    transition: opacity 0.2s ease-out !important;
+  }
+  
+  .product-image-main {
+    // Add visual feedback for touch in "Seite" mode only
+    &.touch-active {
+      transform: scale(0.98);
+      transition: transform 0.1s ease-out;
+    }
+    
+    // In "Front" mode, ensure normal link behavior
+    .image-mode-hover & {
+      transform: none !important;
+      
+      &:active {
+        transform: scale(0.98);
+        transition: transform 0.1s ease-out;
+      }
+    }
+  }
+  
+  // Visual indicator for double-tap to navigate in "Seite" mode
+  .image-mode-main .product-image-main.touch-active::after {
+    content: "Nochmal tippen für Details";
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 10;
+    pointer-events: none;
+  }
+}
+
+.hover-capable-device {
+  .product-image-hover {
+    // Smooth transitions for mouse hover
+    transition: opacity 0.3s ease-in-out !important;
+  }
+}
+
+.hybrid-device {
+  .product-image-hover {
+    // Balanced transition for hybrid devices
+    transition: opacity 0.25s ease-in-out !important;
+  }
+}
+
+// // Reduced motion support
+// @media (prefers-reduced-motion: reduce) {
+//   .product-image-main,
+//   .product-image-hover {
+//     transition: none;
+//   }
+// }
+
+// // Print styles
+// @media print {
+//   .product-image-hover {
+//     display: none;
+//   }
+
+//   .product-image-main {
+//     opacity: 1 !important;
+//   }
+// }

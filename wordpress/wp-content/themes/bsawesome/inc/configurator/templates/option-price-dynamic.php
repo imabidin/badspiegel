@@ -2,7 +2,10 @@
 /**
  * Template for price option type
  * 
- * Handles dropdown selection for pricing options with dynamically managed values
+ * Handles dropdown selection for pricing options with dynamically managed values#
+ * 
+ * @version 2.3.0
+ * 
  */
 
 if (!defined('ABSPATH')) {
@@ -122,6 +125,9 @@ if (current_user_can('manage_options') && defined('WP_DEBUG') && WP_DEBUG) {
      * Option description with modal trigger
      */
     if (!empty($option_description_file) || !empty($option_description)): 
+        // Generate modal link for option descriptions
+        // Preserve subfolder structure by removing only .html extension (like in option-offdrops.php)
+        $modal_link = 'configurator/' . preg_replace('/\.html$/', '', $option_description_file);
     ?>
         <div class="form-text">
             <?php if (!empty($option_description_file)): ?>

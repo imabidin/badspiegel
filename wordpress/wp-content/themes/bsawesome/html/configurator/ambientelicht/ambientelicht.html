@@ -1,0 +1,60 @@
+<div class="callout callout-info mb">
+  <?php if (modal_has_product_category('badspiegel')): ?>
+  <p class="mb-2">Unser vielseitiges <span class="fw-semibold">Ambientelicht ergänzt die Hauptbeleuchtung</span> und schafft eine harmonische Ausleuchtung – für ein wohnliches, individuelles Ambiente in Ihrem Bad.</p>
+  <?php endif; ?>
+  <?php if (!modal_has_product_category('badspiegel')): ?>
+  <p class="mb-2">Unser vielseitiges <span class="fw-semibold">Ambientelicht sorgt für perfekte Ausleuchtung</span> und verwandelt Ihr Bad in ein stimmungsvolles, persönliches Lichtambiente.</p>
+  <?php endif; ?>
+  <?php if (modal_has_product_category('spiegelschraenke')): ?>
+  <p class="mb-2">Je nach gewähltem Korpusmodell setzen wir das Ambientelicht unterschiedlich um:</p>
+  <ul class="mb-0">
+    <li class="mb-0"><span class="small"><span class="fw-medium">Holz:</span> Eingefräste LED Profile</span></li>
+    <li class="mb-0"><span class="small"><span class="fw-medium">Aluminium:</span> Außen montierte LED Profile</span></li>
+    <li class="mb-0"><span class="small"><span class="fw-medium">Dachschräge:</span> An der Schräge wird keine Beleuchtung montiert</span></li>
+  </ul>
+  <?php endif; ?>
+</div>
+
+<?php if (modal_has_product_category('spiegelschraenke')): ?>
+<div class="row g-3 mb">
+  <div class="col-md-6">
+    <div class="card h-100 border border-light-subtle shadow-sm text-center">
+      <div class="card-body p-0 pt-2">
+        <h6 class="card-title">Holz-Korpus</h6>
+        <div class="position-relative d-inline-block border border-light-subtle shadow-sm mb-3">
+          <?php echo do_shortcode('[img id="2040" size="thumbnail"]'); ?>
+        </div>
+        <div class="px-3 pb-3">
+          <p class="mb-0 small text-muted">Eingefräste LED Profile</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card h-100 border border-light-subtle shadow-sm text-center">
+      <div class="card-body p-0 pt-2">
+        <h6 class="card-title">Aluminium-Korpus</h6>
+        <div class="position-relative d-inline-block border border-light-subtle shadow-sm mb-3">
+          <?php echo do_shortcode('[img id="2020" size="thumbnail"]'); ?>
+        </div>
+        <div class="px-3 pb-3">
+          <p class="mb-0 small text-muted">Außen montierte LED Profile</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<?php endif; ?>
+
+<?php if (!modal_has_product_category('badspiegel')): ?>
+<div class="card h-100 border border-light-subtle shadow-sm text-center">
+  <div class="card-body">
+    <h6 class="card-title">
+      <i class="fa-light fa-sharp fa-image me-2"></i>Beispiel Ambientelicht
+    </h6>
+    <div class="position-relative d-inline-block border border-light-subtle shadow-sm">
+      <?php echo do_shortcode('[img id="1239" size="medium"]'); ?>
+    </div>
+  </div>
+</div>
+<?php endif; ?>

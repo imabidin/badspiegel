@@ -1,0 +1,217 @@
+Opitmierungsideen für setup.php configurator
+
+
+Basierend auf deiner Priorität für Performance und Stabilität, hier sind die wichtigsten Optimierungen:
+
+## 1. **Kritisch: Pricematrix-Caching**
+
+````php
+function get_product_options($product) {
+    static $options_cache = array();
+    static $pricematrix_cache = array(); // ✅ Neue Cache-Ebene
+    
+    $product_id = $product->get_id();
+    
+    if (isset($options_cache[$product_id])) {
+        return $options_cache[$product_id];
+    }
+    
+    // ...existing code...
+    
+    $pricematrix_file = get_post_meta($product_id, '_pricematrix_file', true);
+    
+    if (!empty($pricematrix_file)) {
+        // ✅ Cache Pricematrix-Dateien
+        if (!isset($pricematrix_cache[$pricematrix_file])) {
+            $pricematrix_path = get_stylesheet_directory() . '/inc/configurator/pricematrices/php/' . $pricematrix_file;
+            
+            if (file_exists($pricematrix_path)) {
+                $pricematrix_cache[$pricematrix_file] = include $pricematrix_path;
+            } else {
+                $pricematrix_cache[$pricematrix_file] = null;
+            }
+        }
+        
+        $pricematrix_data = $pricematrix_cache[$pricematrix_file];
+        
+        // ...rest of processing...
+    }
+    
+    // ...existing code...
+}
+````
+
+## 2. **Basis-Validierung für Stabilität**
+
+````php
+function get_product_options($product) {
+    static $options_cache = array();
+    
+    // ✅ Minimal validation
+    if (!$product || !method_exists($product, 'get_id')) {
+        return array();
+    }
+    
+    $product_id = $product->get_id();
+    
+    if (isset($options_cache[$product_id])) {
+        return $options_cache[$product_id];
+    }
+    
+    // ...existing code...
+}
+````
+
+## 3. **Optimierte Array-Operationen**
+
+````php
+function get_product_options($product) {
+    // ...existing code...
+    
+    // ✅ Verwende isset() statt array_key_exists() für bessere Performance
+    $applies_to_products = $option_value['applies_to']['products'] ?? array();
+    $applies_to_categories = $option_value['applies_to']['categories'] ?? array();
+    $applies_to_attributes = $option_value['applies_to']['attributes'] ?? array();
+    
+    // ✅ Einmalige Typisierung
+    if (!is_array($applies_to_attributes)) {
+        $applies_to_attributes = array($applies_to_attributes);
+    }
+    
+    // ✅ Verwende in_array() mit strict comparison
+    if (!empty($applies_to_products)) {
+        if (in_array($product_id, $applies_to_products, true)) {
+            $applies = true;
+        }
+    }
+    
+    // ...existing code...
+}
+````
+
+## 4. **Optimierte Cart-Datenverarbeitung**
+
+````php
+function product_configurator_add_cart_item_data($cart_item_data, $product_id) {
+    $product = wc_get_product($product_id);
+    $options = get_product_options($product);
+    
+    // ✅ Early exit für Performance
+    if (empty($options) || !is_array($options)) {
+        return $cart_item_data;
+    }
+    
+    $additional_price = 0.0;
+    
+    foreach ($options as $option) {
+        $option_name = $option['key'] ?? '';
+        if (empty($option_name)) continue;
+        
+        $option_name = sanitize_title($option_name);
+        $posted_value = $_POST[$option_name] ?? '';
+        
+        if (empty($posted_value)) continue;
+        
+        // ✅ Direkte Datenextraktion ohne prepare_option_data() für bessere Performance
+        $option_type = $option['type'] ?? '';
+        $option_label = $option['label'] ?? '';
+        $option_price = floatval($option['price'] ?? 0);
+        $display_value = $posted_value;
+        
+        // ✅ Sub-option lookup optimiert
+        if (!empty($option['options']) && isset($option['options'][$posted_value])) {
+            $sub = $option['options'][$posted_value];
+            $display_value = $sub['label'] ?? $posted_value;
+            $option_price = floatval($sub['price'] ?? 0);
+        }
+        
+        $cart_item_data['custom_configurator'][$option_name] = [
+            'key'   => $option_name,
+            'label' => $option_label,
+            'value' => $display_value,
+            'price' => $option_price,
+            'type'  => $option_type,
+        ];
+        
+        $additional_price += $option_price;
+    }
+    
+    if (!empty($cart_item_data['custom_configurator'])) {
+        $cart_item_data['custom_configurator']['original_price'] = $product->get_price();
+        $cart_item_data['custom_configurator']['additional_price'] = $additional_price;
+        $cart_item_data['unique_key'] = md5(microtime() . rand());
+    }
+    
+    return $cart_item_data;
+}
+````
+
+## 5. **Performance-optimierte Display-Funktion**
+
+````php
+function product_configurator_get_item_data($item_data, $cart_item) {
+    if (!isset($cart_item['custom_configurator']) || !is_array($cart_item['custom_configurator'])) {
+        return $item_data;
+    }
+    
+    // ✅ Statische Arrays für bessere Performance
+    static $skip_keys = array('original_price', 'additional_price');
+    static $skip_types = array('price', 'pricematrix');
+    
+    foreach ($cart_item['custom_configurator'] as $key => $option_data) {
+        // ✅ Schnelle Überprüfungen zuerst
+        if (in_array($key, $skip_keys, true)) continue;
+        if (!is_array($option_data)) continue;
+        
+        $option_type = $option_data['type'] ?? '';
+        if ($option_type && in_array($option_type, $skip_types, true)) continue;
+        
+        $display_label = $option_data['label'] ?? '';
+        $display_value = $option_data['value'] ?? '';
+        
+        if ($display_label && $display_value) {
+            $item_data[] = array(
+                'key'   => $display_label,
+                'value' => wp_kses_post($display_value),
+            );
+        }
+    }
+    
+    return $item_data;
+}
+````
+
+## 6. **Vereinfachte prepare_option_data() - nur wenn nötig**
+
+````php
+function prepare_option_data(array $option, $posted_value) {
+    // ✅ Nur essenzielle Daten für Performance
+    $option_key = $option['key'] ?? sanitize_title($option['label'] ?? uniqid('key_'));
+    $option_label = $option['label'] ?? uniqid('label_');
+    $option_price = floatval($option['price'] ?? 0);
+    $display_value = $posted_value;
+    
+    // ✅ Schnelle Sub-option Lookup
+    if (!empty($option['options']) && isset($option['options'][$posted_value])) {
+        $sub = $option['options'][$posted_value];
+        $display_value = $sub['label'] ?? $posted_value;
+        $option_price = floatval($sub['price'] ?? 0);
+    }
+    
+    return array(
+        'option_key' => $option_key,
+        'option_label' => $option_label,
+        'value_label' => $display_value,
+        'option_price' => $option_price,
+    );
+}
+````
+
+## **Priorität der Implementierung:**
+
+1. **Pricematrix-Caching** (Zeilen 1-30) - Größter Performance-Gewinn
+2. **Basis-Validierung** (Zeilen 31-40) - Stabilität
+3. **Optimierte Cart-Verarbeitung** (Zeilen 70-120) - Reduziert Overhead
+4. **Display-Optimierung** (Zeilen 121-150) - Für häufige Cart-Aufrufe
+
+Diese Optimierungen fokussieren sich auf die Performance-kritischen Pfade und reduzieren unnötige Verarbeitungsschritte, ohne die Funktionalität zu beeinträchtigen.

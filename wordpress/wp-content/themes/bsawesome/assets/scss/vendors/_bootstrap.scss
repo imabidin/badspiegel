@@ -1,0 +1,123 @@
+// vendors/_bootstrap.scss
+
+// Alerts
+//
+// $alert-margin-bottom: 1.5rem;
+
+//
+// Accordion
+//
+
+// $accordion-button-bg: $secondary-light;
+// $accordion-button-color: $dark;
+
+// $accordion-button-active-bg: $dark;
+// $accordion-button-active-color: $white;
+
+// $accordion-icon-color: $dark;
+// $accordion-icon-active-color: $white;
+
+// $accordion-border-width: 0;
+
+//
+// Offcanvas
+//
+
+// $offcanvas-vertical-height: 60vh;
+
+//
+// Configuration
+//
+
+@import "./bootstrap/functions";
+@import "./bootstrap/variables";
+@import "./bootstrap/variables-dark";
+@import "./bootstrap/maps";
+@import "./bootstrap/mixins";
+@import "./bootstrap/utilities";
+
+//
+// Layout & components
+//
+
+@import "./bootstrap/root";
+@import "./bootstrap/reboot";
+@import "./bootstrap/type";
+@import "./bootstrap/images";
+@import "./bootstrap/containers";
+@import "./bootstrap/grid";
+@import "./bootstrap/tables";
+@import "./bootstrap/forms";
+
+@import "./bootstrap/buttons";
+@import "./bootstrap/transitions";
+@import "./bootstrap/dropdown";
+@import "./bootstrap/button-group";
+@import "./bootstrap/nav";
+@import "./bootstrap/navbar";
+@import "./bootstrap/card";
+@import "./bootstrap/accordion";
+@import "./bootstrap/breadcrumb";
+@import "./bootstrap/pagination";
+@import "./bootstrap/badge";
+@import "./bootstrap/alert";
+@import "./bootstrap/callout";
+@import "./bootstrap/progress";
+@import "./bootstrap/list-group";
+@import "./bootstrap/close";
+@import "./bootstrap/toasts";
+@import "./bootstrap/modal";
+@import "./bootstrap/tooltip";
+@import "./bootstrap/popover";
+@import "./bootstrap/carousel";
+@import "./bootstrap/spinners";
+@import "./bootstrap/offcanvas";
+@import "./bootstrap/placeholders";
+
+// @each $color, $value in $theme-colors {
+//   .btn-#{$color} {
+//     @if str-index($color, "light") {
+//       @include button-variant($value, $value, $hover-background: shade-color($value, $btn-hover-bg-shade-amount), $hover-border: shade-color($value, $btn-hover-border-shade-amount), $active-background: shade-color($value, $btn-active-bg-shade-amount), $active-border: shade-color($value, $btn-active-border-shade-amount));
+//     } @else if str-index($color, "dark") {
+//       @include button-variant($value, $value, $hover-background: tint-color($value, $btn-hover-bg-tint-amount), $hover-border: tint-color($value, $btn-hover-border-tint-amount), $active-background: tint-color($value, $btn-active-bg-tint-amount), $active-border: tint-color($value, $btn-active-border-tint-amount));
+//     } @else {
+//       @include button-variant($value, $value);
+//     }
+//   }
+// }
+
+//
+// Helpers
+//
+
+@import "./bootstrap/helpers";
+
+//
+// Utilities
+//
+
+@import "./bootstrap/utilities/api";
+
+// .d-flex-center {
+//   @extend .d-flex;
+//   @extend .justify-content-center;
+//   @extend .align-items-center;
+// }
+
+// .d-flex-x-center {
+//   @extend .d-flex;
+//   @extend .justify-content-center;
+// }
+
+// .d-flex-y-center {
+//   @extend .d-flex;
+//   @extend .align-items-center;
+// }
+
+//
+// Custom
+//
+
+// abbr[title] {
+//   @extend .text-decoration-none;
+// }

@@ -1,6 +1,6 @@
 <?php
 // ============================================================
-// Date: 2025-08-06 17:17:14
+// Date: 2025-08-28 19:30:38
 // Key: unterschrank-BMAR002A-LED
 // File: unterschrank-BMAR002A-LED.php
 //

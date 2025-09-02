@@ -1,0 +1,38 @@
+//
+// Utilities
+//
+
+.g {
+  @extend .g-4;
+  @extend .g-md-5;
+}
+
+.mt {
+  @extend .mt-4;
+  @extend .mt-md-5;
+}
+
+.mb {
+  @extend .mb-4;
+  @extend .mb-md-5;
+}
+
+.my {
+  @extend .my-4;
+  @extend .my-md-5;
+}
+
+.pt {
+  @extend .pt-4;
+  @extend .pt-md-5;
+}
+
+.pb {
+  @extend .pb-4;
+  @extend .pb-md-5;
+}
+
+.py {
+  @extend .py-4;
+  @extend .py-md-5;
+}

@@ -1,0 +1,47 @@
+//
+// Navigation
+//
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  height: 3rem;
+  transition: color 0.15s ease-in-out;
+}
+
+.nav-link {
+  &:hover {
+    color: $primary;
+  }
+
+  &:active {
+    color: $primary;
+  }
+
+  &.show {
+    color: $primary;
+  }
+}
+
+.nav-link.is-child-link {
+  height: 3.5rem;
+}
+
+.menu-thumb {
+  width: 3.5rem;
+  height: 3.5rem;
+}
+
+.menu-thumb + span {
+  white-space: nowrap;
+}
+
+.menu-thumb + span {
+  padding-left: 3.75rem;
+}
+
+@media (min-width: 768px) {
+  .menu-thumb + span {
+    padding-right: 1rem;
+  }
+}

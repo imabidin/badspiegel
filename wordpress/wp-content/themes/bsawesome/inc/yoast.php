@@ -1,7 +1,13 @@
 <?php defined('ABSPATH') || exit;
 
 /**
- * Yoast.
+ * Yoast SEO
+ *
+ * @package BSAwesome
+ * @subpackage SEO
+ * @since 1.0.0
+ * @author BS Awesome Team
+ * @version 2.3.0
  * 
  * Updated 08/06/2025 - Added wpseo_canonical filter to change canonical URL for WooCommerce shop page.
  */

@@ -1,0 +1,47 @@
+<?php
+/**
+ * EXAMPLE: Ultra-Simple Template with Pre-defined Variables
+ * 
+ * Standard variables are automatically available:
+ * - $is_badspiegel
+ * - $is_badspiegel_mit_beleuchtung
+ * - $is_badspiegel_mit_rahmen  
+ * - $is_spiegelschrank
+ * - $is_spiegelschrank_mit_faechern
+ * 
+ * For NEW categories, just get them manually:
+ * $cat = get_modal_category_lookup();
+ * $is_new_category = isset($cat['new-category-slug']);
+ */
+
+// Only your business logic - no variable definitions needed!
+$show_special_info = $is_badspiegel && $is_badspiegel_mit_beleuchtung;
+$show_cabinet_info = $is_spiegelschrank || $is_spiegelschrank_mit_faechern;
+
+// For new categories (until added to standard set):
+$cat = get_modal_category_lookup();
+$is_new_category = isset($cat['some-new-category']);
+?>
+
+<h4>Example Template</h4>
+<div class="card">
+  <div class="card-body">
+    <ul>
+      <?php if ($is_badspiegel): ?>
+      <li>This is a Badspiegel</li>
+      <?php endif; ?>
+      
+      <?php if ($show_special_info): ?>
+      <li>Special info for illuminated mirrors</li>
+      <?php endif; ?>
+      
+      <?php if ($show_cabinet_info): ?>
+      <li>Cabinet-related information</li>
+      <?php endif; ?>
+      
+      <?php if ($is_new_category): ?>
+      <li>New category content</li>
+      <?php endif; ?>
+    </ul>
+  </div>
+</div>

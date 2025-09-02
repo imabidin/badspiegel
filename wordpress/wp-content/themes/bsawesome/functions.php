@@ -6,11 +6,7 @@
  * This file handles the loading of all theme functionality including
  * setup, assets, shortcodes, WooCommerce integration, and layout components.
  *
- * @package BSAwesome
- * @subpackage Functions
- * @since 1.0.0
- * @author BS Awesome Team
- * @version 1.0.0
+ * @version 2.3.1
  */
 
 // Get theme directory paths for file inclusions
@@ -22,11 +18,11 @@ require_once $inc_dir . 'setup.php';         // Theme setup and configuration
 require_once $inc_dir . 'assets.php';        // Asset management (CSS/JS)
 require_once $inc_dir . 'shortcodes.php';    // Custom shortcodes
 require_once $inc_dir . 'woocommerce.php';   // WooCommerce integration
+require_once $inc_dir . 'account.php';       // Account functionality
 require_once $inc_dir . 'loop.php';          // Product loop customizations
 require_once $inc_dir . 'favourites.php';    // Favourites functionality
 require_once $inc_dir . 'forms.php';         // Form handling
 require_once $inc_dir . 'germanized.php';    // German market compliance
-require_once $inc_dir . 'paypal.php';        // PayPal integration
 require_once $inc_dir . 'yoast.php';         // Yoast SEO integration
 require_once $inc_dir . 'zendesk.php';       // Zendesk support integration
 require_once $inc_dir . 'modal.php';         // Modal functionality
@@ -105,4 +101,3 @@ require_once $inc_dir . 'configurator/templates/option.php';
 require_once $inc_dir . 'helpers/display-imgsizes.php';
 // require_once $inc_dir . 'helpers/display-optiondata.php';
 require_once $inc_dir . 'helpers/addtocart-classes.php'; // important for configurator
-require_once $inc_dir . 'account.php';

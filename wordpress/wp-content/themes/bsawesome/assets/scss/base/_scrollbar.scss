@@ -1,0 +1,18 @@
+//
+// Scrollbar
+//
+
+//
+// No scrollbar utility
+//
+
+// Chrome, Edge and Safari
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+// Firefox, IE, and Edge
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

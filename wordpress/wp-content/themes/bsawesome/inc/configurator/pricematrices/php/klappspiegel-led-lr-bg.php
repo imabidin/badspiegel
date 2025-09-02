@@ -1,6 +1,6 @@
 <?php
 // ============================================================
-// Date: 2025-08-06 17:16:57
+// Date: 2025-08-28 19:30:24
 // Key: klappspiegel-led-lr-bg
 // File: klappspiegel-led-lr-bg.php
 //

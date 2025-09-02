@@ -11,7 +11,7 @@
  * @subpackage WooCommerce
  * @since 1.0.0
  * @author BS Awesome Team
- * @version 1.0.0
+ * @version 2.3.0
  */
 
 /**
@@ -208,7 +208,7 @@ add_action('woocommerce_after_shop_loop_item', 'wrapping_loop_end', 20);
 
 function wrapping_loop_start() // Wrapping loop with .card framework.
 {
-	echo '<div class="card border-0 h-100">';
+	echo '<div class="card border-0 h-100 shadow-sm">';
 }
 function wrapping_loop_end()
 {
@@ -248,7 +248,7 @@ function woocommerce_template_loop_product_title() // Overriding loop link
 	global $product;
 	$link = apply_filters('woocommerce_loop_product_link', get_the_permalink(), $product);
 
-	echo '<a class="woocommerce-LoopProduct-link woocommerce-loop-product__link woocommerce-loop-product__title text-montserrat link-body-emphasis lh-sm small mb-2" href="' . esc_url($link) . '" title="' . esc_attr(get_the_title()) . '">' . esc_html(get_the_title()) . '</a>';
+	echo '<a class="woocommerce-LoopProduct-link woocommerce-loop-product__link woocommerce-loop-product__title text-montserrat link-body-emphasis lh-sm small mx-3 mb-2 mt-1" href="' . esc_url($link) . '" title="' . esc_attr(get_the_title()) . '">' . esc_html(get_the_title()) . '</a>';
 }
 function woocommerce_template_loop_product_link_close() // Close loop, override content
 {} // (remove content)

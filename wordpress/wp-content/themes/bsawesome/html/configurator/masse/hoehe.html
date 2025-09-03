@@ -1,31 +1,44 @@
 <?php
 
 /**
- * V2.2 - WITH DEBUG OUTPUT
+ * @version V.2.3.0
  */
+
+?>
+
+<?php
 
 // All variables are now available globally from modal.php
 // No need to define them here anymore!
 
-
-// DEBUG: Check existing variables
-// DEBUG: Check existing variables
-// echo "<!-- DEBUG: is_badspiegel=" . ($is_badspiegel ? 'T' : 'F') . " is_badspiegel_mit_beleuchtung=" . ($is_badspiegel_mit_beleuchtung ? 'T' : 'F') . " is_spiegelschrank=" . ($is_spiegelschrank ? 'T' : 'F') . " is_badspiegel_mit_holzrahmen=" . ($is_badspiegel_mit_holzrahmen ? 'T' : 'F') . " is_spiegelschrank_mit_faechern=" . ($is_spiegelschrank_mit_faechern ? 'T' : 'F') . " -->";
-
-// All category variables are now available globally from modal.php
-// No need to define them here anymore!
-
-// DEBUG: Show all category checks
-// echo "<!-- DEBUG Spiegel: ohne_bel=" . ($is_badspiegel_ohne_beleuchtung ? 'T' : 'F') . " mit_bel=" . ($is_badspiegel_mit_beleuchtung ? 'T' : 'F') . " mit_leuchte=" . ($is_badspiegel_mit_leuchte ? 'T' : 'F') . " mit_rahmen=" . ($is_badspiegel_mit_rahmen ? 'T' : 'F') . " mit_fernseher=" . ($is_badspiegel_mit_fernseher ? 'T' : 'F') . " fuer_dachschraege=" . ($is_badspiegel_fuer_dachschraege ? 'T' : 'F') . " mit_abg_ecken=" . ($is_badspiegel_mit_abgerundeten_ecken ? 'T' : 'F') . " abgerundet=" . ($is_badspiegel_abgerundet ? 'T' : 'F') . " mit_rundbogen=" . ($is_badspiegel_mit_rundbogen ? 'T' : 'F') . " oval=" . ($is_badspiegel_oval ? 'T' : 'F') . " hollywood=" . ($is_hollywood_spiegel ? 'T' : 'F') . " klapp=" . ($is_klappspiegel ? 'T' : 'F') . " raumteiler=" . ($is_spiegel_raumteiler ? 'T' : 'F') . " -->";
-// echo "<!-- DEBUG Spiegelschränke: ohne_bel=" . ($is_spiegelschraenke_ohne_beleuchtung ? 'T' : 'F') . " mit_bel=" . ($is_spiegelschraenke_mit_beleuchtung ? 'T' : 'F') . " mit_leuchte=" . ($is_spiegelschraenke_mit_leuchte ? 'T' : 'F') . " fuer_dachschraege=" . ($is_spiegelschraenke_fuer_dachschraege ? 'T' : 'F') . " mit_faechern=" . ($is_spiegelschrank_mit_faechern ? 'T' : 'F') . " unterschraenke=" . ($is_unterschraenke ? 'T' : 'F') . " sideboards=" . ($is_sideboards ? 'T' : 'F') . " lowboards=" . ($is_lowboards ? 'T' : 'F') . " -->";
-// echo "<!-- DEBUG Spiegelschränke: ohne_bel=" . ($is_spiegelschraenke_ohne_beleuchtung ? 'T' : 'F') . " mit_bel=" . ($is_spiegelschraenke_mit_beleuchtung ? 'T' : 'F') . " mit_leuchte=" . ($is_spiegelschraenke_mit_leuchte ? 'T' : 'F') . " fuer_dachschraege=" . ($is_spiegelschraenke_fuer_dachschraege ? 'T' : 'F') . " mit_faechern=" . ($is_spiegelschraenke_mit_faechern ? 'T' : 'F') . " unterschraenke=" . ($is_unterschraenke ? 'T' : 'F') . " sideboards=" . ($is_sideboards ? 'T' : 'F') . " lowboards=" . ($is_lowboards ? 'T' : 'F') . " -->";
-
 // All attribute variables are now available globally from modal.php
 // No need to define them here anymore!
 
+// CONDITIONAL DEBUG OUTPUT - controlled by $modal_debug_enabled
+if ($modal_debug_enabled) {
+    // DEBUG: Show all business logic variables
+    echo "<!-- DEBUG Business Logic Variables: -->";
+    echo "<!-- show_spiegelkante_info: " . (isset($show_spiegelkante_info) ? ($show_spiegelkante_info ? 'TRUE' : 'FALSE') : 'NOT_SET') . " -->";
+    echo "<!-- show_lichtflaechen_info: " . (isset($show_lichtflaechen_info) ? ($show_lichtflaechen_info ? 'TRUE' : 'FALSE') : 'NOT_SET') . " -->";
+    echo "<!-- show_korpuskante_info: " . (isset($show_korpuskante_info) ? ($show_korpuskante_info ? 'TRUE' : 'FALSE') : 'NOT_SET') . " -->";
+    echo "<!-- show_offene_faecher_info: " . (isset($show_offene_faecher_info) ? ($show_offene_faecher_info ? 'TRUE' : 'FALSE') : 'NOT_SET') . " -->";
 
-// DEBUG: Show attribute checks
-// echo "<!-- DEBUG Attributes: faecherposition_seitlich=" . ($has_faecherposition_seitlich ? 'T' : 'F') . " faecherposition_unten=" . ($has_faecherposition_unten ? 'T' : 'F') . " faecherposition_mittig=" . ($has_faecherposition_mittig ? 'T' : 'F') . " -->";
+    // DEBUG: Show category variables used in business logic
+    echo "<!-- DEBUG Category Variables for Business Logic: -->";
+    echo "<!-- is_badspiegel: " . (isset($is_badspiegel) ? ($is_badspiegel ? 'TRUE' : 'FALSE') : 'NOT_SET') . " -->";
+    echo "<!-- is_badspiegel_mit_holzrahmen: " . (isset($is_badspiegel_mit_holzrahmen) ? ($is_badspiegel_mit_holzrahmen ? 'TRUE' : 'FALSE') : 'NOT_SET') . " -->";
+    echo "<!-- is_badspiegel_mit_beleuchtung: " . (isset($is_badspiegel_mit_beleuchtung) ? ($is_badspiegel_mit_beleuchtung ? 'TRUE' : 'FALSE') : 'NOT_SET') . " -->";
+    echo "<!-- is_spiegelschrank: " . (isset($is_spiegelschrank) ? ($is_spiegelschrank ? 'TRUE' : 'FALSE') : 'NOT_SET') . " -->";
+    echo "<!-- is_spiegelschrank_mit_faechern: " . (isset($is_spiegelschrank_mit_faechern) ? ($is_spiegelschrank_mit_faechern ? 'TRUE' : 'FALSE') : 'NOT_SET') . " -->";
+
+    // DEBUG: Show what categories are actually available
+    echo "<!-- DEBUG Category Lookup Data: -->";
+    $cat = get_modal_category_lookup();
+    echo "<!-- Category data: " . json_encode(array_keys($cat)) . " -->";
+
+    // DEBUG: Show attribute checks
+    // echo "<!-- DEBUG Attributes: faecherposition_seitlich=" . ($has_faecherposition_seitlich ? 'T' : 'F') . " faecherposition_unten=" . ($has_faecherposition_unten ? 'T' : 'F') . " faecherposition_mittig=" . ($has_faecherposition_mittig ? 'T' : 'F') . " -->";
+}
 ?>
 
 <div class="">

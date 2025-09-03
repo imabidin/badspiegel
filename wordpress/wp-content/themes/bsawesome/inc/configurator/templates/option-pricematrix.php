@@ -31,7 +31,7 @@
 $classes = ['option-group'];
 
 // Debug mode - set to true to show all price matrix options
-$debug_mode = true;
+$debug_mode = false;
 
 if (!$debug_mode) {
     $classes[] = 'd-none';
@@ -51,9 +51,9 @@ $price_options = $option_values ?? array();
 ?>
 
 <!-- Price Matrix Option Container -->
-<div id="option_<?php echo esc_attr($option_key); ?>" 
-     class="<?php echo esc_attr($class_attr); ?>" 
-     data-key="<?php echo esc_attr($option_key); ?>" 
+<div id="option_<?php echo esc_attr($option_key); ?>"
+     class="<?php echo esc_attr($class_attr); ?>"
+     data-key="<?php echo esc_attr($option_key); ?>"
      data-label="<?php echo esc_attr($option_label); ?>"
      data-order="<?php echo esc_attr($option_order); ?>"
      data-group="<?php echo esc_attr($option_group); ?>">
@@ -86,7 +86,7 @@ $price_options = $option_values ?? array();
             <?= esc_html($option_placeholder); ?>
         </option>
 
-        <?php 
+        <?php
         /**
          * Render each pricing option
          * Loop through available price matrix values
@@ -96,13 +96,13 @@ $price_options = $option_values ?? array();
                 $sub_label = $value['label'] ?? '';
                 $sub_price = $value['price'] ?? '';
         ?>
-            <option value="<?= esc_attr($option_value); ?>" 
-                    data-label="<?= esc_html($sub_label); ?>" 
+            <option value="<?= esc_attr($option_value); ?>"
+                    data-label="<?= esc_html($sub_label); ?>"
                     data-price="<?= esc_attr($sub_price); ?>">
                 <?= esc_html($sub_label); ?> (+<?= esc_html($sub_price); ?> €)
             </option>
-        <?php 
-            endforeach; 
+        <?php
+            endforeach;
         endif; ?>
 
     </select>
@@ -114,7 +114,7 @@ $price_options = $option_values ?? array();
      */
     ?>
     <p class="text-end text-secondary-emphasis d-none">
-        Aufpreis <span class="sub_name"></span>: 
+        Aufpreis <span class="sub_name"></span>:
         <span class="sub_label"></span> +<span class="sub_price"></span> €
     </p>
 </div>

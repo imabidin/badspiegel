@@ -1949,7 +1949,7 @@ function get_all_product_options()
             'group' => 'masse',
             'label' => 'Höhe links in mm',
             'description' => 'Welche Höhe für links ist korrekt?',
-            'description_file' => 'masse/hoehe-unten.html',
+            'description_file' => 'masse/hoehe-links.html',
             'placeholder' => 'Geben Sie eine Höhe für die linke Seite ein',
             'applies_to' => array(
                 'products'           => array(),
@@ -1971,7 +1971,7 @@ function get_all_product_options()
             'group' => 'masse',
             'label' => 'Höhe rechts in mm',
             'description' => 'Welche Höhe für rechts ist korrekt?',
-            'description_file' => 'masse/hoehe-oben.html',
+            'description_file' => 'masse/hoehe-rechts.html',
             'placeholder' => 'Geben Sie eine Höhe für die rechte Seite ein',
             'applies_to' => array(
                 'products'           => array(),

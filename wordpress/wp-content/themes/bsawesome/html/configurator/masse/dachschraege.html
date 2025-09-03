@@ -1,31 +1,43 @@
 <?php
 
 /**
- * ULTRA SIMPLIFIED: Pre-defined Category Variables
- * 
- * All standard category variables are already available!
- * No need to define them - they're set automatically in modal.php
- * 
- * Available variables:
- * - $is_badspiegel
- * - $is_badspiegel_mit_beleuchtung
- * - $is_badspiegel_mit_rahmen  
- * - $is_spiegelschrank
- * - $is_spiegelschrank_mit_faechern
- * - $is_spiegel_raumteiler
- * - $is_spiegelschraenke_aus_aluminium
+ * @version V.2.4.0
+ * @description Template with conditional content for Badspiegel and Spiegelschrank
  */
+
 ?>
 
-<div class="callout callout-info mb">
+<?php
+
+// All category variables are now available globally from modal.php
+// No need to define them here anymore!
+
+// All attribute variables are now available globally from modal.php
+// No need to define them here anymore!
+
+?>
+
+<?php if ($is_spiegelschrank): ?>
+<div class="callouts callout-infos mb">
   <h5 class="mb-2">
-    <i class="fa-light fa-sharp fa-triangle me-2"></i>Spiegelschrank für Dachschrägen
+    <i class="fa-light fa-sharp fa-pentagon me-2"></i>Spiegelschrank für Dachschrägen
   </h5>
   <p class="mb-2">Passgenauigkeit ist oberstes Gebot in Räumen mit Dachschrägen. Bei unseren Dachschrägen-Spiegelschränken geben Sie ganz einfach die <span class="fw-semibold">Breite oben und unten</span> sowie die <span class="fw-semibold">Höhe links und rechts</span> in Millimetern an.</p>
   <p class="mb-0">So entsteht ein individuelles Unikat, das sich harmonisch in Ihr Dachbad einfügt – ob trapezförmig oder sogar dreieckig.</p>
 </div>
+<?php endif; ?>
 
-<div class="callout callout-info mb">
+<?php if ($is_badspiegel): ?>
+<div class="callouts callout-infos mb">
+  <h5 class="mb-2">
+    <i class="fa-light fa-sharp fa-pentagon me-2"></i>Badspiegel für Dachschrägen
+  </h5>
+  <p class="mb-2">Passgenauigkeit ist oberstes Gebot in Räumen mit Dachschrägen. Bei unseren Dachschrägen-Badspiegeln geben Sie ganz einfach die <span class="fw-semibold">Breite oben und unten</span> sowie die <span class="fw-semibold">Höhe links und rechts</span> in Millimetern an.</p>
+  <p class="mb-0">So entsteht ein individuelles Unikat, das sich harmonisch in Ihr Dachbad einfügt – ob trapezförmig oder sogar dreieckig.</p>
+</div>
+<?php endif; ?>
+
+<div class="callouts callout-infos mb">
   <h5 class="mb-2">
     <i class="fa-light fa-sharp fa-ruler-combined me-2"></i>Flexibel & maßgeschneidert
   </h5>
@@ -33,51 +45,172 @@
     <li><span class="fw-semibold">Breite:</span> Oben und unten separat wählbar</li>
     <li><span class="fw-semibold">Höhe:</span> Links und rechts individuell bestimmbar</li>
     <li><span class="fw-semibold">Toleranz:</span> Bitte beachten Sie eine Abweichung von ±2–3 mm durch die Fertigung</li>
+    <?php if ($is_spiegelschrank): ?>
+    <li><span class="fw-semibold">Mehr Stauraum unterm Dach:</span> Nutzen Sie jede Schräge und Ecke optimal aus</li>
+    <?php endif; ?>
+    <?php if ($is_badspiegel): ?>
     <li><span class="fw-semibold">Mehr Platz unterm Dach:</span> Nutzen Sie jede Schräge und Ecke optimal aus</li>
+    <?php endif; ?>
   </ul>
 </div>
 
-<div class="callout callout-info mb">
+<div class="callouts callout-infos mb">
   <h5 class="mb-2">
     <i class="fa-light fa-sharp fa-1 me-2"></i>Dachschräge Position
   </h5>
-  <p class="mb-3">Zuerst die Position der Dachschräge auswählen.</p>
+  <?php if ($is_spiegelschrank): ?>
+  <p class="mb-3">Zuerst die Position der Dachschräge für Ihren Spiegelschrank auswählen.</p>
+  <?php endif; ?>
+  <?php if ($is_badspiegel): ?>
+  <p class="mb-3">Zuerst die Position der Dachschräge für Ihren Badspiegel auswählen.</p>
+  <?php endif; ?>
+
+  <!-- Synchronized Button Group for Dachschräge Position -->
+  <div id="modal-dachschraege-position" class="d-none">
+    <!-- This will be populated by JavaScript -->
+  </div>
+
   <div class="row g-3">
     <div class="col-md-6">
       <div class="text-center border border-light-subtle shadow-sm p-3">
-        <div class="position-relative d-inline-block">
+        <div class="position-relative d-inline-block d-none">
           <?php echo do_shortcode('[img id="pao-dachschraege-rechts" size="medium"]'); ?>
         </div>
-        <h6 class="mt-2 mb-0">Dachschräge <span class="fw-semibold">rechts</span></h6>
+        <h6 class="mt-0 mb-0">Dachschräge <span class="fw-semibold">rechts</span></h6>
       </div>
     </div>
     <div class="col-md-6">
       <div class="text-center border border-light-subtle shadow-sm p-3">
-        <div class="position-relative d-inline-block">
+        <div class="position-relative d-inline-block d-none">
           <?php echo do_shortcode('[img id="pao-dachschraege-links" size="medium"]'); ?>
         </div>
-        <h6 class="mt-2 mb-0">Dachschräge <span class="fw-semibold">links</span></h6>
+        <h6 class="mt-0 mb-0">Dachschräge <span class="fw-semibold">links</span></h6>
       </div>
     </div>
   </div>
 </div>
 
-<div class="callout callout-info mb">
+<div class="callouts callout-infos mb">
   <h5 class="mb-2">
     <i class="fa-light fa-sharp fa-2 me-2"></i>Kürzere Breite und kürzere Höhe
   </h5>
-  <p class="mb-3">Danach die kürzere Breite sowie die kürzere Höhe des Spiegels für die Dachschräge bestimmen.</p>
-  <div class="text-center">
-    <div class="border border-light-subtle shadow-sm d-inline-block">
-      <?php echo do_shortcode('[img id="pao-dachschraege-kuerzere-masse" size="medium"]'); ?>
-    </div>
-  </div>
+  <?php if ($is_spiegelschrank): ?>
+  <p class="mb-3">Danach die kürzere Breite sowie die kürzere Höhe des Spiegelschranks für die Dachschräge bestimmen.</p>
+  <?php endif; ?>
+  <?php if ($is_badspiegel): ?>
+  <p class="mb-3">Danach die kürzere Breite sowie die kürzere Höhe des Badspiegels für die Dachschräge bestimmen.</p>
+  <?php endif; ?>
 </div>
 
-<div class="callout callout-primary mb">
+<div class="callout callout-primary">
   <h5 class="mb-2">
-    <i class="fa-light fa-sharp fa-info-circle me-2"></i>Hinweis
+    <i class="fa-light fa-sharp fa-face-smile-wink me-2"></i>Hinweis
   </h5>
   <p class="mb-0">Auch extreme Formen sind möglich – unser Team setzt Ihre Wünsche präzise um. <span class="fw-semibold">Profitieren Sie von maximaler Flexibilität</span> für Ihr Bad unterm Dach.</p>
 </div>
-  
+
+<script>
+(function() {
+    'use strict';
+
+    // Wait for DOM to be ready
+    document.addEventListener('DOMContentLoaded', function() {
+        initModalOptionSync();
+    });
+
+    /**
+     * Initialize synchronization of main configurator options with modal
+     */
+    function initModalOptionSync() {
+        // Target containers in modal
+        const modalContainers = {
+            'dachschraege_position': document.getElementById('modal-dachschraege-position')
+        };
+
+        // Find and sync each option group
+        Object.keys(modalContainers).forEach(optionKey => {
+            const modalContainer = modalContainers[optionKey];
+            if (!modalContainer) return;
+
+            // Find the main configurator button group
+            const mainButtonGroup = document.querySelector(`[data-key="${optionKey}"]`);
+            if (!mainButtonGroup) return;
+
+            // Clone and adapt the button group for modal
+            const clonedGroup = cloneButtonGroup(mainButtonGroup, optionKey);
+            if (clonedGroup) {
+                modalContainer.appendChild(clonedGroup);
+                setupSynchronization(mainButtonGroup, clonedGroup, optionKey);
+            }
+        });
+    }
+
+    /**
+     * Clone a button group and adapt it for modal use
+     */
+    function cloneButtonGroup(originalGroup, optionKey) {
+        const clone = originalGroup.cloneNode(true);
+
+        // Update IDs to avoid conflicts
+        const inputs = clone.querySelectorAll('input[type="radio"]');
+        const labels = clone.querySelectorAll('label');
+
+        inputs.forEach((input, index) => {
+            const newId = `modal-${input.id}`;
+            input.id = newId;
+            input.name = `modal-${input.name}`;
+
+            // Find corresponding label
+            const label = labels[index];
+            if (label) {
+                label.setAttribute('for', newId);
+            }
+        });
+
+        // Add modal-specific class
+        clone.classList.add('modal-option-group');
+
+        return clone;
+    }
+
+    /**
+     * Setup bidirectional synchronization between main and modal button groups
+     */
+    function setupSynchronization(mainGroup, modalGroup, optionKey) {
+        const mainInputs = mainGroup.querySelectorAll('input[type="radio"]');
+        const modalInputs = modalGroup.querySelectorAll('input[type="radio"]');
+
+        // Sync modal to main (when modal button is clicked)
+        modalInputs.forEach((modalInput, index) => {
+            modalInput.addEventListener('change', function() {
+                if (this.checked && mainInputs[index]) {
+                    mainInputs[index].checked = true;
+
+                    // Trigger change event on main input
+                    const changeEvent = new Event('change', { bubbles: true });
+                    mainInputs[index].dispatchEvent(changeEvent);
+
+                    console.log(`Modal sync: ${optionKey} = ${this.value}`);
+                }
+            });
+        });
+
+        // Sync main to modal (when main button is clicked)
+        mainInputs.forEach((mainInput, index) => {
+            mainInput.addEventListener('change', function() {
+                if (this.checked && modalInputs[index]) {
+                    modalInputs[index].checked = true;
+                    console.log(`Main sync: ${optionKey} = ${this.value}`);
+                }
+            });
+        });
+
+        // Initial sync - set modal to match main state
+        mainInputs.forEach((mainInput, index) => {
+            if (mainInput.checked && modalInputs[index]) {
+                modalInputs[index].checked = true;
+            }
+        });
+    }
+})();
+</script>

@@ -15,7 +15,7 @@
  * - Comprehensive product attribute flags
  * - Simple debug system for monitoring
  *
- * @version 2.2.0
+ * @version 2.3.0
  * @package Configurator
  */
 
@@ -43,21 +43,12 @@ if (DEBUG_MODE && product) console.log("✅ const product:", product.className);
  * Product category elements
  * @type {boolean}
  */
-export const isBadspiegel = product?.classList.contains(
-  "product_cat-badspiegel"
-);
-export const isSpiegelschrank = product?.classList.contains(
-  "product_cat-spiegelschraenke"
-);
-export const isUnterschrank = product?.classList.contains(
-  "product_cat-unterschraenke"
-);
-export const isHochschrank = product?.classList.contains(
-  "product_cat-hochschraenke"
-);
+export const isBadspiegel = product?.classList.contains("product_cat-badspiegel");
+export const isSpiegelschrank = product?.classList.contains("product_cat-spiegelschraenke");
+export const isUnterschrank = product?.classList.contains("product_cat-unterschraenke");
+export const isHochschrank = product?.classList.contains("product_cat-hochschraenke");
 export const isBoard =
-  product?.classList.contains("product_cat-sideboards") ||
-  product?.classList.contains("product_cat-lowboards");
+  product?.classList.contains("product_cat-sideboards") || product?.classList.contains("product_cat-lowboards");
 
 if (DEBUG_MODE) {
   if (isBadspiegel) console.log("✅ Badspiegel detected");
@@ -81,21 +72,11 @@ if (DEBUG_MODE && isLED) console.log("✅ const isLED: ", isLED);
  * LED lighting position
  * @type {boolean}
  */
-export const isLORU = product?.classList.contains(
-  "product_attr-lichtposition_rundherum"
-);
-export const isLOR = product?.classList.contains(
-  "product_attr-lichtposition_links-oben-rechts"
-);
-export const isLR = product?.classList.contains(
-  "product_attr-lichtposition_links-rechts"
-);
-export const isOU = product?.classList.contains(
-  "product_attr-lichtposition_oben-unten"
-);
-export const isO = product?.classList.contains(
-  "product_attr-lichtposition_oben"
-);
+export const isLORU = product?.classList.contains("product_attr-lichtposition_rundherum");
+export const isLOR = product?.classList.contains("product_attr-lichtposition_links-oben-rechts");
+export const isLR = product?.classList.contains("product_attr-lichtposition_links-rechts");
+export const isOU = product?.classList.contains("product_attr-lichtposition_oben-unten");
+export const isO = product?.classList.contains("product_attr-lichtposition_oben");
 
 if (DEBUG_MODE) {
   if (isLORU) console.log("✅ const isLORU: ", isLORU);
@@ -140,23 +121,25 @@ if (DEBUG_MODE) {
  * Specific dimension input elements
  * @type {HTMLElement|null}
  */
-export const durchmesserInput = document.querySelector(
-  '.option-input[name="durchmesser"]'
-);
-export const breiteInput = document.querySelector(
-  '.option-input[name="breite"]'
-);
+export const durchmesserInput = document.querySelector('.option-input[name="durchmesser"]');
+export const breiteHoheInput = document.querySelector('.option-input[name="breite_hoehe"]');
+export const breiteInput = document.querySelector('.option-input[name="breite"]');
+export const breiteUntenInput = document.querySelector('.option-input[name="breite_unten"]');
+export const breiteObenInput = document.querySelector('.option-input[name="breite_oben"]');
 export const hoeheInput = document.querySelector('.option-input[name="hoehe"]');
-export const breiteHoheInput = document.querySelector(
-  '.option-input[name="breite_hoehe"]'
-);
+export const hoeheLinksInput = document.querySelector('.option-input[name="hoehe_links"]');
+export const hoeheRechtsInput = document.querySelector('.option-input[name="hoehe_rechts"]');
 export const tiefeInput = document.querySelector('.option-input[name="tiefe"]');
 
 if (DEBUG_MODE) {
   if (durchmesserInput) console.log("✅ Durchmesser input found");
-  if (breiteInput) console.log("✅ Breite input found");
-  if (hoeheInput) console.log("✅ Hoehe input found");
   if (breiteHoheInput) console.log("✅ BreiteHoehe input found");
+  if (breiteInput) console.log("✅ Breite input found");
+  if (breiteUntenInput) console.log("✅ BreiteUnten input found");
+  if (breiteObenInput) console.log("✅ BreiteOben input found");
+  if (hoeheInput) console.log("✅ Hoehe input found");
+  if (hoeheLinksInput) console.log("✅ HoeheLinks input found");
+  if (hoeheRechtsInput) console.log("✅ HoeheRechts input found");
   if (tiefeInput) console.log("✅ Tiefe input found");
 }
 
@@ -171,9 +154,7 @@ if (DEBUG_MODE) {
  * Used for cart integration and validation state management
  * @type {HTMLElement|null}
  */
-export const addToCartButton = document.querySelector(
-  ".single_add_to_cart_button"
-);
+export const addToCartButton = document.querySelector(".single_add_to_cart_button");
 
 // ====================== CONFIGURATOR CORE ELEMENTS ======================
 
@@ -193,15 +174,13 @@ export const configurator = document.getElementById("productConfigurator");
  * Bootstrap offcanvas element for mobile configuration display
  * @type {HTMLElement|null}
  */
-export const offcanvas = document.getElementById(
-  "productConfiguratorOffcanvas"
-);
+// export const offcanvas = document.getElementById("productConfiguratorOffcanvas"); // not in use
 
 /**
  * All option elements that use offcanvas display mode
  * @type {NodeList}
  */
-export const offcanvasElements = document.querySelectorAll(".option-offcanvas");
+// export const offcanvasElements = document.querySelectorAll(".option-offcanvas"); // is it in use?
 
 // ====================== OPTION GROUP ELEMENTS ======================
 
@@ -235,9 +214,7 @@ export const optionGroups = document.querySelectorAll(".option-group");
 /**
  * First number input field
  */
-export const numberInput = document.querySelector(
-  '.option-input[type="number"]'
-);
+export const numberInput = document.querySelector('.option-input[type="number"]');
 
 /**
  * First text input field
@@ -252,9 +229,7 @@ export const radioInput = document.querySelector('.option-radio[type="radio"]');
 /**
  * First checkbox input
  */
-export const checkInput = document.querySelector(
-  '.option-check[type="checkbox"]'
-);
+export const checkInput = document.querySelector('.option-check[type="checkbox"]');
 
 /**
  * MULTIPLE INPUT ELEMENT COLLECTIONS
@@ -266,33 +241,25 @@ export const checkInput = document.querySelector(
  * All number input fields in the configurator
  * @type {NodeList}
  */
-export const numberInputs = document.querySelectorAll(
-  '.option-input[type="number"]'
-);
+export const numberInputs = document.querySelectorAll('.option-input[type="number"]');
 
 /**
  * All text input fields in the configurator
  * @type {NodeList}
  */
-export const textInputs = document.querySelectorAll(
-  '.option-input[type="text"]'
-);
+export const textInputs = document.querySelectorAll('.option-input[type="text"]');
 
 /**
  * All radio button inputs in the configurator
  * @type {NodeList}
  */
-export const radioInputs = document.querySelectorAll(
-  '.option-radio[type="radio"]'
-);
+export const radioInputs = document.querySelectorAll('.option-radio[type="radio"]');
 
 /**
  * All checkbox inputs in the configurator
  * @type {NodeList}
  */
-export const checkInputs = document.querySelectorAll(
-  '.option-check[type="checkbox"]'
-);
+export const checkInputs = document.querySelectorAll('.option-check[type="checkbox"]');
 
 // ====================== EMPTY VALUE INPUT DETECTION ======================
 
@@ -305,16 +272,12 @@ export const checkInputs = document.querySelectorAll(
 /**
  * First radio button with empty value (represents "no selection")
  */
-export const radioNoInput = document.querySelector(
-  '.option-input[type="radio"][value=""]'
-);
+export const radioNoInput = document.querySelector('.option-input[type="radio"][value=""]');
 
 /**
  * First checkbox with empty value (represents "no selection")
  */
-export const checkNoInput = document.querySelector(
-  '.option-input[type="checkbox"][value=""]'
-);
+export const checkNoInput = document.querySelector('.option-input[type="checkbox"][value=""]');
 
 /**
  * MULTIPLE "NO SELECTION" INPUT COLLECTIONS
@@ -325,17 +288,13 @@ export const checkNoInput = document.querySelector(
  * All radio buttons with empty values
  * @type {NodeList}
  */
-export const radioNoInputs = document.querySelectorAll(
-  '.option-input[type="radio"][value=""]'
-);
+export const radioNoInputs = document.querySelectorAll('.option-input[type="radio"][value=""]');
 
 /**
  * All checkboxes with empty values
  * @type {NodeList}
  */
-export const checkNoInputs = document.querySelectorAll(
-  '.option-input[type="checkbox"][value=""]'
-);
+export const checkNoInputs = document.querySelectorAll('.option-input[type="checkbox"][value=""]');
 
 // ====================== SELECTED INPUT DETECTION ======================
 
@@ -348,16 +307,12 @@ export const checkNoInputs = document.querySelectorAll(
 /**
  * First currently checked radio button
  */
-export const radioCheckedInput = document.querySelector(
-  '.option-radio[type="radio"]:checked'
-);
+export const radioCheckedInput = document.querySelector('.option-radio[type="radio"]:checked');
 
 /**
  * First currently checked checkbox
  */
-export const checkCheckedInput = document.querySelector(
-  '.option-check[type="checkbox"]:checked'
-);
+export const checkCheckedInput = document.querySelector('.option-check[type="checkbox"]:checked');
 
 /**
  * MULTIPLE SELECTED INPUT COLLECTIONS
@@ -368,17 +323,13 @@ export const checkCheckedInput = document.querySelector(
  * All currently checked radio buttons
  * @type {NodeList}
  */
-export const radioCheckedInputs = document.querySelectorAll(
-  '.option-radio[type="radio"]:checked'
-);
+export const radioCheckedInputs = document.querySelectorAll('.option-radio[type="radio"]:checked');
 
 /**
  * All currently checked checkboxes
  * @type {NodeList}
  */
-export const checkCheckedInputs = document.querySelectorAll(
-  '.option-check[type="checkbox"]:checked'
-);
+export const checkCheckedInputs = document.querySelectorAll('.option-check[type="checkbox"]:checked');
 
 // ====================== PRICE MATRIX ELEMENTS ======================
 
@@ -393,25 +344,19 @@ export const checkCheckedInputs = document.querySelectorAll(
  * Contains options with diameter values and corresponding prices
  * @type {HTMLSelectElement|null}
  */
-export const matrixDurchmesser = document.querySelector(
-  '.option-price[name*="pxd"]'
-);
+export const matrixDurchmesser = document.querySelector('.option-price[name*="pxd"]');
 
 /**
  * Width x Height price matrix selector
  * Contains options with combined dimension values and corresponding prices
  * @type {HTMLSelectElement|null}
  */
-export const matrixBreiteHoehe = document.querySelector(
-  '.option-price[name*="pxbh"]'
-);
+export const matrixBreiteHoehe = document.querySelector('.option-price[name*="pxbh"]');
 
 // Debug price matrix elements
 if (DEBUG_MODE) {
-  if (matrixDurchmesser)
-    console.log("✅ Price matrix Durchmesser found:", matrixDurchmesser.name);
-  if (matrixBreiteHoehe)
-    console.log("✅ Price matrix BreiteHoehe found:", matrixBreiteHoehe.name);
+  if (matrixDurchmesser) console.log("✅ Price matrix Durchmesser found:", matrixDurchmesser.name);
+  if (matrixBreiteHoehe) console.log("✅ Price matrix BreiteHoehe found:", matrixBreiteHoehe.name);
 }
 
 // ====================== ARCHIVED DETECTION FLAGS ======================

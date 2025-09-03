@@ -198,7 +198,7 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
  * - Auto-redirect functionality for code URLs
  * - Comprehensive debug logging system
  *
- * @version 2.2.0
+ * @version 2.3.0
  * @package Configurator
  */
 
@@ -2546,7 +2546,9 @@ __webpack_require__.r(__webpack_exports__);
  * @package BSAwesome
  * @subpackage Assets
  * @since 1.0.0
- * @version 3.0.0 - DRY Refactor
+ * @version 2.3.0
+ *
+ * @todo Fix hover, if "frontansicht" is active
  */
 
 /**
@@ -4250,69 +4252,196 @@ if (typeof window !== "undefined") {
   \*********************************/
 /***/ (() => {
 
+/**
+ * Navigation Dropdown System for Bootstrap 5
+ *
+ * Manages responsive dropdown behavior within SimpleBar scrollable containers.
+ * Automatically handles positioning of dropdown menus to prevent clipping
+ * when dropdowns are inside scrollable containers.
+ *
+ * Features:
+ * - Responsive dropdown behavior (desktop only ≥768px)
+ * - Dynamic positioning for SimpleBar containers
+ * - Automatic menu repositioning to prevent clipping
+ * - Proper cleanup and restoration of original DOM structure
+ * - Media query responsive activation/deactivation
+ * - Bootstrap 5 dropdown event integration
+ *
+ * @version 2.3.0
+ * @package BSAwesome Navigation
+ * @requires Bootstrap 5, SimpleBar (optional)
+ *
+ * Technical Implementation:
+ * - Uses Bootstrap dropdown events (show.bs.dropdown, hide.bs.dropdown)
+ * - Temporarily moves dropdown menus to SimpleBar container for positioning
+ * - Calculates absolute positioning based on trigger element coordinates
+ * - Restores original DOM structure when dropdown closes
+ *
+ * Usage:
+ * Works automatically with any Bootstrap dropdown inside a SimpleBar container.
+ * No manual initialization required - responds to window resize automatically.
+ *
+ * @example
+ * <div data-simplebar>
+ *   <div class="dropdown">
+ *     <button class="dropdown-toggle" data-bs-toggle="dropdown">Menu</button>
+ *     <ul class="dropdown-menu">
+ *       <li><a href="#">Item 1</a></li>
+ *     </ul>
+ *   </div>
+ * </div>
+ */
+
 document.addEventListener("DOMContentLoaded", function () {
+  // Media query for desktop breakpoint (Bootstrap md: ≥768px)
   var mdQuery = window.matchMedia("(min-width: 768px)");
   var desktopActive = false;
 
-  // Handler-Funktionen müssen referenzierbar sein, damit sie entfernt werden können
+  // =============================================================================
+  // EVENT HANDLERS
+  // =============================================================================
+
+  /**
+   * Handler for Bootstrap dropdown show event
+   * Repositions dropdown menu within SimpleBar container to prevent clipping
+   *
+   * @param {Event} e - Bootstrap dropdown show event
+   * @description
+   * 1. Finds the dropdown trigger and corresponding menu
+   * 2. Locates the SimpleBar container (if present)
+   * 3. Temporarily moves dropdown menu to SimpleBar container
+   * 4. Calculates absolute positioning based on trigger coordinates
+   * 5. Stores reference to original parent for restoration
+   */
   function showDropdownHandler(e) {
     var trigger = e.target;
     var dropdown = trigger.closest(".dropdown, .menu-item-has-children");
     if (!dropdown) return;
     var dropdownMenu = dropdown.querySelector(".dropdown-menu");
     if (!dropdownMenu) return;
+
+    // Find SimpleBar container (scrollable parent)
     var simplebar = dropdown.closest("[data-simplebar]");
     if (!simplebar) return;
+
+    // Calculate positioning relative to SimpleBar container
     var triggerRect = trigger.getBoundingClientRect();
     var simplebarRect = simplebar.getBoundingClientRect();
+
+    // Temporarily move dropdown to SimpleBar container for proper positioning
     simplebar.appendChild(dropdownMenu);
+
+    // Apply absolute positioning to prevent clipping
     dropdownMenu.style.position = "absolute";
     dropdownMenu.style.left = "".concat(triggerRect.left - simplebarRect.left + simplebar.scrollLeft, "px");
     dropdownMenu.style.top = "".concat(triggerRect.bottom - simplebarRect.top + simplebar.scrollTop, "px");
     dropdownMenu.style.zIndex = 9999;
     dropdownMenu.style.display = "block";
+
+    // Store original parent for restoration when hiding
     dropdownMenu._originalParent = dropdown;
   }
+
+  /**
+   * Handler for Bootstrap dropdown hide event
+   * Restores dropdown menu to its original position in the DOM
+   *
+   * @param {Event} e - Bootstrap dropdown hide event
+   * @description
+   * 1. Finds the dropdown trigger and temporarily positioned menu
+   * 2. Restores dropdown menu to its original parent container
+   * 3. Removes all positioning styles applied during show
+   * 4. Cleans up temporary references
+   */
   function hideDropdownHandler(e) {
     var trigger = e.target;
     var dropdown = trigger.closest(".dropdown, .menu-item-has-children");
     if (!dropdown) return;
+
+    // Find the temporarily positioned dropdown menu
     var dropdownMenu = document.querySelector('.dropdown-menu[style*="position: absolute"]');
     if (!dropdownMenu) return;
+
+    // Restore to original parent if reference exists, otherwise use current dropdown
     if (dropdownMenu._originalParent) {
       dropdownMenu._originalParent.appendChild(dropdownMenu);
       delete dropdownMenu._originalParent;
     } else {
       dropdown.appendChild(dropdownMenu);
     }
+
+    // Remove all positioning styles to restore normal behavior
     dropdownMenu.style.position = "";
     dropdownMenu.style.left = "";
     dropdownMenu.style.top = "";
     dropdownMenu.style.zIndex = "";
     dropdownMenu.style.display = "";
   }
+
+  // =============================================================================
+  // RESPONSIVE CONTROL FUNCTIONS
+  // =============================================================================
+
+  /**
+   * Enables desktop dropdown functionality
+   * Attaches event listeners for Bootstrap dropdown events
+   * Only activates if not already active to prevent duplicate listeners
+   */
   function enableDesktopDropdown() {
     if (desktopActive) return;
+
+    // Attach Bootstrap dropdown event listeners
     document.addEventListener("show.bs.dropdown", showDropdownHandler);
     document.addEventListener("hide.bs.dropdown", hideDropdownHandler);
     desktopActive = true;
   }
+
+  /**
+   * Disables desktop dropdown functionality
+   * Removes event listeners for Bootstrap dropdown events
+   * Only deactivates if currently active to prevent unnecessary operations
+   */
   function disableDesktopDropdown() {
     if (!desktopActive) return;
+
+    // Remove Bootstrap dropdown event listeners
     document.removeEventListener("show.bs.dropdown", showDropdownHandler);
     document.removeEventListener("hide.bs.dropdown", hideDropdownHandler);
     desktopActive = false;
   }
 
-  // Initial prüfen und bei Änderung reagieren
+  // =============================================================================
+  // MEDIA QUERY MANAGEMENT
+  // =============================================================================
+
+  /**
+   * Checks current viewport size and enables/disables functionality accordingly
+   * Responds to both initial load and viewport size changes
+   *
+   * @param {MediaQueryListEvent|MediaQueryList} e - Media query event or list
+   * @description
+   * - Enables desktop dropdown behavior for viewports ≥768px (Bootstrap md+)
+   * - Disables functionality for smaller viewports (mobile behavior)
+   * - Called both on initial load and when viewport size changes
+   */
   function checkBreakpoint(e) {
     if (mdQuery.matches) {
+      // Desktop: Enable advanced dropdown positioning
       enableDesktopDropdown();
     } else {
+      // Mobile: Use standard Bootstrap behavior
       disableDesktopDropdown();
     }
   }
+
+  // =============================================================================
+  // INITIALIZATION
+  // =============================================================================
+
+  // Listen for viewport size changes
   mdQuery.addEventListener("change", checkBreakpoint);
+
+  // Initialize based on current viewport size
   checkBreakpoint();
 });
 
@@ -4337,80 +4466,164 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * SimpleBar implementation
- * with scroll buttons, debouncing and ResizeObserver
+ * Enhanced SimpleBar Implementation with Custom Scroll Controls
  *
- * Updated 22/04/2025 - optimize in V3 update
+ * Provides an enhanced scrollable container system using SimpleBar with custom
+ * navigation buttons, intelligent visibility management, and performance optimizations.
+ * Includes responsive button positioning and accessibility features.
  *
- * Optimization: Show buttons when you hover the container
+ * Features:
+ * - Custom scroll buttons with smooth scrolling
+ * - Intelligent button visibility based on scroll position
+ * - Debounced scroll event handling for performance
+ * - ResizeObserver integration for responsive updates
+ * - Touch device support with passive event listeners
+ * - WooCommerce specific auto-hide behavior
+ * - ARIA accessibility labels
+ * - FontAwesome icon integration
+ * - CSS class-based configuration system
+ *
+ * @version 2.3.0
+ * @package BSAwesome SimpleBar
+ * @requires SimpleBar library, FontAwesome icons
+ * @updated 22/04/2025 - V3 optimization update
+ *
+ * Technical Implementation:
+ * - Uses ES6 modules and imports SimpleBar library
+ * - Implements debounced scroll handling for performance
+ * - Uses ResizeObserver for container size changes
+ * - Applies fade/unfade CSS classes for smooth transitions
+ * - Supports both click and touch events
+ *
+ * Usage:
+ * Add class "simplebar" to any container element.
+ * Initialization happens automatically on DOM load.
+ *
+ * @example
+ * <div class="simplebar">
+ *   <div class="content">
+ *     <!-- Scrollable content -->
+ *   </div>
+ * </div>
+ *
+ * @todo V3 Optimization: Show buttons when hovering the container
  */
 
 
 window.SimpleBar = simplebar__WEBPACK_IMPORTED_MODULE_3__["default"];
 
-// Configuration
+// =============================================================================
+// CONFIGURATION
+// =============================================================================
+
+/**
+ * Scroll behavior configuration object
+ * Centralizes all scroll-related settings for easy maintenance
+ */
 var SCROLL_CONFIG = {
   step: 400,
-  // Scroll step in pixels
+  // Scroll step in pixels per button click
   behavior: "smooth",
   // Scroll behavior ('smooth' or 'auto')
   debounceDelay: 100,
-  // Delay for scroll events in ms
-  autoHide: true // Hide scrollbar by default
+  // Delay for scroll events in ms (performance optimization)
+  autoHide: true // Hide scrollbar by default (can be overridden per container)
 };
 
-// CSS classes as constants
+/**
+ * CSS class constants for consistent styling
+ * Prevents typos and centralizes class name management
+ */
 var CLASSES = {
   BTN_GROUP: "simplebar-btn-group",
+  // Container for scroll buttons
   BTN_LEFT: "btn-left",
+  // Left scroll button identifier
   BTN_RIGHT: "btn-right",
+  // Right scroll button identifier
   BTN_COLOR: "btn-dark",
+  // Bootstrap button color class
   FADE: "fade",
-  UNFADE: "unfade"
+  // CSS class for hidden state
+  UNFADE: "unfade" // CSS class for visible state
 };
 
-// Initialize after DOM load
+// =============================================================================
+// INITIALIZATION
+// =============================================================================
+
+/**
+ * Initialize SimpleBar for all containers after DOM is ready
+ * Automatically finds and processes all elements with "simplebar" class
+ */
 document.addEventListener("DOMContentLoaded", function () {
   document.querySelectorAll(".simplebar").forEach(function (container) {
     initCustomScroll(container);
   });
 });
 
+// =============================================================================
+// CORE FUNCTIONS
+// =============================================================================
+
 /**
- * Main function to initialize custom scrollbar
- * @param {HTMLElement} container - Container element
+ * Main initialization function for custom scrollbar with navigation buttons
+ * 
+ * @param {HTMLElement} container - The container element to enhance with SimpleBar
+ * @description
+ * 1. Prevents duplicate initialization with data attribute check
+ * 2. Creates SimpleBar instance with conditional auto-hide behavior
+ * 3. Adds custom scroll navigation buttons
+ * 4. Sets up event listeners and observers
  */
 function initCustomScroll(container) {
-  // Check if already initialized
+  // Prevent duplicate initialization
   if (container.dataset.simplebarInitialized) return;
   container.dataset.simplebarInitialized = "true";
 
-  // Create SimpleBar instance
+  // Create SimpleBar instance with conditional configuration
   var simpleBarInstance = new simplebar__WEBPACK_IMPORTED_MODULE_3__["default"](container, {
+    // WooCommerce containers: always show scrollbar
+    // Other containers: use configurable auto-hide behavior
     autoHide: container.classList.contains("woocommerce") ? false : SCROLL_CONFIG.autoHide,
-    tabIndex: -1
+    tabIndex: -1 // Remove from tab order for better accessibility
   });
 
-  // Add scroll buttons
+  // Enhance with custom scroll buttons
   addScrollButtons(container, simpleBarInstance);
 }
 
 /**
- * Adds scroll buttons and binds events
- * @param {HTMLElement} container - Container element
- * @param {SimpleBar} simpleBarInstance - SimpleBar instance
+ * Creates and configures scroll navigation buttons for a SimpleBar container
+ * 
+ * @param {HTMLElement} container - The container element
+ * @param {SimpleBar} simpleBarInstance - The SimpleBar instance
+ * @description
+ * 1. Injects HTML for left/right scroll buttons with accessibility
+ * 2. Configures click and touch event handlers for scrolling
+ * 3. Sets up visibility management based on scroll position
+ * 4. Implements ResizeObserver for responsive button updates
+ * 5. Applies debounced scroll event handling for performance
  */
 function addScrollButtons(container, simpleBarInstance) {
   var scrollElement = simpleBarInstance.getScrollElement();
 
-  // Insert button HTML
+  // =============================================================================
+  // BUTTON HTML INJECTION
+  // =============================================================================
+
+  // Insert scroll button HTML with accessibility attributes
   container.insertAdjacentHTML("beforeend", "\n        <div class=\"".concat(CLASSES.BTN_GROUP, "\">\n            <button class=\"btn ").concat(CLASSES.BTN_COLOR, " simplebar-btn ").concat(CLASSES.BTN_LEFT, " ").concat(CLASSES.FADE, "\" \n                    aria-label=\"Nach links scrollen\">\n                <i class=\"fa-sharp fa-light fa-chevron-left\"></i>\n            </button>\n            <button class=\"btn ").concat(CLASSES.BTN_COLOR, " simplebar-btn ").concat(CLASSES.BTN_RIGHT, " ").concat(CLASSES.FADE, "\" \n                    aria-label=\"Nach rechts scrollen\">\n                <i class=\"fa-sharp fa-light fa-chevron-right\"></i>\n            </button>\n        </div>\n    "));
 
-  // Button references
+  // =============================================================================
+  // BUTTON REFERENCES AND EVENT HANDLERS
+  // =============================================================================
+
+  // Get button references for event binding
   var scrollLeftBtn = container.querySelector(".".concat(CLASSES.BTN_LEFT));
   var scrollRightBtn = container.querySelector(".".concat(CLASSES.BTN_RIGHT));
 
-  // Click handlers
+  // Mouse click handlers for desktop interaction
   scrollLeftBtn.addEventListener("click", function () {
     scrollElement.scrollBy({
       left: -SCROLL_CONFIG.step,
@@ -4424,7 +4637,11 @@ function addScrollButtons(container, simpleBarInstance) {
     });
   });
 
-  // Touch support
+  // =============================================================================
+  // TOUCH SUPPORT FOR MOBILE DEVICES
+  // =============================================================================
+
+  // Touch event handlers with passive listeners for better performance
   scrollLeftBtn.addEventListener("touchstart", function () {
     scrollElement.scrollBy({
       left: -SCROLL_CONFIG.step,
@@ -4432,7 +4649,8 @@ function addScrollButtons(container, simpleBarInstance) {
     });
   }, {
     passive: true
-  });
+  } // Improves scroll performance on touch devices
+  );
   scrollRightBtn.addEventListener("touchstart", function () {
     scrollElement.scrollBy({
       left: SCROLL_CONFIG.step,
@@ -4440,40 +4658,70 @@ function addScrollButtons(container, simpleBarInstance) {
     });
   }, {
     passive: true
-  });
+  } // Improves scroll performance on touch devices
+  );
 
-  // Initial visibility check
+  // =============================================================================
+  // VISIBILITY MANAGEMENT AND OBSERVERS
+  // =============================================================================
+
+  // Create debounced visibility update function for performance optimization
   var updateVisibility = debounce(function () {
     updateButtonVisibility(container, scrollElement);
   }, SCROLL_CONFIG.debounceDelay);
 
-  // Bind events
+  // Bind scroll event with debounced handler
   scrollElement.addEventListener("scroll", updateVisibility);
+
+  // Observe container size changes for responsive updates
   new ResizeObserver(updateVisibility).observe(container);
 
-  // Initial check
+  // Perform initial visibility check
   updateVisibility();
 }
 
+// =============================================================================
+// UTILITY FUNCTIONS
+// =============================================================================
+
 /**
- * Updates scroll button visibility
- * @param {HTMLElement} container - Container element
- * @param {HTMLElement} scrollElement - Scrollable element
+ * Updates scroll button visibility based on current scroll position
+ * 
+ * @param {HTMLElement} container - The container element
+ * @param {HTMLElement} scrollElement - The scrollable element from SimpleBar
+ * @description
+ * Calculates scroll boundaries and toggles button visibility:
+ * - Left button: visible when scrolled away from left edge
+ * - Right button: visible when more content available to the right
+ * Uses CSS classes for smooth fade transitions
  */
 function updateButtonVisibility(container, scrollElement) {
   var scrollLeftBtn = container.querySelector(".".concat(CLASSES.BTN_LEFT));
   var scrollRightBtn = container.querySelector(".".concat(CLASSES.BTN_RIGHT));
+
+  // Calculate scroll position boundaries
   var canScrollLeft = scrollElement.scrollLeft > 0;
   var canScrollRight = scrollElement.scrollLeft < scrollElement.scrollWidth - scrollElement.clientWidth;
+
+  // Toggle visibility classes for smooth transitions
   scrollLeftBtn.classList.toggle(CLASSES.UNFADE, canScrollLeft);
   scrollRightBtn.classList.toggle(CLASSES.UNFADE, canScrollRight);
 }
 
 /**
- * Debounce function for performance optimization
- * @param {Function} func - Function to execute
- * @param {number} delay - Delay in ms
- * @returns {Function} Debounced function
+ * Creates a debounced version of a function for performance optimization
+ * 
+ * @param {Function} func - The function to debounce
+ * @param {number} delay - Delay in milliseconds (default: 100ms)
+ * @returns {Function} Debounced function that delays execution
+ * @description
+ * Prevents excessive function calls during rapid events (like scroll/resize).
+ * Only executes the function after the specified delay has passed since
+ * the last call, improving performance and preventing UI jank.
+ * 
+ * @example
+ * const debouncedScroll = debounce(handleScroll, 100);
+ * element.addEventListener('scroll', debouncedScroll);
  */
 function debounce(func) {
   var _this = this;

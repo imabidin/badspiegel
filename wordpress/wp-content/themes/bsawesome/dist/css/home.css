@@ -20,6 +20,18 @@
   -webkit-filter: brightness(1.25);
           filter: brightness(1.25);
 }
+.hero-container.hero-footer .hero-img-night {
+  -webkit-filter: brightness(1.175);
+          filter: brightness(1.175);
+}
+.hero-container.hero-footer .hero-img-dawn {
+  -webkit-filter: brightness(1);
+          filter: brightness(1);
+}
+.hero-container.hero-footer .hero-img-day {
+  -webkit-filter: brightness(1);
+          filter: brightness(1);
+}
 
 @media (min-width: 768px) {
   .hero-img-container {

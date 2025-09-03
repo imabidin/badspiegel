@@ -67,8 +67,10 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
  * - Modal dialogs for incomplete configurations
  * - Mobile-optimized touch interactions
  *
- * @version 2.2.0
+ * @version 2.3.0
  * @package Configurator
+ *
+ * @todo Check if the carousel functions need to be refactored for better reusability (carouselheight)
  */
 
 // ====================== CONFIGURATION CONSTANTS ======================
@@ -1016,7 +1018,14 @@ var ProductConfigurator = /*#__PURE__*/function () {
  * Creates single instance to manage entire configurator experience
  */
 document.addEventListener("DOMContentLoaded", function () {
-  new ProductConfigurator();
+  var configuratorInstance = new ProductConfigurator();
+
+  // Make carousel height update globally available for validation feedback
+  window.updateCarouselHeight = function () {
+    if (configuratorInstance && configuratorInstance.setCarouselHeight) {
+      configuratorInstance.setCarouselHeight();
+    }
+  };
 });
 
 /**
@@ -1106,7 +1115,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
  * - Debug logging for development support
  * - Automatic favourites integration
  *
- * @version 2.2.0
+ * @version 2.3.0
  * @package Configurator
  */
 
@@ -1739,8 +1748,10 @@ __webpack_require__.r(__webpack_exports__);
  * - Performance-optimized event delegation
  * - Debug logging capabilities
  *
- * @version 2.2.0
+ * @version 2.3.0
  * @package Configurator
+ *
+ * @todo Check if these functions can be used, for a better DRY concept
  */
 
 /**
@@ -2233,7 +2244,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _dependencies_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../dependencies.js */ "./assets/js/configurator/dependencies.js");
 /* harmony import */ var _variables_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../variables.js */ "./assets/js/configurator/variables.js");
 /**
- * @version 2.2.0
+ * @version 2.3.0
  */
 
 
@@ -2268,7 +2279,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _dependencies_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../dependencies.js */ "./assets/js/configurator/dependencies.js");
 /* harmony import */ var _variables_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../variables.js */ "./assets/js/configurator/variables.js");
 /**
- * @version 2.2.0
+ * @version 2.3.0
  */
 
 
@@ -2309,7 +2320,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @version 2.2.0
+ * @version 2.3.0
  */
 
 
@@ -2372,7 +2383,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _dependencies_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../dependencies.js */ "./assets/js/configurator/dependencies.js");
 /* harmony import */ var _variables_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../variables.js */ "./assets/js/configurator/variables.js");
 /**
- * @version 2.2.0
+ * @version 2.3.0
  */
 
 
@@ -2406,7 +2417,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _dependencies_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../dependencies.js */ "./assets/js/configurator/dependencies.js");
 /* harmony import */ var _variables_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../variables.js */ "./assets/js/configurator/variables.js");
 /**
- * @version 2.2.0
+ * @version 2.3.0
  */
 
 
@@ -2441,7 +2452,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _dependencies_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../dependencies.js */ "./assets/js/configurator/dependencies.js");
 /* harmony import */ var _variables_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../variables.js */ "./assets/js/configurator/variables.js");
 /**
- * @version 2.2.0
+ * @version 2.3.0
  */
 
 
@@ -2494,7 +2505,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @version 2.2.0
+ * @version 2.3.0
  */
 
 
@@ -2550,6 +2561,532 @@ document.addEventListener("DOMContentLoaded", function () {
 
 /***/ }),
 
+/***/ "./assets/js/configurator/dependencies/dachschraege.js":
+/*!*************************************************************!*\
+  !*** ./assets/js/configurator/dependencies/dachschraege.js ***!
+  \*************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   autoDetectDachschraegePosition: () => (/* binding */ autoDetectDachschraegePosition),
+/* harmony export */   getDachschraegePosition: () => (/* binding */ getDachschraegePosition),
+/* harmony export */   getDachschraegeValidationMessage: () => (/* binding */ getDachschraegeValidationMessage),
+/* harmony export */   getDependentFields: () => (/* binding */ getDependentFields),
+/* harmony export */   isDachschraegeField: () => (/* binding */ isDachschraegeField),
+/* harmony export */   onDachschraegeFieldChange: () => (/* binding */ onDachschraegeFieldChange),
+/* harmony export */   onDachschraegeFieldInput: () => (/* binding */ onDachschraegeFieldInput),
+/* harmony export */   setDachschraegePosition: () => (/* binding */ setDachschraegePosition),
+/* harmony export */   suggestOptimalPosition: () => (/* binding */ suggestOptimalPosition),
+/* harmony export */   triggerCarouselHeightUpdate: () => (/* binding */ triggerCarouselHeightUpdate),
+/* harmony export */   updateDachschraegeConstraints: () => (/* binding */ updateDachschraegeConstraints),
+/* harmony export */   validateAndUpdateAllPositionFields: () => (/* binding */ validateAndUpdateAllPositionFields),
+/* harmony export */   validateBreiteOben: () => (/* binding */ validateBreiteOben),
+/* harmony export */   validateDachschraegePosition: () => (/* binding */ validateDachschraegePosition),
+/* harmony export */   validateHoeheRelation: () => (/* binding */ validateHoeheRelation)
+/* harmony export */ });
+/* harmony import */ var core_js_modules_es_array_includes_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.includes.js */ "./node_modules/core-js/modules/es.array.includes.js");
+/* harmony import */ var core_js_modules_es_array_includes_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_includes_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_function_name_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.function.name.js */ "./node_modules/core-js/modules/es.function.name.js");
+/* harmony import */ var core_js_modules_es_function_name_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_function_name_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "./node_modules/core-js/modules/es.object.to-string.js");
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _dependencies_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./../dependencies.js */ "./assets/js/configurator/dependencies.js");
+/* harmony import */ var _variables_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./../variables.js */ "./assets/js/configurator/variables.js");
+
+
+
+
+/**
+ * @version 2.3.0
+ *
+ * @todo Optimize edge cases, i.e. refresh page, dachschraege position is default on "links", set "hoehe links" to 200 and then "hoehe rechts" to 100, but of them needs to be always above 400, actually specifically dependent on "dachschraege position"
+ */
+
+
+
+
+/**
+ * Dachschräge position input reference
+ */
+var dachschraegePositionInputs = document.querySelectorAll('input[name="dachschraege_position"]');
+
+/**
+ * Dachschräge Validation Module
+ *
+ * This module provides specialized validation logic for sloped roof configurations.
+ * It works as a plugin for the central input validation system (input.js).
+ *
+ * ARCHITECTURE:
+ * - Pure business logic module (no direct DOM event listeners)
+ * - Provides callback functions for input.js event system
+ * - Exports validation functions used by central validation engine
+ * - Only handles position radio button events (not covered by input.js)
+ *
+ * Handles validation for:
+ * - breite_unten: bottom width (base reference)
+ * - breite_oben: top width (must not exceed bottom width)
+ * - hoehe_links: left height
+ * - hoehe_rechts: right height
+ * - dachschraege_position: controls which height can be reduced to 0
+ */
+
+/**
+ * Gets the currently selected Dachschräge position
+ * @returns {string|null} 'links', 'rechts', or null if none selected
+ */
+function getDachschraegePosition() {
+  var checkedInput = document.querySelector('input[name="dachschraege_position"]:checked');
+  return checkedInput ? checkedInput.value : null;
+}
+
+/**
+ * Updates min/max constraints based on Dachschräge position
+ * - Position "links": hoehe_links can be 0, hoehe_rechts keeps original min
+ * - Position "rechts": hoehe_rechts can be 0, hoehe_links keeps original min
+ * - breite_oben: always min=0 regardless of position
+ */
+function updateDachschraegeConstraints() {
+  var position = getDachschraegePosition();
+
+  // Store original min values if not already stored
+  if (_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput && !_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput.dataset.originalMin) {
+    _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput.dataset.originalMin = _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput.getAttribute("min") || "400";
+  }
+  if (_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput && !_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput.dataset.originalMin) {
+    _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput.dataset.originalMin = _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput.getAttribute("min") || "400";
+  }
+
+  // Always set breite_oben min to 0
+  if (_variables_js__WEBPACK_IMPORTED_MODULE_5__.breiteObenInput) {
+    _variables_js__WEBPACK_IMPORTED_MODULE_5__.breiteObenInput.setAttribute("min", "0");
+  }
+
+  // Update height constraints based on position
+  if (position === "links") {
+    // Links: hoehe_links can be 0, hoehe_rechts keeps original min
+    if (_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput) {
+      _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput.setAttribute("min", "0");
+    }
+    if (_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput) {
+      _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput.setAttribute("min", _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput.dataset.originalMin);
+    }
+  } else if (position === "rechts") {
+    // Rechts: hoehe_rechts can be 0, hoehe_links keeps original min
+    if (_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput) {
+      _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput.setAttribute("min", _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput.dataset.originalMin);
+    }
+    if (_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput) {
+      _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput.setAttribute("min", "0");
+    }
+  } else {
+    // No position selected: restore original min values for both heights
+    if (_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput) {
+      _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput.setAttribute("min", _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput.dataset.originalMin);
+    }
+    if (_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput) {
+      _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput.setAttribute("min", _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput.dataset.originalMin);
+    }
+  }
+}
+
+/**
+ * Validates Dachschräge position constraints
+ * Ensures that at least one height is above minimum when a position is selected
+ * @returns {string|null} Error message or null if valid
+ */
+function validateDachschraegePosition() {
+  var position = getDachschraegePosition();
+  if (!position) return null;
+  var hoeheLinks = parseFloat(_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput === null || _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput === void 0 ? void 0 : _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput.value) || 0;
+  var hoeheRechts = parseFloat(_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput === null || _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput === void 0 ? void 0 : _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput.value) || 0;
+  var originalMinHeight = parseFloat(_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput === null || _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput === void 0 ? void 0 : _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput.dataset.originalMin) || 400;
+  if (position === "links") {
+    // Wenn links gewählt, muss rechte Höhe mindestens originalMin sein
+    if (hoeheRechts < originalMinHeight) {
+      return "Bei Dachschr\xE4ge Position \"links\" muss die rechte H\xF6he mindestens ".concat(originalMinHeight, " mm betragen.");
+    }
+  } else if (position === "rechts") {
+    // Wenn rechts gewählt, muss linke Höhe mindestens originalMin sein
+    if (hoeheLinks < originalMinHeight) {
+      return "Bei Dachschr\xE4ge Position \"rechts\" muss die linke H\xF6he mindestens ".concat(originalMinHeight, " mm betragen.");
+    }
+  }
+  return null;
+}
+
+/**
+ * Auto-adjusts Dachschräge position based on height values
+ * This provides intelligent suggestions when user enters asymmetric heights
+ * @deprecated Use suggestOptimalPosition() instead for better UX
+ */
+function autoDetectDachschraegePosition() {
+  suggestOptimalPosition();
+}
+
+/**
+ * Sets the Dachschräge position programmatically
+ * @param {string} position - 'links' or 'rechts'
+ */
+function setDachschraegePosition(position) {
+  var targetInput = document.querySelector("input[name=\"dachschraege_position\"][value=\"".concat(position, "\"]"));
+  if (targetInput) {
+    targetInput.checked = true;
+    targetInput.dispatchEvent(new Event("change", {
+      bubbles: true
+    }));
+  }
+}
+
+/**
+ * Validates that top width does not exceed bottom width
+ * @param {HTMLElement} breiteObenField - Top width input field
+ * @param {HTMLElement} breiteUntenField - Bottom width input field
+ * @returns {string|null} Error message or null if valid
+ */
+function validateBreiteOben(breiteObenField, breiteUntenField) {
+  var breiteOben = parseFloat(breiteObenField === null || breiteObenField === void 0 ? void 0 : breiteObenField.value) || 0;
+  var breiteUnten = parseFloat(breiteUntenField === null || breiteUntenField === void 0 ? void 0 : breiteUntenField.value) || 0;
+  if (breiteOben > breiteUnten) {
+    return 'Die "Breite oben" darf nicht größer sein als die "Breite unten".';
+  }
+  return null;
+}
+
+/**
+ * Validates height relationship with Dachschräge position constraints
+ * @param {HTMLElement} hoeheLinksField - Left height input field
+ * @param {HTMLElement} hoeheRechtsField - Right height input field
+ * @returns {string|null} Error message or null if valid
+ */
+function validateHoeheRelation(hoeheLinksField, hoeheRechtsField) {
+  // First check Dachschräge position constraints
+  var positionError = validateDachschraegePosition();
+  if (positionError) {
+    return positionError;
+  }
+
+  // Additional height relationship validation can be added here
+  return null;
+}
+
+/**
+ * Gets validation message for a specific field based on Dachschräge rules
+ * Only validates input fields, not radio buttons (position validation happens internally)
+ * @param {HTMLElement} field - The field to validate
+ * @returns {string|null} Error message or null if valid
+ */
+function getDachschraegeValidationMessage(field) {
+  if (!field) return null;
+  switch (field.name) {
+    case "breite_oben":
+      // Only validate breite_oben against breite_unten
+      return validateBreiteOben(field, _variables_js__WEBPACK_IMPORTED_MODULE_5__.breiteUntenInput);
+    case "hoehe_links":
+      // Only validate left height constraints - don't trigger right height validation here
+      var position = getDachschraegePosition();
+      if (position === "links") {
+        // Bei Position "links" kann das linke Höhe-Feld unter dem ursprünglichen Minimum sein
+        // da hier die Dachschräge ist - keine zusätzliche Validierung nötig
+      } else if (position === "rechts") {
+        // Bei Position "rechts" muss das linke Höhe-Feld mindestens das ursprüngliche Minimum haben
+        var hoeheLinks = parseFloat(field.value) || 0;
+        var originalMinHeight = parseFloat(field.dataset.originalMin) || 400;
+        if (hoeheLinks < originalMinHeight) {
+          return "Bei Dachschr\xE4ge Position \"rechts\" muss die linke H\xF6he mindestens ".concat(originalMinHeight, " mm betragen.");
+        }
+      }
+
+      // Basic min/max validation (this is handled by input.js, but we include it for completeness)
+      var minValue = parseFloat(field.getAttribute("min"));
+      var currentValue = parseFloat(field.value) || 0;
+      if (!isNaN(minValue) && currentValue < minValue) {
+        return "Der Wert muss mindestens ".concat(minValue, " mm betragen.");
+      }
+      return null;
+    case "hoehe_rechts":
+      // Only validate right height constraints - don't trigger left height validation here
+      var positionRight = getDachschraegePosition();
+      if (positionRight === "rechts") {
+        // Bei Position "rechts" kann das rechte Höhe-Feld unter dem ursprünglichen Minimum sein
+        // da hier die Dachschräge ist - keine zusätzliche Validierung nötig
+      } else if (positionRight === "links") {
+        // Bei Position "links" muss das rechte Höhe-Feld mindestens das ursprüngliche Minimum haben
+        var hoeheRechts = parseFloat(field.value) || 0;
+        var _originalMinHeight = parseFloat(_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput === null || _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput === void 0 ? void 0 : _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput.dataset.originalMin) || 400;
+        if (hoeheRechts < _originalMinHeight) {
+          return "Bei Dachschr\xE4ge Position \"links\" muss die rechte H\xF6he mindestens ".concat(_originalMinHeight, " mm betragen.");
+        }
+      }
+
+      // Basic min/max validation (this is handled by input.js, but we include it for completeness)
+      var minValueRight = parseFloat(field.getAttribute("min"));
+      var currentValueRight = parseFloat(field.value) || 0;
+      if (!isNaN(minValueRight) && currentValueRight < minValueRight) {
+        return "Der Wert muss mindestens ".concat(minValueRight, " mm betragen.");
+      }
+      return null;
+
+    // Radio button validation removed - position validation happens internally
+    // and doesn't need visual feedback containers
+    default:
+      return null;
+  }
+}
+
+/**
+ * Gets all fields that should be re-validated when a specific field changes
+ * This is primarily used for cross-field validation after user completes input
+ * @param {HTMLElement} field - The field that changed
+ * @returns {HTMLElement[]} Array of fields to re-validate
+ */
+function getDependentFields(field) {
+  if (!field) return [];
+  var dependentFields = [];
+  switch (field.name) {
+    case "breite_unten":
+      // When bottom width changes, re-validate top width (for breite_oben > breite_unten check)
+      if (_variables_js__WEBPACK_IMPORTED_MODULE_5__.breiteObenInput) dependentFields.push(_variables_js__WEBPACK_IMPORTED_MODULE_5__.breiteObenInput);
+      break;
+    case "breite_oben":
+      // Top width validation is self-contained - no dependent fields needed
+      break;
+    case "hoehe_links":
+      // For height fields, we don't immediately validate the other height field
+      // This prevents double validation messages during input
+      // Cross-validation happens in change event via onDachschraegeFieldChange
+      break;
+    case "hoehe_rechts":
+      // For height fields, we don't immediately validate the other height field
+      // This prevents double validation messages during input
+      // Cross-validation happens in change event via onDachschraegeFieldChange
+      break;
+    case "dachschraege_position":
+      // Position radio buttons are handled internally - no dependent fields for validation UI
+      // Constraint updates and validation happen through position change event listeners
+      updateDachschraegeConstraints();
+      if (_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput) dependentFields.push(_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput);
+      if (_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput) dependentFields.push(_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput);
+
+      // Trigger comprehensive update for position changes
+      setTimeout(function () {
+        validateAndUpdateAllPositionFields();
+      }, 10);
+      break;
+  }
+
+  // Trigger carousel height update after dependent field validation
+  if (dependentFields.length > 0) {
+    triggerCarouselHeightUpdate();
+  }
+  return dependentFields;
+}
+
+/**
+ * Checks if a field is part of Dachschräge configuration
+ * @param {HTMLElement} field - The field to check
+ * @returns {boolean} True if field is part of Dachschräge
+ */
+function isDachschraegeField(field) {
+  if (!field) return false;
+
+  // Only handle input fields, not radio buttons (radio buttons are handled separately)
+  var dachschraegeInputFields = ["breite_unten", "breite_oben", "hoehe_links", "hoehe_rechts"];
+  return dachschraegeInputFields.includes(field.name);
+}
+
+/**
+ * Triggers carousel height update after validation changes
+ * Should be called whenever invalid feedback is shown/hidden
+ */
+function triggerCarouselHeightUpdate() {
+  // Small delay to ensure DOM changes (validation feedback) are rendered
+  setTimeout(function () {
+    if (window.updateCarouselHeight) {
+      window.updateCarouselHeight();
+    }
+  }, 100);
+}
+
+/**
+ * Validates and updates all Dachschräge-related fields
+ * This ensures complete synchronization between all fields
+ */
+function validateAndUpdateAllPositionFields() {
+  // Update constraints first
+  updateDachschraegeConstraints();
+
+  // Validate all fields if validation function is available
+  if (window.validateField) {
+    // Validate height fields (these trigger position-specific validation)
+    if (_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput) {
+      window.validateField(_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput);
+    }
+    if (_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput) {
+      window.validateField(_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput);
+    }
+
+    // Validate width fields
+    if (_variables_js__WEBPACK_IMPORTED_MODULE_5__.breiteObenInput) {
+      window.validateField(_variables_js__WEBPACK_IMPORTED_MODULE_5__.breiteObenInput);
+    }
+    if (_variables_js__WEBPACK_IMPORTED_MODULE_5__.breiteUntenInput) {
+      window.validateField(_variables_js__WEBPACK_IMPORTED_MODULE_5__.breiteUntenInput);
+    }
+
+    // Note: Position radio buttons are not validated via validateField
+    // to prevent invalid-feedback containers from being created
+  }
+
+  // Update carousel height after all validations
+  triggerCarouselHeightUpdate();
+}
+
+/**
+ * Provides smart suggestions for position based on current height values
+ * More sophisticated than simple auto-detection
+ */
+function suggestOptimalPosition() {
+  var hoeheLinks = parseFloat(_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput === null || _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput === void 0 ? void 0 : _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput.value) || 0;
+  var hoeheRechts = parseFloat(_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput === null || _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput === void 0 ? void 0 : _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput.value) || 0;
+  var originalMinHeight = parseFloat(_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput === null || _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput === void 0 ? void 0 : _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput.dataset.originalMin) || 400;
+  var currentPosition = getDachschraegePosition();
+
+  // Determine optimal position based on values
+  var suggestedPosition = null;
+
+  // Case 1: Left height is below minimum, right height is acceptable
+  if (hoeheLinks < originalMinHeight && hoeheRechts >= originalMinHeight) {
+    suggestedPosition = "links";
+  }
+  // Case 2: Right height is below minimum, left height is acceptable
+  else if (hoeheRechts < originalMinHeight && hoeheLinks >= originalMinHeight) {
+    suggestedPosition = "rechts";
+  }
+  // Case 3: Both heights are acceptable - validate current position
+  else if (hoeheLinks >= originalMinHeight && hoeheRechts >= originalMinHeight) {
+    // Keep current position if it's valid, otherwise suggest based on smaller value
+    if (currentPosition) {
+      // Current position is fine, no change needed
+      return;
+    } else {
+      // No position selected, suggest based on which side is smaller
+      suggestedPosition = hoeheLinks <= hoeheRechts ? "links" : "rechts";
+    }
+  }
+  // Case 4: Both heights are below minimum - this is an invalid state
+  else if (hoeheLinks < originalMinHeight && hoeheRechts < originalMinHeight) {
+    // Suggest position based on which height is closer to minimum
+    var linksDistance = originalMinHeight - hoeheLinks;
+    var rechtsDistance = originalMinHeight - hoeheRechts;
+    suggestedPosition = linksDistance <= rechtsDistance ? "links" : "rechts";
+  }
+
+  // Only change if suggestion is different from current position
+  if (suggestedPosition && suggestedPosition !== currentPosition) {
+    setDachschraegePosition(suggestedPosition);
+
+    // Visual feedback that position was auto-adjusted
+    setTimeout(function () {
+      var positionGroup = document.querySelector('[data-key="dachschraege_position"]');
+      if (positionGroup) {
+        positionGroup.classList.add("focus-ring-success");
+        setTimeout(function () {
+          positionGroup.classList.remove("focus-ring-success");
+        }, 2000);
+      }
+    }, 100);
+  }
+}
+
+/**
+ * Callback function for input events on Dachschräge fields
+ * Called by input.js when a Dachschräge field receives input
+ * @param {HTMLElement} field - The field that received input
+ */
+function onDachschraegeFieldInput(field) {
+  // Handle dependent field validation for real-time feedback
+  var dependentFields = getDependentFields(field);
+  dependentFields.forEach(function (dependentField) {
+    setTimeout(function () {
+      if (window.validateField) {
+        window.validateField(dependentField);
+      }
+    }, 0);
+  });
+}
+
+/**
+ * Callback function for change events on Dachschräge fields
+ * Called by input.js when a Dachschräge field value changes (user completes input)
+ * @param {HTMLElement} field - The field that changed
+ */
+function onDachschraegeFieldChange(field) {
+  // Handle position-specific logic for height fields
+  if (field.name === "hoehe_links" || field.name === "hoehe_rechts") {
+    // Smart position suggestion based on height values
+    suggestOptimalPosition();
+
+    // Re-validate the other height field after position might have changed
+    var otherHeightField = field.name === "hoehe_links" ? _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput : _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput;
+    if (otherHeightField && window.validateField) {
+      setTimeout(function () {
+        window.validateField(otherHeightField);
+      }, 100); // Small delay to ensure position change is processed
+    }
+  }
+
+  // Validate dependent fields for all field types
+  var dependentFields = getDependentFields(field);
+  dependentFields.forEach(function (dependentField) {
+    setTimeout(function () {
+      if (window.validateField) {
+        window.validateField(dependentField);
+      }
+    }, 0);
+  });
+
+  // Trigger position validation and suggestions for height fields
+  if (field.name === "hoehe_links" || field.name === "hoehe_rechts") {
+    setTimeout(function () {
+      validateAndUpdateAllPositionFields();
+    }, 50);
+  }
+}
+
+/**
+ * Initialize Dachschräge dependencies on DOM ready
+ */
+document.addEventListener("DOMContentLoaded", function () {
+  // Initialize constraints based on current position
+  updateDachschraegeConstraints();
+
+  // Add event listeners ONLY for position radio buttons (not handled by input.js)
+  dachschraegePositionInputs.forEach(function (input) {
+    input.addEventListener("change", function () {
+      // Immediate constraint update for better responsiveness
+      updateDachschraegeConstraints();
+
+      // Comprehensive validation of all related fields
+      setTimeout(function () {
+        validateAndUpdateAllPositionFields();
+      }, 20);
+    });
+  });
+
+  // Initial auto-detection with improved logic
+  setTimeout(function () {
+    if (_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput !== null && _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput !== void 0 && _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput.value && _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput.value !== "0" || _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput !== null && _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput !== void 0 && _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput.value && _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput.value !== "0") {
+      suggestOptimalPosition();
+      validateAndUpdateAllPositionFields();
+    }
+  }, 200); // Increased delay for complete DOM readiness
+});
+
+/***/ }),
+
 /***/ "./assets/js/configurator/dependencies/digital-uhr.js":
 /*!************************************************************!*\
   !*** ./assets/js/configurator/dependencies/digital-uhr.js ***!
@@ -2560,7 +3097,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _dependencies_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../dependencies.js */ "./assets/js/configurator/dependencies.js");
 /* harmony import */ var _variables_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../variables.js */ "./assets/js/configurator/variables.js");
 /**
- * @version 2.2.0
+ * @version 2.3.0
  */
 
 
@@ -2592,7 +3129,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @version 2.2.0
+ * @version 2.3.0
  */
 
 
@@ -2764,7 +3301,7 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
  * Dependencies:
  * - variables.js: Dimension inputs, lighting position flags, and product category flags
  *
- * @version 2.2.0
+ * @version 2.3.0
  * @package Configurator
  */
 
@@ -3742,7 +4279,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @version 2.2.0
+ * @version 2.3.0
  */
 
 
@@ -3759,7 +4296,7 @@ document.addEventListener("DOMContentLoaded", function () {
   (0,_dependencies_js__WEBPACK_IMPORTED_MODULE_2__.dependenciesValuesXvalues)("schminkspiegel_lichtfarbe", function (value) {
     return value === "alle_drei_lichtfarben";
   }, "schminkspiegel_bedienung", function (value) {
-    return value === "extra_touch_sensor";
+    return value === "extra_touch_sensor_plus";
   });
   (0,_dependencies_js__WEBPACK_IMPORTED_MODULE_2__.dependenciesValuesXvalues)("schminkspiegel_bedienung", function (value) {
     return !value.includes("touch_sensor");
@@ -3798,7 +4335,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _variables_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./../variables.js */ "./assets/js/configurator/variables.js");
 
 /**
- * @version 2.2.0
+ * @version 2.3.0
  */
 
 
@@ -3887,7 +4424,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @version 2.2.0
+ * @version 2.3.0
  */
 
 
@@ -3924,7 +4461,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _dependencies_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../dependencies.js */ "./assets/js/configurator/dependencies.js");
 /* harmony import */ var _variables_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../variables.js */ "./assets/js/configurator/variables.js");
 /**
- * @version 2.2.0
+ * @version 2.3.0
  */
 
 
@@ -3961,7 +4498,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _dependencies_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../dependencies.js */ "./assets/js/configurator/dependencies.js");
 /* harmony import */ var _variables_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../variables.js */ "./assets/js/configurator/variables.js");
 /**
- * @version 2.2.0
+ * @version 2.3.0
+ * 
+ * @todo Check if this file is needed
  */
 
 
@@ -3979,7 +4518,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _dependencies_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../dependencies.js */ "./assets/js/configurator/dependencies.js");
 /* harmony import */ var _variables_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../variables.js */ "./assets/js/configurator/variables.js");
 /**
- * @version 2.2.0
+ * @version 2.3.0
  */
 
 
@@ -4042,7 +4581,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @version 2.2.0
+ * @version 2.3.0
  */
 
 
@@ -4089,7 +4628,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @version 2.2.0
+ * @version 2.3.0
  */
 
 
@@ -4451,9 +4990,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _dependencies_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../dependencies.js */ "./assets/js/configurator/dependencies.js");
 /* harmony import */ var _variables_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../variables.js */ "./assets/js/configurator/variables.js");
 /**
- * @version 2.2.0
+ * @version 2.3.0
  *
- * TODO: Check functionality on rounded mirrors.
+ * @todo Check functionality on rounded mirrors
  */
 
 
@@ -4479,7 +5018,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _dependencies_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../dependencies.js */ "./assets/js/configurator/dependencies.js");
 /* harmony import */ var _variables_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../variables.js */ "./assets/js/configurator/variables.js");
 /**
- * @version 2.2.0
+ * @version 2.3.0
  */
 
 
@@ -4542,8 +5081,10 @@ __webpack_require__.r(__webpack_exports__);
  * - Dynamic event binding for configurator elements
  * - Performance optimizations with caching and debouncing
  *
- * @version 2.2.0
+ * @version 2.3.0
  * @package Configurator
+ *
+ * @todo Use for "dachschraege" calcPrice2x100, whilst using a "prefunction" to get the higher "breite" or "hoehe" value
  */
 
 
@@ -4788,6 +5329,33 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     }
   });
+
+  // ====================== DACHSCHRAEGE DIMENSION CALCULATIONS ======================
+  var fourDimensionPriceMatrix = document.querySelector('.option-price[name*="pxbh"]');
+  if (_variables__WEBPACK_IMPORTED_MODULE_5__.breiteUntenInput && _variables__WEBPACK_IMPORTED_MODULE_5__.breiteObenInput && _variables__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput && _variables__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput && fourDimensionPriceMatrix) {
+    // Calculation function
+    var calcFourDimensionPrice = function calcFourDimensionPrice() {
+      (0,_pricecalcs_pricematrices__WEBPACK_IMPORTED_MODULE_7__.calcPrice4x100)(_variables__WEBPACK_IMPORTED_MODULE_5__.breiteUntenInput, _variables__WEBPACK_IMPORTED_MODULE_5__.breiteObenInput, _variables__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput, _variables__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput, fourDimensionPriceMatrix, fourDimensionCache, fourDimensionLastValue);
+    }; // Event listeners for all four inputs
+    var fourDimensionCache = {};
+    var fourDimensionLastValue = {
+      lastRoundedValue: null
+    };
+
+    // Build cache for four dimension calculations
+    fourDimensionPriceMatrix.querySelectorAll("option").forEach(function (option) {
+      if (option.value.includes("x")) {
+        fourDimensionCache[option.value] = option;
+      }
+    });
+    _variables__WEBPACK_IMPORTED_MODULE_5__.breiteUntenInput.addEventListener("input", calcFourDimensionPrice);
+    _variables__WEBPACK_IMPORTED_MODULE_5__.breiteObenInput.addEventListener("input", calcFourDimensionPrice);
+    _variables__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput.addEventListener("input", calcFourDimensionPrice);
+    _variables__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput.addEventListener("input", calcFourDimensionPrice);
+
+    // Initial calculation
+    calcFourDimensionPrice();
+  }
 });
 
 /**
@@ -4863,8 +5431,10 @@ __webpack_require__.r(__webpack_exports__);
  * configurator system. It includes number parsing, price formatting, DOM
  * manipulation helpers, and performance optimization utilities.
  *
- * @version 2.2.0
+ * @version 2.3.0
  * @package Configurator
+ *
+ * @todo Check if these functions can be used, for a better DRY concept
  */
 
 /**
@@ -5128,6 +5698,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
 /* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _dependencies_dachschraege_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./dependencies/dachschraege.js */ "./assets/js/configurator/dependencies/dachschraege.js");
 
 
 
@@ -5136,9 +5707,14 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * Product Configurator - Input Validation Module
  *
- * This module handles form input validation for the product configurator.
+ * This module serves as the central validation engine for the product configurator.
  * It provides real-time validation feedback, custom error messages,
  * relational field validation, and Bootstrap form state management.
+ *
+ * ARCHITECTURE (DRY Principle):
+ * - input.js: Central validation engine with generic event listeners
+ * - Specialized modules (e.g., dachschraege.js): Domain-specific validation rules
+ * - Callback system: Specialized modules provide callback functions for input.js
  *
  * Features:
  * - Real-time validation with visual feedback
@@ -5146,10 +5722,12 @@ __webpack_require__.r(__webpack_exports__);
  * - Relational field constraints (e.g., width dependencies)
  * - Bootstrap form state classes (is-valid, is-invalid)
  * - Dynamic min/max attribute updates
+ * - Modular validation rules via callback system
  *
- * @version 2.2.0
+ * @version 2.3.0
  * @package Configurator
  */
+
 
 document.addEventListener("DOMContentLoaded", function () {
   /**
@@ -5160,20 +5738,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /**
    * Special field references for relational validation
-   * These fields have interdependencies that require custom validation logic
-   * For Dachschrägen (sloped roof configurations):
-   * - breite_unten: bottom width (base reference)
-   * - breite_oben: top width (must not exceed bottom width)
-   * - hoehe_links: left height
-   * - hoehe_rechts: right height
    */
-  var breiteUntenField = document.querySelector('input[name="breite_unten"]');
-  var breiteObenField = document.querySelector('input[name="breite_oben"]');
-  var hoeheLinksField = document.querySelector('input[name="hoehe_links"]');
-  var hoeheRechtsField = document.querySelector('input[name="hoehe_rechts"]');
-
-  // Legacy field support (for shelf width validation)
-  var ablageBreiteField = document.querySelector('input[name="ablage_breite"]');
 
   /**
    * Ensures that an invalid feedback container exists for the given field
@@ -5231,6 +5796,9 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
       feedbackElement.style.display = "none";
     }
+
+    // Trigger carousel height update when feedback visibility changes
+    (0,_dependencies_dachschraege_js__WEBPACK_IMPORTED_MODULE_5__.triggerCarouselHeightUpdate)();
   }
 
   /**
@@ -5263,65 +5831,17 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
-    // 3. Custom relational validation rules for Dachschrägen
+    // 3. Custom relational validation rules
 
-    // Validate top width against bottom width (Dachschräge)
-    if (field.name === "breite_oben") {
-      var _document$querySelect;
-      var breiteOben = parseFloat(field.value) || 0;
-      var breiteUnten = parseFloat((_document$querySelect = document.querySelector('input[name="breite_unten"]')) === null || _document$querySelect === void 0 ? void 0 : _document$querySelect.value) || 0;
-      if (breiteOben > breiteUnten) {
-        messages.push('Die "Breite oben" darf nicht größer sein als die "Breite unten".');
+    // Dachschräge validation (outsourced to dedicated module)
+    if ((0,_dependencies_dachschraege_js__WEBPACK_IMPORTED_MODULE_5__.isDachschraegeField)(field)) {
+      var dachschraegeMessage = (0,_dependencies_dachschraege_js__WEBPACK_IMPORTED_MODULE_5__.getDachschraegeValidationMessage)(field);
+      if (dachschraegeMessage) {
+        messages.push(dachschraegeMessage);
       }
     }
 
-    // Validate left height against right height (ensure reasonable difference)
-    if (field.name === "hoehe_links") {
-      var _document$querySelect2;
-      var hoeheLinks = parseFloat(field.value) || 0;
-      var hoeheRechts = parseFloat((_document$querySelect2 = document.querySelector('input[name="hoehe_rechts"]')) === null || _document$querySelect2 === void 0 ? void 0 : _document$querySelect2.value) || 0;
-      // Optional: Add validation if one height should not exceed the other by too much
-      // Example: if (Math.abs(hoeheLinks - hoeheRechts) > someMaxDifference) { ... }
-    }
-
-    // Validate right height against left height (ensure reasonable difference)
-    if (field.name === "hoehe_rechts") {
-      var _document$querySelect3;
-      var _hoeheRechts = parseFloat(field.value) || 0;
-      var _hoeheLinks = parseFloat((_document$querySelect3 = document.querySelector('input[name="hoehe_links"]')) === null || _document$querySelect3 === void 0 ? void 0 : _document$querySelect3.value) || 0;
-      // Optional: Add validation if one height should not exceed the other by too much
-      // Example: if (Math.abs(hoeheRechts - hoeheLinks) > someMaxDifference) { ... }
-    }
-
-    // Cross-validate bottom width (base reference for other measurements)
-    if (field.name === "breite_unten") {
-      var _document$querySelect4;
-      var _breiteUnten = parseFloat(field.value) || 0;
-      var _breiteOben = parseFloat((_document$querySelect4 = document.querySelector('input[name="breite_oben"]')) === null || _document$querySelect4 === void 0 ? void 0 : _document$querySelect4.value) || 0;
-      if (_breiteOben > _breiteUnten) {
-        // Trigger validation on the dependent field
-        var _breiteObenField = document.querySelector('input[name="breite_oben"]');
-        if (_breiteObenField) {
-          setTimeout(function () {
-            return validateField(_breiteObenField);
-          }, 0);
-        }
-      }
-    }
-
-    // 4. Shelf width validation (currently disabled)
-    // Uncomment to enable shelf width validation against main width
-    /*
-    if (field.name === "ablage_breite") {
-      const ablageBreite = parseFloat(field.value) || 0;
-      const breite = parseFloat(breiteField ? breiteField.value : 0) || 0;
-      if (ablageBreite > breite) {
-        messages.push("Die Ablage Breite darf nicht größer sein als die Breite.");
-      }
-    }
-    */
-
-    // 5. Apply validation state based on collected messages
+    // 4. Apply validation state based on collected messages
     if (messages.length > 0) {
       field.classList.add("is-invalid");
       setInvalidFeedback(field, messages.join(" "));
@@ -5330,6 +5850,9 @@ document.addEventListener("DOMContentLoaded", function () {
       setInvalidFeedback(field, "");
     }
   }
+
+  // Make validateField globally available for other modules (e.g., dachschraege.js)
+  window.validateField = validateField;
 
   /**
    * Updates field state classes based on focus and content:
@@ -5368,6 +5891,8 @@ document.addEventListener("DOMContentLoaded", function () {
    * This provides dynamic constraint updates for related fields
    */
   function updateAblageBreiteMax() {
+    var breiteUntenField = document.querySelector('input[name="breite_unten"]');
+    var ablageBreiteField = document.querySelector('input[name="ablage_breite"]');
     if (breiteUntenField && ablageBreiteField) {
       var breiteUntenValue = parseFloat(breiteUntenField.value) || 0;
       ablageBreiteField.setAttribute("max", breiteUntenValue);
@@ -5406,24 +5931,11 @@ document.addEventListener("DOMContentLoaded", function () {
       // Handle width field changes for relational validation
       if (field.name === "breite_unten") {
         updateAblageBreiteMax();
-        // Also trigger validation on dependent top width field
-        if (breiteObenField) {
-          setTimeout(function () {
-            return validateField(breiteObenField);
-          }, 0);
-        }
       }
 
-      // Trigger cross-validation for height fields
-      if (field.name === "hoehe_links" && hoeheRechtsField) {
-        setTimeout(function () {
-          return validateField(hoeheRechtsField);
-        }, 0);
-      }
-      if (field.name === "hoehe_rechts" && hoeheLinksField) {
-        setTimeout(function () {
-          return validateField(hoeheLinksField);
-        }, 0);
+      // Handle Dachschräge field dependencies using centralized logic
+      if ((0,_dependencies_dachschraege_js__WEBPACK_IMPORTED_MODULE_5__.isDachschraegeField)(field)) {
+        (0,_dependencies_dachschraege_js__WEBPACK_IMPORTED_MODULE_5__.onDachschraegeFieldInput)(field);
       }
 
       // Show 'is-valid' state during typing when no errors exist
@@ -5432,6 +5944,17 @@ document.addEventListener("DOMContentLoaded", function () {
         field.classList.add("is-valid");
       } else {
         field.classList.remove("is-valid");
+      }
+    });
+
+    /**
+     * Change event handler
+     * Handles cross-field validation and position suggestions when user completes input
+     */
+    field.addEventListener("change", function () {
+      // Handle Dachschräge field dependencies and position suggestions
+      if ((0,_dependencies_dachschraege_js__WEBPACK_IMPORTED_MODULE_5__.isDachschraegeField)(field)) {
+        (0,_dependencies_dachschraege_js__WEBPACK_IMPORTED_MODULE_5__.onDachschraegeFieldChange)(field);
       }
     });
 
@@ -5455,9 +5978,8 @@ document.addEventListener("DOMContentLoaded", function () {
   /**
    * Initialize shelf width constraints on page load
    * Sets up initial max attribute if main width field has a value
-   * Currently disabled - uncomment to enable initial constraint setup
    */
-  // updateAblageBreiteMax();
+  updateAblageBreiteMax();
 });
 
 /**
@@ -5550,8 +6072,10 @@ __webpack_require__.r(__webpack_exports__);
  * Includes MutationObserver to track dynamic attribute changes and search
  * functionality for option groups.
  *
- * @version 2.2.0
+ * @version 2.3.0
  * @package Configurator
+ *
+ * @todo Offdrops desktop, dropdowns are not navigable through keyboard
  */
 
 /**
@@ -6248,7 +6772,7 @@ __webpack_require__.r(__webpack_exports__);
  * - Initial state population on page load
  * - Robust DOM structure validation
  *
- * @version 2.2.0
+ * @version 2.3.0
  * @package Configurator
  * @subpackage PriceCalculations
  */
@@ -6406,7 +6930,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   calcPrice1x10: () => (/* binding */ calcPrice1x10),
 /* harmony export */   calcPrice1x100: () => (/* binding */ calcPrice1x100),
 /* harmony export */   calcPrice1x50: () => (/* binding */ calcPrice1x50),
-/* harmony export */   calcPrice2x100: () => (/* binding */ calcPrice2x100)
+/* harmony export */   calcPrice2x100: () => (/* binding */ calcPrice2x100),
+/* harmony export */   calcPrice4x100: () => (/* binding */ calcPrice4x100)
 /* harmony export */ });
 /* harmony import */ var core_js_modules_es_symbol_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.symbol.js */ "./node_modules/core-js/modules/es.symbol.js");
 /* harmony import */ var core_js_modules_es_symbol_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_symbol_js__WEBPACK_IMPORTED_MODULE_0__);
@@ -6494,7 +7019,7 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
  * - Data attribute synchronization for price display
  * - Prevention of redundant calculations through value caching
  *
- * @version 2.2.0
+ * @version 2.3.0
  * @package Configurator
  * @subpackage PriceCalculations
  */
@@ -6898,6 +7423,143 @@ function calcPrice2x100(inputElement1, inputElement2, pricematrixSelect, pricema
   inputElement2.dataset.price = price;
 }
 
+/**
+ * Calculates price for four dimension inputs (breite_unten, breite_oben, hoehe_links, hoehe_rechts)
+ * Takes the maximum values from width inputs and height inputs, then uses progressive rounding
+ * strategy like calcPrice2x100: attempts 100-unit rounding first, falls back to 50-unit rounding
+ *
+ * @param {HTMLInputElement} breiteUntenElement - Bottom width input element
+ * @param {HTMLInputElement} breiteObenElement - Top width input element
+ * @param {HTMLInputElement} hoeheLinksElement - Left height input element
+ * @param {HTMLInputElement} hoeheRechtsElement - Right height input element
+ * @param {HTMLSelectElement} pricematrixSelect - The price matrix select element
+ * @param {Object} pricematrixCache - Cached option elements (currently unused but preserved for consistency)
+ * @param {Object} lastValueCache - Cache object to prevent redundant calculations
+ * @param {string} lastValueCache.lastRoundedValue - Previously calculated dimension string
+ *
+ * @example
+ * // Usage for four dimension inputs
+ * calcPrice4x100(breiteUntenInput, breiteObenInput, hoeheLinksInput, hoeheRechtsInput, matrixSelect, cache, { lastRoundedValue: null });
+ *
+ * // Input: breiteUnten=350, breiteOben=400, hoeheLinks=780, hoeheRechts=750
+ * // Max width=400, Max height=780 → Try: 400x800 → Found: Select option
+ */
+function calcPrice4x100(breiteUntenElement, breiteObenElement, hoeheLinksElement, hoeheRechtsElement, pricematrixSelect, pricematrixCache, lastValueCache) {
+  // Parse and validate all four input values
+  var breiteUntenValue = parseInt(breiteUntenElement.value, 10);
+  var breiteObenValue = parseInt(breiteObenElement.value, 10);
+  var hoeheLinksValue = parseInt(hoeheLinksElement.value, 10);
+  var hoeheRechtsValue = parseInt(hoeheRechtsElement.value, 10);
+
+  // Exit if any value is invalid
+  if (isNaN(breiteUntenValue) || isNaN(breiteObenValue) || isNaN(hoeheLinksValue) || isNaN(hoeheRechtsValue)) return;
+
+  // Calculate maximum values for width and height
+  var maxBreite = Math.max(breiteUntenValue, breiteObenValue);
+  var maxHoehe = Math.max(hoeheLinksValue, hoeheRechtsValue);
+
+  /**
+   * PROGRESSIVE ROUNDING STRATEGY WITH INTELLIGENT FALLBACK
+   * ======================================================
+   * Step 1: Round to nearest 100 (primary strategy for common sizes)
+   * Step 2: Round to nearest 50 (fallback for intermediate sizes)
+   * Step 3: Smart fallback to next available size in matrix
+   */
+
+  // Step 1: Round both max dimensions to next multiple of 100
+  var roundedValue1 = Math.ceil(maxBreite / 100) * 100;
+  var roundedValue2 = Math.ceil(maxHoehe / 100) * 100;
+  var potentialValue = "".concat(roundedValue1, "x").concat(roundedValue2);
+
+  // Performance optimization: Skip if dimension string hasn't changed
+  if (lastValueCache.lastRoundedValue === potentialValue) return;
+
+  /**
+   * PRIMARY OPTION SEARCH (100-unit rounding)
+   * ========================================
+   * Search for exact match in price matrix using 100-unit rounded dimensions
+   */
+  var optionToSelect = Array.from(pricematrixSelect.options).find(function (opt) {
+    return opt.value === potentialValue;
+  });
+
+  /**
+   * FALLBACK OPTION SEARCH (50-unit rounding)
+   * ========================================
+   * If 100-unit rounding doesn't yield results, try 50-unit rounding
+   * This covers intermediate sizes not available in the primary matrix
+   */
+  if (!optionToSelect) {
+    roundedValue1 = Math.ceil(maxBreite / 50) * 50;
+    roundedValue2 = Math.ceil(maxHoehe / 50) * 50;
+    potentialValue = "".concat(roundedValue1, "x").concat(roundedValue2);
+    optionToSelect = Array.from(pricematrixSelect.options).find(function (opt) {
+      return opt.value === potentialValue;
+    });
+  }
+
+  /**
+   * INTELLIGENT SIZE FALLBACK (similar to calcPrice2x100)
+   * ====================================================
+   * If both 100 and 50 unit rounding fail, find next available size combination
+   */
+  if (!optionToSelect) {
+    // Get all available dimension combinations from the select options
+    var availableOptions = Array.from(pricematrixSelect.options).map(function (opt) {
+      return opt.value;
+    }).filter(function (val) {
+      return val.includes("x");
+    }).map(function (val) {
+      var _val$split$map3 = val.split("x").map(function (v) {
+          return parseInt(v, 10);
+        }),
+        _val$split$map4 = _slicedToArray(_val$split$map3, 2),
+        w = _val$split$map4[0],
+        h = _val$split$map4[1];
+      return {
+        value: val,
+        width: w,
+        height: h,
+        element: pricematrixSelect.querySelector("option[value=\"".concat(val, "\"]"))
+      };
+    }).filter(function (opt) {
+      return !isNaN(opt.width) && !isNaN(opt.height);
+    });
+
+    // Find the smallest option that can accommodate both max dimensions
+    var suitableOption = availableOptions.find(function (opt) {
+      return opt.width >= roundedValue1 && opt.height >= roundedValue2;
+    });
+    if (suitableOption) {
+      optionToSelect = suitableOption.element;
+      potentialValue = suitableOption.value;
+    }
+  }
+
+  // Exit if no option found even with intelligent fallback
+  if (!optionToSelect) return;
+
+  /**
+   * MATRIX UPDATE AND EVENT PROPAGATION
+   * ===================================
+   * Update the price matrix selection and propagate changes to dependent systems
+   * Using the same pattern as calcPrice2x100 for consistency
+   */
+
+  // Update the cache with successful calculation result
+  lastValueCache.lastRoundedValue = potentialValue;
+
+  // Use the same updateSelectAndTrigger function for consistency
+  (0,_functions__WEBPACK_IMPORTED_MODULE_20__.updateSelectAndTrigger)(pricematrixSelect, optionToSelect);
+
+  // Synchronize data-price attributes for all four input elements
+  var price = optionToSelect.dataset.price || "0";
+  breiteUntenElement.dataset.price = price;
+  breiteObenElement.dataset.price = price;
+  hoeheLinksElement.dataset.price = price;
+  hoeheRechtsElement.dataset.price = price;
+}
+
 /***/ }),
 
 /***/ "./assets/js/configurator/pricecalcs/sk1.js":
@@ -6945,7 +7607,7 @@ __webpack_require__.r(__webpack_exports__);
  * - Diameter from Height: d = (h² + t²/4) / h
  * - All calculations based on circle geometry and segment formulas
  *
- * @version 2.2.0
+ * @version 2.3.0
  * @package Configurator
  * @subpackage PriceCalculations
  */
@@ -7410,7 +8072,7 @@ __webpack_require__.r(__webpack_exports__);
  * - Width/Height = (diameter - b) ÷ a
  * - Coefficients derived from manufacturing specifications
  *
- * @version 2.2.0
+ * @version 2.3.0
  * @package Configurator
  * @subpackage PriceCalculations
  */
@@ -7792,7 +8454,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
  * - Tooltip initialization for summary actions
  * - Graceful error handling for print/save actions
  *
- * @version 2.2.0
+ * @version 2.3.0
  * @package Configurator
  */
 
@@ -8123,7 +8785,7 @@ function _printSummary() {
           return _context.f(6);
         case 7:
           printWindow = window.open("", "_blank");
-          printWindow.document.write("\n    <!DOCTYPE html>\n    <html>\n    <head>\n      <title>Badspiegel.de</title>\n      <style>\n        body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.5; font-size: 14px; }\n        .print-code-section,\n        .print-header { margin-bottom: 16px; border-bottom: 2px solid #dee2e6; }\n          .print-header p { margin: 0; margin-bottom: 16px; }\n        \n        /* Code section styling */\n        .print-code-section { \n         \n        }\n        .print-code-section h3 { \n        }\n        \n        /* Bootstrap-like grid system - modified for print */\n        .row { display: block; margin: 0; }\n        .list-group-item .row { display: flex; align-items: center; margin: 0; }\n        .row.g-1 { display: flex; align-items: center; margin: 0; }\n        .col { flex: 1; padding: 0 4px; }\n        .col-auto { flex: 0 0 auto; padding: 0 4px; }\n        .col-12 { width: 100%; display: block; margin-bottom: 15px; }\n        \n        /* Container layouts */\n        .list-group-body { display: block !important; }\n        .list-group-body > .row { display: block; }\n        \n        /* List styles */\n        .list-group { list-style: none; margin: 0; padding: 0; }\n        .list-group-item { \n          padding: 12px 16px; \n          border: 1px solid #ddd; \n          margin-bottom: 1px; \n          background: #fff;\n          display: block;\n        }\n        .list-group-flush .list-group-item { border-left: 0; border-right: 0; border-top: 0; }\n        .list-group-flush .list-group-item:first-child { border-top: 0; }\n        .list-group-flush .list-group-item:last-child { border-bottom: 0; }\n        \n        /* Typography */\n        .fw-medium { font-weight: 500; }\n        .text-end { text-align: right; }\n        .fs-5 { font-size: 1.25rem; }\n        .small { font-size: 0.875rem; }\n        .text-muted { color: #6c757d; }\n        .text-truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }\n        \n        /* Headers */\n        h5, h6 { font-weight: 500; }\n        h2 { font-size: 1.5rem; margin: 16px 0 16px 0; }\n        h3 { font-size: 1.3rem; margin: 16px 0 8px 0; font-weight: 500; }\n        h5 { font-size: 1.25rem; margin: 16px 0 16px 0; }\n        h6 { font-size: 1.1rem; margin: 16px 0 8px 0; }\n\n        /* Spacing */\n        .mb-0 { margin-bottom: 0; }\n        .px-3 { padding-left: 1rem; padding-right: 1rem; }\n        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }\n        .pt-3 { padding-top: 1rem; }\n        .p-3 { padding: 1rem; }\n        \n        /* Background and borders */\n        \n        .border-secondary-subtle { border-color: #dee2e6; }\n        .border-top { border-top: 1px solid #dee2e6; }\n        \n        /* Layout improvements */\n        .d-flex { display: flex; }\n        .justify-content-between { justify-content: space-between; }\n        .align-items-center { align-items: center; }\n        \n        /* Hide print button in print */\n        .btn-print-summary,.btn-save-summary,div.vr.border-secondary-subtle { display: none; }\n\n        /* Price styling */\n        .product-price { font-weight: 600; }\n        \n        /* Page breaks */\n        @media print {\n          .print-header { page-break-after: avoid; }\n          .print-code-section { page-break-inside: avoid; }\n          .list-group-item { page-break-inside: avoid; }\n        }\n\n        /* Overwrites */\n        .d-flex.justify-content-between.align-items-center.bg-secondary-subtle.px-3.pt-3.mb-0,\n        .list-group-body.bg-secondary-subtle.row.g-3.p-3.pt-0.mx-0.mt-0 {\n          padding: 0\n        }\n        .list-group-item.border-secondary-subtle {\n          padding: 0.25rem;\n        }\n        .bg-secondary-subtle.border-top.border-secondary-subtle.text-end.px-3.py-2.mb-0.fs-5 {\n          padding: 0.5rem 1rem;\n          border-top: 2px double #dee2e6;\n        }\n\n      </style>\n    </head>\n    <body>\n      <div class=\"print-header\">\n        <h2>Badspiegel.de Konfiguration</h2>\n        <p>Gedruckt am: ".concat(new Date().toLocaleDateString("de-DE"), " um ").concat(new Date().toLocaleTimeString("de-DE"), "</p>\n      </div>\n      ").concat(codeSection, "\n      ").concat(summaryHtml, "\n      ").concat(totalHtml, "\n    </body>\n    </html>\n  "));
+          printWindow.document.write("\n    <!DOCTYPE html>\n    <html>\n    <head>\n      <title>Badspiegel.de</title>\n      <style>\n        body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.5; font-size: 14px; }\n        .print-code-section, \n        .print-header { margin-bottom: 16px; border-bottom: 2px solid #dee2e6; }\n        .print-header p { margin: 0; margin-bottom: 16px; }\n        \n        /* Bootstrap-like grid system - modified for print */\n        .row { display: block; margin: 0; }\n        .list-group-item .row { display: flex; align-items: center; margin: 0; }\n        .row.g-1 { display: flex; align-items: center; margin: 0; }\n        .col { flex: 1; padding: 0 4px; }\n        .col-auto { flex: 0 0 auto; padding: 0 4px; }\n        .col-12 { width: 100%; display: block; margin-bottom: 15px; }\n        \n        /* Container layouts */\n        .list-group-body { display: block !important; }\n        .list-group-body > .row { display: block; }\n        \n        /* List styles */\n        .list-group { list-style: none; margin: 0; padding: 0; }\n        .list-group-item { padding: 12px 16px; border: 1px solid #ddd; margin-bottom: 1px; background: #fff; display: block; }\n        .list-group-flush .list-group-item { border-left: 0; border-right: 0; border-top: 0; }\n        .list-group-flush .list-group-item:first-child { border-top: 0; }\n        .list-group-flush .list-group-item:last-child { border-bottom: 0; }\n        \n        /* Typography */\n        .fw-medium { font-weight: 500; }\n        .text-end { text-align: right; }\n        .fs-5 { font-size: 1.25rem; }\n        .small { font-size: 0.875rem; }\n        .text-muted { color: #6c757d; }\n        .text-truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }\n        \n        /* Headers */\n        h5, h6 { font-weight: 500; }\n        h2 { font-size: 1.5rem; margin: 16px 0 16px 0; }\n        h3 { font-size: 1.3rem; margin: 16px 0 8px 0; font-weight: 500; }\n        h5 { font-size: 1.25rem; margin: 16px 0 16px 0; }\n        h6 { font-size: 1.1rem; margin: 16px 0 8px 0; }\n\n        /* Spacing */\n        .mb-0 { margin-bottom: 0; }\n        .px-3 { padding-left: 1rem; padding-right: 1rem; }\n        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }\n        .pt-3 { padding-top: 1rem; }\n        .p-3 { padding: 1rem; }\n        \n        /* Background and borders */\n        .border-secondary-subtle { border-color: #dee2e6; }\n        .border-top { border-top: 1px solid #dee2e6; }\n        \n        /* Layout improvements */\n        .d-flex { display: flex; }\n        .justify-content-between { justify-content: space-between; }\n        .align-items-center { align-items: center; }\n        \n        /* Hide print button in print */\n        .btn-print-summary,\n        .btn-save-summary,\n        .btn-edit-group,\n        div.vr.border-secondary-subtle { display: none; }\n\n        /* Price styling */\n        .product-price { font-weight: 600; }\n        \n        /* Page breaks */\n        @media print {\n          .print-header { page-break-after: avoid; }\n          .print-code-section { page-break-inside: avoid; }\n          .list-group-item { page-break-inside: avoid; }\n        }\n\n        /* Overwrites */\n        .d-flex.justify-content-between.align-items-center.bg-secondary-subtle.px-3.pt-3.mb-0,\n        .list-group-body.bg-secondary-subtle.row.g-3.p-3.pt-0.mx-0.mt-0 {\n          padding: 0\n        }\n        .list-group-item.border-secondary-subtle {\n          padding: 0.25rem;\n        }\n        .bg-secondary-subtle.border-top.border-secondary-subtle.text-end.px-3.py-2.mb-0.fs-5 {\n          padding: 0.5rem 1rem;\n          border-top: 2px double #dee2e6;\n        }\n\n      </style>\n    </head>\n    <body>\n      <div class=\"print-header\">\n        <h2>Badspiegel.de Konfiguration</h2>\n        <p>Gedruckt am: ".concat(new Date().toLocaleDateString("de-DE"), " um ").concat(new Date().toLocaleTimeString("de-DE"), "</p>\n      </div>\n      ").concat(codeSection, "\n      ").concat(summaryHtml, "\n      ").concat(totalHtml, "\n    </body>\n    </html>\n  "));
           printWindow.document.close();
           printWindow.focus();
           printWindow.print();
@@ -8528,6 +9190,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   addToCartButton: () => (/* binding */ addToCartButton),
 /* harmony export */   breiteHoheInput: () => (/* binding */ breiteHoheInput),
 /* harmony export */   breiteInput: () => (/* binding */ breiteInput),
+/* harmony export */   breiteObenInput: () => (/* binding */ breiteObenInput),
+/* harmony export */   breiteUntenInput: () => (/* binding */ breiteUntenInput),
 /* harmony export */   checkCheckedInput: () => (/* binding */ checkCheckedInput),
 /* harmony export */   checkCheckedInputs: () => (/* binding */ checkCheckedInputs),
 /* harmony export */   checkInput: () => (/* binding */ checkInput),
@@ -8537,6 +9201,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   configurator: () => (/* binding */ configurator),
 /* harmony export */   durchmesserInput: () => (/* binding */ durchmesserInput),
 /* harmony export */   hoeheInput: () => (/* binding */ hoeheInput),
+/* harmony export */   hoeheLinksInput: () => (/* binding */ hoeheLinksInput),
+/* harmony export */   hoeheRechtsInput: () => (/* binding */ hoeheRechtsInput),
 /* harmony export */   isBadspiegel: () => (/* binding */ isBadspiegel),
 /* harmony export */   isBoard: () => (/* binding */ isBoard),
 /* harmony export */   isHochschrank: () => (/* binding */ isHochschrank),
@@ -8557,8 +9223,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   matrixDurchmesser: () => (/* binding */ matrixDurchmesser),
 /* harmony export */   numberInput: () => (/* binding */ numberInput),
 /* harmony export */   numberInputs: () => (/* binding */ numberInputs),
-/* harmony export */   offcanvas: () => (/* binding */ offcanvas),
-/* harmony export */   offcanvasElements: () => (/* binding */ offcanvasElements),
 /* harmony export */   optionGroup: () => (/* binding */ optionGroup),
 /* harmony export */   optionGroups: () => (/* binding */ optionGroups),
 /* harmony export */   product: () => (/* binding */ product),
@@ -8592,7 +9256,7 @@ __webpack_require__.r(__webpack_exports__);
  * - Comprehensive product attribute flags
  * - Simple debug system for monitoring
  *
- * @version 2.2.0
+ * @version 2.3.0
  * @package Configurator
  */
 
@@ -8684,15 +9348,23 @@ if (DEBUG_MODE) {
  * @type {HTMLElement|null}
  */
 var durchmesserInput = document.querySelector('.option-input[name="durchmesser"]');
-var breiteInput = document.querySelector('.option-input[name="breite"]');
-var hoeheInput = document.querySelector('.option-input[name="hoehe"]');
 var breiteHoheInput = document.querySelector('.option-input[name="breite_hoehe"]');
+var breiteInput = document.querySelector('.option-input[name="breite"]');
+var breiteUntenInput = document.querySelector('.option-input[name="breite_unten"]');
+var breiteObenInput = document.querySelector('.option-input[name="breite_oben"]');
+var hoeheInput = document.querySelector('.option-input[name="hoehe"]');
+var hoeheLinksInput = document.querySelector('.option-input[name="hoehe_links"]');
+var hoeheRechtsInput = document.querySelector('.option-input[name="hoehe_rechts"]');
 var tiefeInput = document.querySelector('.option-input[name="tiefe"]');
 if (DEBUG_MODE) {
   if (durchmesserInput) console.log("✅ Durchmesser input found");
-  if (breiteInput) console.log("✅ Breite input found");
-  if (hoeheInput) console.log("✅ Hoehe input found");
   if (breiteHoheInput) console.log("✅ BreiteHoehe input found");
+  if (breiteInput) console.log("✅ Breite input found");
+  if (breiteUntenInput) console.log("✅ BreiteUnten input found");
+  if (breiteObenInput) console.log("✅ BreiteOben input found");
+  if (hoeheInput) console.log("✅ Hoehe input found");
+  if (hoeheLinksInput) console.log("✅ HoeheLinks input found");
+  if (hoeheRechtsInput) console.log("✅ HoeheRechts input found");
   if (tiefeInput) console.log("✅ Tiefe input found");
 }
 
@@ -8727,13 +9399,13 @@ var configurator = document.getElementById("productConfigurator");
  * Bootstrap offcanvas element for mobile configuration display
  * @type {HTMLElement|null}
  */
-var offcanvas = document.getElementById("productConfiguratorOffcanvas");
+// export const offcanvas = document.getElementById("productConfiguratorOffcanvas"); // not in use
 
 /**
  * All option elements that use offcanvas display mode
  * @type {NodeList}
  */
-var offcanvasElements = document.querySelectorAll(".option-offcanvas");
+// export const offcanvasElements = document.querySelectorAll(".option-offcanvas"); // is it in use?
 
 // ====================== OPTION GROUP ELEMENTS ======================
 

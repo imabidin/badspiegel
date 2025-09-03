@@ -578,7 +578,7 @@ function init_modal_category_variables() {
     $is_spiegelschraenke_ohne_beleuchtung = isset($cat['spiegelschraenke-ohne-beleuchtung']);
     $is_spiegelschraenke_mit_beleuchtung = isset($cat['spiegelschraenke-mit-beleuchtung']);
     $is_spiegelschraenke_mit_leuchte = isset($cat['spiegelschraenke-mit-leuchte']);
-    $is_spiegelschraenke_fuer_dachschraege = isset($cat['spiegelschränke-fuer-dachschraege']);
+    $is_spiegelschraenke_fuer_dachschraege = isset($cat['spiegelschraenke-fuer-dachschraege']);
     $is_unterschraenke = isset($cat['unterschraenke']);
     $is_sideboards = isset($cat['sideboards']);
     $is_lowboards = isset($cat['lowboards']);
@@ -600,7 +600,7 @@ function init_modal_attribute_variables() {
     global $has_faecherposition_seitlich, $has_faecherposition_unten, $has_faecherposition_mittig;
     global $has_schnittkante_unten, $has_schnittkante_seite, $has_schnittkanten_seite_und_unten;
 
-    // Fächerposition attributes for Spiegelschränke
+    // Faecherposition attributes for Spiegelschraenke
     $has_faecherposition_seitlich = modal_has_pa_attribute('faecherposition', 'seitlich');
     $has_faecherposition_unten = modal_has_pa_attribute('faecherposition', 'unten');
     $has_faecherposition_mittig = modal_has_pa_attribute('faecherposition', 'mittig');
@@ -616,18 +616,28 @@ function init_modal_attribute_variables() {
  * This function should be called before including any template file
  */
 function init_modal_business_logic_variables() {
+    // Get category lookup directly to avoid global variable scope issues
+    $cat = get_modal_category_lookup();
+
     // Define ALL business logic variables globally for template access
     global $show_spiegelkante_info, $show_lichtflaechen_info, $show_korpuskante_info, $show_offene_faecher_info;
 
-    // Access global category variables
+    // Also declare category variables as global to make them available in templates
     global $is_badspiegel, $is_badspiegel_mit_beleuchtung, $is_badspiegel_mit_holzrahmen;
     global $is_spiegelschrank, $is_spiegelschrank_mit_faechern;
 
-    // Business logic for measurement information display
-    $show_spiegelkante_info = $is_badspiegel || !$is_badspiegel_mit_holzrahmen;
-    $show_lichtflaechen_info = $is_badspiegel_mit_beleuchtung || !$is_badspiegel_mit_holzrahmen;
-    $show_korpuskante_info = $is_spiegelschrank || $is_badspiegel_mit_holzrahmen;
-    $show_offene_faecher_info = $is_spiegelschrank_mit_faechern || $is_badspiegel_mit_holzrahmen;
+    // Get category values directly from lookup instead of relying on global variables
+    $is_badspiegel_val = isset($cat['badspiegel']);
+    $is_badspiegel_mit_beleuchtung_val = isset($cat['badspiegel-mit-beleuchtung']);
+    $is_badspiegel_mit_holzrahmen_val = isset($cat['badspiegel-mit-rahmen-aus-holz-und-ablage']);
+    $is_spiegelschrank_val = isset($cat['spiegelschraenke']);
+    $is_spiegelschrank_mit_faechern_val = isset($cat['spiegelschraenke-mit-faechern']);
+
+    // Business logic for measurement information display using local values
+    $show_spiegelkante_info = $is_badspiegel_val || !$is_badspiegel_mit_holzrahmen_val;
+    $show_lichtflaechen_info = $is_badspiegel_mit_beleuchtung_val || !$is_badspiegel_mit_holzrahmen_val;
+    $show_korpuskante_info = $is_spiegelschrank_val || $is_badspiegel_mit_holzrahmen_val;
+    $show_offene_faecher_info = $is_spiegelschrank_mit_faechern_val || $is_badspiegel_mit_holzrahmen_val;
 }
 
 // =============================================================================
@@ -733,25 +743,84 @@ function validate_file_path($requested_file)
  */
 function load_cached_file_content($file_path)
 {
-    $cache_key = 'modal_content_' . md5($file_path . filemtime($file_path));
-    $cached_content = wp_cache_get($cache_key, 'modal_files');
+    // DEVELOPMENT MODE: Caching deaktiviert für sofortige aenderungen
+    $development_mode = true; // Set to false for production
 
-    if ($cached_content !== false) {
-        return $cached_content;
+    if (!$development_mode) {
+        $cache_key = 'modal_content_' . md5($file_path . filemtime($file_path));
+        $cached_content = wp_cache_get($cache_key, 'modal_files');
+
+        if ($cached_content !== false) {
+            return $cached_content;
+        }
     }
 
-    // Initialize category variables before including the template
-    init_modal_category_variables();
+    // CENTRAL DEBUG CONTROL - Set to false for production
+    $modal_debug_enabled = true; // DEBUG MODE: debugging dachschraege spiegelschrank images
 
-    // Initialize attribute variables before including the template
-    init_modal_attribute_variables();
+    // Get category lookup for variable initialization
+    $cat = get_modal_category_lookup();
 
-    // Initialize business logic variables before including the template
-    init_modal_business_logic_variables();    ob_start();
+    // Initialize ALL category variables directly in this scope
+    $is_badspiegel = isset($cat['badspiegel']);
+    $is_badspiegel_mit_beleuchtung = isset($cat['badspiegel-mit-beleuchtung']);
+    $is_badspiegel_mit_holzrahmen = isset($cat['badspiegel-mit-rahmen-aus-holz-und-ablage']);
+    $is_spiegelschrank = isset($cat['spiegelschraenke']);
+    $is_spiegelschrank_mit_faechern = isset($cat['spiegelschraenke-mit-faechern']);
+    $is_spiegel_raumteiler = isset($cat['spiegel-raumteiler']);
+    $is_spiegelschraenke_aus_aluminium = isset($cat['spiegelschraenke-aus-aluminium']);
+
+    // Additional specific categories from templates
+    $is_badspiegel_ohne_beleuchtung = isset($cat['badspiegel-ohne-beleuchtung']);
+    $is_badspiegel_mit_leuchte = isset($cat['badspiegel-mit-leuchte']);
+    $is_badspiegel_mit_rahmen = isset($cat['badspiegel-mit-rahmen']);
+    $is_badspiegel_mit_fernseher = isset($cat['badspiegel-mit-fernseher']);
+    $is_badspiegel_mit_abgerundeten_ecken = isset($cat['badspiegel-mit-abgerundeten-ecken']);
+    $is_badspiegel_abgerundet = isset($cat['badspiegel-abgerundet']);
+    $is_badspiegel_mit_rundbogen = isset($cat['badspiegel-mit-rundbogen']);
+    $is_badspiegel_oval = isset($cat['badspiegel-oval']);
+    $is_badspiegel_fuer_dachschraege = isset($cat['badspiegel-fuer-dachschraege']);
+    $is_hollywood_spiegel = isset($cat['hollywood-spiegel']);
+    $is_klappspiegel = isset($cat['klappspiegel']);
+    $is_spiegelschraenke_ohne_beleuchtung = isset($cat['spiegelschraenke-ohne-beleuchtung']);
+    $is_spiegelschraenke_mit_beleuchtung = isset($cat['spiegelschraenke-mit-beleuchtung']);
+    $is_spiegelschraenke_mit_leuchte = isset($cat['spiegelschraenke-mit-leuchte']);
+    $is_spiegelschraenke_fuer_dachschraege = isset($cat['spiegelschraenke-fuer-dachschraege']);
+    $is_unterschraenke = isset($cat['unterschraenke']);
+    $is_sideboards = isset($cat['sideboards']);
+    $is_lowboards = isset($cat['lowboards']);
+
+    // Round mirror categories
+    $is_badspiegel_rund = isset($cat['badspiegel-rund']);
+    $is_badspiegel_rund_mit_rahmen = isset($cat['badspiegel-rund-mit-rahmen']);
+    $is_badspiegel_rund_mit_rahmen_lackiertem_glas = isset($cat['badspiegel-rund-mit-rahmen-aus-lackiertem-glas']);
+    $is_badspiegel_rund_mit_riemen = isset($cat['badspiegel-rund-mit-riemen']);
+    $is_badspiegel_rund_mit_schnittkante = isset($cat['badspiegel-rund-mit-schnittkante']);
+
+    // Initialize attribute variables
+    $context = get_modal_context();
+    $attribute_lookup = $context['attribute_lookup'] ?? array();
+    $has_faecherposition_seitlich = isset($attribute_lookup['faecherposition-seitlich']);
+    $has_faecherposition_unten = isset($attribute_lookup['faecherposition-unten']);
+    $has_faecherposition_mittig = isset($attribute_lookup['faecherposition-mittig']);
+    $has_lichtfarbe_3000k = isset($attribute_lookup['lichtfarbe-3000k']);
+    $has_lichtfarbe_4000k = isset($attribute_lookup['lichtfarbe-4000k']);
+    $has_lichtfarbe_warmweiss_kaltweiss = isset($attribute_lookup['lichtfarbe-warmweiss-kaltweiss']);
+
+    // Initialize business logic variables
+    $show_spiegelkante_info = $is_badspiegel || !$is_badspiegel_mit_holzrahmen;
+    $show_lichtflaechen_info = $is_badspiegel_mit_beleuchtung || !$is_badspiegel_mit_holzrahmen;
+    $show_korpuskante_info = $is_spiegelschrank || $is_badspiegel_mit_holzrahmen;
+    $show_offene_faecher_info = $is_spiegelschrank_mit_faechern || $is_badspiegel_mit_holzrahmen;
+
+    ob_start();
     include $file_path;
     $content = ob_get_clean();
 
-    wp_cache_set($cache_key, $content, 'modal_files', 3600);
+    // Only cache in production mode
+    if (!$development_mode) {
+        wp_cache_set($cache_key, $content, 'modal_files', 3600);
+    }
 
     return $content;
 }

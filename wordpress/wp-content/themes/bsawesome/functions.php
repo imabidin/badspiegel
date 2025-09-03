@@ -26,6 +26,8 @@ require_once $inc_dir . 'germanized.php';    // German market compliance
 require_once $inc_dir . 'yoast.php';         // Yoast SEO integration
 require_once $inc_dir . 'zendesk.php';       // Zendesk support integration
 require_once $inc_dir . 'modal.php';         // Modal functionality
+require_once $inc_dir . 'modal-performance.php'; // Modal performance optimization
+require_once $inc_dir . 'ajax-performance.php'; // AJAX performance booster
 require_once $inc_dir . 'redirects.php';     // Redirects outside Yoast
 // require_once $inc_dir . 'cli.php';           // WP-CLI commands
 

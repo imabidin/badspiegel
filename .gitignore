@@ -59,6 +59,8 @@ wordpress/wp-content/themes/bsawesome/node_modules/
 
 # Build-Ausgaben
 wordpress/wp-content/themes/bsawesome/dist/
+wordpress/wp-content/themes/bsawesome/dist/js/configurator.js
+wordpress/wp-content/themes/bsawesome/dist/js/configurator.js.map
 
 # Source Maps
 wordpress/wp-content/themes/bsawesome/**/*.map

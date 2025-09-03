@@ -1,13 +1,10 @@
 /**
- * @version 2.2.0
+ * @version 2.3.0
  *
- * TODO: Check functionality on rounded mirrors.
+ * @todo Check functionality on rounded mirrors
  */
 
-import {
-  dependenciesValuesXvalues,
-  dependenciesValuesXcontainer,
-} from "./../dependencies.js";
+import { dependenciesValuesXvalues, dependenciesValuesXcontainer } from "./../dependencies.js";
 
 import {} from "./../variables.js";
 
@@ -17,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
    */
   dependenciesValuesXcontainer(
     "tv_seitenanschluss",
-    (value) => {
+    value => {
       return value !== "";
     },
     "tv_seitenanschluss_position"

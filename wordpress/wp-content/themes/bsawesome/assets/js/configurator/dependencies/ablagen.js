@@ -1,11 +1,8 @@
 /**
- * @version 2.2.0
+ * @version 2.3.0
  */
 
-import {
-  dependenciesValuesXvalues,
-  dependenciesValuesXcontainer,
-} from "./../dependencies.js";
+import { dependenciesValuesXvalues, dependenciesValuesXcontainer } from "./../dependencies.js";
 
 import {} from "../variables.js";
 
@@ -15,28 +12,28 @@ document.addEventListener("DOMContentLoaded", () => {
    */
   dependenciesValuesXcontainer(
     "ablagen",
-    (value) => {
+    value => {
       return value !== "";
     },
     "ablagen_typ"
   );
   dependenciesValuesXcontainer(
     "ablagen_typ",
-    (value) => {
+    value => {
       return value === "farbiges_glas";
     },
     "ablagen_farbe"
   );
   dependenciesValuesXcontainer(
     "ablagen_typ",
-    (value) => {
+    value => {
       return value === "getoentes_glas";
     },
     "ablagen_toenung"
   );
   dependenciesValuesXcontainer(
     "ablagen_farbe",
-    (value) => {
+    value => {
       return value === "individuell";
     },
     "ablagen_farbton"

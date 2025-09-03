@@ -70,9 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
    * Represents the width of the straight cut edge
    * @type {HTMLInputElement|null}
    */
-  const schnittkanteInput = document.querySelector(
-    '.option-input[name="schnittkante"]'
-  );
+  const schnittkanteInput = document.querySelector('.option-input[name="schnittkante"]');
 
   /**
    * INPUT VALIDATION AND FILTERING
@@ -80,9 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
    * Create array of available inputs, filtering out null references
    * Enables graceful handling of partial input configurations
    */
-  const inputs = [durchmesserInput, hoeheInput, schnittkanteInput].filter(
-    Boolean
-  );
+  const inputs = [durchmesserInput, hoeheInput, schnittkanteInput].filter(Boolean);
 
   // Early exit if no valid inputs found
   if (inputs.length === 0) {
@@ -129,7 +125,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Create debounced version of the input handler (500ms delay)
   const debouncedInputHandler = debounce(handleInputChange, 500);
 
-  inputs.forEach((el) => {
+  inputs.forEach(el => {
     // Use debounced handler for 'input' events (while typing)
     el.addEventListener("input", debouncedInputHandler);
 

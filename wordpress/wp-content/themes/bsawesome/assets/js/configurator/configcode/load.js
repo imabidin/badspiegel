@@ -111,9 +111,7 @@ const DataUtils = {
     switch (fieldType) {
       case "radio":
         // Find and select specific radio button
-        $element = $(
-          `input[type="radio"][name="${fieldName}"][value="${fieldValue}"]`
-        );
+        $element = $(`input[type="radio"][name="${fieldName}"][value="${fieldValue}"]`);
         if ($element.length) {
           $element.prop("checked", true).trigger("change");
           found = true;
@@ -177,12 +175,7 @@ const DataUtils = {
 
     // Apply each configuration field
     $.each(configData, (fieldName, fieldObj) => {
-      const result = this.applyFieldValue(
-        fieldName,
-        fieldObj.type,
-        fieldObj.value,
-        debug
-      );
+      const result = this.applyFieldValue(fieldName, fieldObj.type, fieldObj.value, debug);
 
       if (!result.found) {
         log(debug, "Field not found in current form", { fieldName, fieldObj });
@@ -194,11 +187,7 @@ const DataUtils = {
       }
     });
 
-    log(
-      debug,
-      "Configuration application completed. Fields not found:",
-      notFound
-    );
+    log(debug, "Configuration application completed. Fields not found:", notFound);
     return notFound;
   },
 };
@@ -241,9 +230,7 @@ const RenderUtils = {
       // Get carousel step information if available
       const $carousel = $group.closest(".carousel-item[data-label]");
       const groupLabel = $carousel.length ? $carousel.data("label") : groupKey;
-      const groupStep = $carousel.length
-        ? parseInt($carousel.data("step"), 10) || 999
-        : 999;
+      const groupStep = $carousel.length ? parseInt($carousel.data("step"), 10) || 999 : 999;
 
       // Extract display values and pricing
       const label = $group.data("label") || fieldName;
@@ -257,10 +244,7 @@ const RenderUtils = {
           const selectedLabel = $selected.data("label");
 
           // Skip empty child options (typically "none" selections)
-          if (
-            isChild &&
-            (value === "" || selectedLabel?.trim().toLowerCase() === "keins")
-          ) {
+          if (isChild && (value === "" || selectedLabel?.trim().toLowerCase() === "keins")) {
             return;
           }
 
@@ -308,7 +292,7 @@ const RenderUtils = {
 
     // Group options by their logical groups
     const groups = {};
-    options.forEach((opt) => {
+    options.forEach(opt => {
       if (!groups[opt.groupKey]) {
         groups[opt.groupKey] = {
           order: opt.groupOrder,
@@ -331,7 +315,7 @@ const RenderUtils = {
     let html = "";
 
     // Generate grouped HTML structure
-    sortedGroups.forEach((group) => {
+    sortedGroups.forEach(group => {
       log(debug, "Rendering group", group.label, group.options);
       if (!group.options.length) return;
 
@@ -343,10 +327,8 @@ const RenderUtils = {
       `;
 
       // Group options
-      group.options.forEach((opt) => {
-        const priceDisplay = opt.price
-          ? PriceUtils.formatPrice(opt.price, debug)
-          : "";
+      group.options.forEach(opt => {
+        const priceDisplay = opt.price ? PriceUtils.formatPrice(opt.price, debug) : "";
         const itemClass = opt.isChild
           ? "list-group-item list-group-item-child text-muted small mt-n2"
           : "list-group-item";
@@ -390,8 +372,7 @@ const ModalSystem = {
       '<span class="text-danger"><i class="fa-sharp fa-light fa-exclamation-circle me-2"></i>Der Code muss genau 6 Zeichen haben.</span>',
     notFound:
       '<span class="text-danger"><i class="fa-sharp fa-light fa-exclamation-circle me-2"></i>Keine Konfiguration gefunden. Haben Sie den Code richtig eingegeben?</span>',
-    success:
-      '<span class="text-success"><i class="fa-sharp fa-light fa-sparkles me-2"></i>Erfolg!</span>',
+    success: '<span class="text-success"><i class="fa-sharp fa-light fa-sparkles me-2"></i>Erfolg!</span>',
   },
 
   /**
@@ -439,16 +420,13 @@ const ModalSystem = {
         dark: '<span class="text-warning"><i class="fa-sharp fa-light fa-exclamation-circle me-2"></i>Keine Konfiguration gefunden. Haben Sie den Code richtig eingegeben?</span>',
       },
       success: {
-        light:
-          '<span class="text-success"><i class="fa-sharp fa-light fa-sparkles me-2"></i>Erfolg!</span>',
+        light: '<span class="text-success"><i class="fa-sharp fa-light fa-sparkles me-2"></i>Erfolg!</span>',
         dark: '<span class="text-success"><i class="fa-sharp fa-light fa-sparkles me-2"></i>Erfolg!</span>',
       },
     };
 
     const messageSet = messages[type] || messages.info;
-    const selectedMessage = isDarkBackground
-      ? messageSet.dark
-      : messageSet.light;
+    const selectedMessage = isDarkBackground ? messageSet.dark : messageSet.light;
 
     log(debug, "Selected contextual message", {
       type,
@@ -481,13 +459,7 @@ const ModalSystem = {
    * });
    */
   createBaseModal(options, debug = false) {
-    log(
-      debug,
-      "Creating modal with title:",
-      options.title,
-      "Full options:",
-      options
-    );
+    log(debug, "Creating modal with title:", options.title, "Full options:", options);
     const defaults = {
       size: "md",
       // createModal will use its own default footer if options.footer is not provided.
@@ -504,9 +476,7 @@ const ModalSystem = {
 
     // Warn if an old 'onConfirm' was passed directly and not integrated into the new 'footer' array.
     if (options.onConfirm && typeof options.onConfirm === "function") {
-      const confirmButtonWithHandler = modalSettings.footer?.find(
-        (btn) => btn.onClick === options.onConfirm
-      );
+      const confirmButtonWithHandler = modalSettings.footer?.find(btn => btn.onClick === options.onConfirm);
       if (!confirmButtonWithHandler) {
         const warningMsg =
           "[ConfigLoader] createBaseModal: 'onConfirm' was provided but no corresponding button in 'footer' array uses it. This 'onConfirm' might be ignored. Please update the calling function to use the new footer structure correctly.";
@@ -537,12 +507,7 @@ const ModalSystem = {
    *   "Correct Mirror Product"
    * );
    */
-  showValidationModal(
-    onConfirmCallback,
-    productUrl = null,
-    productTitle = null,
-    debug = false
-  ) {
+  showValidationModal(onConfirmCallback, productUrl = null, productTitle = null, debug = false) {
     log(debug, "Product mismatch detected", { productUrl, productTitle });
 
     const modalBody = `
@@ -601,13 +566,7 @@ const ModalSystem = {
    *   true
    * );
    */
-  showSuccessModal(
-    configData,
-    successMsg,
-    forcedLoad = false,
-    showSummaryAccordion = false,
-    debug = false
-  ) {
+  showSuccessModal(configData, successMsg, forcedLoad = false, showSummaryAccordion = false, debug = false) {
     log(debug, "Displaying success modal", {
       configData,
       successMsg,
@@ -764,24 +723,14 @@ const ConfigApplication = {
     });
 
     // Check for product mismatch
-    if (
-      currentProductId &&
-      remoteProductId &&
-      remoteProductId !== currentProductId
-    ) {
+    if (currentProductId && remoteProductId && remoteProductId !== currentProductId) {
       // Show validation modal for product mismatch
       ModalSystem.showValidationModal(
         () => {
           // User confirmed to load despite mismatch
           const $modal = $(".modal:visible");
           $modal.one("hidden.bs.modal", () => {
-            ModalSystem.showSuccessModal(
-              configData,
-              successMsg,
-              true,
-              false,
-              debug
-            );
+            ModalSystem.showSuccessModal(configData, successMsg, true, false, debug);
           });
           $modal.modal("hide");
         },
@@ -879,11 +828,7 @@ const ConfigCodeInputUtils = {
     }
 
     // Generate contextual text content based on background
-    const textContent = ModalSystem.getContextualText(
-      errorType || "info",
-      $input,
-      debug
-    );
+    const textContent = ModalSystem.getContextualText(errorType || "info", $input, debug);
 
     // Handle feedback text display based on context
     if (isModal) {
@@ -907,10 +852,7 @@ const ConfigCodeInputUtils = {
 
       // Fallback strategies for finding form text element
       if (!$mainFormText.length) {
-        $mainFormText = $input
-          .closest(".input-group")
-          .parent()
-          .find(".form-text");
+        $mainFormText = $input.closest(".input-group").parent().find(".form-text");
       }
 
       if (!$mainFormText.length) {
@@ -918,9 +860,7 @@ const ConfigCodeInputUtils = {
       }
 
       if (!$mainFormText.length) {
-        $mainFormText = $input
-          .closest("form, .form-container, .configurator-section")
-          .find(".form-text");
+        $mainFormText = $input.closest("form, .form-container, .configurator-section").find(".form-text");
       }
 
       if ($mainFormText.length) {
@@ -932,15 +872,11 @@ const ConfigCodeInputUtils = {
           selector: $mainFormText.selector,
         });
       } else {
-        log(
-          debug,
-          "Main form text element not found - attempting fallback approach",
-          {
-            inputId: $input.attr("id"),
-            parentClasses: $input.parent().attr("class"),
-            containerClasses: $input.closest(".input-group").attr("class"),
-          }
-        );
+        log(debug, "Main form text element not found - attempting fallback approach", {
+          inputId: $input.attr("id"),
+          parentClasses: $input.parent().attr("class"),
+          containerClasses: $input.closest(".input-group").attr("class"),
+        });
 
         // Last resort: find form text by ID relationship
         let $formText = $(`#${$input.attr("id")}`)
@@ -1127,13 +1063,9 @@ const EventHandlers = {
       success(response) {
         log(debug, "AJAX request successful", response);
         if (response.success) {
-          const { msg, product_id, config_data, product_url, product_title } =
-            response.data;
+          const { msg, product_id, config_data, product_url, product_title } = response.data;
           const remoteProductId = DataUtils.getProductId(product_id, debug);
-          const currentProductId = DataUtils.getProductId(
-            myAjaxData.productId,
-            debug
-          );
+          const currentProductId = DataUtils.getProductId(myAjaxData.productId, debug);
           ConfigApplication.doApply(
             config_data,
             msg,
@@ -1220,11 +1152,7 @@ const EventHandlers = {
           // Show brief success feedback before redirect
           setTimeout(() => {
             const codeUrl = `${window.location.origin}/code/${code}`;
-            log(
-              debug,
-              "Redirecting to configuration URL from homepage",
-              codeUrl
-            );
+            log(debug, "Redirecting to configuration URL from homepage", codeUrl);
             window.location.href = codeUrl;
           }, 800);
         } else {
@@ -1361,24 +1289,17 @@ const EventHandlers = {
           window.location.href = codeUrl;
         } else {
           // Handle error response
-          const errorMsg =
-            response.data?.msg || "Ein unbekannter Fehler ist aufgetreten.";
+          const errorMsg = response.data?.msg || "Ein unbekannter Fehler ist aufgetreten.";
           log(debug, "Modal AJAX logical error", errorMsg);
 
-          $modal
-            .find(".modal-footer .btn-primary")
-            .html("Konfiguration laden")
-            .prop("disabled", false);
+          $modal.find(".modal-footer .btn-primary").html("Konfiguration laden").prop("disabled", false);
           ConfigCodeInputUtils.setFeedback($input, "notFound", true, debug);
         }
       },
       error(xhr) {
         log(debug, "Modal AJAX request failed", xhr);
         ConfigCodeInputUtils.setFeedback($input, "invalid", true, debug);
-        $modal
-          .find(".modal-footer .btn-primary")
-          .html("Konfiguration laden")
-          .prop("disabled", false);
+        $modal.find(".modal-footer .btn-primary").html("Konfiguration laden").prop("disabled", false);
       },
     });
   },

@@ -64,7 +64,7 @@ export const autoSelect = (inputs, focusCallback, debug = false) => {
   log("autoSelect inputs:", inputs);
 
   // 1. Filter for visible and non-empty inputs only
-  const candidates = inputs.filter((input) => {
+  const candidates = inputs.filter(input => {
     const group = input.closest(".btn, .btn-group, .values-group");
     const visible = group && !group.classList.contains("d-none");
     const nonEmpty = input.value.trim() !== "";
@@ -73,7 +73,7 @@ export const autoSelect = (inputs, focusCallback, debug = false) => {
   log("Auto-select candidates:", candidates);
 
   // 2. Skip if a selection already exists
-  if (candidates.some((input) => input.checked)) {
+  if (candidates.some(input => input.checked)) {
     log("Already selected, aborting.");
     return;
   }
@@ -129,16 +129,12 @@ export function dependenciesValuesXvalues(
   const warn = (...args) => debug && console.warn("[ValuesXvalues]", ...args);
 
   // 1. Get all target group inputs for auto-selection functionality
-  const allGroupInputs = Array.from(
-    document.querySelectorAll(
-      '.values-group input[name="' + targetOptionName + '"]'
-    )
-  );
+  const allGroupInputs = Array.from(document.querySelectorAll('.values-group input[name="' + targetOptionName + '"]'));
 
   // 2. Pre-cache all target inputs with their container buttons for performance
   const allTargetEntries = allGroupInputs
-    .filter((input) => targetValueCondition(input.value))
-    .map((input) => {
+    .filter(input => targetValueCondition(input.value))
+    .map(input => {
       const btn = input.closest("label.btn");
       if (!btn) {
         warn("No container found for input:", input.value);
@@ -168,19 +164,12 @@ export function dependenciesValuesXvalues(
     });
 
     // Auto-select first valid option after dependency change with focus effect
-    const targetContainer = allGroupInputs[0]?.closest(
-      ".option-group, .values-group"
-    );
-    autoSelect(
-      allGroupInputs,
-      targetContainer
-        ? () => applyFocusEffect(targetContainer, "focus-ring-info")
-        : null
-    );
+    const targetContainer = allGroupInputs[0]?.closest(".option-group, .values-group");
+    autoSelect(allGroupInputs, targetContainer ? () => applyFocusEffect(targetContainer, "focus-ring-info") : null);
   }
 
   // 5. Event delegation: single listener for all trigger inputs (performance optimization)
-  document.body.addEventListener("change", (event) => {
+  document.body.addEventListener("change", event => {
     const target = event.target;
     if (target.name === triggerName) {
       handleChange.call(target, event);
@@ -215,15 +204,9 @@ export function dependenciesValuesXvalues(
  *   false
  * );
  */
-export function dependenciesValuesXcontainer(
-  triggerName,
-  condition,
-  targetIdSuffix,
-  debug = false
-) {
+export function dependenciesValuesXcontainer(triggerName, condition, targetIdSuffix, debug = false) {
   const log = (...args) => debug && console.log("[ValuesXcontainer]", ...args);
-  const warn = (...args) =>
-    debug && console.warn("[ValuesXcontainer]", ...args);
+  const warn = (...args) => debug && console.warn("[ValuesXcontainer]", ...args);
 
   log("Trigger name:", triggerName);
 
@@ -245,12 +228,11 @@ export function dependenciesValuesXcontainer(
       container.classList.remove("d-none");
 
       // Set default values for empty number and text inputs with focus effect
-      ["number", "text"].forEach((type) => {
+      ["number", "text"].forEach(type => {
         const input = container.querySelector(`input[type="${type}"]`);
         if (input && input.value.trim() === "") {
           // Use min attribute for numbers, placeholder for text as fallback
-          const fallback =
-            input.getAttribute(type === "number" ? "min" : "placeholder") || "";
+          const fallback = input.getAttribute(type === "number" ? "min" : "placeholder") || "";
           input.value = fallback;
           input.classList.replace("no-input", "yes-input");
 
@@ -262,16 +244,14 @@ export function dependenciesValuesXcontainer(
       // Auto-select first valid option within the container (only for child option groups)
       if (container.classList.contains("option-group-child")) {
         const allInputs = Array.from(container.querySelectorAll("input"));
-        autoSelect(allInputs, () =>
-          applyFocusEffect(container, "focus-ring-secondary")
-        );
+        autoSelect(allInputs, () => applyFocusEffect(container, "focus-ring-secondary"));
       }
     } else {
       // Hide container and reset all values
       container.classList.add("d-none");
 
       // Clear number and text input values
-      container.querySelectorAll("input").forEach((input) => {
+      container.querySelectorAll("input").forEach(input => {
         if (["number", "text"].includes(input.type)) {
           input.value = "";
           input.classList.replace("yes-input", "no-input");
@@ -288,7 +268,7 @@ export function dependenciesValuesXcontainer(
   };
 
   // Event delegation for performance optimization
-  document.body.addEventListener("change", (event) => {
+  document.body.addEventListener("change", event => {
     const target = event.target;
     if (target.matches(`input[name="${triggerName}"]`)) {
       handleChange.call(target, event);
@@ -296,9 +276,7 @@ export function dependenciesValuesXcontainer(
   });
 
   // Initial run for already checked trigger inputs (page load state)
-  document
-    .querySelectorAll(`input[name="${triggerName}"]:checked`)
-    .forEach((input) => handleChange.call(input, null));
+  document.querySelectorAll(`input[name="${triggerName}"]:checked`).forEach(input => handleChange.call(input, null));
 }
 
 /**
@@ -321,16 +299,9 @@ export function dependenciesValuesXcontainer(
  *   'facette'
  * );
  */
-export function dependenciesValueStartingPriceXcontainer(
-  triggerName,
-  condition,
-  targetIdSuffix,
-  debug = false
-) {
-  const log = (...args) =>
-    debug && console.log("[ValueStartingPriceXcontainer]", ...args);
-  const warn = (...args) =>
-    debug && console.warn("[ValueStartingPriceXcontainer]", ...args);
+export function dependenciesValueStartingPriceXcontainer(triggerName, condition, targetIdSuffix, debug = false) {
+  const log = (...args) => debug && console.log("[ValueStartingPriceXcontainer]", ...args);
+  const warn = (...args) => debug && console.warn("[ValueStartingPriceXcontainer]", ...args);
 
   log("Trigger name:", triggerName, "Target container:", targetIdSuffix);
 
@@ -346,15 +317,11 @@ export function dependenciesValueStartingPriceXcontainer(
    * @returns {string|null} The cheapest price or null if no valid prices found
    */
   const getCheapestPrice = () => {
-    const radioInputs = targetContainer.querySelectorAll(
-      'input[type="radio"]:not(.option-none)'
-    );
+    const radioInputs = targetContainer.querySelectorAll('input[type="radio"]:not(.option-none)');
     let cheapestPrice = null;
 
-    radioInputs.forEach((radio) => {
-      const price = parseFloat(
-        radio.dataset.price || radio.getAttribute("data-price")
-      );
+    radioInputs.forEach(radio => {
+      const price = parseFloat(radio.dataset.price || radio.getAttribute("data-price"));
       if (!isNaN(price) && price > 0) {
         if (cheapestPrice === null || price < cheapestPrice) {
           cheapestPrice = price;
@@ -390,11 +357,9 @@ export function dependenciesValueStartingPriceXcontainer(
     const cheapestPrice = getCheapestPrice();
 
     // Find all trigger inputs that match the condition
-    const triggerInputs = document.querySelectorAll(
-      `input[name="${triggerName}"]`
-    );
+    const triggerInputs = document.querySelectorAll(`input[name="${triggerName}"]`);
 
-    triggerInputs.forEach((input) => {
+    triggerInputs.forEach(input => {
       if (condition(input.value)) {
         updateTriggerStartingPrice(input, cheapestPrice);
       }
@@ -414,7 +379,7 @@ export function dependenciesValueStartingPriceXcontainer(
   };
 
   // Event delegation for trigger inputs
-  document.body.addEventListener("change", (event) => {
+  document.body.addEventListener("change", event => {
     const target = event.target;
     if (target.matches(`input[name="${triggerName}"]`)) {
       handleTriggerChange.call(target, event);
@@ -422,7 +387,7 @@ export function dependenciesValueStartingPriceXcontainer(
   });
 
   // Event delegation for target container inputs (in case prices change dynamically)
-  document.body.addEventListener("change", (event) => {
+  document.body.addEventListener("change", event => {
     const target = event.target;
     if (target.matches(`#option_${targetIdSuffix} input[type="radio"]`)) {
       handleTargetChange.call(target, event);

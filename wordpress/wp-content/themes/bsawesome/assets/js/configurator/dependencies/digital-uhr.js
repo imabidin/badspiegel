@@ -1,11 +1,8 @@
 /**
- * @version 2.2.0
+ * @version 2.3.0
  */
 
-import {
-  dependenciesValuesXvalues,
-  dependenciesValuesXcontainer,
-} from "./../dependencies.js";
+import { dependenciesValuesXvalues, dependenciesValuesXcontainer } from "./../dependencies.js";
 
 import { isRund, isLOR, isLR, isOU } from "./../variables.js";
 
@@ -15,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
    */
   dependenciesValuesXcontainer(
     "digital_uhr",
-    (value) => {
+    value => {
       return value === "ja";
     },
     "digital_uhr_position"

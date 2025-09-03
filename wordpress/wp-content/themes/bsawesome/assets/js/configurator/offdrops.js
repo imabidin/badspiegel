@@ -36,290 +36,263 @@ document.addEventListener("DOMContentLoaded", () => {
    * 2. Initialize and manage all offdrop button components
    * Creates responsive dropdown/offcanvas pairs for each button
    */
-  document
-    .querySelectorAll('button[data-target="offdrop"]')
-    .forEach((button) => {
-      const offcanvasId = button.dataset.offcanvasId;
-      const dropdownId = button.dataset.dropdownId;
-      const group = button.closest(".option-offdrop");
-      if (!group) return;
+  document.querySelectorAll('button[data-target="offdrop"]').forEach(button => {
+    const offcanvasId = button.dataset.offcanvasId;
+    const dropdownId = button.dataset.dropdownId;
+    const group = button.closest(".option-offdrop");
+    if (!group) return;
 
-      // Get required DOM elements
-      const source = group.querySelector(".offdrop-body");
-      const offcanvasEl = document.getElementById(offcanvasId);
-      const dropdownEl = document.getElementById(dropdownId);
-      if (!source || !offcanvasEl || !dropdownEl) return;
+    // Get required DOM elements
+    const source = group.querySelector(".offdrop-body");
+    const offcanvasEl = document.getElementById(offcanvasId);
+    const dropdownEl = document.getElementById(dropdownId);
+    if (!source || !offcanvasEl || !dropdownEl) return;
 
-      const offcanvasBody = offcanvasEl.querySelector(".offcanvas-body");
-      const dropdownBody = dropdownEl.querySelector(".dropdown-body");
-      if (!offcanvasBody || !dropdownBody) return;
+    const offcanvasBody = offcanvasEl.querySelector(".offcanvas-body");
+    const dropdownBody = dropdownEl.querySelector(".dropdown-body");
+    if (!offcanvasBody || !dropdownBody) return;
 
-      const valueLabel = group.querySelector(".option-value-label");
+    const valueLabel = group.querySelector(".option-value-label");
 
-      // Extract and clear source nodes for dynamic placement
-      const nodes = Array.from(source.children);
-      source.innerHTML = "";
+    // Extract and clear source nodes for dynamic placement
+    const nodes = Array.from(source.children);
+    source.innerHTML = "";
 
-      // Initialize Bootstrap component instances
-      const offcanvasInst =
-        bootstrap.Offcanvas.getOrCreateInstance(offcanvasEl);
-      const dropdownInst = bootstrap.Dropdown.getOrCreateInstance(button);
-      dropdownInst._menu = dropdownEl; // Workaround for separate menu element
+    // Initialize Bootstrap component instances
+    const offcanvasInst = bootstrap.Offcanvas.getOrCreateInstance(offcanvasEl);
+    const dropdownInst = bootstrap.Dropdown.getOrCreateInstance(button);
+    dropdownInst._menu = dropdownEl; // Workaround for separate menu element
 
-      /**
-       * Manager instance containing all component state and methods
-       */
-      const mgr = {
-        group,
-        nodes,
-        offcanvasBody,
-        dropdownBody,
-        dropdownEl,
-        offcanvasInst,
-        dropdownInst,
-        isDesktop: null,
-        originalValue: null,
-        valueChanged: false,
-        updateValueLabel,
-        observer: null,
-        setupObserver,
-      };
+    /**
+     * Manager instance containing all component state and methods
+     */
+    const mgr = {
+      group,
+      nodes,
+      offcanvasBody,
+      dropdownBody,
+      dropdownEl,
+      offcanvasInst,
+      dropdownInst,
+      isDesktop: null,
+      originalValue: null,
+      valueChanged: false,
+      updateValueLabel,
+      observer: null,
+      setupObserver,
+    };
 
-      /**
-       * Updates the value label and button state based on current selection
-       *
-       * @param {HTMLInputElement} input - The selected input element
-       */
-      function updateValueLabel(input) {
-        const selLabel = input.closest("label");
-        const text = input.dataset.label || "";
-        let price = input.dataset.price || "0";
+    /**
+     * Updates the value label and button state based on current selection
+     *
+     * @param {HTMLInputElement} input - The selected input element
+     */
+    function updateValueLabel(input) {
+      const selLabel = input.closest("label");
+      const text = input.dataset.label || "";
+      let price = input.dataset.price || "0";
 
-        const isNone = input.value === "";
-        const isOverride =
-          isNone && selLabel.classList.contains("use-first-image-for-none");
-        const treatAsValue = !isNone || isOverride;
+      const isNone = input.value === "";
+      const isOverride = isNone && selLabel.classList.contains("use-first-image-for-none");
+      const treatAsValue = !isNone || isOverride;
 
-        if (treatAsValue) {
-          // For none-override cases, hide the price display
-          const displayPrice = isOverride ? "" : price;
-          valueLabel.textContent =
-            displayPrice && displayPrice !== "0"
-              ? `${text} (+${displayPrice} €)`
-              : text;
-          valueLabel.classList.add("fade", "show");
-        } else {
-          valueLabel.textContent = "";
-          valueLabel.classList.remove("show");
-        }
-
-        // Update button visual state
-        button.classList.remove(
-          "no-selection",
-          "on-selection",
-          "yes-selection"
-        );
-        button.classList.add(treatAsValue ? "yes-selection" : "no-selection");
-
-        mgr.valueChanged = true;
+      if (treatAsValue) {
+        // For none-override cases, hide the price display
+        const displayPrice = isOverride ? "" : price;
+        valueLabel.textContent = displayPrice && displayPrice !== "0" ? `${text} (+${displayPrice} €)` : text;
+        valueLabel.classList.add("fade", "show");
+      } else {
+        valueLabel.textContent = "";
+        valueLabel.classList.remove("show");
       }
 
-      /**
-       * Sets up MutationObserver to track dynamic changes to data attributes
-       * Monitors changes to data-price, data-label, and value attributes
-       */
-      function setupObserver() {
-        const config = {
-          attributes: true,
-          attributeFilter: ["data-price", "data-label", "value"],
-          subtree: true,
-        };
+      // Update button visual state
+      button.classList.remove("no-selection", "on-selection", "yes-selection");
+      button.classList.add(treatAsValue ? "yes-selection" : "no-selection");
 
-        const callback = (mutations) => {
-          mutations.forEach((mutation) => {
-            if (
-              mutation.type === "attributes" &&
-              mutation.target.matches(
-                'input[type="radio"], input[type="checkbox"]'
-              )
-            ) {
-              const input = mutation.target;
-              if (input.checked) {
-                mgr.updateValueLabel(input);
-              }
+      mgr.valueChanged = true;
+    }
+
+    /**
+     * Sets up MutationObserver to track dynamic changes to data attributes
+     * Monitors changes to data-price, data-label, and value attributes
+     */
+    function setupObserver() {
+      const config = {
+        attributes: true,
+        attributeFilter: ["data-price", "data-label", "value"],
+        subtree: true,
+      };
+
+      const callback = mutations => {
+        mutations.forEach(mutation => {
+          if (
+            mutation.type === "attributes" &&
+            mutation.target.matches('input[type="radio"], input[type="checkbox"]')
+          ) {
+            const input = mutation.target;
+            if (input.checked) {
+              mgr.updateValueLabel(input);
             }
-          });
-        };
-
-        // Cleanup existing observer before creating new one
-        if (mgr.observer) mgr.observer.disconnect();
-        mgr.observer = new MutationObserver(callback);
-        mgr.observer.observe(mgr.dropdownBody, config);
-        mgr.observer.observe(mgr.offcanvasBody, config);
-      }
-
-      // Initialize the mutation observer
-      mgr.setupObserver();
-
-      /**
-       * Handle input change events for radio buttons and checkboxes
-       */
-      mgr.group.addEventListener("change", (e) => {
-        if (e.target.matches('input[type="radio"], input[type="checkbox"]')) {
-          // Update active state on label buttons
-          mgr.group
-            .querySelectorAll("label.btn")
-            .forEach((lbl) => lbl.classList.remove("active"));
-          const selLbl = e.target.closest("label");
-          if (selLbl) selLbl.classList.add("active");
-
-          // Update value label with slight delay for smooth UX
-          setTimeout(() => mgr.updateValueLabel(e.target), 150);
-        }
-      });
-
-      /**
-       * Offcanvas event handlers
-       */
-
-      // Offcanvas show event
-      offcanvasEl.addEventListener("show.bs.offcanvas", () => {
-        button.classList.add("on-selection");
-        const checked = mgr.offcanvasBody.querySelector("input:checked");
-        mgr.originalValue = checked ? checked.value : "";
-        mgr.valueChanged = false;
-      });
-
-      // Offcanvas hide event
-      offcanvasEl.addEventListener("hide.bs.offcanvas", () => {
-        const checked = mgr.offcanvasBody.querySelector("input:checked");
-        const newValue = checked ? checked.value : "";
-        if (!mgr.valueChanged) {
-          button.classList.remove("on-selection");
-          button.classList.add(
-            newValue !== "" ? "yes-selection" : "no-selection"
-          );
-        }
-        mgr.valueChanged = false;
-      });
-
-      /**
-       * Dropdown event handlers
-       */
-      // Dropdown show event
-      button.addEventListener("show.bs.dropdown", () => {
-        button.classList.add("on-selection");
-        const checked = mgr.dropdownBody.querySelector("input:checked");
-        mgr.originalValue = checked ? checked.value : "";
-        mgr.valueChanged = false;
-
-        // Set responsive max-height and overflow for dropdown
-        mgr.dropdownBody.style.maxHeight = "69vh";
-        mgr.dropdownBody.style.overflowY = "auto";
-        mgr.dropdownBody.style.overflowX = "hidden";
-
-        // Constrain dropdown width to trigger button width
-        mgr.updateDropdownWidth();
-      });
-
-      /**
-       * Update dropdown width to match trigger button width
-       */
-      mgr.updateDropdownWidth = () => {
-        const triggerWidth = button.offsetWidth;
-        mgr.dropdownEl.style.minWidth = `${triggerWidth}px`;
-        mgr.dropdownEl.style.maxWidth = `${triggerWidth}px`;
-        mgr.dropdownEl.style.width = `${triggerWidth}px`;
+          }
+        });
       };
 
-      // Dropdown hide event
-      button.addEventListener("hide.bs.dropdown", () => {
-        const checked = mgr.dropdownBody.querySelector("input:checked");
-        const newValue = checked ? checked.value : "";
-        if (!mgr.valueChanged) {
-          button.classList.remove("on-selection");
-          button.classList.add(
-            newValue !== "" ? "yes-selection" : "no-selection"
-          );
-        }
-        mgr.valueChanged = false;
-      });
+      // Cleanup existing observer before creating new one
+      if (mgr.observer) mgr.observer.disconnect();
+      mgr.observer = new MutationObserver(callback);
+      mgr.observer.observe(mgr.dropdownBody, config);
+      mgr.observer.observe(mgr.offcanvasBody, config);
+    }
 
-      /**
-       * Main button click handler for responsive toggle
-       */
-      button.addEventListener("click", (e) => {
-        e.preventDefault();
-        if (mgr.isDesktop) {
-          mgr.dropdownInst.toggle();
-        } else {
-          mgr.offcanvasInst.toggle();
-        }
-      });
+    // Initialize the mutation observer
+    mgr.setupObserver();
 
-      /**
-       * Dropdown input change events with auto-close and focus management
-       */
-      mgr.dropdownBody.addEventListener("change", (e) => {
-        if (e.target.matches('input[type="radio"], input[type="checkbox"]')) {
-          mgr.dropdownInst.hide();
+    /**
+     * Handle input change events for radio buttons and checkboxes
+     */
+    mgr.group.addEventListener("change", e => {
+      if (e.target.matches('input[type="radio"], input[type="checkbox"]')) {
+        // Update active state on label buttons
+        mgr.group.querySelectorAll("label.btn").forEach(lbl => lbl.classList.remove("active"));
+        const selLbl = e.target.closest("label");
+        if (selLbl) selLbl.classList.add("active");
 
-          // Only for trusted user events (not programmatic)
-          if (e.isTrusted) {
-            // Set visual feedback and focus after transition
-            setTimeout(() => {
-              button.classList.add("just-selected");
-              button.focus();
-            }, 150);
+        // Update value label with slight delay for smooth UX
+        setTimeout(() => mgr.updateValueLabel(e.target), 150);
+      }
+    });
 
-            // Remove visual feedback on blur
-            button.addEventListener(
-              "blur",
-              () => button.classList.remove("just-selected"),
-              { once: true }
-            );
-          }
-        }
-      });
+    /**
+     * Offcanvas event handlers
+     */
 
-      /**
-       * Offcanvas input change events with auto-close and focus management
-       */
-      mgr.offcanvasBody.addEventListener("change", (e) => {
-        if (e.target.matches('input[type="radio"], input[type="checkbox"]')) {
-          mgr.offcanvasInst.hide();
+    // Offcanvas show event
+    offcanvasEl.addEventListener("show.bs.offcanvas", () => {
+      button.classList.add("on-selection");
+      const checked = mgr.offcanvasBody.querySelector("input:checked");
+      mgr.originalValue = checked ? checked.value : "";
+      mgr.valueChanged = false;
+    });
 
-          // Focus management after offcanvas is completely hidden
-          offcanvasEl.addEventListener(
-            "hidden.bs.offcanvas",
-            () => {
-              button.classList.add("just-selected");
-              button.focus();
-            },
-            { once: true }
-          );
+    // Offcanvas hide event
+    offcanvasEl.addEventListener("hide.bs.offcanvas", () => {
+      const checked = mgr.offcanvasBody.querySelector("input:checked");
+      const newValue = checked ? checked.value : "";
+      if (!mgr.valueChanged) {
+        button.classList.remove("on-selection");
+        button.classList.add(newValue !== "" ? "yes-selection" : "no-selection");
+      }
+      mgr.valueChanged = false;
+    });
+
+    /**
+     * Dropdown event handlers
+     */
+    // Dropdown show event
+    button.addEventListener("show.bs.dropdown", () => {
+      button.classList.add("on-selection");
+      const checked = mgr.dropdownBody.querySelector("input:checked");
+      mgr.originalValue = checked ? checked.value : "";
+      mgr.valueChanged = false;
+
+      // Set responsive max-height and overflow for dropdown
+      mgr.dropdownBody.style.maxHeight = "69vh";
+      mgr.dropdownBody.style.overflowY = "auto";
+      mgr.dropdownBody.style.overflowX = "hidden";
+
+      // Constrain dropdown width to trigger button width
+      mgr.updateDropdownWidth();
+    });
+
+    /**
+     * Update dropdown width to match trigger button width
+     */
+    mgr.updateDropdownWidth = () => {
+      const triggerWidth = button.offsetWidth;
+      mgr.dropdownEl.style.minWidth = `${triggerWidth}px`;
+      mgr.dropdownEl.style.maxWidth = `${triggerWidth}px`;
+      mgr.dropdownEl.style.width = `${triggerWidth}px`;
+    };
+
+    // Dropdown hide event
+    button.addEventListener("hide.bs.dropdown", () => {
+      const checked = mgr.dropdownBody.querySelector("input:checked");
+      const newValue = checked ? checked.value : "";
+      if (!mgr.valueChanged) {
+        button.classList.remove("on-selection");
+        button.classList.add(newValue !== "" ? "yes-selection" : "no-selection");
+      }
+      mgr.valueChanged = false;
+    });
+
+    /**
+     * Main button click handler for responsive toggle
+     */
+    button.addEventListener("click", e => {
+      e.preventDefault();
+      if (mgr.isDesktop) {
+        mgr.dropdownInst.toggle();
+      } else {
+        mgr.offcanvasInst.toggle();
+      }
+    });
+
+    /**
+     * Dropdown input change events with auto-close and focus management
+     */
+    mgr.dropdownBody.addEventListener("change", e => {
+      if (e.target.matches('input[type="radio"], input[type="checkbox"]')) {
+        mgr.dropdownInst.hide();
+
+        // Only for trusted user events (not programmatic)
+        if (e.isTrusted) {
+          // Set visual feedback and focus after transition
+          setTimeout(() => {
+            button.classList.add("just-selected");
+            button.focus();
+          }, 150);
 
           // Remove visual feedback on blur
-          button.addEventListener(
-            "blur",
-            () => button.classList.remove("just-selected"),
-            { once: true }
-          );
+          button.addEventListener("blur", () => button.classList.remove("just-selected"), { once: true });
         }
-      });
-
-      // Add manager to global array for lifecycle management
-      managers.push(mgr);
-
-      // Remove d-none class after initialization to prevent layout shift
-      source.classList.remove("d-none");
+      }
     });
+
+    /**
+     * Offcanvas input change events with auto-close and focus management
+     */
+    mgr.offcanvasBody.addEventListener("change", e => {
+      if (e.target.matches('input[type="radio"], input[type="checkbox"]')) {
+        mgr.offcanvasInst.hide();
+
+        // Focus management after offcanvas is completely hidden
+        offcanvasEl.addEventListener(
+          "hidden.bs.offcanvas",
+          () => {
+            button.classList.add("just-selected");
+            button.focus();
+          },
+          { once: true }
+        );
+
+        // Remove visual feedback on blur
+        button.addEventListener("blur", () => button.classList.remove("just-selected"), { once: true });
+      }
+    });
+
+    // Add manager to global array for lifecycle management
+    managers.push(mgr);
+
+    // Remove d-none class after initialization to prevent layout shift
+    source.classList.remove("d-none");
+  });
 
   /**
    * 3. Global click handler to close dropdowns (preserves Bootstrap behavior)
    * Handles edge cases with modals and prevents unwanted closures
    */
-  document.addEventListener("click", (e) => {
+  document.addEventListener("click", e => {
     // Skip if modal was just closed to prevent dropdown interference
     if (skipNextClick) {
       skipNextClick = false;
@@ -330,15 +303,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.target.closest(".modal.show")) return;
 
     // Close open dropdowns when clicking outside
-    managers.forEach((mgr) => {
+    managers.forEach(mgr => {
       if (!mgr.isDesktop) return;
       const menu = mgr.dropdownInst._menu;
       const toggleEl = mgr.dropdownInst._element;
-      if (
-        menu.classList.contains("show") &&
-        !menu.contains(e.target) &&
-        !toggleEl.contains(e.target)
-      ) {
+      if (menu.classList.contains("show") && !menu.contains(e.target) && !toggleEl.contains(e.target)) {
         mgr.dropdownInst.hide();
       }
     });
@@ -355,10 +324,10 @@ document.addEventListener("DOMContentLoaded", () => {
    *
    * @param {MediaQueryListEvent} e - Media query change event
    */
-  const handleResponsiveBehaviour = (e) => {
+  const handleResponsiveBehaviour = e => {
     const matchesDesktop = e.matches;
 
-    managers.forEach((mgr) => {
+    managers.forEach(mgr => {
       // Skip if already in correct state
       if (mgr.isDesktop === matchesDesktop) return;
 
@@ -379,21 +348,20 @@ document.addEventListener("DOMContentLoaded", () => {
       // Move nodes to appropriate container
       const target = matchesDesktop ? mgr.dropdownBody : mgr.offcanvasBody;
       target.innerHTML = "";
-      mgr.nodes.forEach((node) => target.appendChild(node));
+      mgr.nodes.forEach(node => target.appendChild(node));
 
       // Reconnect observer after DOM changes
       mgr.setupObserver();
 
       // Adjust button styling for desktop layout
-      target.querySelectorAll(".btn-group-vertical .btn").forEach((btn) => {
+      target.querySelectorAll(".btn-group-vertical .btn").forEach(btn => {
         btn.classList.toggle("border-0", matchesDesktop);
       });
 
       // Maintain active states after layout switch
-      target.querySelectorAll("input:checked").forEach((input) => {
+      target.querySelectorAll("input:checked").forEach(input => {
         const lbl = input.closest("label");
-        if (lbl && !lbl.classList.contains("active"))
-          lbl.classList.add("active");
+        if (lbl && !lbl.classList.contains("active")) lbl.classList.add("active");
       });
     });
   };
@@ -411,7 +379,7 @@ document.addEventListener("DOMContentLoaded", () => {
    */
   handleResponsiveBehaviour(mql);
   // Update value labels for all existing selections
-  managers.forEach((mgr) => {
+  managers.forEach(mgr => {
     const target = mgr.isDesktop ? mgr.dropdownBody : mgr.offcanvasBody;
     const checkedInput = target.querySelector("input:checked");
     if (checkedInput) mgr.updateValueLabel(checkedInput);
@@ -439,7 +407,7 @@ document.addEventListener("DOMContentLoaded", () => {
       currentBreakpoint = newBreakpoint;
 
       // Recalculate dropdown widths for all desktop managers
-      managers.forEach((mgr) => {
+      managers.forEach(mgr => {
         if (mgr.isDesktop && mgr.dropdownEl.classList.contains("show")) {
           // Small delay to ensure layout is settled
           setTimeout(() => mgr.updateDropdownWidth(), 1);
@@ -487,13 +455,8 @@ document.addEventListener("DOMContentLoaded", () => {
    * @param {string} str - Text to normalize
    * @returns {string} Normalized text
    */
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/ä/g, "ae")
-      .replace(/ö/g, "oe")
-      .replace(/ü/g, "ue")
-      .replace(/ß/g, "ss");
+  const normalize = str =>
+    str.toLowerCase().replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss");
 
   /**
    * Cache system for normalized text (performance optimization)
@@ -506,7 +469,7 @@ document.addEventListener("DOMContentLoaded", () => {
    * @param {HTMLElement} label - Label element to normalize
    * @returns {string} Normalized text content
    */
-  const getNormalizedText = (label) => {
+  const getNormalizedText = label => {
     if (!config.useCache) {
       return normalize(label.textContent.trim());
     }
@@ -521,16 +484,16 @@ document.addEventListener("DOMContentLoaded", () => {
    * Maintains cache consistency when new elements are added
    */
   if (config.useCache) {
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        mutation.addedNodes.forEach((node) => {
+    const observer = new MutationObserver(mutations => {
+      mutations.forEach(mutation => {
+        mutation.addedNodes.forEach(node => {
           if (node.nodeType === 1) {
             // Element node
             if (node.matches("label.btn")) {
               cache.set(node, normalize(node.textContent.trim()));
             }
             // Handle nested label elements
-            node.querySelectorAll?.("label.btn").forEach((label) => {
+            node.querySelectorAll?.("label.btn").forEach(label => {
               cache.set(label, normalize(label.textContent.trim()));
             });
           }
@@ -539,7 +502,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Observe all values groups for dynamic changes
-    document.querySelectorAll(".values-group").forEach((container) => {
+    document.querySelectorAll(".values-group").forEach(container => {
       observer.observe(container, { childList: true, subtree: true });
     });
   }
@@ -547,7 +510,7 @@ document.addEventListener("DOMContentLoaded", () => {
   /**
    * Initialize search functionality for each search input
    */
-  document.querySelectorAll(".option-search-input").forEach((input) => {
+  document.querySelectorAll(".option-search-input").forEach(input => {
     let debounceTimer;
     const wrapper = input.closest(".option-search-wrapper");
     const resetBtn = wrapper.querySelector(".option-search-input-reset");
@@ -556,7 +519,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const targets =
       input.dataset.target
         ?.split(",")
-        .map((selector) => selector.trim())
+        .map(selector => selector.trim())
         .filter(Boolean) || [];
 
     if (targets.length === 0) {
@@ -585,7 +548,7 @@ document.addEventListener("DOMContentLoaded", () => {
     /**
      * Handle Enter key press for mobile keyboard dismissal
      */
-    input.addEventListener("keydown", (e) => {
+    input.addEventListener("keydown", e => {
       if (e.key === "Enter") {
         e.preventDefault();
 
@@ -625,8 +588,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const isSearchActive = rawInput.length >= config.minChars;
 
       // Prepare no-results message with icon
-      const iconHTML =
-        '<i class="fa-sharp fa-light fa-triangle-exclamation me-2" aria-hidden="true"></i>';
+      const iconHTML = '<i class="fa-sharp fa-light fa-triangle-exclamation me-2" aria-hidden="true"></i>';
       const noResultsHTML = `${iconHTML} ${config.noResultsText}`;
 
       // Toggle reset button visibility
@@ -635,22 +597,19 @@ document.addEventListener("DOMContentLoaded", () => {
       resetBtn.setAttribute("aria-hidden", String(!hasText));
 
       // Process each search target
-      targets.forEach((selector) => {
-        document.querySelectorAll(selector).forEach((container) => {
+      targets.forEach(selector => {
+        document.querySelectorAll(selector).forEach(container => {
           // Setup aria-controls relationship
           if (!container.id) {
-            container.id = `search-container-${Math.random()
-              .toString(36)
-              .slice(2, 8)}`;
+            container.id = `search-container-${Math.random().toString(36).slice(2, 8)}`;
           }
           input.setAttribute("aria-controls", container.id);
 
           // Filter option labels
           let hasVisibleOptions = false;
-          container.querySelectorAll("label.btn").forEach((label) => {
+          container.querySelectorAll("label.btn").forEach(label => {
             const normalizedText = getNormalizedText(label);
-            const shouldShow =
-              !isSearchActive || normalizedText.includes(normalizedTerm);
+            const shouldShow = !isSearchActive || normalizedText.includes(normalizedTerm);
 
             label.classList.toggle("d-none", !shouldShow);
             label.setAttribute("aria-hidden", String(!shouldShow));
@@ -668,8 +627,7 @@ document.addEventListener("DOMContentLoaded", () => {
             noResultsElement.setAttribute("aria-live", "polite");
 
             const alertParagraph = document.createElement("p");
-            alertParagraph.className =
-              "alert alert-danger text-truncate mt-1 mt-md-3 mb-3";
+            alertParagraph.className = "alert alert-danger text-truncate mt-1 mt-md-3 mb-3";
             alertParagraph.innerHTML = noResultsHTML;
 
             noResultsElement.appendChild(alertParagraph);

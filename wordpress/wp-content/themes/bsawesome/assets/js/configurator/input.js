@@ -4,7 +4,7 @@
  * This module serves as the central validation engine for the product configurator.
  * It provides real-time validation feedback, custom error messages,
  * relational field validation, and Bootstrap form state management.
- * 
+ *
  * ARCHITECTURE (DRY Principle):
  * - input.js: Central validation engine with generic event listeners
  * - Specialized modules (e.g., dachschraege.js): Domain-specific validation rules
@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
       feedbackElement.style.display = "none";
     }
-    
+
     // Trigger carousel height update when feedback visibility changes
     triggerCarouselHeightUpdate();
   }
@@ -248,10 +248,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Show 'is-valid' state during typing when no errors exist
       // This provides positive feedback during data entry
-      if (
-        document.activeElement === field &&
-        !field.classList.contains("is-invalid")
-      ) {
+      if (document.activeElement === field && !field.classList.contains("is-invalid")) {
         field.classList.add("is-valid");
       } else {
         field.classList.remove("is-valid");
@@ -259,11 +256,11 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     /**
-     * Change event handler  
+     * Change event handler
      * Handles cross-field validation and position suggestions when user completes input
      */
     field.addEventListener("change", function () {
-      // Handle Dachschräge field dependencies and position suggestions  
+      // Handle Dachschräge field dependencies and position suggestions
       if (isDachschraegeField(field)) {
         onDachschraegeFieldChange(field);
       }

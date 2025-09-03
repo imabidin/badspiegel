@@ -141,9 +141,7 @@ document.addEventListener("DOMContentLoaded", function () {
       .off("click", "#configcode-share-mail")
       .on("click", "#configcode-share-mail", function () {
         const mailSubject = encodeURIComponent(
-          `Badspiegel.de | Meine Konfiguration${
-            productInfo.title ? " – " + productInfo.title : ""
-          }`
+          `Badspiegel.de | Meine Konfiguration${productInfo.title ? " – " + productInfo.title : ""}`
         );
 
         // Comprehensive email body with all product details
@@ -152,13 +150,9 @@ document.addEventListener("DOMContentLoaded", function () {
             `🪄 Direkter Link (klicken zum Öffnen):\n` +
             `${productInfo.directLink}\n\n` +
             `🔑 Oder Code eingeben: ${code}\n\n` +
-            `📌 Produkt: ${
-              productInfo.title || "Individueller Badspiegel oder Badmöbel"
-            }\n\n` +
+            `📌 Produkt: ${productInfo.title || "Individueller Badspiegel oder Badmöbel"}\n\n` +
             (productInfo.price ? `💶 Preis: ${productInfo.price}\n` : "") +
-            (productInfo.deliveryTime
-              ? `⏱️ Lieferzeit: ${productInfo.deliveryTime}\n\n`
-              : "") +
+            (productInfo.deliveryTime ? `⏱️ Lieferzeit: ${productInfo.deliveryTime}\n\n` : "") +
             `Mit diesem Code können Sie:\n` +
             `✓ Konfiguration sofort aufrufen\n` +
             `✓ Änderungen vornehmen\n` +
@@ -179,10 +173,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const whatsappText = `Meine Konfiguration für Badspiegel.de:\n\n${productInfo.directLink}\n\n(Code: ${code})`;
 
         // Open WhatsApp with pre-filled message
-        window.open(
-          `https://wa.me/?text=${encodeURIComponent(whatsappText)}`,
-          "_blank"
-        );
+        window.open(`https://wa.me/?text=${encodeURIComponent(whatsappText)}`, "_blank");
       });
   }
 
@@ -209,12 +200,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const directLink = `${window.location.origin}/code/${code}`;
             resolve({ code, directLink });
           } else {
-            reject(
-              new Error(
-                response.data?.msg ||
-                  "Konfiguration konnte nicht gespeichert werden"
-              )
-            );
+            reject(new Error(response.data?.msg || "Konfiguration konnte nicht gespeichert werden"));
           }
         },
         error(xhr, status, error) {
@@ -253,10 +239,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             resolve(response.data);
           } else {
-            console.warn(
-              "Could not add to favourites:",
-              response.data?.message
-            );
+            console.warn("Could not add to favourites:", response.data?.message);
             // Don't reject - favourites addition is optional
             resolve({ added: false, message: response.data?.message });
           }
@@ -281,10 +264,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function showSuccessModal(msg, code, tooltip, addedToFavourites = false) {
     // Collect current product information for sharing
     const productInfo = {
-      title: $(".product_title, .product-titel, .entry-title")
-        .first()
-        .text()
-        .trim(),
+      title: $(".product_title, .product-titel, .entry-title").first().text().trim(),
       price: $("#productConfiguroator .product-price").first().text().trim(),
       deliveryTime: $(".delivery-time-data").first().text().trim(),
       link: window.location.href,
@@ -468,10 +448,7 @@ document.addEventListener("DOMContentLoaded", function () {
    */
   async function saveConfiguration($button, loadingType = "spinner") {
     // Apply appropriate loading state based on type
-    const cleanupLoading =
-      loadingType === "icon"
-        ? applyIconAnimationLoading($button)
-        : applySpinnerLoading($button);
+    const cleanupLoading = loadingType === "icon" ? applyIconAnimationLoading($button) : applySpinnerLoading($button);
 
     try {
       // Collect all configuration data from form
@@ -499,10 +476,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // Automatically add configuration to favourites
         let addedToFavourites = false;
         try {
-          const favouriteResult = await addConfigToFavourites(
-            code,
-            myAjaxData.productId
-          );
+          const favouriteResult = await addConfigToFavourites(code, myAjaxData.productId);
           addedToFavourites = favouriteResult.added !== false;
         } catch (error) {
           console.warn("Could not add to favourites:", error);
@@ -513,10 +487,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         return { success: true, code, addedToFavourites };
       } else {
-        console.error(
-          "Save configuration failed:",
-          response.data?.msg || "Unknown error"
-        );
+        console.error("Save configuration failed:", response.data?.msg || "Unknown error");
         throw new Error(response.data?.msg || "Unknown error");
       }
     } catch (error) {
@@ -534,7 +505,7 @@ document.addEventListener("DOMContentLoaded", function () {
    */
   $("#product-configurator-configcode-save").on("click", function () {
     const $button = $(this);
-    saveConfiguration($button, "spinner").catch((error) => {
+    saveConfiguration($button, "spinner").catch(error => {
       console.error("Save failed:", error);
       // Optionally show error message to user
     });

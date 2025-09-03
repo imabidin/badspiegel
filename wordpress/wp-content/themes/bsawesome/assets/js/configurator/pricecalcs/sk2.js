@@ -266,11 +266,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateDiameterFromBH();
   }
   // Alternatively, if diameter has a value but breite_hoehe doesn't, calculate breite_hoehe
-  else if (
-    dInput.value &&
-    dInput.value.trim() !== "" &&
-    (!bhInput.value || bhInput.value.trim() === "")
-  ) {
+  else if (dInput.value && dInput.value.trim() !== "" && (!bhInput.value || bhInput.value.trim() === "")) {
     updateBHFromDiameter();
   }
 });

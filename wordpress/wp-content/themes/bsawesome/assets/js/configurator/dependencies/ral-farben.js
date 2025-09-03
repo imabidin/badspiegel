@@ -1,37 +1,46 @@
 /**
- * @version 2.2.0
+ * @version 2.3.0
+ *
+ * @todo Its not inside build, add to configurator.js and do feature checks, if everything works fine
  */
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Cache the input element for better performance
-  const ralInput = document.querySelector(
-    'input[placeholder="RAL Farbton eingeben"]'
+  // Cache all RAL color input elements for better performance
+  const ralInputs = document.querySelectorAll(
+    ['input[placeholder="RAL Farbton eingeben"]', 'input[name="ablage_farbton"]', 'input[name*="farbton"]'].join(", ")
   );
 
-  /**
-   * Clear input when focused if it contains the placeholder text
-   */
-  ralInput.addEventListener("focus", function () {
-    if (
-      this.value.trim().toLowerCase() === this.placeholder.trim().toLowerCase()
-    ) {
-      this.value = "";
-    }
-  });
+  // Apply event listeners to all RAL input fields
+  ralInputs.forEach(ralInput => {
+    if (!ralInput) return;
 
-  /**
-   * Validate input when leaving the field (on blur)
-   */
-  ralInput.addEventListener("blur", function () {
-    const value = this.value.trim();
+    /**
+     * Clear input when focused if it contains placeholder-like text
+     */
+    ralInput.addEventListener("focus", function () {
+      const value = this.value.trim().toLowerCase();
+      const placeholder = this.placeholder.trim().toLowerCase();
 
-    // Empty input is allowed
-    if (value === "") return;
+      // Clear if value matches placeholder or contains auto-filled text
+      if (value === placeholder || value === "ral farbton auswählen" || value === "ral farbton eingeben") {
+        this.value = "";
+      }
+    });
 
-    const validation = validateRAL(value);
-    if (!validation.isValid) {
-      showRALModal(value, validation.errorType);
-    }
+    /**
+     * Validate input when leaving the field (on blur)
+     */
+    ralInput.addEventListener("blur", function () {
+      const value = this.value.trim();
+
+      // Empty input is allowed
+      if (value === "") return;
+
+      const validation = validateRAL(value);
+      if (!validation.isValid) {
+        showRALModal(value, validation.errorType);
+      }
+    });
   });
 
   /**

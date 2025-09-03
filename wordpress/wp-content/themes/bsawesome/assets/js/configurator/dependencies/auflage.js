@@ -1,11 +1,8 @@
 /**
- * @version 2.2.0
+ * @version 2.3.0
  */
 
-import {
-  dependenciesValuesXvalues,
-  dependenciesValuesXcontainer,
-} from "./../dependencies.js";
+import { dependenciesValuesXvalues, dependenciesValuesXcontainer } from "./../dependencies.js";
 
 import {} from "../variables.js";
 
@@ -15,28 +12,28 @@ document.addEventListener("DOMContentLoaded", () => {
    */
   dependenciesValuesXcontainer(
     "auflage",
-    (value) => {
+    value => {
       return value === "farbiges_glas";
     },
     "auflage_farbe"
   );
   dependenciesValuesXcontainer(
     "auflage",
-    (value) => {
+    value => {
       return value === "getoentes_glas";
     },
     "auflage_toenung"
   );
   dependenciesValuesXcontainer(
     "auflage",
-    (value) => {
+    value => {
       return value === "keramik";
     },
     "auflage_keramik"
   );
   dependenciesValuesXcontainer(
     "auflage_farbe",
-    (value) => {
+    value => {
       return value === "individuell";
     },
     "auflage_farbton"

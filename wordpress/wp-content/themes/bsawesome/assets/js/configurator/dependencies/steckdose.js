@@ -1,11 +1,8 @@
 /**
- * @version 2.2.0
+ * @version 2.3.0
  */
 
-import {
-  dependenciesValuesXvalues,
-  dependenciesValuesXcontainer,
-} from "./../dependencies.js";
+import { dependenciesValuesXvalues, dependenciesValuesXcontainer } from "./../dependencies.js";
 
 import {} from "./../variables.js";
 
@@ -15,11 +12,11 @@ document.addEventListener("DOMContentLoaded", () => {
    */
   dependenciesValuesXvalues(
     "steckdose",
-    (value) => {
+    value => {
       return value === "2x";
     },
     "steckdose_position",
-    (value) => {
+    value => {
       return value === "links_und_rechts";
     }
   );
@@ -28,14 +25,14 @@ document.addEventListener("DOMContentLoaded", () => {
    */
   dependenciesValuesXcontainer(
     "steckdose",
-    (value) => {
+    value => {
       return value !== "";
     },
     "steckdose_farbe"
   );
   dependenciesValuesXcontainer(
     "steckdose",
-    (value) => {
+    value => {
       return value !== "";
     },
     "steckdose_position"

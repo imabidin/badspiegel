@@ -1,11 +1,8 @@
 /**
- * @version 2.2.0
+ * @version 2.3.0
  */
 
-import {
-  dependenciesValuesXvalues,
-  dependenciesValuesXcontainer,
-} from "./../dependencies.js";
+import { dependenciesValuesXvalues, dependenciesValuesXcontainer } from "./../dependencies.js";
 
 import {} from "./../variables.js";
 
@@ -15,11 +12,11 @@ document.addEventListener("DOMContentLoaded", () => {
    */
   dependenciesValuesXvalues(
     "spiegelheizung_bedienung",
-    (value) => {
+    value => {
       return !value.includes("touch_sensor");
     },
     "spiegelheizung_bedienung_position",
-    (value) => {
+    value => {
       return value === "linke_seite" || value === "rechte_seite";
     }
   );
@@ -28,14 +25,14 @@ document.addEventListener("DOMContentLoaded", () => {
    */
   dependenciesValuesXcontainer(
     "spiegelheizung",
-    (value) => {
+    value => {
       return value === "ja";
     },
     "spiegelheizung_bedienung"
   );
   dependenciesValuesXcontainer(
     "spiegelheizung_bedienung",
-    (value) => {
+    value => {
       return value !== "" && value !== "ohne_extra_schalter";
     },
     "spiegelheizung_bedienung_position"

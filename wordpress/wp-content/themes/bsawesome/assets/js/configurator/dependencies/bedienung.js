@@ -1,11 +1,8 @@
 /**
- * @version 2.2.0
+ * @version 2.3.0
  */
 
-import {
-  dependenciesValuesXvalues,
-  dependenciesValuesXcontainer,
-} from "./../dependencies.js";
+import { dependenciesValuesXvalues, dependenciesValuesXcontainer } from "./../dependencies.js";
 
 import { isRund, isLOR, isLR, isOU } from "./../variables.js";
 
@@ -15,13 +12,11 @@ document.addEventListener("DOMContentLoaded", () => {
    */
   dependenciesValuesXvalues(
     "bedienung",
-    (value) => {
-      return !(
-        value.includes("touch_sensor") || value.includes("gestensteuerung")
-      );
+    value => {
+      return !(value.includes("touch_sensor") || value.includes("gestensteuerung"));
     },
     "bedienung_position",
-    (value) => {
+    value => {
       return value === "linke_seite" || value === "rechte_seite";
     }
   );
@@ -31,11 +26,11 @@ document.addEventListener("DOMContentLoaded", () => {
   if (isLOR || isLR) {
     dependenciesValuesXvalues(
       "bedienung",
-      (value) => {
+      value => {
         return value.includes("kippschalter") || value.includes("gestensensor");
       },
       "bedienung_position",
-      (value) => {
+      value => {
         return value.includes("linke_seite") || value.includes("rechte_seite");
       }
     );
@@ -46,16 +41,12 @@ document.addEventListener("DOMContentLoaded", () => {
   if (isOU) {
     dependenciesValuesXvalues(
       "bedienung",
-      (value) => {
+      value => {
         return value.includes("kippschalter") || value.includes("gestensensor");
       },
       "bedienung_position",
-      (value) => {
-        return (
-          value.includes("unten-mittig") ||
-          value.includes("unten-links") ||
-          value.includes("unten-rechts")
-        );
+      value => {
+        return value.includes("unten-mittig") || value.includes("unten-links") || value.includes("unten-rechts");
       }
     );
   }
@@ -65,13 +56,11 @@ document.addEventListener("DOMContentLoaded", () => {
   if (isRund) {
     dependenciesValuesXvalues(
       "bedienung",
-      (value) => {
-        return (
-          value.includes("touch_sensor") || value.includes("gestensteuerung")
-        );
+      value => {
+        return value.includes("touch_sensor") || value.includes("gestensteuerung");
       },
       "bedienung_position",
-      (value) => {
+      value => {
         return (
           value.includes("rechts_3_uhr") || value.includes("links_9_uhr")
           // || value.includes('oben_12_uhr')
@@ -84,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
    */
   dependenciesValuesXcontainer(
     "bedienung",
-    (value) => {
+    value => {
       return (
         value.includes("kippschalter") ||
         value.includes("gestensensor") ||

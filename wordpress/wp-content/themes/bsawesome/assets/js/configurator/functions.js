@@ -7,7 +7,7 @@
  *
  * @version 2.3.0
  * @package Configurator
- * 
+ *
  * @todo Check if these functions can be used, for a better DRY concept
  */
 
@@ -82,9 +82,7 @@ export function roundUp(value, step = 100) {
  */
 export function formatPrice(price) {
   const numericPrice = toNumber(String(price));
-  return numericPrice === 0
-    ? ""
-    : `${numericPrice.toFixed(2).replace(".", ",")} €`;
+  return numericPrice === 0 ? "" : `${numericPrice.toFixed(2).replace(".", ",")} €`;
 }
 
 /**
@@ -97,9 +95,7 @@ export function formatPrice(price) {
  * const title = getProductTitle(); // "Badezimmerspiegel Premium"
  */
 export function getProductTitle() {
-  const titleEl =
-    document.querySelector(".product-titel") ||
-    document.querySelector(".product_title");
+  const titleEl = document.querySelector(".product-titel") || document.querySelector(".product_title");
   return titleEl ? titleEl.textContent.trim() : "";
 }
 
@@ -113,9 +109,7 @@ export function getProductTitle() {
  * const price = getProductPrice(); // 199.99
  */
 export function getProductPrice() {
-  const priceEl =
-    document.querySelector(".product-price") ||
-    document.querySelector(".price");
+  const priceEl = document.querySelector(".product-price") || document.querySelector(".price");
   return priceEl ? toNumber(priceEl.textContent.trim()) : 0;
 }
 
@@ -162,17 +156,13 @@ export function updateValueLabel(input, valueLabel, button, mgr) {
 
   // Determine selection state
   const isNone = input.value === "";
-  const isOverride =
-    isNone && selLabel.classList.contains("use-first-image-for-none");
+  const isOverride = isNone && selLabel.classList.contains("use-first-image-for-none");
   const treatAsValue = !isNone || isOverride;
 
   if (treatAsValue) {
     // For none-override cases, hide the price display
     const displayPrice = isOverride ? "" : price;
-    valueLabel.textContent =
-      displayPrice && displayPrice !== "0"
-        ? `${text} (+${displayPrice} €)`
-        : text;
+    valueLabel.textContent = displayPrice && displayPrice !== "0" ? `${text} (+${displayPrice} €)` : text;
     valueLabel.classList.add("fade", "show");
   } else {
     // Clear label for empty selections

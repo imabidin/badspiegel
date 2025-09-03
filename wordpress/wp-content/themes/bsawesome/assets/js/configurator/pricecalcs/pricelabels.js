@@ -93,9 +93,7 @@ function updatePriceLabel(select) {
  * Ensures that pre-selected options display their labels immediately
  * without requiring user interaction
  */
-document
-  .querySelectorAll("select.option-pricematrix, select.option-price")
-  .forEach((sel) => updatePriceLabel(sel));
+document.querySelectorAll("select.option-pricematrix, select.option-price").forEach(sel => updatePriceLabel(sel));
 
 // ====================== EVENT DELEGATION SYSTEM ======================
 
@@ -109,7 +107,7 @@ document
  * - Automatic handling of dynamically added selects
  * - Centralized event management
  */
-document.addEventListener("change", (event) => {
+document.addEventListener("change", event => {
   const sel = event.target;
 
   // Check if the changed element is a price matrix select

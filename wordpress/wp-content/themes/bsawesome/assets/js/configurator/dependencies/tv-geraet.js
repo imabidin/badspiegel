@@ -1,11 +1,8 @@
 /**
- * @version 2.2.0
+ * @version 2.3.0
  */
 
-import {
-  dependenciesValuesXvalues,
-  dependenciesValuesXcontainer,
-} from "../dependencies.js";
+import { dependenciesValuesXvalues, dependenciesValuesXcontainer } from "../dependencies.js";
 
 import {} from "../variables.js";
 
@@ -28,8 +25,7 @@ const TV_SIZE_MESSAGES = {
     'Bei einem 22"-TV muss der Spiegel mind. 85 x 65 cm (Breite x Höhe) groß sein. Bitte ändern Sie Breite x Höhe oder wählen Sie einen kleineren Bildschirm.',
   led_19_zoll_ca_48cm:
     'Bei einem 19"-TV sind die Maße zu klein. Bitte vergrößern Sie Breite x Höhe oder wählen Sie einen kleineren Bildschirm.',
-  led_156_zoll_ca_40cm:
-    "Für diese sehr kleine TV-Größe sollten minimale Maße beachtet werden (siehe Konfiguration).",
+  led_156_zoll_ca_40cm: "Für diese sehr kleine TV-Größe sollten minimale Maße beachtet werden (siehe Konfiguration).",
 };
 
 // Feedback mode: 'alert' or 'modal'
@@ -76,10 +72,7 @@ function escapeHtml(str) {
  */
 function highlightImportant(escapedMessage) {
   // Match patterns like '1450 x 800 mm' or '1250 x 650 mm' (space-insensitive)
-  return escapedMessage.replace(
-    /(\d+\s*[x×]\s*\d+\s*mm)/gi,
-    '<span class="fw-semibold">$1</span>'
-  );
+  return escapedMessage.replace(/(\d+\s*[x×]\s*\d+\s*mm)/gi, '<span class="fw-semibold">$1</span>');
 }
 
 /**
@@ -174,10 +167,7 @@ function showLabelReason(label) {
   debugLog("showLabelReason", { reason, label });
   if (reason) showFeedback(reason, "Warum diese Option deaktiviert ist");
   else
-    showFeedback(
-      "Diese TV-Größe ist für die angegebenen Maße nicht verfügbar.",
-      "Warum diese Option deaktiviert ist"
-    );
+    showFeedback("Diese TV-Größe ist für die angegebenen Maße nicht verfügbar.", "Warum diese Option deaktiviert ist");
 }
 // --------------------------------------------------------------------------
 
@@ -206,11 +196,8 @@ function checkSelectedTvSizing() {
 
   if (tooNarrow || tooShort) {
     // Use the configured message if present, but append a short hint about reduction
-    const baseMsg =
-      TV_SIZE_MESSAGES[selectedTvValue] ||
-      "Die gewählten Maße sind zu klein für das gewählte TV-Gerät.";
-    const hint =
-      " Das ausgewählte TV-Gerät wird in der Darstellung verkleinert.";
+    const baseMsg = TV_SIZE_MESSAGES[selectedTvValue] || "Die gewählten Maße sind zu klein für das gewählte TV-Gerät.";
+    const hint = " Das ausgewählte TV-Gerät wird in der Darstellung verkleinert.";
     showFeedback(baseMsg + hint, "Hinweis zur TV-Größe");
     return false;
   }
@@ -225,7 +212,7 @@ document.addEventListener("DOMContentLoaded", () => {
    */
   dependenciesValuesXcontainer(
     "tv_seitenanschluss",
-    (value) => {
+    value => {
       return value !== "";
     },
     "tv_seitenanschluss_position"
@@ -238,8 +225,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // TV radio buttons
   const tvRadios = document.querySelectorAll('input[name="tv_geraet"]');
   if (tvRadios && tvRadios.length) {
-    tvRadios.forEach((radio) => {
-      radio.addEventListener("change", (ev) => {
+    tvRadios.forEach(radio => {
+      radio.addEventListener("change", ev => {
         if (ev.target.checked) {
           setSelectedTv(ev.target.value);
           // immediate sizing check when a tv is selected
@@ -248,9 +235,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
     // initialize selectedTv if one is checked on load
-    const initiallyChecked = document.querySelector(
-      'input[name="tv_geraet"]:checked'
-    );
+    const initiallyChecked = document.querySelector('input[name="tv_geraet"]:checked');
     if (initiallyChecked) setSelectedTv(initiallyChecked.value);
   }
 
@@ -274,7 +259,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (valuesGroup) {
     valuesGroup.addEventListener(
       "click",
-      (ev) => {
+      ev => {
         const infoBtn = ev.target.closest("button[data-modal-link]");
         if (infoBtn) return; // allow modal button to work
 
@@ -308,15 +293,14 @@ function updateAvailableTVSizes(width, height) {
   }
   const tvOptions = getTvOptions();
 
-  tvOptions.forEach((option) => {
+  tvOptions.forEach(option => {
     const tvValue = option.value;
     const requirements = TV_SIZE_REQUIREMENTS[tvValue];
     const label = getLabelForOption(option);
 
     if (!requirements || !label) return;
 
-    const isAvailable =
-      width >= requirements.minWidth && height >= requirements.minHeight;
+    const isAvailable = width >= requirements.minWidth && height >= requirements.minHeight;
 
     if (isAvailable) {
       option.disabled = false;
@@ -336,9 +320,7 @@ function updateAvailableTVSizes(width, height) {
   }
 
   // Erste verfügbare Option auswählen, wenn keine ausgewählt ist
-  const checkedOption = document.querySelector(
-    'input[name="tv_geraet"]:checked:not([disabled])'
-  );
+  const checkedOption = document.querySelector('input[name="tv_geraet"]:checked:not([disabled])');
   if (!checkedOption && availableOptions.length > 0) {
     availableOptions[0].checked = true;
     // Trigger change event

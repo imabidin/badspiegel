@@ -73,19 +73,14 @@ function findOption(pricematrixCache, pricematrixSelect, key, domFallbackFn) {
  *
  * // Input: 350 → Rounded: 400 → Selects option with value "400"
  */
-export function calcPrice1x100(
-  inputElement,
-  pricematrixSelect,
-  pricematrixCache,
-  lastValueCache
-) {
+export function calcPrice1x100(inputElement, pricematrixSelect, pricematrixCache, lastValueCache) {
   // Parse and validate input value
   const inputValue = parseInt(inputElement.value, 10);
   if (isNaN(inputValue)) return;
 
   // Get available cache keys for fallback logic
   const cacheKeys = Object.keys(pricematrixCache)
-    .map((k) => parseInt(k, 10))
+    .map(k => parseInt(k, 10))
     .sort((a, b) => a - b);
 
   let valueToUse = inputValue;
@@ -100,7 +95,7 @@ export function calcPrice1x100(
       valueToUse = roundedValue;
     } else {
       // Third: Find the next available size that's >= input value
-      const nextAvailableSize = cacheKeys.find((size) => size >= inputValue);
+      const nextAvailableSize = cacheKeys.find(size => size >= inputValue);
       if (nextAvailableSize) {
         valueToUse = nextAvailableSize;
       } else {
@@ -125,7 +120,7 @@ export function calcPrice1x100(
     String(valueToUse),
     (pricematrixSelect, key) => {
       // DOM fallback: Search by data-label attribute
-      return Array.from(pricematrixSelect.options).find((currentOption) => {
+      return Array.from(pricematrixSelect.options).find(currentOption => {
         const labelValue = parseInt(currentOption.dataset.label, 10);
         return !isNaN(labelValue) && labelValue === parseInt(key, 10);
       });
@@ -160,19 +155,14 @@ export function calcPrice1x100(
  * // Input: 175 → Rounded: 200 → Selects option with value "200"
  * // Input: 320 → Rounded: 350 → Selects option with value "350"
  */
-export function calcPrice1x50(
-  inputElement,
-  pricematrixSelect,
-  pricematrixCache,
-  lastValueCache
-) {
+export function calcPrice1x50(inputElement, pricematrixSelect, pricematrixCache, lastValueCache) {
   // Parse and validate input value
   const inputValue = parseInt(inputElement.value, 10);
   if (isNaN(inputValue)) return;
 
   // Get available cache keys for fallback logic
   const cacheKeys = Object.keys(pricematrixCache)
-    .map((k) => parseInt(k, 10))
+    .map(k => parseInt(k, 10))
     .sort((a, b) => a - b);
 
   let valueToUse = inputValue;
@@ -187,7 +177,7 @@ export function calcPrice1x50(
       valueToUse = roundedValue;
     } else {
       // Third: Find the next available size that's >= input value
-      const nextAvailableSize = cacheKeys.find((size) => size >= inputValue);
+      const nextAvailableSize = cacheKeys.find(size => size >= inputValue);
       if (nextAvailableSize) {
         valueToUse = nextAvailableSize;
       } else {
@@ -212,7 +202,7 @@ export function calcPrice1x50(
     String(valueToUse),
     (pricematrixSelect, key) => {
       // DOM fallback: Search by data-label attribute
-      return Array.from(pricematrixSelect.options).find((currentOption) => {
+      return Array.from(pricematrixSelect.options).find(currentOption => {
         const labelValue = parseInt(currentOption.dataset.label, 10);
         return !isNaN(labelValue) && labelValue === parseInt(key, 10);
       });
@@ -247,19 +237,14 @@ export function calcPrice1x50(
  * // Input: 165 → Rounded: 170 → Selects option with value "170"
  * // Input: 235 → Rounded: 240 → Selects option with value "240"
  */
-export function calcPrice1x10(
-  inputElement,
-  pricematrixSelect,
-  pricematrixCache,
-  lastValueCache
-) {
+export function calcPrice1x10(inputElement, pricematrixSelect, pricematrixCache, lastValueCache) {
   // Parse and validate input value
   const inputValue = parseInt(inputElement.value, 10);
   if (isNaN(inputValue)) return;
 
   // Get available cache keys for fallback logic
   const cacheKeys = Object.keys(pricematrixCache)
-    .map((k) => parseInt(k, 10))
+    .map(k => parseInt(k, 10))
     .sort((a, b) => a - b);
 
   let valueToUse = inputValue;
@@ -274,7 +259,7 @@ export function calcPrice1x10(
       valueToUse = roundedValue;
     } else {
       // Third: Find the next available size that's >= input value
-      const nextAvailableSize = cacheKeys.find((size) => size >= inputValue);
+      const nextAvailableSize = cacheKeys.find(size => size >= inputValue);
       if (nextAvailableSize) {
         valueToUse = nextAvailableSize;
       } else {
@@ -299,7 +284,7 @@ export function calcPrice1x10(
     String(valueToUse),
     (pricematrixSelect, key) => {
       // DOM fallback: Search by data-label attribute
-      return Array.from(pricematrixSelect.options).find((currentOption) => {
+      return Array.from(pricematrixSelect.options).find(currentOption => {
         const labelValue = parseInt(currentOption.dataset.label, 10);
         return !isNaN(labelValue) && labelValue === parseInt(key, 10);
       });
@@ -337,13 +322,7 @@ export function calcPrice1x10(
  * // Input: 350x780 → Try: 400x800 → Found: Select option
  * // Input: 120x340 → Try: 200x400 → Not found → Try: 150x350 → Found: Select option
  */
-export function calcPrice2x100(
-  inputElement1,
-  inputElement2,
-  pricematrixSelect,
-  pricematrixCache,
-  lastValueCache
-) {
+export function calcPrice2x100(inputElement1, inputElement2, pricematrixSelect, pricematrixCache, lastValueCache) {
   // Parse and validate both input values
   const inputValue1 = parseInt(inputElement1.value, 10);
   const inputValue2 = parseInt(inputElement2.value, 10);
@@ -371,9 +350,7 @@ export function calcPrice2x100(
    * ========================================
    * Search for exact match in price matrix using 100-unit rounded dimensions
    */
-  let optionToSelect = Array.from(pricematrixSelect.options).find(
-    (opt) => opt.value === potentialValue
-  );
+  let optionToSelect = Array.from(pricematrixSelect.options).find(opt => opt.value === potentialValue);
 
   /**
    * FALLBACK OPTION SEARCH (50-unit rounding)
@@ -386,9 +363,7 @@ export function calcPrice2x100(
     roundedValue2 = Math.ceil(inputValue2 / 50) * 50;
     potentialValue = `${roundedValue1}x${roundedValue2}`;
 
-    optionToSelect = Array.from(pricematrixSelect.options).find(
-      (opt) => opt.value === potentialValue
-    );
+    optionToSelect = Array.from(pricematrixSelect.options).find(opt => opt.value === potentialValue);
   }
 
   /**
@@ -399,10 +374,10 @@ export function calcPrice2x100(
   if (!optionToSelect) {
     // Get all available dimension combinations from the select options
     const availableOptions = Array.from(pricematrixSelect.options)
-      .map((opt) => opt.value)
-      .filter((val) => val.includes("x"))
-      .map((val) => {
-        const [w, h] = val.split("x").map((v) => parseInt(v, 10));
+      .map(opt => opt.value)
+      .filter(val => val.includes("x"))
+      .map(val => {
+        const [w, h] = val.split("x").map(v => parseInt(v, 10));
         return {
           value: val,
           width: w,
@@ -410,12 +385,10 @@ export function calcPrice2x100(
           element: pricematrixSelect.querySelector(`option[value="${val}"]`),
         };
       })
-      .filter((opt) => !isNaN(opt.width) && !isNaN(opt.height));
+      .filter(opt => !isNaN(opt.width) && !isNaN(opt.height));
 
     // Find the smallest option that can accommodate both dimensions
-    const suitableOption = availableOptions.find(
-      (opt) => opt.width >= roundedValue1 && opt.height >= roundedValue2
-    );
+    const suitableOption = availableOptions.find(opt => opt.width >= roundedValue1 && opt.height >= roundedValue2);
 
     if (suitableOption) {
       optionToSelect = suitableOption.element;
@@ -451,7 +424,7 @@ export function calcPrice2x100(
  * strategy like calcPrice2x100: attempts 100-unit rounding first, falls back to 50-unit rounding
  *
  * @param {HTMLInputElement} breiteUntenElement - Bottom width input element
- * @param {HTMLInputElement} breiteObenElement - Top width input element  
+ * @param {HTMLInputElement} breiteObenElement - Top width input element
  * @param {HTMLInputElement} hoeheLinksElement - Left height input element
  * @param {HTMLInputElement} hoeheRechtsElement - Right height input element
  * @param {HTMLSelectElement} pricematrixSelect - The price matrix select element
@@ -482,8 +455,7 @@ export function calcPrice4x100(
   const hoeheRechtsValue = parseInt(hoeheRechtsElement.value, 10);
 
   // Exit if any value is invalid
-  if (isNaN(breiteUntenValue) || isNaN(breiteObenValue) || 
-      isNaN(hoeheLinksValue) || isNaN(hoeheRechtsValue)) return;
+  if (isNaN(breiteUntenValue) || isNaN(breiteObenValue) || isNaN(hoeheLinksValue) || isNaN(hoeheRechtsValue)) return;
 
   // Calculate maximum values for width and height
   const maxBreite = Math.max(breiteUntenValue, breiteObenValue);
@@ -510,9 +482,7 @@ export function calcPrice4x100(
    * ========================================
    * Search for exact match in price matrix using 100-unit rounded dimensions
    */
-  let optionToSelect = Array.from(pricematrixSelect.options).find(
-    (opt) => opt.value === potentialValue
-  );
+  let optionToSelect = Array.from(pricematrixSelect.options).find(opt => opt.value === potentialValue);
 
   /**
    * FALLBACK OPTION SEARCH (50-unit rounding)
@@ -525,9 +495,7 @@ export function calcPrice4x100(
     roundedValue2 = Math.ceil(maxHoehe / 50) * 50;
     potentialValue = `${roundedValue1}x${roundedValue2}`;
 
-    optionToSelect = Array.from(pricematrixSelect.options).find(
-      (opt) => opt.value === potentialValue
-    );
+    optionToSelect = Array.from(pricematrixSelect.options).find(opt => opt.value === potentialValue);
   }
 
   /**
@@ -538,10 +506,10 @@ export function calcPrice4x100(
   if (!optionToSelect) {
     // Get all available dimension combinations from the select options
     const availableOptions = Array.from(pricematrixSelect.options)
-      .map((opt) => opt.value)
-      .filter((val) => val.includes("x"))
-      .map((val) => {
-        const [w, h] = val.split("x").map((v) => parseInt(v, 10));
+      .map(opt => opt.value)
+      .filter(val => val.includes("x"))
+      .map(val => {
+        const [w, h] = val.split("x").map(v => parseInt(v, 10));
         return {
           value: val,
           width: w,
@@ -549,12 +517,10 @@ export function calcPrice4x100(
           element: pricematrixSelect.querySelector(`option[value="${val}"]`),
         };
       })
-      .filter((opt) => !isNaN(opt.width) && !isNaN(opt.height));
+      .filter(opt => !isNaN(opt.width) && !isNaN(opt.height));
 
     // Find the smallest option that can accommodate both max dimensions
-    const suitableOption = availableOptions.find(
-      (opt) => opt.width >= roundedValue1 && opt.height >= roundedValue2
-    );
+    const suitableOption = availableOptions.find(opt => opt.width >= roundedValue1 && opt.height >= roundedValue2);
 
     if (suitableOption) {
       optionToSelect = suitableOption.element;

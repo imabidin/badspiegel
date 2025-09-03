@@ -14,7 +14,7 @@
  *
  * @version 2.3.0
  * @package Configurator
- * 
+ *
  * @todo Use for "dachschraege" calcPrice2x100, whilst using a "prefunction" to get the higher "breite" or "hoehe" value
  */
 
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
    */
   const optionRadios = document.querySelectorAll("input.option-radio:checked");
   if (optionRadios.length > 0) {
-    optionRadios.forEach((input) => {
+    optionRadios.forEach(input => {
       // Dispatch synthetic change event with bubbling enabled
       // This triggers all associated event handlers and calculations
       input.dispatchEvent(new Event("change", { bubbles: true }));
@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
    * for inputs that have default or pre-filled values
    */
   const optionInputs = document.querySelectorAll(".option-input");
-  optionInputs.forEach((input) => {
+  optionInputs.forEach(input => {
     if (input.value && input.value.trim() !== "") {
       // Dispatch synthetic input event to trigger price calculations
       input.dispatchEvent(new Event("input", { bubbles: true }));
@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
  * Updates summary when radio button selections change
  * Small delay ensures price matrix calculations complete first
  */
-document.querySelectorAll(".option-radio").forEach((radioEl) => {
+document.querySelectorAll(".option-radio").forEach(radioEl => {
   radioEl.addEventListener("change", () => {
     // 1ms delay allows price matrix calculations to complete
     // before summary update, preventing display inconsistencies
@@ -103,7 +103,7 @@ document.querySelectorAll(".option-radio").forEach((radioEl) => {
  * Updates summary when text/number inputs change
  * Provides real-time feedback during user typing
  */
-document.querySelectorAll(".option-input").forEach((inputEl) => {
+document.querySelectorAll(".option-input").forEach(inputEl => {
   inputEl.addEventListener("input", () => {
     // 1ms delay ensures price calculations are completed
     // before summary display is updated
@@ -119,31 +119,22 @@ document.querySelectorAll(".option-input").forEach((inputEl) => {
  */
 document.addEventListener("DOMContentLoaded", function () {
   // ====================== DIAMETER CALCULATIONS ======================
-  const diameterPriceMatrix = document.querySelector(
-    '.option-price[name*="pxd"]'
-  );
+  const diameterPriceMatrix = document.querySelector('.option-price[name*="pxd"]');
   if (durchmesserInput && diameterPriceMatrix) {
     const diameterCache = {};
     const diameterLastValue = { lastRoundedValue: null };
 
     // Build cache
-    diameterPriceMatrix
-      .querySelectorAll("option[data-label]")
-      .forEach((option) => {
-        const labelValue = parseInt(option.dataset.label, 10);
-        if (!isNaN(labelValue)) {
-          diameterCache[String(labelValue)] = option;
-        }
-      });
+    diameterPriceMatrix.querySelectorAll("option[data-label]").forEach(option => {
+      const labelValue = parseInt(option.dataset.label, 10);
+      if (!isNaN(labelValue)) {
+        diameterCache[String(labelValue)] = option;
+      }
+    });
 
     // Calculation function
     function calcDiameterPrice() {
-      calcPrice1x100(
-        durchmesserInput,
-        diameterPriceMatrix,
-        diameterCache,
-        diameterLastValue
-      );
+      calcPrice1x100(durchmesserInput, diameterPriceMatrix, diameterCache, diameterLastValue);
     }
 
     // Event listener
@@ -161,7 +152,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const sk2LastValue = { lastRoundedValue: null };
 
     // Build cache
-    sk2PriceMatrix.querySelectorAll("option[data-label]").forEach((option) => {
+    sk2PriceMatrix.querySelectorAll("option[data-label]").forEach(option => {
       const labelValue = parseInt(option.dataset.label, 10);
       if (!isNaN(labelValue)) {
         sk2Cache[String(labelValue)] = option;
@@ -187,14 +178,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const depthLastValue = { lastRoundedValue: null };
 
     // Build cache
-    depthPriceMatrix
-      .querySelectorAll("option[data-label]")
-      .forEach((option) => {
-        const labelValue = parseInt(option.dataset.label, 10);
-        if (!isNaN(labelValue)) {
-          depthCache[String(labelValue)] = option;
-        }
-      });
+    depthPriceMatrix.querySelectorAll("option[data-label]").forEach(option => {
+      const labelValue = parseInt(option.dataset.label, 10);
+      if (!isNaN(labelValue)) {
+        depthCache[String(labelValue)] = option;
+      }
+    });
 
     // Calculation function
     function calcDepthPrice() {
@@ -224,7 +213,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const whLastValue = { lastRoundedValue: null };
 
     // Build cache
-    whPriceMatrix.querySelectorAll("option").forEach((option) => {
+    whPriceMatrix.querySelectorAll("option").forEach(option => {
       if (option.value.includes("x")) {
         whCache[option.value] = option;
       }
@@ -232,13 +221,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Calculation function
     function calcWidthHeightPrice() {
-      calcPrice2x100(
-        breiteInput,
-        hoeheInput,
-        whPriceMatrix,
-        whCache,
-        whLastValue
-      );
+      calcPrice2x100(breiteInput, hoeheInput, whPriceMatrix, whCache, whLastValue);
     }
 
     // Event listeners
@@ -250,47 +233,30 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // ====================== KLAPPELEMENTE CALCULATIONS (50-unit steps) ======================
-  const klappelementerBreiteInput = document.querySelector(
-    '.option-input[name="klappelemente_breite"]'
-  );
-  const klappelementePriceMatrix = document.querySelector(
-    '.option-price[name*="klappelemente_breite_aufpreis"]'
-  );
+  const klappelementerBreiteInput = document.querySelector('.option-input[name="klappelemente_breite"]');
+  const klappelementePriceMatrix = document.querySelector('.option-price[name*="klappelemente_breite_aufpreis"]');
   if (klappelementerBreiteInput && klappelementePriceMatrix) {
     const klappelementerCache = {};
     const klappelementerLastValue = { lastRoundedValue: null };
 
     // Build cache
-    klappelementePriceMatrix
-      .querySelectorAll("option[data-label]")
-      .forEach((option) => {
-        const labelValue = parseInt(option.dataset.label, 10);
-        if (!isNaN(labelValue)) {
-          klappelementerCache[String(labelValue)] = option;
-        }
-      });
+    klappelementePriceMatrix.querySelectorAll("option[data-label]").forEach(option => {
+      const labelValue = parseInt(option.dataset.label, 10);
+      if (!isNaN(labelValue)) {
+        klappelementerCache[String(labelValue)] = option;
+      }
+    });
 
     // Calculation function
     function calcKlappelementerPrice() {
-      calcPrice1x50(
-        klappelementerBreiteInput,
-        klappelementePriceMatrix,
-        klappelementerCache,
-        klappelementerLastValue
-      );
+      calcPrice1x50(klappelementerBreiteInput, klappelementePriceMatrix, klappelementerCache, klappelementerLastValue);
     }
 
     // Event listener
-    klappelementerBreiteInput.addEventListener(
-      "input",
-      calcKlappelementerPrice
-    );
+    klappelementerBreiteInput.addEventListener("input", calcKlappelementerPrice);
 
     // Initial calculation - force it even if input is empty by setting default value
-    if (
-      !klappelementerBreiteInput.value ||
-      klappelementerBreiteInput.value.trim() === ""
-    ) {
+    if (!klappelementerBreiteInput.value || klappelementerBreiteInput.value.trim() === "") {
       // Set minimum value if no value exists
       const minValue = klappelementerBreiteInput.getAttribute("min") || "150";
       klappelementerBreiteInput.value = minValue;
@@ -309,7 +275,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelector('.option-input[name="schnittkante"]'),
   ];
 
-  additionalInputs.forEach((input) => {
+  additionalInputs.forEach(input => {
     if (input && durchmesserInput && diameterPriceMatrix) {
       input.addEventListener("input", () => {
         // Trigger diameter recalculation when additional inputs change
@@ -325,7 +291,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const fourDimensionLastValue = { lastRoundedValue: null };
 
     // Build cache for four dimension calculations
-    fourDimensionPriceMatrix.querySelectorAll("option").forEach((option) => {
+    fourDimensionPriceMatrix.querySelectorAll("option").forEach(option => {
       if (option.value.includes("x")) {
         fourDimensionCache[option.value] = option;
       }

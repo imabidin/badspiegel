@@ -74,9 +74,7 @@ class ProductConfigurator {
     this.progressBar = this.progressEl?.querySelector(".progress-bar");
 
     // Step indicator elements
-    this.indicatorsEl = document.getElementById(
-      "productConfiguratorIndicators"
-    );
+    this.indicatorsEl = document.getElementById("productConfiguratorIndicators");
     this.indicatorsRow = this.indicatorsEl?.querySelector(".row");
     this.indicators = this.indicatorsEl?.querySelectorAll(".indicator");
     this.indicatorsRightBtn = document.getElementById("scrollIndicatorsRight");
@@ -88,8 +86,7 @@ class ProductConfigurator {
 
     // Configuration state management
     this.currentStep = 1;
-    this.totalSteps =
-      parseInt(this.configuratorEl?.dataset.totalSteps, 10) || 1;
+    this.totalSteps = parseInt(this.configuratorEl?.dataset.totalSteps, 10) || 1;
     this.maxStepReached = 1;
     this.hasEverCompleted = false;
     this.isProgrammaticClick = false;
@@ -126,7 +123,7 @@ class ProductConfigurator {
     // this.carouselInstance = bootstrap.Carousel.getOrCreateInstance(this.carouselEl);
 
     // Handle slide start events (before transition)
-    this.carouselEl.addEventListener("slide.bs.carousel", (event) => {
+    this.carouselEl.addEventListener("slide.bs.carousel", event => {
       this.handleSlideStart(event);
     });
 
@@ -147,10 +144,7 @@ class ProductConfigurator {
    * Initialize add to cart button with validation and loading states
    */
   initAddtocart() {
-    this.addtocartBtn.addEventListener(
-      "click",
-      this.handleAddtocartClick.bind(this)
-    );
+    this.addtocartBtn.addEventListener("click", this.handleAddtocartClick.bind(this));
   }
 
   /**
@@ -183,19 +177,9 @@ class ProductConfigurator {
    * Implements auto-hide behavior for cleaner mobile interface
    */
   setupButtonVisibilityEvents() {
-    this.indicatorsEl?.addEventListener(
-      "mouseenter",
-      this.showButtonsTemporarily.bind(this)
-    );
-    this.indicatorsEl?.addEventListener(
-      "touchstart",
-      this.showButtonsTemporarily.bind(this),
-      { passive: true }
-    );
-    this.indicatorsEl?.addEventListener(
-      "mouseleave",
-      this.hideButtonsIfNotInteracted.bind(this)
-    );
+    this.indicatorsEl?.addEventListener("mouseenter", this.showButtonsTemporarily.bind(this));
+    this.indicatorsEl?.addEventListener("touchstart", this.showButtonsTemporarily.bind(this), { passive: true });
+    this.indicatorsEl?.addEventListener("mouseleave", this.hideButtonsIfNotInteracted.bind(this));
 
     // Optional: Focus/blur events for keyboard navigation
     // [this.indicatorsLeftBtn, this.indicatorsRightBtn].forEach((button) => {
@@ -216,20 +200,16 @@ class ProductConfigurator {
    */
   setupScrollButtons() {
     if (this.indicatorsRightBtn) {
-      this.indicatorsRightBtn.addEventListener("click", (e) => {
+      this.indicatorsRightBtn.addEventListener("click", e => {
         e.preventDefault();
-        this.scrollContainer(
-          this.indicatorsRow.clientWidth * INDICATOR_SCROLL_AMOUNT
-        );
+        this.scrollContainer(this.indicatorsRow.clientWidth * INDICATOR_SCROLL_AMOUNT);
       });
     }
 
     if (this.indicatorsLeftBtn) {
-      this.indicatorsLeftBtn.addEventListener("click", (e) => {
+      this.indicatorsLeftBtn.addEventListener("click", e => {
         e.preventDefault();
-        this.scrollContainer(
-          -this.indicatorsRow.clientWidth * INDICATOR_SCROLL_AMOUNT
-        );
+        this.scrollContainer(-this.indicatorsRow.clientWidth * INDICATOR_SCROLL_AMOUNT);
       });
     }
   }
@@ -245,8 +225,7 @@ class ProductConfigurator {
 
     this.showButtonsTemporarily();
     const newPosition = this.indicatorsRow.scrollLeft + amount;
-    const maxScroll =
-      this.indicatorsRow.scrollWidth - this.indicatorsRow.clientWidth;
+    const maxScroll = this.indicatorsRow.scrollWidth - this.indicatorsRow.clientWidth;
     const finalPosition = Math.max(0, Math.min(newPosition, maxScroll));
 
     this.indicatorsRow.scrollTo({
@@ -273,10 +252,7 @@ class ProductConfigurator {
    * Checks for hover, focus, and active states before hiding
    */
   hideButtonsIfNotInteracted() {
-    if (
-      !this.isInteracted(this.indicatorsLeftBtn) &&
-      !this.isInteracted(this.indicatorsRightBtn)
-    ) {
+    if (!this.isInteracted(this.indicatorsLeftBtn) && !this.isInteracted(this.indicatorsRightBtn)) {
       this.indicatorsEl?.classList.remove(BUTTONS_VISIBLE_CLASS);
     }
   }
@@ -289,11 +265,7 @@ class ProductConfigurator {
    * @returns {boolean} True if element or container is being interacted with
    */
   isInteracted(element) {
-    return (
-      this.indicatorsEl?.matches(":hover") ||
-      element?.matches(":focus") ||
-      this.indicatorsEl?.matches(":active")
-    );
+    return this.indicatorsEl?.matches(":hover") || element?.matches(":focus") || this.indicatorsEl?.matches(":active");
   }
 
   /**
@@ -303,10 +275,7 @@ class ProductConfigurator {
   setupScrollListeners() {
     if (this.indicatorsRow) {
       this.checkScrollButtons();
-      this.indicatorsRow.addEventListener(
-        "scroll",
-        this.checkScrollButtons.bind(this)
-      );
+      this.indicatorsRow.addEventListener("scroll", this.checkScrollButtons.bind(this));
     }
     window.addEventListener("resize", this.checkScrollButtons.bind(this));
   }
@@ -319,8 +288,7 @@ class ProductConfigurator {
     if (!this.indicatorsRow) return;
 
     const currentScroll = this.indicatorsRow.scrollLeft;
-    const maxScroll =
-      this.indicatorsRow.scrollWidth - this.indicatorsRow.clientWidth;
+    const maxScroll = this.indicatorsRow.scrollWidth - this.indicatorsRow.clientWidth;
 
     // Update right scroll button state
     if (this.indicatorsRightBtn) {
@@ -400,8 +368,7 @@ class ProductConfigurator {
    * @param {HTMLElement} [slide] - Target slide element (defaults to active slide)
    */
   setCarouselHeight(slide) {
-    const targetSlide =
-      slide || this.carouselInner?.querySelector(".carousel-item.active");
+    const targetSlide = slide || this.carouselInner?.querySelector(".carousel-item.active");
     if (targetSlide) {
       this.carouselInner.style.height = `${targetSlide.offsetHeight}px`;
     }
@@ -443,8 +410,7 @@ class ProductConfigurator {
     const isFullyVisible =
       rect.top >= 0 &&
       rect.left >= 0 &&
-      rect.bottom <=
-        (window.innerHeight || document.documentElement.clientHeight) &&
+      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
       rect.right <= (window.innerWidth || document.documentElement.clientWidth);
 
     if (!isFullyVisible) {
@@ -543,20 +509,14 @@ class ProductConfigurator {
     // Scroll left if indicator is cut off on left side
     if (indicatorRect.left < containerRect.left) {
       this.indicatorsRow.scrollTo({
-        left:
-          this.indicatorsRow.scrollLeft +
-          (indicatorRect.left - containerRect.left) -
-          10,
+        left: this.indicatorsRow.scrollLeft + (indicatorRect.left - containerRect.left) - 10,
         behavior: "smooth",
       });
     }
     // Scroll right if indicator is cut off on right side
     else if (indicatorRect.right > containerRect.right) {
       this.indicatorsRow.scrollTo({
-        left:
-          this.indicatorsRow.scrollLeft +
-          (indicatorRect.right - containerRect.right) +
-          10,
+        left: this.indicatorsRow.scrollLeft + (indicatorRect.right - containerRect.right) + 10,
         behavior: "smooth",
       });
     }
@@ -622,10 +582,7 @@ class ProductConfigurator {
         this.carouselNextBtn.removeAttribute("data-bs-toggle");
         this.carouselNextBtn.removeAttribute("aria-expanded");
         this.carouselNextBtn.removeAttribute("aria-controls");
-        this.carouselNextBtn.setAttribute(
-          "data-bs-target",
-          "#productConfiguratorCarousel"
-        );
+        this.carouselNextBtn.setAttribute("data-bs-target", "#productConfiguratorCarousel");
       }, 300);
     }
   }
@@ -648,15 +605,9 @@ class ProductConfigurator {
     // Configure button for Bootstrap collapse
     setTimeout(() => {
       this.carouselNextBtn.setAttribute("data-bs-toggle", "collapse");
-      this.carouselNextBtn.setAttribute(
-        "data-bs-target",
-        "#productConfiguratorSummary"
-      );
+      this.carouselNextBtn.setAttribute("data-bs-target", "#productConfiguratorSummary");
       this.carouselNextBtn.setAttribute("aria-expanded", "false");
-      this.carouselNextBtn.setAttribute(
-        "aria-controls",
-        "productConfiguratorSummary"
-      );
+      this.carouselNextBtn.setAttribute("aria-controls", "productConfiguratorSummary");
     }, 1);
 
     // Setup summary event listeners (once only)
@@ -697,9 +648,7 @@ class ProductConfigurator {
 
     // Setup event listeners
     this.summaryEl.addEventListener("show.bs.collapse", onSummaryShow);
-    this.summaryEl.addEventListener("hide.bs.collapse", (e) =>
-      e.preventDefault()
-    );
+    this.summaryEl.addEventListener("hide.bs.collapse", e => e.preventDefault());
     this.summaryEl.dataset.listenerAdded = "true";
   }
 
@@ -720,7 +669,7 @@ class ProductConfigurator {
   setupFinishedButtonScrollBehavior() {
     if (!this.carouselNextBtn) return;
 
-    this.carouselNextBtn.addEventListener("click", (event) => {
+    this.carouselNextBtn.addEventListener("click", event => {
       // Only handle when button is in "Fertig" state (last step)
       if (this.currentStep !== this.totalSteps) return;
 
@@ -803,8 +752,7 @@ class ProductConfigurator {
    */
   showIncompleteConfigModal() {
     createModal({
-      title:
-        '<i class="fa-sharp fa-light fa-exclamation-triangle text-warning me-2"></i>Hinweis',
+      title: '<i class="fa-sharp fa-light fa-exclamation-triangle text-warning me-2"></i>Hinweis',
       body: `
                 <p class="alert alert-warning mb-3">Konfiguration noch nicht abgeschlossen!</p>
                 <p class="border border-warning-subtle p-3 text-warning-emphasis mb-0">
@@ -952,9 +900,9 @@ class ProductConfigurator {
  */
 document.addEventListener("DOMContentLoaded", () => {
   const configuratorInstance = new ProductConfigurator();
-  
+
   // Make carousel height update globally available for validation feedback
-  window.updateCarouselHeight = function() {
+  window.updateCarouselHeight = function () {
     if (configuratorInstance && configuratorInstance.setCarouselHeight) {
       configuratorInstance.setCarouselHeight();
     }

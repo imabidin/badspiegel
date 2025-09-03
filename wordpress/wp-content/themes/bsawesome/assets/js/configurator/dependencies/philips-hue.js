@@ -34,7 +34,7 @@
  * Dependencies:
  * - variables.js: Dimension inputs, lighting position flags, and product category flags
  *
- * @version 2.2.0
+ * @version 2.3.0
  * @package Configurator
  */
 
@@ -54,10 +54,7 @@ import {
   isBoard,
 } from "../variables.js";
 
-import {
-  dependenciesValuesXcontainer,
-  dependenciesValuesXvalues,
-} from "../dependencies.js";
+import { dependenciesValuesXcontainer, dependenciesValuesXvalues } from "../dependencies.js";
 
 // ========================================
 // CONFIGURATION & CONSTANTS
@@ -137,42 +134,24 @@ document.addEventListener("DOMContentLoaded", () => {
 const initializeDOMElements = () => {
   // Main lighting elements
   mainLightingElements = {
-    radioHue: document.querySelector(
-      "input[name='lichtfarbe'][value='philips_hue']"
-    ),
-    radioOptions: document.querySelectorAll(
-      "input[name='lichtfarbe_philips_hue']"
-    ),
-    selectPlus: document.querySelector(
-      "select[name='lichtfarbe_philips_hue_lightstrip_aufpreis']"
-    ),
-    selectGradient: document.querySelector(
-      "select[name='lichtfarbe_philips_hue_gradient_aufpreis']"
-    ),
+    radioHue: document.querySelector("input[name='lichtfarbe'][value='philips_hue']"),
+    radioOptions: document.querySelectorAll("input[name='lichtfarbe_philips_hue']"),
+    selectPlus: document.querySelector("select[name='lichtfarbe_philips_hue_lightstrip_aufpreis']"),
+    selectGradient: document.querySelector("select[name='lichtfarbe_philips_hue_gradient_aufpreis']"),
   };
 
   // Ambient lighting elements
   ambientLightingElements = {
-    radioHue: document.querySelector(
-      "input[value='philips_hue'][name='ambientelicht_lichtfarbe']"
-    ),
-    radioOptions: document.querySelectorAll(
-      "input[name='ambientelicht_philips_hue']"
-    ),
-    selectPlus: document.querySelector(
-      "select[name='ambientelicht_philips_hue_lightstrip_aufpreis']"
-    ),
-    selectGradient: document.querySelector(
-      "select[name='ambientelicht_philips_hue_gradient_aufpreis']"
-    ),
+    radioHue: document.querySelector("input[value='philips_hue'][name='ambientelicht_lichtfarbe']"),
+    radioOptions: document.querySelectorAll("input[name='ambientelicht_philips_hue']"),
+    selectPlus: document.querySelector("select[name='ambientelicht_philips_hue_lightstrip_aufpreis']"),
+    selectGradient: document.querySelector("select[name='ambientelicht_philips_hue_gradient_aufpreis']"),
   };
 
   // All lighting color inputs for reset functionality
   allLightingInputs = {
     main: document.querySelectorAll("input[name='lichtfarbe']"),
-    ambient: document.querySelectorAll(
-      "input[name='ambientelicht_lichtfarbe']"
-    ),
+    ambient: document.querySelectorAll("input[name='ambientelicht_lichtfarbe']"),
   };
 };
 
@@ -191,19 +170,15 @@ const setupEventListeners = () => {
  * Set up dimension input listeners for real-time price updates
  */
 const setupDimensionInputListeners = () => {
-  const dimensionInputs = [durchmesserInput, breiteInput, hoeheInput].filter(
-    Boolean
-  );
+  const dimensionInputs = [durchmesserInput, breiteInput, hoeheInput].filter(Boolean);
 
-  dimensionInputs.forEach((input) => {
+  dimensionInputs.forEach(input => {
     if (!input) return;
 
-    ["input", "change", "blur"].forEach((eventType) => {
+    ["input", "change", "blur"].forEach(eventType => {
       input.addEventListener(eventType, () => {
         if (isValidInput(input)) {
-          debugLog(
-            `Dimension ${eventType} event triggered, updating Philips Hue configurations`
-          );
+          debugLog(`Dimension ${eventType} event triggered, updating Philips Hue configurations`);
           updateHueConfigurations();
         } else {
           debugLog(`Invalid input for ${eventType} event:`, input.value);
@@ -218,14 +193,12 @@ const setupDimensionInputListeners = () => {
  */
 const setupMainLightingListeners = () => {
   if (!hasMainLighting() || !mainLightingElements.radioOptions?.length) {
-    debugLog(
-      "Main lighting not available or no radio options found for this product category"
-    );
+    debugLog("Main lighting not available or no radio options found for this product category");
     return;
   }
 
   debugLog("Setting up main lighting Philips Hue listeners");
-  mainLightingElements.radioOptions.forEach((radio) => {
+  mainLightingElements.radioOptions.forEach(radio => {
     if (radio) {
       radio.addEventListener("change", () => {
         debugLog("Main lighting Philips Hue option changed:", radio.value);
@@ -240,14 +213,12 @@ const setupMainLightingListeners = () => {
  */
 const setupAmbientLightingListeners = () => {
   if (!hasAmbientLighting() || !ambientLightingElements.radioOptions?.length) {
-    debugLog(
-      "Ambient lighting not available or no radio options found for this product category"
-    );
+    debugLog("Ambient lighting not available or no radio options found for this product category");
     return;
   }
 
   debugLog("Setting up ambient lighting Philips Hue listeners");
-  ambientLightingElements.radioOptions.forEach((radio) => {
+  ambientLightingElements.radioOptions.forEach(radio => {
     if (radio) {
       radio.addEventListener("change", () => {
         debugLog("Ambient lighting Philips Hue option changed:", radio.value);
@@ -263,10 +234,10 @@ const setupAmbientLightingListeners = () => {
 const setupResetListeners = () => {
   // Main lighting reset listeners
   if (hasMainLighting() && allLightingInputs.main?.length) {
-    allLightingInputs.main.forEach((radio) => {
+    allLightingInputs.main.forEach(radio => {
       if (!radio) return;
 
-      radio.addEventListener("change", (event) => {
+      radio.addEventListener("change", event => {
         debugLog("Main lighting color changed:", event.target.value);
         if (event.target.value !== "philips_hue") {
           resetHueSelects(LIGHTING_TYPES.MAIN);
@@ -277,10 +248,10 @@ const setupResetListeners = () => {
 
   // Ambient lighting reset listeners
   if (hasAmbientLighting() && allLightingInputs.ambient?.length) {
-    allLightingInputs.ambient.forEach((radio) => {
+    allLightingInputs.ambient.forEach(radio => {
       if (!radio) return;
 
-      radio.addEventListener("change", (event) => {
+      radio.addEventListener("change", event => {
         debugLog("Ambient lighting color changed:", event.target.value);
         if (event.target.value !== "philips_hue") {
           resetHueSelects(LIGHTING_TYPES.AMBIENT);
@@ -298,14 +269,14 @@ const setupPhilipsHueDependencies = () => {
   // Hide incompatible containers when Philips Hue is selected (main lighting)
   dependenciesValuesXcontainer(
     "lichtfarbe",
-    (value) => value !== "philips_hue", // Show when NOT Philips Hue
+    value => value !== "philips_hue", // Show when NOT Philips Hue
     "lichtstaerke",
     DEBUG_MODE
   );
 
   dependenciesValuesXcontainer(
     "lichtfarbe",
-    (value) => value !== "philips_hue", // Show when NOT Philips Hue
+    value => value !== "philips_hue", // Show when NOT Philips Hue
     "smart_home",
     DEBUG_MODE
   );
@@ -313,14 +284,14 @@ const setupPhilipsHueDependencies = () => {
   // Hide incompatible containers when Philips Hue is selected (ambient lighting)
   dependenciesValuesXcontainer(
     "ambientelicht_lichtfarbe",
-    (value) => value !== "philips_hue", // Show when NOT Philips Hue
+    value => value !== "philips_hue", // Show when NOT Philips Hue
     "lichtstaerke",
     DEBUG_MODE
   );
 
   dependenciesValuesXcontainer(
     "ambientelicht_lichtfarbe",
-    (value) => value !== "philips_hue", // Show when NOT Philips Hue
+    value => value !== "philips_hue", // Show when NOT Philips Hue
     "smart_home",
     DEBUG_MODE
   );
@@ -328,14 +299,14 @@ const setupPhilipsHueDependencies = () => {
   // Show Philips Hue containers when Philips Hue is selected
   dependenciesValuesXcontainer(
     "lichtfarbe",
-    (value) => value === "philips_hue", // Show when Philips Hue
+    value => value === "philips_hue", // Show when Philips Hue
     "lichtfarbe_philips_hue",
     DEBUG_MODE
   );
 
   dependenciesValuesXcontainer(
     "ambientelicht_lichtfarbe",
-    (value) => value === "philips_hue", // Show when Philips Hue
+    value => value === "philips_hue", // Show when Philips Hue
     "ambientelicht_philips_hue",
     DEBUG_MODE
   );
@@ -343,19 +314,17 @@ const setupPhilipsHueDependencies = () => {
   // Show Philips Hue App option only when lichtfarbe contains "hue"
   dependenciesValuesXvalues(
     "lichtfarbe",
-    (value) => {
+    value => {
       return value.includes("hue");
     },
     "bedienung",
-    (value) => {
+    value => {
       return value === "philips_hue_app";
     },
     DEBUG_MODE
   );
 
-  debugLog(
-    "Philips Hue dependencies set up using dependenciesValuesXcontainer"
-  );
+  debugLog("Philips Hue dependencies set up using dependenciesValuesXcontainer");
 };
 
 /**
@@ -385,9 +354,7 @@ const updateHueConfigurations = () => {
  */
 const updateMainLightingHueConfiguration = () => {
   if (!hasMainLighting()) {
-    debugLog(
-      "Main lighting not available for this product category, skipping update"
-    );
+    debugLog("Main lighting not available for this product category, skipping update");
     return;
   }
 
@@ -404,9 +371,7 @@ const updateMainLightingHueConfiguration = () => {
  */
 const updateAmbientLightingHueConfiguration = () => {
   if (!hasAmbientLighting()) {
-    debugLog(
-      "Ambient lighting not available for this product category, skipping update"
-    );
+    debugLog("Ambient lighting not available for this product category, skipping update");
     return;
   }
 
@@ -436,10 +401,7 @@ const updateLightingConfiguration = (lightingType, elements) => {
     }
 
     const selectedType = getSelectedLightingType(lightingType);
-    const { plusPrice, gradientPrice } = getPricesForCategory(
-      elements,
-      category
-    );
+    const { plusPrice, gradientPrice } = getPricesForCategory(elements, category);
 
     debugLog(`${lightingType} update:`, {
       perimeter,
@@ -451,23 +413,9 @@ const updateLightingConfiguration = (lightingType, elements) => {
 
     // Update UI elements
     updateBasePriceDisplay(elements.radioHue, plusPrice);
-    updatePriceDisplay(
-      elements.radioOptions,
-      LIGHTSTRIP_VARIANTS.PLUS,
-      plusPrice
-    );
-    updatePriceDisplay(
-      elements.radioOptions,
-      LIGHTSTRIP_VARIANTS.GRADIENT,
-      gradientPrice
-    );
-    updateSelectValues(
-      elements,
-      category,
-      selectedType,
-      plusPrice,
-      gradientPrice
-    );
+    updatePriceDisplay(elements.radioOptions, LIGHTSTRIP_VARIANTS.PLUS, plusPrice);
+    updatePriceDisplay(elements.radioOptions, LIGHTSTRIP_VARIANTS.GRADIENT, gradientPrice);
+    updateSelectValues(elements, category, selectedType, plusPrice, gradientPrice);
   } catch (error) {
     debugWarn(`Error updating ${lightingType} Hue configuration:`, error);
   }
@@ -554,9 +502,7 @@ const calculateAmbientPerimeter = (width, height) => {
   }
 
   // Fallback: Use mirror logic for unknown categories
-  debugWarn(
-    "Unknown product category for ambient lighting, using mirror logic"
-  );
+  debugWarn("Unknown product category for ambient lighting, using mirror logic");
   return calculateMirrorAmbientLighting(width, height, selectedOption);
 };
 
@@ -618,10 +564,8 @@ const calculateMirrorAmbientLighting = (width, height, selectedOption) => {
     seitenbeleuchtung: () => Math.ceil(2 * height * 100) / 100,
     wasch_und_deckenbeleuchtung: () => Math.ceil(2 * width * 100) / 100,
     oben_und_unten: () => Math.ceil(2 * width * 100) / 100,
-    wasch_und_seitenbeleuchtung: () =>
-      Math.ceil((width + 2 * height) * 100) / 100,
-    decken_und_seitenbeleuchtung: () =>
-      Math.ceil((width + 2 * height) * 100) / 100,
+    wasch_und_seitenbeleuchtung: () => Math.ceil((width + 2 * height) * 100) / 100,
+    decken_und_seitenbeleuchtung: () => Math.ceil((width + 2 * height) * 100) / 100,
     rundherumbeleuchtung: () => Math.ceil(2 * (width + height) * 100) / 100,
   };
 
@@ -655,10 +599,8 @@ const calculateCabinetAmbientLighting = (width, height, selectedOption) => {
     seitenbeleuchtung: () => Math.ceil(2 * height * 100) / 100,
     wasch_und_deckenbeleuchtung: () => Math.ceil(2 * width * 100) / 100,
     oben_und_unten: () => Math.ceil(2 * width * 100) / 100,
-    wasch_und_seitenbeleuchtung: () =>
-      Math.ceil((width + 2 * height) * 100) / 100,
-    decken_und_seitenbeleuchtung: () =>
-      Math.ceil((width + 2 * height) * 100) / 100,
+    wasch_und_seitenbeleuchtung: () => Math.ceil((width + 2 * height) * 100) / 100,
+    decken_und_seitenbeleuchtung: () => Math.ceil((width + 2 * height) * 100) / 100,
     rundherumbeleuchtung: () => Math.ceil(2 * (width + height) * 100) / 100,
     sockelbeleuchtung: () => Math.ceil(width * 100) / 100,
     innenbeleuchtung: () => Math.ceil(2 * (width + height) * 100) / 100,
@@ -733,12 +675,9 @@ const calculateBadspiegelMainLighting = (width, height) => {
 /**
  * Resets Philips Hue select fields and pricing
  */
-const resetHueSelects = (lightingType) => {
+const resetHueSelects = lightingType => {
   try {
-    const elements =
-      lightingType === LIGHTING_TYPES.MAIN
-        ? mainLightingElements
-        : ambientLightingElements;
+    const elements = lightingType === LIGHTING_TYPES.MAIN ? mainLightingElements : ambientLightingElements;
     debugLog(`Resetting ${lightingType} Hue selects`);
 
     // Reset select field values
@@ -747,7 +686,7 @@ const resetHueSelects = (lightingType) => {
 
     // Reset radio button prices and UI displays
     if (elements.radioOptions) {
-      elements.radioOptions.forEach((radio) => {
+      elements.radioOptions.forEach(radio => {
         if (radio) {
           // Clear data attributes
           delete radio.dataset.price;
@@ -790,9 +729,7 @@ const updateBasePriceDisplay = (radioElement, price) => {
 const updatePriceDisplay = (radioElements, targetValue, price) => {
   if (!radioElements || !targetValue) return;
 
-  const radio = Array.from(radioElements).find(
-    (r) => r && r.value === targetValue
-  );
+  const radio = Array.from(radioElements).find(r => r && r.value === targetValue);
   if (!radio) return;
 
   const priceContainer = getPriceContainer(radio);
@@ -804,21 +741,11 @@ const updatePriceDisplay = (radioElements, targetValue, price) => {
 /**
  * Updates select values and radio prices based on selected type
  */
-const updateSelectValues = (
-  elements,
-  category,
-  selectedType,
-  plusPrice,
-  gradientPrice
-) => {
+const updateSelectValues = (elements, category, selectedType, plusPrice, gradientPrice) => {
   if (selectedType === LIGHTSTRIP_VARIANTS.GRADIENT) {
     elements.selectGradient.value = category;
     elements.selectPlus.value = "";
-    setRadioPrice(
-      elements.radioOptions,
-      LIGHTSTRIP_VARIANTS.GRADIENT,
-      gradientPrice
-    );
+    setRadioPrice(elements.radioOptions, LIGHTSTRIP_VARIANTS.GRADIENT, gradientPrice);
   } else if (selectedType === LIGHTSTRIP_VARIANTS.PLUS) {
     elements.selectPlus.value = category;
     elements.selectGradient.value = "";
@@ -836,7 +763,7 @@ const updateSelectValues = (
 const setRadioPrice = (radioElements, targetValue, price) => {
   if (!radioElements || !targetValue) return;
 
-  radioElements.forEach((radio) => {
+  radioElements.forEach(radio => {
     if (radio && radio.value === targetValue) {
       if (price) {
         radio.dataset.price = price;
@@ -852,7 +779,7 @@ const setRadioPrice = (radioElements, targetValue, price) => {
 /**
  * Clears price display for a radio button
  */
-const clearPriceDisplay = (radio) => {
+const clearPriceDisplay = radio => {
   const priceContainer = getPriceContainer(radio);
   if (priceContainer) {
     priceContainer.textContent = "";
@@ -862,7 +789,7 @@ const clearPriceDisplay = (radio) => {
 /**
  * Gets the price container element for a radio button
  */
-const getPriceContainer = (radioElement) => {
+const getPriceContainer = radioElement => {
   if (!radioElement) return null;
 
   const label = document.querySelector(`label.btn[for="${radioElement.id}"]`);
@@ -876,7 +803,7 @@ const getPriceContainer = (radioElement) => {
 /**
  * Safely parses input value and converts from millimeters to meters
  */
-const parseInputValue = (input) => {
+const parseInputValue = input => {
   if (input === null || input === undefined || input === "") {
     return 0;
   }
@@ -888,7 +815,7 @@ const parseInputValue = (input) => {
 /**
  * Maps perimeter to appropriate pricing category
  */
-const mapPerimeterToCategory = (perimeter) => {
+const mapPerimeterToCategory = perimeter => {
   if (!perimeter || perimeter <= 0) {
     debugLog("Invalid perimeter for category mapping:", perimeter);
     return "";
@@ -908,7 +835,7 @@ const mapPerimeterToCategory = (perimeter) => {
 /**
  * Validates input value against min/max constraints
  */
-const isValidInput = (input) => {
+const isValidInput = input => {
   try {
     if (!input || !input.value || input.value.trim() === "") {
       return false;
@@ -960,12 +887,7 @@ const hasMainLighting = () => {
  * Checks if the current product category supports ambient lighting
  */
 const hasAmbientLighting = () => {
-  const hasAmbient =
-    isBadspiegel ||
-    isSpiegelschrank ||
-    isUnterschrank ||
-    isHochschrank ||
-    isBoard;
+  const hasAmbient = isBadspiegel || isSpiegelschrank || isUnterschrank || isHochschrank || isBoard;
   debugLog("Ambient lighting availability:", {
     isBadspiegel,
     isSpiegelschrank,
@@ -980,7 +902,7 @@ const hasAmbientLighting = () => {
 /**
  * Checks if all required elements are valid
  */
-const areElementsValid = (elements) => {
+const areElementsValid = elements => {
   return elements.radioHue && elements.selectPlus && elements.selectGradient;
 };
 
@@ -988,23 +910,16 @@ const areElementsValid = (elements) => {
  * Gets the selected ambient lighting option
  */
 const getSelectedAmbientOption = () => {
-  const ambientElement = document.querySelector(
-    "input[name='ambientelicht']:checked"
-  );
+  const ambientElement = document.querySelector("input[name='ambientelicht']:checked");
   return ambientElement?.value;
 };
 
 /**
  * Gets the selected lighting type for main or ambient lighting
  */
-const getSelectedLightingType = (lightingType) => {
-  const selectorName =
-    lightingType === LIGHTING_TYPES.MAIN
-      ? "lichtfarbe_philips_hue"
-      : "ambientelicht_philips_hue";
-  const selectedTypeElement = document.querySelector(
-    `input[name='${selectorName}']:checked`
-  );
+const getSelectedLightingType = lightingType => {
+  const selectorName = lightingType === LIGHTING_TYPES.MAIN ? "lichtfarbe_philips_hue" : "ambientelicht_philips_hue";
+  const selectedTypeElement = document.querySelector(`input[name='${selectorName}']:checked`);
   return selectedTypeElement?.value;
 };
 
@@ -1012,12 +927,8 @@ const getSelectedLightingType = (lightingType) => {
  * Gets prices for a category from select options
  */
 const getPricesForCategory = (elements, category) => {
-  const plusOption = elements.selectPlus.querySelector(
-    `option[value="${category}"]`
-  );
-  const gradientOption = elements.selectGradient.querySelector(
-    `option[value="${category}"]`
-  );
+  const plusOption = elements.selectPlus.querySelector(`option[value="${category}"]`);
+  const gradientOption = elements.selectGradient.querySelector(`option[value="${category}"]`);
 
   if (!plusOption || !gradientOption) {
     debugWarn("Missing select options for category:", {
@@ -1038,13 +949,7 @@ const getPricesForCategory = (elements, category) => {
  * Gets the product type name for logging
  */
 const getProductTypeName = () => {
-  return isUnterschrank
-    ? "Unterschrank"
-    : isHochschrank
-    ? "Hochschrank"
-    : isBoard
-    ? "Side/Lowboard"
-    : "Cabinet";
+  return isUnterschrank ? "Unterschrank" : isHochschrank ? "Hochschrank" : isBoard ? "Side/Lowboard" : "Cabinet";
 };
 
 // ========================================

@@ -1,11 +1,8 @@
 /**
- * @version 2.2.0
+ * @version 2.3.0
  */
 
-import {
-  dependenciesValuesXvalues,
-  dependenciesValuesXcontainer,
-} from "./../dependencies.js";
+import { dependenciesValuesXvalues, dependenciesValuesXcontainer } from "./../dependencies.js";
 
 import {} from "./../variables.js";
 
@@ -36,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
    */
   dependenciesValuesXcontainer(
     "einbaurahmen",
-    (value) => {
+    value => {
       return value === "ja";
     },
     "einbaurahmen_tiefe"
@@ -47,9 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
    */
   function updateEinbaurahmenTiefeConstraints() {
     const breiteInput = document.querySelector('input[name="breite"]');
-    const einbaurahmenTiefeInput = document.querySelector(
-      'input[name="einbaurahmen_tiefe"]'
-    );
+    const einbaurahmenTiefeInput = document.querySelector('input[name="einbaurahmen_tiefe"]');
 
     if (!breiteInput || !einbaurahmenTiefeInput) return;
 

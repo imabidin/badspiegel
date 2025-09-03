@@ -1,11 +1,8 @@
 /**
- * @version 2.2.0
+ * @version 2.3.0
  */
 
-import {
-  dependenciesValuesXvalues,
-  dependenciesValuesXcontainer,
-} from "./../dependencies.js";
+import { dependenciesValuesXvalues, dependenciesValuesXcontainer } from "./../dependencies.js";
 
 import {} from "./../variables.js";
 
@@ -15,15 +12,11 @@ document.addEventListener("DOMContentLoaded", () => {
    */
   dependenciesValuesXvalues(
     "lichtfarbe",
-    (value) => {
-      return (
-        value === "warmweiss" ||
-        value === "neutralweiss" ||
-        value === "kaltweiss"
-      );
+    value => {
+      return value === "warmweiss" || value === "neutralweiss" || value === "kaltweiss";
     },
     "bedienung",
-    (value) => {
+    value => {
       return (
         value === "ueber_eigenen_wandschalter" ||
         value === "schalter" ||
@@ -38,31 +31,31 @@ document.addEventListener("DOMContentLoaded", () => {
   );
   dependenciesValuesXvalues(
     "lichtfarbe",
-    (value) => {
+    value => {
       return value.includes("warm_und_kalt");
     },
     "bedienung",
-    (value) => {
+    value => {
       return value.includes("doppel");
     }
   );
   dependenciesValuesXvalues(
     "lichtfarbe",
-    (value) => {
+    value => {
       return value.includes("warm_bis_kalt");
     },
     "bedienung",
-    (value) => {
+    value => {
       return value === "gestensteuerung_plus" || value === "fernbedienung";
     }
   );
   dependenciesValuesXvalues(
     "lichtfarbe",
-    (value) => {
+    value => {
       return value.includes("rgb");
     },
     "bedienung",
-    (value) => {
+    value => {
       return value === "rgb_fernbedienung";
     }
   );

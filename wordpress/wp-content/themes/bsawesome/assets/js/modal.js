@@ -20,7 +20,7 @@
  * - Debug controls for development
  *
  * Usage Examples:
- * 
+ *
  * // Manual modal creation
  * createModal({
  *   id: 'my-modal',
@@ -238,11 +238,23 @@ function clearAllCache() {
  */
 function fetchWithTimeout(url, options = {}, timeout = 10000) {
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeout);
+  const timeoutId = setTimeout(() => {
+    modalDebugLog(`🕒 Request timeout after ${timeout}ms for: ${url}`);
+    controller.abort();
+  }, timeout);
 
-  return fetch(url, { ...options, signal: controller.signal }).finally(() =>
-    clearTimeout(timeoutId)
-  );
+  return fetch(url, { ...options, signal: controller.signal })
+    .catch(error => {
+      // Handle different abort scenarios
+      if (error.name === 'AbortError') {
+        throw new Error(`Request timeout after ${timeout/1000}s`);
+      }
+      // Re-throw other errors
+      throw error;
+    })
+    .finally(() => {
+      clearTimeout(timeoutId);
+    });
 }
 
 /**
@@ -263,12 +275,12 @@ function createAjaxFormData(action, data = {}) {
   const formData = new FormData();
   formData.append("action", action);
   formData.append("nonce", window.myAjaxData.modalFileNonce);
-  
+
   // Add additional data fields
   Object.entries(data).forEach(([key, value]) => {
     formData.append(key, value);
   });
-  
+
   return formData;
 }
 
@@ -281,30 +293,45 @@ function createAjaxFormData(action, data = {}) {
  */
 async function performAjaxRequest(action, data = {}, timeout = 10000) {
   const formData = createAjaxFormData(action, data);
-  
+
   modalDebugLog(`Fetching ${action} with data:`, data);
 
-  const response = await fetchWithTimeout(
-    window.myAjaxData.ajaxUrl,
-    {
-      method: "POST",
-      body: formData,
-      credentials: "same-origin",
-    },
-    timeout
-  );
+  try {
+    const response = await fetchWithTimeout(
+      window.myAjaxData.ajaxUrl,
+      {
+        method: "POST",
+        body: formData,
+        credentials: "same-origin",
+      },
+      timeout
+    );
 
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
+
+    const result = await response.json();
+
+    if (!result.success) {
+      throw new Error(result.data || "Request failed");
+    }
+
+    return result.data;
+
+  } catch (error) {
+    // Enhanced error handling for different scenarios
+    if (error.name === 'AbortError') {
+      throw new Error(`Request timeout after ${timeout/1000}s`);
+    }
+
+    if (error.name === 'TypeError' && error.message.includes('fetch')) {
+      throw new Error('Network connection failed');
+    }
+
+    modalDebugLog(`❌ AJAX Error (${action}):`, error);
+    throw error; // Re-throw with original or enhanced message
   }
-
-  const result = await response.json();
-
-  if (!result.success) {
-    throw new Error(result.data || "Request failed");
-  }
-
-  return result.data;
 }
 
 // =============================================================================
@@ -365,7 +392,7 @@ function handleModalClick(event) {
   if (!target) return;
 
   event.preventDefault();
-  
+
   // Check for image modal
   if (target.hasAttribute('data-modal-image')) {
     showImageModal(target);
@@ -385,7 +412,7 @@ function handleModalKeydown(event) {
   if (!target) return;
 
   event.preventDefault();
-  
+
   // Check for image modal
   if (target.hasAttribute('data-modal-image')) {
     showImageModal(target);
@@ -507,7 +534,7 @@ async function showImageModal(element) {
 
     // Create modal with loading content first
     const loadingContent = createImageLoadingContent();
-    
+
     const modal = createModal({
       id: modalId,
       title: modalTitle,
@@ -519,15 +546,15 @@ async function showImageModal(element) {
     try {
       // Load image via AJAX using WordPress shortcode
       const imageContent = await loadImageContent(imageId);
-      
+
       // Update modal content with loaded image
       updateModalContent(modalId, imageContent);
-      
+
       modalDebugLog(`Image modal loaded successfully: ${imageId}`);
     } catch (error) {
       modalErrorLog("Image load failed:", error);
       updateModalContent(
-        modalId, 
+        modalId,
         `<div class="alert alert-danger mb-0">Fehler beim Laden des Bildes: ${error.message}</div>`
       );
     }
@@ -634,22 +661,29 @@ async function showHtmlModal(element) {
  * @returns {Promise<string>} Promise resolving to modal content
  */
 async function loadModalContent(baseName, isPreload = false) {
-  const timeout = isPreload ? 5000 : 10000; // Shorter timeout for preload
-  
+  const timeout = isPreload ? 5000 : 15000; // Increased timeout for main requests
+
+  modalDebugLog(`🔄 Starting AJAX request for: ${baseName} (timeout: ${timeout}ms)`);
+
+  // Check AJAX availability first
+  if (!isAjaxAvailable()) {
+    throw new Error('AJAX system not initialized');
+  }
+
   // Minimal context data - only what's really needed
   const contextData = {
     file_name: baseName,
     current_url: window.location.href,
     product_id: null
   };
-  
+
   // Try to get product ID - prioritize the most reliable method
   if (typeof wc_single_product_params !== 'undefined' && wc_single_product_params.post_id) {
     // Method 1: WooCommerce JavaScript params (most reliable)
     contextData.product_id = parseInt(wc_single_product_params.post_id);
   } else {
     // Fallback methods only if WooCommerce params not available
-    
+
     // Method 2: Add-to-cart button (very reliable)
     const addToCartBtn = document.querySelector('button[name="add-to-cart"], input[name="add-to-cart"]');
     if (addToCartBtn && addToCartBtn.value) {
@@ -665,7 +699,7 @@ async function loadModalContent(baseName, isPreload = false) {
       }
     }
   }
-  
+
   return performAjaxRequest("load_modal_file", contextData, timeout);
 }
 
@@ -1094,11 +1128,11 @@ function cleanupModal(modal, ariaObserver) {
 if (typeof window !== "undefined") {
   // Main functions
   window.createModal = createModal;
-  
+
   // Content loading functions
   window.showHtmlModal = showHtmlModal;
   window.showImageModal = showImageModal;
-  
+
   // Cache management
   window.clearModalCache = clearAllCache;
 

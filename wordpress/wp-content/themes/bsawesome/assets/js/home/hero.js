@@ -26,6 +26,18 @@
  * @version 2.3.0
  */
 
+// PRODUCTION MODE: Set to false to disable debug logging
+const HERO_DEBUG_ENABLED = false;
+
+/**
+ * Debug logging function (disabled in production)
+ */
+function heroDebugLog(...args) {
+  if (HERO_DEBUG_ENABLED) {
+    heroDebugLog(...args);
+  }
+}
+
 // ====================== PAGE LOAD ANIMATION SYSTEM ======================
 
 /**
@@ -120,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
      * ==================
      * Clear all active states and reset ARIA attributes for accessibility
      */
-    buttons.forEach((btn) => {
+    buttons.forEach(btn => {
       btn.classList.remove("active"); // Remove visual active state
       btn.setAttribute("aria-pressed", "false"); // Reset screen reader state
     });
@@ -130,9 +142,7 @@ document.addEventListener("DOMContentLoaded", function () {
      * ============================================
      * Find and activate the button corresponding to selected mode
      */
-    const activeButton = document.querySelector(
-      `.hero-switch .btn[data-hero="${mode}"]`
-    );
+    const activeButton = document.querySelector(`.hero-switch .btn[data-hero="${mode}"]`);
     if (activeButton) {
       activeButton.classList.add("active"); // Apply visual active state
       activeButton.setAttribute("aria-pressed", "true"); // Update screen reader state
@@ -144,8 +154,8 @@ document.addEventListener("DOMContentLoaded", function () {
      * Manages opacity classes to show/hide images based on selected mode
      * Special logic for day mode which combines multiple lighting states
      */
-    Object.keys(heroImages).forEach((key) => {
-      heroImages[key].forEach((img) => {
+    Object.keys(heroImages).forEach(key => {
+      heroImages[key].forEach(img => {
         if (mode === "hero-img-day") {
           /**
            * DAY MODE SPECIAL BEHAVIOR
@@ -203,8 +213,7 @@ document.addEventListener("DOMContentLoaded", function () {
       modeToSet = "hero-img-day";
     }
 
-    // Debug log for verification (remove in production if desired)
-    console.log(`[Hero] Auto-selected ${modeToSet} mode for hour ${currentHour}`);
+    // PRODUCTION: Debug logging removed
 
     // Apply the determined mode using existing switchMode function
     switchMode(modeToSet);
@@ -220,11 +229,11 @@ document.addEventListener("DOMContentLoaded", function () {
   /**
    * Development helper functions for testing time-based mode selection
    * Available in browser console for manual testing and debugging
-   * 
+   *
    * PRODUCTION NOTE: These utilities are designed for development and testing.
    * They can safely remain in production as they don't affect normal operation
    * and are only accessible via browser console for debugging purposes.
-   * 
+   *
    * Usage in browser console:
    * - testHeroMode.night()     // Test night mode (22:00-05:59)
    * - testHeroMode.dawn()      // Test dawn mode (06:00-08:59 & 17:00-21:59)
@@ -237,24 +246,24 @@ document.addEventListener("DOMContentLoaded", function () {
     /**
      * Test night mode (simulates 2 AM)
      */
-    night: function() {
-      console.log('🌙 Testing NIGHT mode (simulating 02:00)');
+    night: function () {
+      heroDebugLog("🌙 Testing NIGHT mode (simulating 02:00)");
       this._simulateTime(2);
     },
 
     /**
      * Test dawn mode (simulates 7 AM)
      */
-    dawn: function() {
-      console.log('🌅 Testing DAWN mode (simulating 07:00)');
+    dawn: function () {
+      heroDebugLog("🌅 Testing DAWN mode (simulating 07:00)");
       this._simulateTime(7);
     },
 
     /**
      * Test day mode (simulates 2 PM)
      */
-    day: function() {
-      console.log('☀️ Testing DAY mode (simulating 14:00)');
+    day: function () {
+      heroDebugLog("☀️ Testing DAY mode (simulating 14:00)");
       this._simulateTime(14);
     },
 
@@ -262,46 +271,46 @@ document.addEventListener("DOMContentLoaded", function () {
      * Test specific time
      * @param {number} hour - Hour to simulate (0-23)
      */
-    time: function(hour) {
+    time: function (hour) {
       if (hour < 0 || hour > 23) {
-        console.error('❌ Invalid hour! Please use 0-23');
+        console.error("❌ Invalid hour! Please use 0-23");
         return;
       }
-      console.log(`🕐 Testing specific time: ${hour}:00`);
+      heroDebugLog(`🕐 Testing specific time: ${hour}:00`);
       this._simulateTime(hour);
     },
 
     /**
      * Reset to current real time
      */
-    reset: function() {
+    reset: function () {
       const realHour = new Date().getHours();
-      console.log(`🔄 Resetting to real time: ${realHour}:00`);
+      heroDebugLog(`🔄 Resetting to real time: ${realHour}:00`);
       this._simulateTime(realHour);
     },
 
     /**
      * Show current mode information
      */
-    info: function() {
+    info: function () {
       const currentHour = new Date().getHours();
       let mode, timeRange;
-      
+
       if (currentHour >= 22 || currentHour < 6) {
-        mode = 'NIGHT';
-        timeRange = '22:00 - 05:59';
+        mode = "NIGHT";
+        timeRange = "22:00 - 05:59";
       } else if ((currentHour >= 6 && currentHour < 9) || (currentHour >= 17 && currentHour < 22)) {
-        mode = 'DAWN';
-        timeRange = '06:00 - 08:59 & 17:00 - 21:59';
+        mode = "DAWN";
+        timeRange = "06:00 - 08:59 & 17:00 - 21:59";
       } else {
-        mode = 'DAY';
-        timeRange = '09:00 - 16:59';
+        mode = "DAY";
+        timeRange = "09:00 - 16:59";
       }
 
-      const activeButton = document.querySelector('.hero-switch .btn.active');
-      const activeMode = activeButton ? activeButton.dataset.hero : 'none';
+      const activeButton = document.querySelector(".hero-switch .btn.active");
+      const activeMode = activeButton ? activeButton.dataset.hero : "none";
 
-      console.log(`📊 Hero Mode Info:
+      heroDebugLog(`📊 Hero Mode Info:
 🕐 Current time: ${currentHour}:00
 🎯 Expected mode: ${mode} (${timeRange})
 ✅ Active button: ${activeMode}
@@ -312,27 +321,27 @@ document.addEventListener("DOMContentLoaded", function () {
      * Internal helper to simulate specific time
      * @private
      */
-    _simulateTime: function(hour) {
+    _simulateTime: function (hour) {
       let modeToSet;
-      
+
       if (hour >= 22 || hour < 6) {
         modeToSet = "hero-img-night";
-        console.log(`   → Should activate NIGHT mode (hour ${hour})`);
+        heroDebugLog(`   → Should activate NIGHT mode (hour ${hour})`);
       } else if ((hour >= 6 && hour < 9) || (hour >= 17 && hour < 22)) {
         modeToSet = "hero-img-dawn";
-        console.log(`   → Should activate DAWN mode (hour ${hour})`);
+        heroDebugLog(`   → Should activate DAWN mode (hour ${hour})`);
       } else {
         modeToSet = "hero-img-day";
-        console.log(`   → Should activate DAY mode (hour ${hour})`);
+        heroDebugLog(`   → Should activate DAY mode (hour ${hour})`);
       }
 
       // Apply the mode
       switchMode(modeToSet);
-      
+
       // Show result
       setTimeout(() => {
-        console.log(`   ✅ Active mode: ${modeToSet}`);
-        console.log(`   🖼️ Visible images: ${this._getVisibleImages()}`);
+        heroDebugLog(`   ✅ Active mode: ${modeToSet}`);
+        heroDebugLog(`   🖼️ Visible images: ${this._getVisibleImages()}`);
       }, 100);
     },
 
@@ -340,24 +349,25 @@ document.addEventListener("DOMContentLoaded", function () {
      * Get list of currently visible hero images
      * @private
      */
-    _getVisibleImages: function() {
+    _getVisibleImages: function () {
       const visibleImages = [];
-      document.querySelectorAll('.hero-img').forEach(img => {
-        if (!img.classList.contains('opacity-0')) {
-          if (img.classList.contains('hero-img-night')) visibleImages.push('night');
-          if (img.classList.contains('hero-img-dawn')) visibleImages.push('dawn');
-          if (img.classList.contains('hero-img-day')) visibleImages.push('day');
+      document.querySelectorAll(".hero-img").forEach(img => {
+        if (!img.classList.contains("opacity-0")) {
+          if (img.classList.contains("hero-img-night")) visibleImages.push("night");
+          if (img.classList.contains("hero-img-dawn")) visibleImages.push("dawn");
+          if (img.classList.contains("hero-img-day")) visibleImages.push("day");
         }
       });
-      return visibleImages.join(', ') || 'none';
-    }
+      return visibleImages.join(", ") || "none";
+    },
   };
 
   // Development mode detection and conditional logging
-  if (window.location.hostname === 'localhost' || window.location.hostname.includes('dev') || window.console) {
-    console.log(`🧪 Hero Mode Testing Commands Available:
+  if (window.location.hostname === "localhost" || window.location.hostname.includes("dev") || window.console) {
+    heroDebugLog(`
+🧪 Hero Mode Testing Commands Available:
 🌙 testHeroMode.night()    - Test night mode
-🌅 testHeroMode.dawn()     - Test dawn mode  
+🌅 testHeroMode.dawn()     - Test dawn mode
 ☀️ testHeroMode.day()      - Test day mode
 🕐 testHeroMode.time(14)   - Test specific hour
 🔄 testHeroMode.reset()    - Reset to real time
@@ -370,7 +380,7 @@ document.addEventListener("DOMContentLoaded", function () {
    * Button click event delegation for mode switching
    * Attaches event listeners to all switcher buttons for interactive control
    */
-  buttons.forEach((button) => {
+  buttons.forEach(button => {
     button.addEventListener("click", function () {
       // Extract target mode from button's data attribute
       const targetMode = button.dataset.hero;

@@ -155,7 +155,11 @@ function send_modal_error($error, $code = 400)
 function verify_modal_nonce()
 {
     $nonce = isset($_POST['nonce']) ? sanitize_text_field($_POST['nonce']) : '';
-    return wp_verify_nonce($nonce, 'modal_content_nonce');
+    $result = wp_verify_nonce($nonce, 'modal_content_nonce');
+    
+    // PRODUCTION: Debug logging removed
+    
+    return $result;
 }
 
 /**
@@ -743,8 +747,8 @@ function validate_file_path($requested_file)
  */
 function load_cached_file_content($file_path)
 {
-    // DEVELOPMENT MODE: Caching deaktiviert für sofortige aenderungen
-    $development_mode = true; // Set to false for production
+    // PRODUCTION MODE: Caching enabled for performance
+    $development_mode = false; // Set to false for production
 
     if (!$development_mode) {
         $cache_key = 'modal_content_' . md5($file_path . filemtime($file_path));
@@ -756,7 +760,7 @@ function load_cached_file_content($file_path)
     }
 
     // CENTRAL DEBUG CONTROL - Set to false for production
-    $modal_debug_enabled = true; // DEBUG MODE: debugging dachschraege spiegelschrank images
+    $modal_debug_enabled = false; // PRODUCTION MODE: debug disabled
 
     // Get category lookup for variable initialization
     $cat = get_modal_category_lookup();
@@ -963,28 +967,49 @@ function generate_image_modal_html($image_id)
  */
 function handle_modal_file_request()
 {
-    // Centralized validation pipeline
-    $requested_file = validate_modal_request_pipeline('file', 'file_name', 'text');
-    if ($requested_file === false) return; // Error already sent
+    // Debug logging
+    error_log("MODAL DEBUG: handle_modal_file_request started");
+    error_log("MODAL DEBUG: POST data: " . json_encode($_POST));
+    
+    try {
+        // Centralized validation pipeline
+        $requested_file = validate_modal_request_pipeline('file', 'file_name', 'text');
+        if ($requested_file === false) {
+            error_log("MODAL DEBUG: validate_modal_request_pipeline failed");
+            return; // Error already sent
+        }
+        
+        error_log("MODAL DEBUG: requested_file: " . $requested_file);
 
-    // File path validation
-    $file_path = validate_file_path($requested_file);
-    if (is_wp_error($file_path)) {
-        send_modal_error($file_path);
-        return;
+        // File path validation
+        $file_path = validate_file_path($requested_file);
+        if (is_wp_error($file_path)) {
+            error_log("MODAL DEBUG: validate_file_path failed: " . $file_path->get_error_message());
+            send_modal_error($file_path);
+            return;
+        }
+        
+        error_log("MODAL DEBUG: file_path validated: " . $file_path);
+
+        // Set up product context from frontend data
+        setup_modal_product_context();
+
+        // Load and cache content
+        $content = load_cached_file_content($file_path);
+        if (is_wp_error($content)) {
+            error_log("MODAL DEBUG: load_cached_file_content failed: " . $content->get_error_message());
+            send_modal_error($content);
+            return;
+        }
+        
+        error_log("MODAL DEBUG: Content loaded successfully, length: " . strlen($content));
+        wp_send_json_success($content);
+        
+    } catch (Throwable $e) {
+        error_log("MODAL DEBUG: Exception caught: " . $e->getMessage());
+        error_log("MODAL DEBUG: Exception trace: " . $e->getTraceAsString());
+        wp_send_json_error('Internal server error: ' . $e->getMessage(), 500);
     }
-
-    // Set up product context from frontend data
-    setup_modal_product_context();
-
-    // Load and cache content
-    $content = load_cached_file_content($file_path);
-    if (is_wp_error($content)) {
-        send_modal_error($content);
-        return;
-    }
-
-    wp_send_json_success($content);
 }
 
 /**
@@ -1029,17 +1054,19 @@ function setup_modal_product_context() {
         $url_product_id = url_to_postid($current_url);
         if ($url_product_id && get_post_type($url_product_id) === 'product') {
             $modal_context['product_id'] = $url_product_id;
-            $product = wc_get_product($url_product_id);
-            if ($product) {
-                $modal_context['product'] = $product;
-                $modal_context['product_categories'] = get_terms(array(
-                    'taxonomy' => 'product_cat',
-                    'include' => $product->get_category_ids(),
-                    'hide_empty' => false
-                ));
+            if (function_exists('wc_get_product')) {
+                $product = wc_get_product($url_product_id);
+                if ($product) {
+                    $modal_context['product'] = $product;
+                    $modal_context['product_categories'] = get_terms(array(
+                        'taxonomy' => 'product_cat',
+                        'include' => $product->get_category_ids(),
+                        'hide_empty' => false
+                    ));
 
-                // Create simple category lookup for fast O(1) checks
-                $modal_context['category_lookup'] = create_category_lookup($modal_context['product_categories']);
+                    // Create simple category lookup for fast O(1) checks
+                    $modal_context['category_lookup'] = create_category_lookup($modal_context['product_categories']);
+                }
             }
         }
     }

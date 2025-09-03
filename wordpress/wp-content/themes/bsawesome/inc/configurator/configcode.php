@@ -17,7 +17,7 @@
  * Set to TRUE for development, FALSE for production
  */
 if (!defined('PRODUCT_CONFIGURATOR_DEBUG')) {
-    define('PRODUCT_CONFIGURATOR_DEBUG', true);
+    define('PRODUCT_CONFIGURATOR_DEBUG', false);
 }
 
 /**
@@ -58,31 +58,31 @@ function product_configurator_debug($message, $data = null, $type = 'info', $lev
     if (!PRODUCT_CONFIGURATOR_DEBUG) {
         return;
     }
-    
+
     // Level Check - exit early if this debug level is disabled
     $debug_levels = PRODUCT_CONFIGURATOR_DEBUG_LEVELS;
     if (isset($debug_levels[$level]) && !$debug_levels[$level]) {
         return;
     }
-    
+
     // Stack trace for better identification of debug source
     $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
     $caller = isset($trace[1]) ? basename($trace[1]['file']) . ':' . $trace[1]['line'] : 'unknown';
-    
+
     // Alert type CSS classes for Bootstrap styling
     $type_classes = [
         'info'    => 'alert-info',
-        'success' => 'alert-success', 
+        'success' => 'alert-success',
         'warning' => 'alert-warning',
         'error'   => 'alert-danger'
     ];
-    
+
     $class = $type_classes[$type] ?? 'alert-info';
-    
+
     // Output formatted debug message
     echo '<div class="alert ' . esc_attr($class) . ' alert-dismissible fade show small mb-1" role="alert">';
     echo '<strong>🔧 [' . esc_html($caller) . ']</strong> ' . esc_html($message);
-    
+
     if ($data !== null) {
         // Compact display for simple arrays (3 items or less)
         if (is_array($data) && count($data) <= 3) {
@@ -96,7 +96,7 @@ function product_configurator_debug($message, $data = null, $type = 'info', $lev
             echo '<pre class="mt-1 mb-0 small">' . esc_html(print_r($data, true)) . '</pre>';
         }
     }
-    
+
     echo '<button type="button" class="btn-close btn-close-sm" data-bs-dismiss="alert"></button>';
     echo '</div>';
 }
@@ -351,27 +351,27 @@ add_filter('query_vars', 'product_configurator_add_query_vars');
  */
 function product_configurator_handle_code_url() {
     $config_code = get_query_var('config_code');
-    
+
     if (!empty($config_code)) {
         // Look up configuration in database
         global $wpdb;
         $table_name = $wpdb->prefix . 'product_config_codes';
-        
+
         $row = $wpdb->get_row(
             $wpdb->prepare(
                 "SELECT product_id, config_code FROM $table_name WHERE config_code = %s LIMIT 1",
                 $config_code
             )
         );
-        
+
         if ($row && !empty($row->product_id)) {
             // Get product URL for redirection
             $product_url = get_permalink($row->product_id);
-            
+
             if ($product_url) {
                 // Build redirect URL with load_config parameter
                 $redirect_url = add_query_arg('load_config', $config_code, $product_url);
-                
+
                 // Perform temporary redirect (302)
                 wp_redirect($redirect_url, 302);
                 exit;
@@ -406,15 +406,15 @@ add_action('template_redirect', 'product_configurator_handle_code_url', 1);
  */
 function product_configurator_track_auto_load($option_key, $step) {
     static $processed = [];
-    
+
     if (!isset($processed[$option_key])) {
         $processed[$option_key] = [];
     }
-    
+
     if (in_array($step, $processed[$option_key])) {
         return false; // Already processed
     }
-    
+
     $processed[$option_key][] = $step;
     return true; // First time processing
 }

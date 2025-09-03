@@ -1,5 +1,19 @@
 // global.js
 
+// PRODUCTION MODE: Debug logging disabled
+if (typeof window !== 'undefined') {
+  window.addEventListener('DOMContentLoaded', function() {
+    // Check if myAjaxData is loaded (silent in production)
+    if (typeof myAjaxData === 'undefined') {
+      // AJAX functionality may fail - debug in development only
+      return;
+    }
+    
+    // PRODUCTION: AJAX monitoring disabled for performance
+    // Debug code removed for production deployment
+  });
+}
+
 // Import Scss
 import "./scss/style.scss";
 

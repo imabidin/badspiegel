@@ -9,6 +9,33 @@ if (!defined('ABSPATH')) {
     exit('Direct access denied.');
 }
 
+// Add AJAX debugging
+add_action('wp_ajax_load_modal_file', 'debug_ajax_request', 1);
+add_action('wp_ajax_nopriv_load_modal_file', 'debug_ajax_request', 1);
+add_action('wp_ajax_add_to_favourites', 'debug_ajax_request', 1);
+add_action('wp_ajax_nopriv_add_to_favourites', 'debug_ajax_request', 1);
+add_action('wp_ajax_remove_from_favourites', 'debug_ajax_request', 1);
+add_action('wp_ajax_nopriv_remove_from_favourites', 'debug_ajax_request', 1);
+add_action('wp_ajax_get_favourites_count', 'debug_ajax_request', 1);
+add_action('wp_ajax_nopriv_get_favourites_count', 'debug_ajax_request', 1);
+add_action('wp_ajax_check_config_favourite_state', 'debug_ajax_request', 1);
+add_action('wp_ajax_nopriv_check_config_favourite_state', 'debug_ajax_request', 1);
+
+function debug_ajax_request() {
+    $action = $_POST['action'] ?? 'unknown';
+    $debug_data = [
+        'action' => $action,
+        'nonce_provided' => isset($_POST['nonce']),
+        'post_data_keys' => array_keys($_POST),
+        'timestamp' => current_time('mysql')
+    ];
+
+    error_log("AJAX DEBUG: " . json_encode($debug_data));
+
+    // Don't prevent the actual AJAX handler from running
+    return;
+}
+
 class AjaxPerformanceBooster {
 
     private static $instance = null;

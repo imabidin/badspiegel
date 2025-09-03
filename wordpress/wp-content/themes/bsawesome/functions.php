@@ -33,7 +33,7 @@ require_once $inc_dir . 'redirects.php';     // Redirects outside Yoast
 
 // Media Duplicate Manager (Admin Tool)
 if (is_admin()) {
-    require_once $stylesheet_directory . '/media-duplicate-admin.php';
+    require_once $inc_dir . 'plugins/media-duplicate-admin.php';
 }
 
 /**

@@ -53,62 +53,91 @@ function bsawesome_validate_product($product_id)
  */
 function bsawesome_get_user_favourites($user_id = null, $auto_cleanup = true)
 {
-    if (!$user_id) {
-        $user_id = get_current_user_id();
-    }
-
-    if ($user_id) {
-        global $wpdb;
-        $table_name = $wpdb->prefix . 'user_favourites';
-
-        if ($auto_cleanup) {
-            $wpdb->query($wpdb->prepare("
-                DELETE FROM $table_name 
-                WHERE user_id = %d 
-                AND product_id NOT IN (
-                    SELECT ID FROM {$wpdb->posts} 
-                    WHERE post_type = 'product' 
-                    AND post_status = 'publish'
-                )
-            ", $user_id));
+    try {
+        error_log("FAVOURITES DEBUG: bsawesome_get_user_favourites started, user_id: " . ($user_id ?? 'null'));
+        
+        if (!$user_id) {
+            $user_id = get_current_user_id();
+            error_log("FAVOURITES DEBUG: Using current user ID: " . $user_id);
         }
 
-        $favourites = $wpdb->get_col($wpdb->prepare(
-            "SELECT product_id FROM $table_name WHERE user_id = %d ORDER BY date_added DESC",
-            $user_id
-        ));
-
-        return is_array($favourites) ? array_map('intval', $favourites) : array();
-    }
-
-    // Guest session handling
-    if (function_exists('WC') && WC()->session) {
-        $session_favourites = WC()->session->get('bsawesome_favourites', array());
-
-        if ($auto_cleanup && !empty($session_favourites)) {
-            $cleaned_favourites = array();
-            foreach ($session_favourites as $item) {
-                $product_id = is_array($item) ? $item['product_id'] : $item;
-                if (bsawesome_validate_product($product_id)) {
-                    $cleaned_favourites[] = $item;
-                }
+        if ($user_id) {
+            global $wpdb;
+            $table_name = $wpdb->prefix . 'user_favourites';
+            
+            error_log("FAVOURITES DEBUG: Checking table: " . $table_name);
+            
+            // Check if table exists
+            $table_exists = $wpdb->get_var("SHOW TABLES LIKE '$table_name'") == $table_name;
+            error_log("FAVOURITES DEBUG: Table exists: " . ($table_exists ? 'yes' : 'no'));
+            
+            if (!$table_exists) {
+                error_log("FAVOURITES DEBUG: Table does not exist, returning empty array");
+                return array();
             }
 
-            if (count($cleaned_favourites) !== count($session_favourites)) {
-                WC()->session->set('bsawesome_favourites', $cleaned_favourites);
+            if ($auto_cleanup) {
+                $cleanup_result = $wpdb->query($wpdb->prepare("
+                    DELETE FROM $table_name 
+                    WHERE user_id = %d 
+                    AND product_id NOT IN (
+                        SELECT ID FROM {$wpdb->posts} 
+                        WHERE post_type = 'product' 
+                        AND post_status = 'publish'
+                    )
+                ", $user_id));
+                error_log("FAVOURITES DEBUG: Cleanup result: " . $cleanup_result);
+            }
+
+            $favourites = $wpdb->get_col($wpdb->prepare(
+                "SELECT product_id FROM $table_name WHERE user_id = %d ORDER BY date_added DESC",
+                $user_id
+            ));
+            
+            error_log("FAVOURITES DEBUG: Raw favourites: " . json_encode($favourites));
+
+            return is_array($favourites) ? array_map('intval', $favourites) : array();
+        }
+
+        // Guest session handling
+        error_log("FAVOURITES DEBUG: Checking guest session");
+        if (function_exists('WC') && WC()->session) {
+            $session_favourites = WC()->session->get('bsawesome_favourites', array());
+            error_log("FAVOURITES DEBUG: Session favourites: " . json_encode($session_favourites));
+
+            if ($auto_cleanup && !empty($session_favourites)) {
+                $cleaned_favourites = array();
+                foreach ($session_favourites as $item) {
+                    $product_id = is_array($item) ? $item['product_id'] : $item;
+                    if (bsawesome_validate_product($product_id)) {
+                        $cleaned_favourites[] = $item;
+                    }
+                }
+
+                if (count($cleaned_favourites) !== count($session_favourites)) {
+                    WC()->session->set('bsawesome_favourites', $cleaned_favourites);
+                }
+
+                return array_map(function ($item) {
+                    return is_array($item) ? intval($item['product_id']) : intval($item);
+                }, $cleaned_favourites);
             }
 
             return array_map(function ($item) {
                 return is_array($item) ? intval($item['product_id']) : intval($item);
-            }, $cleaned_favourites);
+            }, $session_favourites);
+        } else {
+            error_log("FAVOURITES DEBUG: WooCommerce session not available");
         }
 
-        return array_map(function ($item) {
-            return is_array($item) ? intval($item['product_id']) : intval($item);
-        }, $session_favourites);
+        error_log("FAVOURITES DEBUG: Returning empty array");
+        return array();
+        
+    } catch (Throwable $e) {
+        error_log("FAVOURITES DEBUG: Exception in bsawesome_get_user_favourites: " . $e->getMessage());
+        error_log("FAVOURITES DEBUG: Exception trace: " . $e->getTraceAsString());
+        return array();
     }
-
-    return array();
 }
 
 /**
@@ -547,10 +576,11 @@ add_action('wp_ajax_nopriv_get_favourites_count', 'handle_get_favourites_count')
 
 function handle_get_favourites_count()
 {
-    $count = bsawesome_get_favourites_count();
+    // TEMPORARY FIX: Return 0 to prevent 500 errors
     wp_send_json_success(array(
-        'count' => $count,
-        'source' => is_user_logged_in() ? 'database' : 'session'
+        'count' => 0,
+        'source' => 'fallback',
+        'debug' => 'Favourites temporarily disabled due to database issue'
     ));
 }
 
@@ -562,26 +592,13 @@ add_action('wp_ajax_nopriv_check_config_favourite_state', 'handle_check_config_f
 
 function handle_check_config_favourite_state()
 {
-    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'favourite_nonce')) {
-        wp_send_json_error(array('message' => __('Security check failed.', 'bsawesome')), 403);
-        return;
-    }
-
-    $product_id = isset($_POST['product_id']) ? intval($_POST['product_id']) : 0;
-    $config_code = isset($_POST['config_code']) ? sanitize_text_field($_POST['config_code']) : null;
-
-    if ($product_id <= 0) {
-        wp_send_json_error(array('message' => __('Invalid product ID.', 'bsawesome')), 400);
-        return;
-    }
-
-    $is_favourite = bsawesome_is_product_config_favourite($product_id, $config_code);
-
+    // TEMPORARY FIX: Return false to prevent 500 errors
     wp_send_json_success(array(
-        'is_favourite' => $is_favourite,
-        'product_id' => $product_id,
-        'config_code' => $config_code,
-        'source' => is_user_logged_in() ? 'database' : 'session'
+        'is_favourite' => false,
+        'product_id' => isset($_POST['product_id']) ? intval($_POST['product_id']) : 0,
+        'config_code' => isset($_POST['config_code']) ? sanitize_text_field($_POST['config_code']) : null,
+        'source' => 'fallback',
+        'debug' => 'Favourites temporarily disabled due to database issue'
     ));
 }
 

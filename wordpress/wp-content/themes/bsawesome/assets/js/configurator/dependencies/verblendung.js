@@ -4,7 +4,7 @@
 
 import { dependenciesValuesXvalues, dependenciesValuesXcontainer } from "./../dependencies.js";
 
-import {} from "./../variables.js";
+import { isRund } from "./../variables.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   //*********************************/

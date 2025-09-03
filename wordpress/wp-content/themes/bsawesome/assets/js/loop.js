@@ -7,7 +7,9 @@
  * @package BSAwesome
  * @subpackage Assets
  * @since 1.0.0
- * @version 3.0.0 - DRY Refactor
+ * @version 2.3.0
+ *
+ * @todo Fix hover, if "frontansicht" is active
  */
 
 /**

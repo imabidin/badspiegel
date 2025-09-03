@@ -1,4 +1,4 @@
-// home.scss // updated 18/04/2025
+// home.scss // V2.3.0
 
 .hero-container {
   .hero-img {
@@ -17,6 +17,20 @@
 
   .hero-img-day {
     filter: brightness(1.25);
+  }
+
+  &.hero-footer {
+    .hero-img-night {
+      filter: brightness(1.175);
+    }
+
+    .hero-img-dawn {
+      filter: brightness(1);
+    }
+
+    .hero-img-day {
+      filter: brightness(1);
+    }
   }
 }
 

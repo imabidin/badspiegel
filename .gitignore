@@ -7,6 +7,23 @@ wordpress/wp-content/*
 !wordpress/wp-content/themes
 wordpress/wp-content/themes/*
 !wordpress/wp-content/themes/bsawesome/
+wordpress/wp-content/themes/bsawesome/dist/*
+
+# Builds
+# wordpress/wp-content/themes/bsawesome/dist/*
+# wordpress/wp-content/themes/bsawesome/dist/js/configurator.js
+# wordpress/wp-content/themes/bsawesome/dist/js/configurator.js.map
+
+# BSAwesome Theme spezifische Dateien
+# Node modules
+# wordpress/wp-content/themes/bsawesome/node_modules/
+
+# Excel-Dateien (Konfiguration)
+# wordpress/wp-content/themes/bsawesome/inc/configurator/*.xlsx
+# wordpress/wp-content/themes/bsawesome/inc/configurator/~$*.xlsx
+
+# Andere temporäre Dateien
+# wordpress/wp-content/themes/bsawesome/package-lock.json
 
 # Persistente Daten
 data/
@@ -23,6 +40,10 @@ backups/
 # Imports
 kinsta-import/
 !kinsta-import/.gitkeep
+
+# Build
+dist/
+!dist/.gitkeep
 
 # Umgebungsvariablen (falls sensible Daten enthalten)
 .env.local
@@ -52,25 +73,6 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
-# BSAwesome Theme spezifische Dateien
-# Node modules
-wordpress/wp-content/themes/bsawesome/node_modules/
-
-# Build-Ausgaben
-wordpress/wp-content/themes/bsawesome/dist/
-wordpress/wp-content/themes/bsawesome/dist/js/configurator.js
-wordpress/wp-content/themes/bsawesome/dist/js/configurator.js.map
-
-# Source Maps
-wordpress/wp-content/themes/bsawesome/**/*.map
-
-# Excel-Dateien (Konfiguration)
-wordpress/wp-content/themes/bsawesome/inc/configurator/*.xlsx
-wordpress/wp-content/themes/bsawesome/inc/configurator/~$*.xlsx
-
-# Andere temporäre Dateien
-wordpress/wp-content/themes/bsawesome/package-lock.json
 
 # PHP
 vendor/

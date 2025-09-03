@@ -17,17 +17,12 @@
  * - Tooltip initialization for summary actions
  * - Graceful error handling for print/save actions
  *
- * @version 2.2.0
+ * @version 2.3.0
  * @package Configurator
  */
 
 import { optionGroups } from "./variables";
-import {
-  toNumber,
-  formatPrice,
-  getProductTitle,
-  getProductPrice,
-} from "./functions";
+import { toNumber, formatPrice, getProductTitle, getProductPrice } from "./functions";
 
 /**
  * Configuration flags for summary module behavior
@@ -68,7 +63,7 @@ function setupSummaryInteractions() {
 
   // Only add click navigation if enabled in config
   if (summaryConfig.enableClickNavigation) {
-    summary.addEventListener("click", (e) => {
+    summary.addEventListener("click", e => {
       const item = e.target.closest(".list-group-item[data-step]");
       if (!item) return;
 
@@ -81,7 +76,7 @@ function setupSummaryInteractions() {
   // Set up print button
   const printBtn = summary.querySelector(".btn-print-summary");
   if (printBtn) {
-    printBtn.addEventListener("click", (e) => {
+    printBtn.addEventListener("click", e => {
       e.preventDefault();
       e.stopPropagation();
       hideTooltip(printBtn);
@@ -91,7 +86,7 @@ function setupSummaryInteractions() {
   // Set up save button
   const saveBtn = summary.querySelector(".btn-save-summary");
   if (saveBtn) {
-    saveBtn.addEventListener("click", (e) => {
+    saveBtn.addEventListener("click", e => {
       e.preventDefault();
       e.stopPropagation();
       hideTooltip(saveBtn);
@@ -101,8 +96,8 @@ function setupSummaryInteractions() {
 
   // Set up edit buttons
   const editBtns = summary.querySelectorAll(".btn-edit-group");
-  editBtns.forEach((editBtn) => {
-    editBtn.addEventListener("click", (e) => {
+  editBtns.forEach(editBtn => {
+    editBtn.addEventListener("click", e => {
       e.preventDefault();
       e.stopPropagation();
       hideTooltip(editBtn);
@@ -144,9 +139,7 @@ function scrollToCarouselStep(step, key) {
   if (!step) return;
 
   const carouselEl = document.getElementById("productConfiguratorCarousel");
-  const carouselItem = carouselEl?.querySelector(
-    `.carousel-item[data-step="${step}"]`
-  );
+  const carouselItem = carouselEl?.querySelector(`.carousel-item[data-step="${step}"]`);
   if (!carouselEl || !carouselItem) return;
 
   const carousel = bootstrap.Carousel.getOrCreateInstance(carouselEl);
@@ -158,9 +151,7 @@ function scrollToCarouselStep(step, key) {
    * Focus the appropriate form control within the target carousel item
    */
   const focusControlElement = () => {
-    const targetGroup = carouselItem.querySelector(
-      `.option-group[data-key="${key}"]`
-    );
+    const targetGroup = carouselItem.querySelector(`.option-group[data-key="${key}"]`);
     if (!targetGroup) return;
 
     let controlEl = null;
@@ -171,17 +162,17 @@ function scrollToCarouselStep(step, key) {
       {
         type: "input",
         selector: "input.form-control",
-        getElement: (input) => input.closest(".form-floating"),
+        getElement: input => input.closest(".form-floating"),
       },
       {
         type: "button",
         selector: "button.form-select",
-        getElement: (button) => button.closest(".form-floating"),
+        getElement: button => button.closest(".form-floating"),
       },
       {
         type: "btngroup",
         selector: ".btn-group[data-key]",
-        getElement: (btnGroup) => btnGroup,
+        getElement: btnGroup => btnGroup,
       },
     ];
 
@@ -199,15 +190,9 @@ function scrollToCarouselStep(step, key) {
 
     // Apply focus based on control type
     if (controlEl && controlType) {
-      applyFocusWithTabindex(
-        controlEl,
-        `cleanup${controlType.charAt(0).toUpperCase() + controlType.slice(1)}`
-      );
+      applyFocusWithTabindex(controlEl, `cleanup${controlType.charAt(0).toUpperCase() + controlType.slice(1)}`);
     } else {
-      console.warn(
-        "[Summary] No focusable control element found for key:",
-        key
-      );
+      console.warn("[Summary] No focusable control element found for key:", key);
     }
   };
 
@@ -235,9 +220,7 @@ function navigateToCarouselStep(step) {
   if (!step) return;
 
   const carouselEl = document.getElementById("productConfiguratorCarousel");
-  const carouselItem = carouselEl?.querySelector(
-    `.carousel-item[data-step="${step}"]`
-  );
+  const carouselItem = carouselEl?.querySelector(`.carousel-item[data-step="${step}"]`);
   if (!carouselEl || !carouselItem) return;
 
   const carousel = bootstrap.Carousel.getOrCreateInstance(carouselEl);
@@ -250,14 +233,10 @@ function navigateToCarouselStep(step) {
    */
   const highlightIndicatorButton = () => {
     // Try multiple selectors to find the indicator button
-    let indicatorButton = document.querySelector(
-      `button.indicator[data-bs-slide-to="${targetIdx}"]`
-    );
+    let indicatorButton = document.querySelector(`button.indicator[data-bs-slide-to="${targetIdx}"]`);
 
     if (!indicatorButton) {
-      indicatorButton = document.querySelector(
-        `button[data-bs-slide-to="${targetIdx}"]`
-      );
+      indicatorButton = document.querySelector(`button[data-bs-slide-to="${targetIdx}"]`);
     }
 
     if (!indicatorButton) {
@@ -270,10 +249,7 @@ function navigateToCarouselStep(step) {
       // Check if the indicator is visible and scroll to it if needed
       const rect = indicatorButton.getBoundingClientRect();
       const isVisible =
-        rect.left >= 0 &&
-        rect.right <= window.innerWidth &&
-        rect.top >= 0 &&
-        rect.bottom <= window.innerHeight;
+        rect.left >= 0 && rect.right <= window.innerWidth && rect.top >= 0 && rect.bottom <= window.innerHeight;
 
       if (!isVisible) {
         indicatorButton.scrollIntoView({
@@ -287,22 +263,14 @@ function navigateToCarouselStep(step) {
       setTimeout(
         () => {
           indicatorButton.classList.remove("border-secondary-subtle");
-          indicatorButton.classList.add(
-            "border-primary-subtle",
-            "focus-ring",
-            "focus-ring-primary"
-          );
+          indicatorButton.classList.add("border-primary-subtle", "focus-ring", "focus-ring-primary");
           indicatorButton.focus();
 
           // Remove classes after blur
           indicatorButton.addEventListener(
             "blur",
             () => {
-              indicatorButton.classList.remove(
-                "border-primary",
-                "focus-ring",
-                "focus-ring-primary"
-              );
+              indicatorButton.classList.remove("border-primary", "focus-ring", "focus-ring-primary");
               indicatorButton.classList.add("border-secondary-subtle");
             },
             { once: true }
@@ -362,8 +330,7 @@ async function printSummary() {
       window.ConfiguratorSave.generateConfigCode
     ) {
       const configData = window.ConfiguratorSave.gatherConfigData(false);
-      const { code, directLink } =
-        await window.ConfiguratorSave.generateConfigCode(configData);
+      const { code, directLink } = await window.ConfiguratorSave.generateConfigCode(configData);
 
       codeSection = `
         <div class="print-code-section">
@@ -399,16 +366,9 @@ async function printSummary() {
       <title>Badspiegel.de</title>
       <style>
         body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.5; font-size: 14px; }
-        .print-code-section,
+        .print-code-section, 
         .print-header { margin-bottom: 16px; border-bottom: 2px solid #dee2e6; }
-          .print-header p { margin: 0; margin-bottom: 16px; }
-        
-        /* Code section styling */
-        .print-code-section { 
-         
-        }
-        .print-code-section h3 { 
-        }
+        .print-header p { margin: 0; margin-bottom: 16px; }
         
         /* Bootstrap-like grid system - modified for print */
         .row { display: block; margin: 0; }
@@ -424,13 +384,7 @@ async function printSummary() {
         
         /* List styles */
         .list-group { list-style: none; margin: 0; padding: 0; }
-        .list-group-item { 
-          padding: 12px 16px; 
-          border: 1px solid #ddd; 
-          margin-bottom: 1px; 
-          background: #fff;
-          display: block;
-        }
+        .list-group-item { padding: 12px 16px; border: 1px solid #ddd; margin-bottom: 1px; background: #fff; display: block; }
         .list-group-flush .list-group-item { border-left: 0; border-right: 0; border-top: 0; }
         .list-group-flush .list-group-item:first-child { border-top: 0; }
         .list-group-flush .list-group-item:last-child { border-bottom: 0; }
@@ -458,7 +412,6 @@ async function printSummary() {
         .p-3 { padding: 1rem; }
         
         /* Background and borders */
-        
         .border-secondary-subtle { border-color: #dee2e6; }
         .border-top { border-top: 1px solid #dee2e6; }
         
@@ -468,7 +421,10 @@ async function printSummary() {
         .align-items-center { align-items: center; }
         
         /* Hide print button in print */
-        .btn-print-summary,.btn-save-summary,div.vr.border-secondary-subtle { display: none; }
+        .btn-print-summary,
+        .btn-save-summary,
+        .btn-edit-group,
+        div.vr.border-secondary-subtle { display: none; }
 
         /* Price styling */
         .product-price { font-weight: 600; }
@@ -498,9 +454,7 @@ async function printSummary() {
     <body>
       <div class="print-header">
         <h2>Badspiegel.de Konfiguration</h2>
-        <p>Gedruckt am: ${new Date().toLocaleDateString(
-          "de-DE"
-        )} um ${new Date().toLocaleTimeString("de-DE")}</p>
+        <p>Gedruckt am: ${new Date().toLocaleDateString("de-DE")} um ${new Date().toLocaleTimeString("de-DE")}</p>
       </div>
       ${codeSection}
       ${summaryHtml}
@@ -588,10 +542,7 @@ function lockHeartButton(heartButton) {
       heartIcon.className = originalClasses;
       heartButton.disabled = false;
       heartButton.setAttribute("aria-pressed", "false");
-      heartButton.setAttribute(
-        "title",
-        originalTitle || "Konfiguration speichern"
-      );
+      heartButton.setAttribute("title", originalTitle || "Konfiguration speichern");
       heartButton.setAttribute("data-bs-tooltip-md", "true");
 
       // Remove wrapper and restore original structure
@@ -658,9 +609,7 @@ async function saveSummaryConfig() {
   // Check if ConfiguratorSave module is available
   if (!window.ConfiguratorSave || !window.ConfiguratorSave.saveConfiguration) {
     console.error("ConfiguratorSave module not available");
-    alert(
-      "Speichern-Funktion nicht verfügbar. Bitte verwenden Sie den Hauptspeichern-Button."
-    );
+    alert("Speichern-Funktion nicht verfügbar. Bitte verwenden Sie den Hauptspeichern-Button.");
     return;
   }
 
@@ -675,10 +624,7 @@ async function saveSummaryConfig() {
     // }
 
     // Lock the heart button IMMEDIATELY after successful save (when modal opens)
-    const result = await window.ConfiguratorSave.saveConfiguration(
-      $(saveBtn),
-      "icon"
-    );
+    const result = await window.ConfiguratorSave.saveConfiguration($(saveBtn), "icon");
 
     // Lock immediately after save is successful (modal is opening)
     lockHeartButton(saveBtn);
@@ -707,7 +653,7 @@ async function saveSummaryConfig() {
 function createGroupedOptions(optionsSummary) {
   const groups = {};
 
-  optionsSummary.forEach((item) => {
+  optionsSummary.forEach(item => {
     const { groupKey, groupLabel, groupStep, groupOrder } = item.groupData;
 
     if (!groups[groupKey]) {
@@ -774,10 +720,10 @@ export function buildSummary({ productTitle, productPrice, optionsSummary }) {
   } else {
     const groupedOptions = createGroupedOptions(optionsSummary);
 
-    groupedOptions.forEach((group) => {
+    groupedOptions.forEach(group => {
       if (group.options.length === 0) return;
 
-      const showGroupLabel = group.options.some((opt) => !opt.isPricematrix);
+      const showGroupLabel = group.options.some(opt => !opt.isPricematrix);
       htmlOutput += `<div class="col-12 px-0">`;
 
       if (showGroupLabel) {
@@ -794,7 +740,7 @@ export function buildSummary({ productTitle, productPrice, optionsSummary }) {
 
       htmlOutput += `<ul class="list-group list-group-flush">`;
 
-      group.options.forEach((item) => {
+      group.options.forEach(item => {
         const {
           key,
           label,
@@ -813,8 +759,7 @@ export function buildSummary({ productTitle, productPrice, optionsSummary }) {
         const price = radioPrice || inputPrice || pricematrixPrice || 0;
         const formattedPrice = formatPrice(price) || "-";
         const childClass = isChild ? " text-muted small" : ""; // Conditional classes and attributes for pricematrix items
-        const isClickable =
-          !isPricematrix && summaryConfig.enableClickNavigation;
+        const isClickable = !isPricematrix && summaryConfig.enableClickNavigation;
         const actionClass = isClickable ? " list-group-item-action" : "";
         const interactiveAttrs = isClickable
           ? `
@@ -856,7 +801,7 @@ export function updateSummary() {
   const productTitle = getProductTitle();
   const optionsSummary = [];
 
-  optionGroups.forEach((group) => {
+  optionGroups.forEach(group => {
     const label = group.dataset.label || "Unbekannte Option";
     const isChild = group.classList.contains("option-group-child");
     const key = group.dataset.key;
@@ -864,8 +809,7 @@ export function updateSummary() {
     const carouselItem = group.closest(".carousel-item");
     const groupDataForSummary = {
       groupKey: group.dataset.group || "Sonstiges",
-      groupLabel:
-        carouselItem?.dataset.label || group.dataset.group || "Sonstiges",
+      groupLabel: carouselItem?.dataset.label || group.dataset.group || "Sonstiges",
       groupStep: parseInt(carouselItem?.dataset.step, 10) || 999,
       groupOrder: parseInt(group.dataset.order, 10) || 999,
     };
@@ -936,9 +880,7 @@ export function updateSummary() {
     optionsSummary,
   });
 
-  const configuratorSummary = document.getElementById(
-    "productConfiguratorSummary"
-  );
+  const configuratorSummary = document.getElementById("productConfiguratorSummary");
   if (configuratorSummary) {
     configuratorSummary.innerHTML = summaryHtml;
     setupSummaryInteractions(); // Re-establishes click handlers and initializes tooltips
@@ -946,11 +888,7 @@ export function updateSummary() {
 
   // Calculate and display total price
   const extraPrice = optionsSummary.reduce(
-    (acc, item) =>
-      acc +
-      toNumber(item.inputPrice) +
-      toNumber(item.radioPrice) +
-      toNumber(item.pricematrixPrice),
+    (acc, item) => acc + toNumber(item.inputPrice) + toNumber(item.radioPrice) + toNumber(item.pricematrixPrice),
     0
   );
   const totalPrice = productPrice + extraPrice;
@@ -959,9 +897,7 @@ export function updateSummary() {
   const totalHtml = `
     <p class="bg-secondary-subtle border-top border-secondary-subtle text-end px-3 py-2 mb-0 fs-5">
       <span class="product-price-total-text small">Gesamtpreis:</span>
-      <span class="product-price price fw-medium">${
-        totalPriceFormatted || "0,00 €"
-      }</span>
+      <span class="product-price price fw-medium">${totalPriceFormatted || "0,00 €"}</span>
     </p>
   `;
 

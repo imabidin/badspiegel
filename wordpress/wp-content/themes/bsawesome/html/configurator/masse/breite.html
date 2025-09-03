@@ -1,17 +1,7 @@
 <?php
 
 /**
- * ULTRA SIMPLIFIED: Pre-defined Category Variables
- * 
- * All standard category variables are already available!
- * No need to define them - they're set automatically in modal.php
- * 
- * Available variables:
- * - $is_badspiegel
- * - $is_badspiegel_mit_beleuchtung
- * - $is_badspiegel_mit_rahmen  
- * - $is_spiegelschrank
- * - $is_spiegelschrank_mit_faechern
+ * V2.2
  */
 
 // Only define your business logic - variables are already available!
@@ -19,9 +9,86 @@ $show_spiegelkante_info = $is_badspiegel || !$is_badspiegel_mit_holzrahmen;
 $show_lichtflaechen_info = $is_badspiegel_mit_beleuchtung || !$is_badspiegel_mit_holzrahmen;
 $show_korpuskante_info = $is_spiegelschrank || $is_badspiegel_mit_holzrahmen;
 $show_offene_faecher_info = $is_spiegelschrank_mit_faechern || $is_badspiegel_mit_holzrahmen;
+
+// Define specific category variables for image display
+$is_badspiegel_ohne_beleuchtung = modal_has_category('badspiegel-ohne-beleuchtung');
+$is_badspiegel_mit_beleuchtung = modal_has_category('badspiegel-mit-beleuchtung');
+$is_badspiegel_mit_leuchte = modal_has_category('badspiegel-mit-leuchte');
+$is_badspiegel_mit_rahmen = modal_has_category('badspiegel-mit-rahmen');
+$is_badspiegel_mit_fernseher = modal_has_category('badspiegel-mit-fernseher');
+$is_badspiegel_mit_abgerundeten_ecken = modal_has_category('badspiegel-mit-abgerundeten-ecken');
+$is_badspiegel_abgerundet = modal_has_category('badspiegel-abgerundet');
+$is_badspiegel_mit_rundbogen = modal_has_category('badspiegel-mit-rundbogen');
+$is_badspiegel_oval = modal_has_category('badspiegel-oval');
+$is_hollywood_spiegel = modal_has_category('hollywood-spiegel');
+$is_klappspiegel = modal_has_category('klappspiegel');
+$is_spiegel_raumteiler = modal_has_category('spiegel-raumteiler');
+$is_spiegelschraenke_ohne_beleuchtung = modal_has_category('spiegelschraenke-ohne-beleuchtung');
+$is_spiegelschraenke_mit_beleuchtung = modal_has_category('spiegelschraenke-mit-beleuchtung');
+$is_spiegelschraenke_mit_leuchte = modal_has_category('spiegelschraenke-mit-leuchte');
+$is_spiegelschraenke_mit_faechern = modal_has_category('spiegelschränke-mit-faechern');
+$is_unterschraenke = modal_has_category('unterschraenke');
+$is_sideboards = modal_has_category('sideboards');
+$is_lowboards = modal_has_category('lowboards');
+
+// Check for specific Fächerposition attributes
+$has_faecherposition_seitlich = modal_has_pa_attribute('faecherposition', 'seitlich');
+$has_faecherposition_unten = modal_has_pa_attribute('faecherposition', 'unten');
+$has_faecherposition_mittig = modal_has_pa_attribute('faecherposition', 'mittig');
 ?>
 
 <div class="">
+    <?php
+    // Show specific images based on category match
+    if ($is_badspiegel_ohne_beleuchtung):
+        echo do_shortcode('[img id="61" size="thumbnail"]'); // Badspiegel ohne Beleuchtung
+    elseif ($is_badspiegel_mit_beleuchtung):
+        echo do_shortcode('[img id="602" size="thumbnail"]'); // Badspiegel mit Beleuchtung
+    elseif ($is_badspiegel_mit_leuchte):
+        echo do_shortcode('[img id="603" size="thumbnail"]'); // Badspiegel mit Leuchte
+    elseif ($is_badspiegel_mit_rahmen):
+        echo do_shortcode('[img id="604" size="thumbnail"]'); // Badspiegel mit Rahmen
+    elseif ($is_badspiegel_mit_fernseher):
+        echo do_shortcode('[img id="5111" size="thumbnail"]'); // Badspiegel mit Fernseher
+    elseif ($is_badspiegel_mit_abgerundeten_ecken):
+        echo do_shortcode('[img id="607" size="thumbnail"]'); // Badspiegel mit abgerundeten Ecken
+    elseif ($is_badspiegel_abgerundet):
+        echo do_shortcode('[img id="608" size="thumbnail"]'); // Badspiegel abgerundet
+    elseif ($is_badspiegel_mit_rundbogen):
+        echo do_shortcode('[img id="609" size="thumbnail"]'); // Badspiegel mit Rundbogen
+    elseif ($is_badspiegel_oval):
+        echo do_shortcode('[img id="610" size="thumbnail"]'); // Badspiegel oval
+    elseif ($is_hollywood_spiegel):
+        echo do_shortcode('[img id="611" size="thumbnail"]'); // Hollywood Spiegel
+    elseif ($is_klappspiegel):
+        echo do_shortcode('[img id="612" size="thumbnail"]'); // Klappspiegel
+    elseif ($is_spiegel_raumteiler):
+        echo do_shortcode('[img id="613" size="thumbnail"]'); // Spiegel Raumteiler
+    elseif ($is_spiegelschraenke_ohne_beleuchtung):
+        echo do_shortcode('[img id="5107" size="thumbnail"]'); // Spiegelschränke ohne Beleuchtung
+    elseif ($is_spiegelschraenke_mit_beleuchtung):
+        echo do_shortcode('[img id="5097" size="thumbnail"]'); // Spiegelschränke mit Beleuchtung
+    elseif ($is_spiegelschraenke_mit_leuchte):
+        echo do_shortcode('[img id="616" size="thumbnail"]'); // Spiegelschränke mit Leuchte
+    elseif ($is_spiegelschraenke_mit_faechern):
+        // Show different images based on Fächerposition attribute
+        if ($has_faecherposition_seitlich):
+            echo do_shortcode('[img id="5101" size="thumbnail"]'); // Spiegelschränke mit Fächern seitlich
+        elseif ($has_faecherposition_unten):
+            echo do_shortcode('[img id="5103" size="thumbnail"]'); // Spiegelschränke mit Fächern unten
+        elseif ($has_faecherposition_mittig):
+            echo do_shortcode('[img id="5099" size="thumbnail"]'); // Spiegelschränke mit Fächern mittig
+        else:
+            echo "FALLBACK SMF01"; // Default Spiegelschränke mit Fächern
+        endif;
+    elseif ($is_unterschraenke):
+        echo do_shortcode('[img id="619" size="thumbnail"]'); // Unterschränke
+    elseif ($is_sideboards):
+        echo do_shortcode('[img id="620" size="thumbnail"]'); // Sideboards
+    elseif ($is_lowboards):
+        echo do_shortcode('[img id="621" size="thumbnail"]'); // Lowboards
+    endif;
+    ?>
     <h5 class="mb-3">
         <i class="fa-light fa-sharp fa-ruler me-2"></i>Maßangaben
     </h5>

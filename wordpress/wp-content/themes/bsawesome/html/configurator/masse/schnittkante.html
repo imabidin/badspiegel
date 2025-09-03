@@ -2,22 +2,57 @@
 
 /**
  * ULTRA SIMPLIFIED: Pre-defined Category Variables
- * 
+ *
  * All standard category variables are already available!
  * No need to define them - they're set automatically in modal.php
- * 
+ *
  * Available variables:
  * - $is_badspiegel
  * - $is_badspiegel_mit_beleuchtung
- * - $is_badspiegel_mit_rahmen  
+ * - $is_badspiegel_mit_rahmen
  * - $is_spiegelschrank
  * - $is_spiegelschrank_mit_faechern
  * - $is_spiegel_raumteiler
  * - $is_spiegelschraenke_aus_aluminium
  */
+
+// Define specific round category variables for image display
+$is_badspiegel_rund = modal_has_category('badspiegel-rund');
+$is_badspiegel_rund_mit_rahmen = modal_has_category('badspiegel-rund-mit-rahmen');
+$is_badspiegel_rund_mit_rahmen_lackiertem_glas = modal_has_category('badspiegel-rund-mit-rahmen-aus-lackiertem-glas');
+$is_badspiegel_rund_mit_riemen = modal_has_category('badspiegel-rund-mit-riemen');
+$is_badspiegel_rund_mit_schnittkante = modal_has_category('badspiegel-rund-mit-schnittkante');
+
+// Check for specific Schnittkante attributes
+$has_schnittkante_unten = modal_has_pa_attribute('schnittkante', 'unten');
+$has_schnittkante_seite = modal_has_pa_attribute('schnittkante', 'seite');
+$has_schnittkanten_seite_und_unten = modal_has_pa_attribute('schnittkante', 'seite-und-unten');
 ?>
 
 <div class="">
+    <?php
+    // Show specific images based on exact category match
+    if ($is_badspiegel_rund && !$is_badspiegel_rund_mit_rahmen && !$is_badspiegel_rund_mit_rahmen_lackiertem_glas && !$is_badspiegel_rund_mit_riemen && !$is_badspiegel_rund_mit_schnittkante):
+        // echo do_shortcode('[img id="5085" size="thumbnail"]'); // Standard runder Badspiegel
+    elseif ($is_badspiegel_rund_mit_rahmen):
+        // echo do_shortcode('[img id="5087" size="thumbnail"]'); // Rund mit Rahmen
+    elseif ($is_badspiegel_rund_mit_rahmen_lackiertem_glas):
+        // echo do_shortcode('[img id="5090" size="thumbnail"]'); // Rund mit lackiertem Glas
+    elseif ($is_badspiegel_rund_mit_riemen):
+        // echo do_shortcode('[img id="5047" size="thumbnail"]'); // Rund mit Riemen
+    elseif ($is_badspiegel_rund_mit_schnittkante):
+        // Show different images based on Schnittkante attribute
+        if ($has_schnittkante_unten):
+            echo do_shortcode('[img id="5056" size="thumbnail"]'); // Schnittkante unten
+        elseif ($has_schnittkante_seite):
+            echo do_shortcode('[img id="5059" size="thumbnail"]'); // Schnittkante seite
+        elseif ($has_schnittkanten_seite_und_unten):
+            // echo do_shortcode('[img id="5073" size="thumbnail"]'); // Schnittkanten seite und unten
+        else:
+            // echo do_shortcode('[img id="5063" size="thumbnail"]'); // Default Schnittkante
+        endif;
+    endif;
+    ?>
     <h5 class="mb-3">
         <i class="fa-light fa-sharp fa-ruler me-2"></i>Maßangaben
     </h5>

@@ -2,30 +2,142 @@
 
 /**
  * ULTRA SIMPLIFIED: Pre-defined Category Variables
- * 
+ *
  * All standard category variables are already available!
  * No need to define them - they're set automatically in modal.php
- * 
+ *
  * Available variables:
  * - $is_badspiegel
  * - $is_badspiegel_mit_beleuchtung
- * - $is_badspiegel_mit_rahmen  
+ * - $is_badspiegel_mit_rahmen
  * - $is_spiegelschrank
  * - $is_spiegelschrank_mit_faechern
  * - $is_spiegel_raumteiler
- * - $is_spiegelschraenke_aus_aluminium
  */
+
+// Only define your business logic - variables are already available!
+$show_spiegelkante_info = $is_badspiegel || !$is_badspiegel_mit_holzrahmen;
+$show_lichtflaechen_info = $is_badspiegel_mit_beleuchtung || !$is_badspiegel_mit_holzrahmen;
+$show_korpuskante_info = $is_spiegelschrank || $is_badspiegel_mit_holzrahmen;
+$show_offene_faecher_info = $is_spiegelschrank_mit_faechern || $is_badspiegel_mit_holzrahmen;
+
+// Define specific category variables for image display
+$is_badspiegel_ohne_beleuchtung = modal_has_category('badspiegel-ohne-beleuchtung');
+$is_badspiegel_mit_beleuchtung = modal_has_category('badspiegel-mit-beleuchtung');
+$is_badspiegel_mit_leuchte = modal_has_category('badspiegel-mit-leuchte');
+$is_badspiegel_mit_rahmen = modal_has_category('badspiegel-mit-rahmen');
+$is_badspiegel_mit_fernseher = modal_has_category('badspiegel-mit-fernseher');
+$is_badspiegel_fuer_dachschraege = modal_has_category('badspiegel-fuer-dachschraege');
+$is_badspiegel_mit_abgerundeten_ecken = modal_has_category('badspiegel-mit-abgerundeten-ecken');
+$is_badspiegel_abgerundet = modal_has_category('badspiegel-abgerundet');
+$is_badspiegel_mit_rundbogen = modal_has_category('badspiegel-mit-rundbogen');
+$is_badspiegel_oval = modal_has_category('badspiegel-oval');
+$is_hollywood_spiegel = modal_has_category('hollywood-spiegel');
+$is_klappspiegel = modal_has_category('klappspiegel');
+$is_spiegel_raumteiler = modal_has_category('spiegel-raumteiler');
+$is_spiegelschraenke_ohne_beleuchtung = modal_has_category('spiegelschraenke-ohne-beleuchtung');
+$is_spiegelschraenke_mit_beleuchtung = modal_has_category('spiegelschraenke-mit-beleuchtung');
+$is_spiegelschraenke_mit_leuchte = modal_has_category('spiegelschraenke-mit-leuchte');
+$is_spiegelschraenke_fuer_dachschraege = modal_has_category('spiegelschränke-fuer-dachschraege');
+$is_spiegelschraenke_mit_faechern = modal_has_category('spiegelschränke-mit-faechern');
+$is_unterschraenke = modal_has_category('unterschraenke');
+$is_sideboards = modal_has_category('sideboards');
+$is_lowboards = modal_has_category('lowboards');
+
+// Check for specific Fächerposition attributes
+$has_faecherposition_seitlich = modal_has_pa_attribute('faecherposition', 'seitlich');
+$has_faecherposition_unten = modal_has_pa_attribute('faecherposition', 'unten');
+$has_faecherposition_mittig = modal_has_pa_attribute('faecherposition', 'mittig');
 ?>
 
-<div class="callout callout-info mb">
-    <h5 class="mb-2">
-        <i class="fa-light fa-sharp fa-arrows-up-down me-2"></i>Höhe links/rechts (niedrigere Seite)
+<div class="">
+    <?php
+    // Show specific images based on category match
+    if ($is_badspiegel_ohne_beleuchtung):
+        echo do_shortcode('[img id="6001" size="thumbnail"]'); // Badspiegel ohne Beleuchtung
+    elseif ($is_badspiegel_mit_beleuchtung):
+        echo do_shortcode('[img id="6002" size="thumbnail"]'); // Badspiegel mit Beleuchtung
+    elseif ($is_badspiegel_mit_leuchte):
+        echo do_shortcode('[img id="6003" size="thumbnail"]'); // Badspiegel mit Leuchte
+    elseif ($is_badspiegel_mit_rahmen):
+        echo do_shortcode('[img id="6004" size="thumbnail"]'); // Badspiegel mit Rahmen
+    elseif ($is_badspiegel_mit_fernseher):
+        echo do_shortcode('[img id="6005" size="thumbnail"]'); // Badspiegel mit Fernseher
+    elseif ($is_badspiegel_fuer_dachschraege):
+        echo do_shortcode('[img id="6006" size="thumbnail"]'); // Badspiegel für Dachschräge
+    elseif ($is_badspiegel_mit_abgerundeten_ecken):
+        echo do_shortcode('[img id="6007" size="thumbnail"]'); // Badspiegel mit abgerundeten Ecken
+    elseif ($is_badspiegel_abgerundet):
+        echo do_shortcode('[img id="6008" size="thumbnail"]'); // Badspiegel abgerundet
+    elseif ($is_badspiegel_mit_rundbogen):
+        echo do_shortcode('[img id="6009" size="thumbnail"]'); // Badspiegel mit Rundbogen
+    elseif ($is_badspiegel_oval):
+        echo do_shortcode('[img id="6010" size="thumbnail"]'); // Badspiegel oval
+    elseif ($is_hollywood_spiegel):
+        echo do_shortcode('[img id="6011" size="thumbnail"]'); // Hollywood Spiegel
+    elseif ($is_klappspiegel):
+        echo do_shortcode('[img id="6012" size="thumbnail"]'); // Klappspiegel
+    elseif ($is_spiegel_raumteiler):
+        echo do_shortcode('[img id="6013" size="thumbnail"]'); // Spiegel Raumteiler
+    elseif ($is_spiegelschraenke_ohne_beleuchtung):
+        echo do_shortcode('[img id="6014" size="thumbnail"]'); // Spiegelschränke ohne Beleuchtung
+    elseif ($is_spiegelschraenke_mit_beleuchtung):
+        echo do_shortcode('[img id="6015" size="thumbnail"]'); // Spiegelschränke mit Beleuchtung
+    elseif ($is_spiegelschraenke_mit_leuchte):
+        echo do_shortcode('[img id="6016" size="thumbnail"]'); // Spiegelschränke mit Leuchte
+    elseif ($is_spiegelschraenke_fuer_dachschraege):
+        echo do_shortcode('[img id="6017" size="thumbnail"]'); // Spiegelschränke für Dachschräge
+    elseif ($is_spiegelschraenke_mit_faechern):
+        // Show different images based on Fächerposition attribute
+        if ($has_faecherposition_seitlich):
+            echo do_shortcode('[img id="6018" size="thumbnail"]'); // Spiegelschränke mit Fächern seitlich
+        elseif ($has_faecherposition_unten):
+            echo do_shortcode('[img id="6022" size="thumbnail"]'); // Spiegelschränke mit Fächern unten
+        elseif ($has_faecherposition_mittig):
+            echo do_shortcode('[img id="6023" size="thumbnail"]'); // Spiegelschränke mit Fächern mittig
+        else:
+            echo do_shortcode('[img id="6018" size="thumbnail"]'); // Default Spiegelschränke mit Fächern
+        endif;
+    elseif ($is_unterschraenke):
+        echo do_shortcode('[img id="6019" size="thumbnail"]'); // Unterschränke
+    elseif ($is_sideboards):
+        echo do_shortcode('[img id="6020" size="thumbnail"]'); // Sideboards
+    elseif ($is_lowboards):
+        echo do_shortcode('[img id="6021" size="thumbnail"]'); // Lowboards
+    endif;
+    ?>
+    <h5 class="mb-3">
+        <i class="fa-light fa-sharp fa-ruler me-2"></i>Maßangaben
     </h5>
-    <p class="mb-0">Geben Sie hier die <span class="fw-semibold">minimale Höhe</span> Ihres Dachschrägen-Spiegelschranks in Millimetern an. Dies ist die Höhe an der <span class="fw-semibold">niedrigeren Seite</span> (wo die Dachschräge ansetzt).</p>
+    <ul class="mb-0">
+        <?php if ($show_spiegelkante_info): ?>
+        <li>Maße sind von einer Spiegelkante bis zur nächsten Kante</li>
+        <?php endif; ?>
+        <?php if ($show_lichtflaechen_info): ?>
+        <li>Lichtflächen / satinierte Flächen sind inklusive</li>
+        <?php endif; ?>
+        <?php if ($show_korpuskante_info): ?>
+        <li>Maße sind von einer Korpuskante bis zur nächsten Kante</li>
+        <?php endif; ?>
+        <?php if ($show_offene_faecher_info): ?>
+        <li>Etwaige offene Fächer sind in den Maßen inklusive</li>
+        <?php endif; ?>
+        <li><span class="fw-semibold">Toleranz fertigungsbedingt ± 2–3 mm möglich</span></li>
+    </ul>
 </div>
 
-<div class="text-center mb">
-    <div class="position-relative d-inline-block border border-light-subtle shadow-sm">
-        <?php echo do_shortcode('[img id="pao-dachschraege-hoehe-min" size="thumbnail"]'); ?>
-    </div>
+<?php if ($is_spiegel_raumteiler): ?>
+<div class="callout callout-primary mt">
+    <h5 class="mb-2">
+        <i class="fa-light fa-sharp fa-info-circle me-2"></i>Hinweis
+    </h5>
+    <p class="mb-0">Da die angegebene Höhe ohne Füße ist, rechnen Sie für die Gesamthöhe bitte die <span class="fw-semibold">Fußhöhe von 10 cm</span> hinzu. Andere Fußhöhen sind auf Anfrage möglich.</p>
 </div>
+<?php endif; ?>
+
+<?php if (!$is_spiegel_raumteiler && !$is_spiegelschrank): ?>
+<div class="callout callout-info mt">
+    <h5 class="mb-2">Tipp für Nischen</h5>
+    <p class="mb-0">Planen Sie für Nischen <span class="fw-semibold">ca. 4 cm Freiraum nach oben</span> ein, damit die Montage problemlos möglich ist.</p>
+</div>
+<?php endif; ?>

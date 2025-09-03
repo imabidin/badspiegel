@@ -536,12 +536,25 @@ function modal_has_category($category_slug) {
 function init_modal_category_variables() {
     $cat = get_modal_category_lookup();
 
-    // Define standard category variables globally for template access
+    // Define ALL category variables globally for template access
     global $is_badspiegel, $is_badspiegel_mit_beleuchtung, $is_badspiegel_mit_holzrahmen;
     global $is_spiegelschrank, $is_spiegelschrank_mit_faechern, $is_spiegel_raumteiler;
     global $is_spiegelschraenke_aus_aluminium;
 
-    // Most common categories - add more as needed
+    // Additional specific categories from templates
+    global $is_badspiegel_ohne_beleuchtung, $is_badspiegel_mit_leuchte, $is_badspiegel_mit_rahmen;
+    global $is_badspiegel_mit_fernseher, $is_badspiegel_mit_abgerundeten_ecken, $is_badspiegel_abgerundet;
+    global $is_badspiegel_mit_rundbogen, $is_badspiegel_oval, $is_badspiegel_fuer_dachschraege;
+    global $is_hollywood_spiegel, $is_klappspiegel;
+    global $is_spiegelschraenke_ohne_beleuchtung, $is_spiegelschraenke_mit_beleuchtung;
+    global $is_spiegelschraenke_mit_leuchte, $is_spiegelschraenke_fuer_dachschraege;
+    global $is_unterschraenke, $is_sideboards, $is_lowboards;
+
+    // Round mirror categories from breite-hoehe.html and schnittkante.html
+    global $is_badspiegel_rund, $is_badspiegel_rund_mit_rahmen, $is_badspiegel_rund_mit_rahmen_lackiertem_glas;
+    global $is_badspiegel_rund_mit_riemen, $is_badspiegel_rund_mit_schnittkante;
+
+    // Standard categories
     $is_badspiegel = isset($cat['badspiegel']);
     $is_badspiegel_mit_beleuchtung = isset($cat['badspiegel-mit-beleuchtung']);
     $is_badspiegel_mit_holzrahmen = isset($cat['badspiegel-mit-rahmen-aus-holz-und-ablage']);
@@ -549,6 +562,72 @@ function init_modal_category_variables() {
     $is_spiegelschrank_mit_faechern = isset($cat['spiegelschraenke-mit-faechern']);
     $is_spiegel_raumteiler = isset($cat['spiegel-raumteiler']);
     $is_spiegelschraenke_aus_aluminium = isset($cat['spiegelschraenke-aus-aluminium']);
+
+    // Specific categories
+    $is_badspiegel_ohne_beleuchtung = isset($cat['badspiegel-ohne-beleuchtung']);
+    $is_badspiegel_mit_leuchte = isset($cat['badspiegel-mit-leuchte']);
+    $is_badspiegel_mit_rahmen = isset($cat['badspiegel-mit-rahmen']);
+    $is_badspiegel_mit_fernseher = isset($cat['badspiegel-mit-fernseher']);
+    $is_badspiegel_mit_abgerundeten_ecken = isset($cat['badspiegel-mit-abgerundeten-ecken']);
+    $is_badspiegel_abgerundet = isset($cat['badspiegel-abgerundet']);
+    $is_badspiegel_mit_rundbogen = isset($cat['badspiegel-mit-rundbogen']);
+    $is_badspiegel_oval = isset($cat['badspiegel-oval']);
+    $is_badspiegel_fuer_dachschraege = isset($cat['badspiegel-fuer-dachschraege']);
+    $is_hollywood_spiegel = isset($cat['hollywood-spiegel']);
+    $is_klappspiegel = isset($cat['klappspiegel']);
+    $is_spiegelschraenke_ohne_beleuchtung = isset($cat['spiegelschraenke-ohne-beleuchtung']);
+    $is_spiegelschraenke_mit_beleuchtung = isset($cat['spiegelschraenke-mit-beleuchtung']);
+    $is_spiegelschraenke_mit_leuchte = isset($cat['spiegelschraenke-mit-leuchte']);
+    $is_spiegelschraenke_fuer_dachschraege = isset($cat['spiegelschränke-fuer-dachschraege']);
+    $is_unterschraenke = isset($cat['unterschraenke']);
+    $is_sideboards = isset($cat['sideboards']);
+    $is_lowboards = isset($cat['lowboards']);
+
+    // Round mirror categories
+    $is_badspiegel_rund = isset($cat['badspiegel-rund']);
+    $is_badspiegel_rund_mit_rahmen = isset($cat['badspiegel-rund-mit-rahmen']);
+    $is_badspiegel_rund_mit_rahmen_lackiertem_glas = isset($cat['badspiegel-rund-mit-rahmen-aus-lackiertem-glas']);
+    $is_badspiegel_rund_mit_riemen = isset($cat['badspiegel-rund-mit-riemen']);
+    $is_badspiegel_rund_mit_schnittkante = isset($cat['badspiegel-rund-mit-schnittkante']);
+}
+
+/**
+ * Initialize common attribute variables globally for template access
+ * This function should be called before including any template file
+ */
+function init_modal_attribute_variables() {
+    // Define ALL attribute variables globally for template access
+    global $has_faecherposition_seitlich, $has_faecherposition_unten, $has_faecherposition_mittig;
+    global $has_schnittkante_unten, $has_schnittkante_seite, $has_schnittkanten_seite_und_unten;
+
+    // Fächerposition attributes for Spiegelschränke
+    $has_faecherposition_seitlich = modal_has_pa_attribute('faecherposition', 'seitlich');
+    $has_faecherposition_unten = modal_has_pa_attribute('faecherposition', 'unten');
+    $has_faecherposition_mittig = modal_has_pa_attribute('faecherposition', 'mittig');
+
+    // Schnittkante attributes for round mirrors
+    $has_schnittkante_unten = modal_has_pa_attribute('schnittkante', 'unten');
+    $has_schnittkante_seite = modal_has_pa_attribute('schnittkante', 'seite');
+    $has_schnittkanten_seite_und_unten = modal_has_pa_attribute('schnittkante', 'seite-und-unten');
+}
+
+/**
+ * Initialize common business logic variables globally for template access
+ * This function should be called before including any template file
+ */
+function init_modal_business_logic_variables() {
+    // Define ALL business logic variables globally for template access
+    global $show_spiegelkante_info, $show_lichtflaechen_info, $show_korpuskante_info, $show_offene_faecher_info;
+
+    // Access global category variables
+    global $is_badspiegel, $is_badspiegel_mit_beleuchtung, $is_badspiegel_mit_holzrahmen;
+    global $is_spiegelschrank, $is_spiegelschrank_mit_faechern;
+
+    // Business logic for measurement information display
+    $show_spiegelkante_info = $is_badspiegel || !$is_badspiegel_mit_holzrahmen;
+    $show_lichtflaechen_info = $is_badspiegel_mit_beleuchtung || !$is_badspiegel_mit_holzrahmen;
+    $show_korpuskante_info = $is_spiegelschrank || $is_badspiegel_mit_holzrahmen;
+    $show_offene_faecher_info = $is_spiegelschrank_mit_faechern || $is_badspiegel_mit_holzrahmen;
 }
 
 // =============================================================================
@@ -664,7 +743,11 @@ function load_cached_file_content($file_path)
     // Initialize category variables before including the template
     init_modal_category_variables();
 
-    ob_start();
+    // Initialize attribute variables before including the template
+    init_modal_attribute_variables();
+
+    // Initialize business logic variables before including the template
+    init_modal_business_logic_variables();    ob_start();
     include $file_path;
     $content = ob_get_clean();
 

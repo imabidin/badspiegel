@@ -20,7 +20,7 @@
  * - Width/Height = (diameter - b) ÷ a
  * - Coefficients derived from manufacturing specifications
  *
- * @version 2.2.0
+ * @version 2.3.0
  * @package Configurator
  * @subpackage PriceCalculations
  */

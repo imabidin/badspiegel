@@ -13,8 +13,10 @@
  * - Performance-optimized event delegation
  * - Debug logging capabilities
  *
- * @version 2.2.0
+ * @version 2.3.0
  * @package Configurator
+ *
+ * @todo Check if these functions can be used, for a better DRY concept
  */
 
 /**

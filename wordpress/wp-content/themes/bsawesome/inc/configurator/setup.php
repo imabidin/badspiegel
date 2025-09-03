@@ -29,24 +29,24 @@ if (!defined('ABSPATH')) {
 
 /**
  * Intelligent price matrix file finder with multiple fallback strategies
- * 
+ *
  * This function provides robust file matching for price matrix files,
  * handling various naming conventions and user input errors gracefully.
- * 
+ *
  * Matching strategies (in order):
  * 1. Exact filename match
  * 2. Add .php extension if missing
  * 3. Remove .php extension and try again
  * 4. Case-insensitive matching
  * 5. Normalized matching (remove special chars)
- * 
+ *
  * @param string $requested_filename Filename from database or user input
  * @return string|null Full file path if found, null if no match
  */
 function find_pricematrix_file($requested_filename)
 {
     $base_dir = get_stylesheet_directory() . '/inc/configurator/pricematrices/php/';
-    
+
     // Strategy 1: Exact filename match
     $exact_path = $base_dir . $requested_filename;
     if (file_exists($exact_path)) {
@@ -74,10 +74,10 @@ function find_pricematrix_file($requested_filename)
     if (is_dir($base_dir)) {
         $files = scandir($base_dir);
         $requested_lower = strtolower($requested_filename);
-        
+
         foreach ($files as $file) {
             if ($file === '.' || $file === '..') continue;
-            
+
             if (strtolower($file) === $requested_lower) {
                 return $base_dir . $file;
             }
@@ -85,10 +85,10 @@ function find_pricematrix_file($requested_filename)
 
         // Strategy 5: Case-insensitive with .php extension variants
         $requested_base = strtolower(str_replace('.php', '', $requested_filename));
-        
+
         foreach ($files as $file) {
             if ($file === '.' || $file === '..') continue;
-            
+
             $file_base = strtolower(str_replace('.php', '', $file));
             if ($file_base === $requested_base) {
                 return $base_dir . $file;
@@ -97,10 +97,10 @@ function find_pricematrix_file($requested_filename)
 
         // Strategy 6: Normalized fuzzy matching
         $normalized_requested = normalize_filename_for_matching($requested_filename);
-        
+
         foreach ($files as $file) {
             if ($file === '.' || $file === '..') continue;
-            
+
             $normalized_file = normalize_filename_for_matching($file);
             if ($normalized_requested === $normalized_file) {
                 return $base_dir . $file;
@@ -114,7 +114,7 @@ function find_pricematrix_file($requested_filename)
 
 /**
  * Normalize filename for fuzzy matching
- * 
+ *
  * @param string $filename Original filename
  * @return string Normalized filename for comparison
  */
@@ -122,13 +122,13 @@ function normalize_filename_for_matching($filename)
 {
     // Remove .php extension
     $name = str_replace('.php', '', $filename);
-    
+
     // Convert to lowercase
     $name = strtolower($name);
-    
+
     // Remove/replace special characters and spaces
     $name = preg_replace('/[^a-z0-9]/', '', $name);
-    
+
     return $name;
 }
 
@@ -139,9 +139,9 @@ function normalize_filename_for_matching($filename)
 /**
  * Get filtered product options for a specific product
  *
- * This is the main function that determines which configurator options are 
+ * This is the main function that determines which configurator options are
  * available for a specific product. It performs multiple filtering steps:
- * 
+ *
  * 1. Loads product-specific price matrices from meta data
  * 2. Applies product inclusion rules (products, categories, attributes)
  * 3. Applies product exclusion rules (excluded products, categories, attributes)
@@ -187,31 +187,31 @@ function get_product_options($product)
     // OPTIMIZATION: Cache category data to avoid duplicate queries
     // =================================================================
     $cache_key = $product_id . '_categories';
-    
+
     if (!isset($category_cache[$cache_key])) {
         // Single optimized query - get full category objects once
         $categories = wp_get_post_terms($product_id, 'product_cat', array('fields' => 'all'));
-        
+
         // Handle potential WP_Error from wp_get_post_terms
         if (is_wp_error($categories)) {
             $categories = array();
         }
-        
+
         // Extract both slugs and IDs from the single query result
         $category_slugs = array();
         $category_ids = array();
-        
+
         foreach ($categories as $category) {
             $category_slugs[] = $category->slug;
             $category_ids[] = $category->term_id;
         }
-        
+
         $category_cache[$cache_key] = array(
             'slugs' => $category_slugs,
             'ids' => $category_ids
         );
     }
-    
+
     // Use cached category data
     $product_categories = $category_cache[$cache_key]['slugs'];
     $product_category_ids = $category_cache[$cache_key]['ids'];
@@ -239,7 +239,7 @@ function get_product_options($product)
                 // Check cache validity by file modification time
                 $cache_key = $pricematrix_file . '_' . filemtime($pricematrix_path);
                 $cached_transient = get_transient('pricematrix_' . md5($cache_key));
-                
+
                 if ($cached_transient !== false) {
                     // Use cached data if file hasn't changed
                     $pricematrix_cache[$pricematrix_file] = $cached_transient;
@@ -249,7 +249,7 @@ function get_product_options($product)
                         ob_start();
                         $pricematrix_data = include $pricematrix_path;
                         ob_end_clean();
-                        
+
                         // Validate that the include returned valid array data
                         if (is_array($pricematrix_data)) {
                             $pricematrix_cache[$pricematrix_file] = $pricematrix_data;
@@ -365,13 +365,13 @@ function get_product_options($product)
     // =================================================================
     // STEP 2.5: Check for backend-assigned PriceCalc options override
     // =================================================================
-    
+
     $backend_assigned_options = array();
     $pricecalc_types = array(
         'pxd' => array('prefix' => 'pxd_'),
         'pxt' => array('prefix' => 'pxt_')
     );
-    
+
     foreach ($pricecalc_types as $type => $config) {
         $assigned_option = get_post_meta($product_id, "_pricecalc_{$type}_option", true);
         if (!empty($assigned_option) && isset($product_options[$assigned_option])) {
@@ -401,7 +401,7 @@ function get_product_options($product)
                 break;
             }
         }
-        
+
         if ($is_pricecalc_option && !empty($backend_assigned_options)) {
             // If this option is not in the backend assignments, skip it
             if (!isset($backend_assigned_options[$option_key])) {
@@ -536,12 +536,12 @@ function get_product_options($product)
     // =================================================================
     // STEP 5: Add dynamic width/height options for products with price matrices
     // =================================================================
-    
+
     // Check if product has a price matrix and needs width/height options
     if (!empty($pricematrix_file)) {
         $dynamic_ranges = get_product_input_ranges($product);
         $added_dynamic_options = add_dynamic_width_height_options($product_options, $product_id, $dynamic_ranges);
-        
+
         // Merge dynamic options with applicable options
         $applicable_options = array_merge($applicable_options, $added_dynamic_options);
     }
@@ -549,11 +549,11 @@ function get_product_options($product)
     // =================================================================
     // STEP 5.5: Add automatic input fields for assigned PriceCalc options
     // =================================================================
-    
+
     // Add input fields for each assigned PriceCalc option automatically
     if (!empty($backend_assigned_options)) {
         $pricecalc_input_options = add_pricecalc_input_fields($backend_assigned_options, $product_options, $product_id);
-        
+
         // Merge PriceCalc input options with applicable options
         $applicable_options = array_merge($applicable_options, $pricecalc_input_options);
     }
@@ -614,7 +614,7 @@ function replace_cart_product_links_with_config($product_name, $cart_item, $cart
         $config_url = $cart_item['custom_configurator']['config_url'];
         $product = $cart_item['data'];
         $product_title = $product->get_name();
-        
+
         // Replace any existing links with our configuration link
         if (preg_match('/<a[^>]*>(.*?)<\/a>/', $product_name, $matches)) {
             // Extract just the text content from existing link
@@ -625,7 +625,7 @@ function replace_cart_product_links_with_config($product_name, $cart_item, $cart
             $product_name = '<a href="' . esc_url($config_url) . '">' . esc_html($product_title) . '</a>';
         }
     }
-    
+
     return $product_name;
 }
 
@@ -652,8 +652,8 @@ add_filter('woocommerce_checkout_cart_item_name', 'replace_cart_product_links_wi
 /**
  * Generate unique option IDs for DOM elements
  *
- * Creates sequential unique IDs for option elements to ensure proper HTML 
- * structure and enable reliable JavaScript targeting. Uses product ID 
+ * Creates sequential unique IDs for option elements to ensure proper HTML
+ * structure and enable reliable JavaScript targeting. Uses product ID
  * for namespacing to avoid conflicts between products.
  *
  * @param int $product_id The product ID for namespacing the generated ID
@@ -668,8 +668,8 @@ function get_next_option_id($product_id)
 /**
  * Prepare and normalize option data for rendering and processing
  *
- * Takes raw option configuration and user-submitted values to create a 
- * standardized data structure. This ensures consistent option rendering 
+ * Takes raw option configuration and user-submitted values to create a
+ * standardized data structure. This ensures consistent option rendering
  * and processing throughout the configurator system.
  *
  * Key normalizations:
@@ -813,42 +813,42 @@ function prepare_option_data(array $option, $posted_value, $product_id = null)
 
 /**
  * Parse input ranges from price matrix file comments
- * 
+ *
  * Extracts dynamic min/max values from the structured comments in price matrix PHP files.
  * These comments are generated by the Python script in Phase 1.
- * 
+ *
  * @param string $matrix_file Filename of the price matrix (e.g., 'unterschrank-BHS001.php')
  * @return array|null Array with input ranges or null if not found/parseable
  */
 function parse_pricematrix_input_ranges($matrix_file) {
     // Static cache to avoid re-parsing the same file multiple times
     static $range_cache = array();
-    
+
     // Return cached result if available
     if (isset($range_cache[$matrix_file])) {
         return $range_cache[$matrix_file];
     }
-    
+
     // Build full file path
     $pricematrix_dir = get_stylesheet_directory() . '/inc/configurator/pricematrices/php/';
     $file_path = $pricematrix_dir . $matrix_file;
-    
+
     // Check if file exists
     if (!file_exists($file_path)) {
         $range_cache[$matrix_file] = null;
         return null;
     }
-    
+
     // Read file content
     $content = file_get_contents($file_path);
     if ($content === false) {
         $range_cache[$matrix_file] = null;
         return null;
     }
-    
+
     // Parse input ranges from structured comments
     $ranges = array();
-    
+
     // Extract Input Width Start/End
     if (preg_match('/\/\/ Input Width Start: (\d+)/', $content, $matches)) {
         $ranges['input_width_start'] = (int)$matches[1];
@@ -856,7 +856,7 @@ function parse_pricematrix_input_ranges($matrix_file) {
     if (preg_match('/\/\/ Input Width End: (\d+)/', $content, $matches)) {
         $ranges['input_width_end'] = (int)$matches[1];
     }
-    
+
     // Extract Input Height Start/End
     if (preg_match('/\/\/ Input Height Start: (\d+)/', $content, $matches)) {
         $ranges['input_height_start'] = (int)$matches[1];
@@ -864,14 +864,14 @@ function parse_pricematrix_input_ranges($matrix_file) {
     if (preg_match('/\/\/ Input Height End: (\d+)/', $content, $matches)) {
         $ranges['input_height_end'] = (int)$matches[1];
     }
-    
+
     // Only return ranges if we have all required values
-    if (isset($ranges['input_width_start'], $ranges['input_width_end'], 
+    if (isset($ranges['input_width_start'], $ranges['input_width_end'],
               $ranges['input_height_start'], $ranges['input_height_end'])) {
         $range_cache[$matrix_file] = $ranges;
         return $ranges;
     }
-    
+
     // Cache negative result to avoid repeated parsing
     $range_cache[$matrix_file] = null;
     return null;
@@ -879,11 +879,11 @@ function parse_pricematrix_input_ranges($matrix_file) {
 
 /**
  * Get dynamic input ranges for a specific product
- * 
+ *
  * Determines the input ranges for width/height fields based on the product's
  * assigned price matrix. Falls back to default ranges if no matrix is assigned
  * or if the matrix file doesn't contain range information.
- * 
+ *
  * @param int|WC_Product $product Product ID or WC_Product object
  * @return array Array with input ranges (always returns valid ranges)
  */
@@ -892,40 +892,40 @@ function get_product_input_ranges($product) {
     if (is_numeric($product)) {
         $product = wc_get_product($product);
     }
-    
+
     if (!$product || !($product instanceof WC_Product)) {
         return get_default_input_ranges();
     }
-    
+
     // Get assigned price matrix file
     $matrix_file = get_post_meta($product->get_id(), '_pricematrix_file', true);
-    
+
     if (empty($matrix_file)) {
         return get_default_input_ranges();
     }
-    
+
     // Ensure .php extension
     if (!str_ends_with($matrix_file, '.php')) {
         $matrix_file .= '.php';
     }
-    
+
     // Parse ranges from matrix file
     $ranges = parse_pricematrix_input_ranges($matrix_file);
-    
+
     if ($ranges === null) {
         return get_default_input_ranges();
     }
-    
+
     return $ranges;
 }
 
 /**
  * Get default input ranges as fallback
- * 
+ *
  * Provides standard input ranges when no price matrix is assigned
  * or when matrix parsing fails. These values match the defaults
  * from the original options.php configuration.
- * 
+ *
  * @return array Default input ranges
  */
 function get_default_input_ranges() {
@@ -939,11 +939,11 @@ function get_default_input_ranges() {
 
 /**
  * Apply dynamic ranges to option configuration
- * 
+ *
  * Modifies an option configuration array to use dynamic min/max values
  * based on the product's price matrix. This function is used during
  * option processing to override static ranges.
- * 
+ *
  * @param array $option Original option configuration
  * @param array $ranges Dynamic input ranges from price matrix
  * @return array Modified option configuration with dynamic ranges
@@ -952,71 +952,71 @@ function apply_dynamic_ranges_to_option($option, $ranges) {
     // Only apply to width/height related options
     $width_fields = array('breite', 'width', 'w');
     $height_fields = array('hoehe', 'height', 'h', 'höhe');
-    
+
     $option_key = strtolower($option['key'] ?? '');
     $option_name = strtolower($option['name'] ?? '');
     $option_label = strtolower($option['label'] ?? '');
-    
+
     // Check if this is a width-related field
     foreach ($width_fields as $field) {
-        if (strpos($option_key, $field) !== false || 
-            strpos($option_name, $field) !== false || 
+        if (strpos($option_key, $field) !== false ||
+            strpos($option_name, $field) !== false ||
             strpos($option_label, $field) !== false) {
-            
+
             $option['min'] = (string)$ranges['input_width_start'];
             $option['max'] = (string)$ranges['input_width_end'];
-            
+
             // Also update placeholder if it exists
             if (isset($option['placeholder']) && is_numeric($option['placeholder'])) {
                 // Set placeholder to minimum value if current placeholder is outside range
                 $current_placeholder = (int)$option['placeholder'];
-                if ($current_placeholder < $ranges['input_width_start'] || 
+                if ($current_placeholder < $ranges['input_width_start'] ||
                     $current_placeholder > $ranges['input_width_end']) {
                     $option['placeholder'] = (string)$ranges['input_width_start'];
                 }
             }
-            
+
             return $option;
         }
     }
-    
+
     // Check if this is a height-related field
     foreach ($height_fields as $field) {
-        if (strpos($option_key, $field) !== false || 
-            strpos($option_name, $field) !== false || 
+        if (strpos($option_key, $field) !== false ||
+            strpos($option_name, $field) !== false ||
             strpos($option_label, $field) !== false) {
-            
+
             $option['min'] = (string)$ranges['input_height_start'];
             $option['max'] = (string)$ranges['input_height_end'];
-            
+
             // Also update placeholder if it exists
             if (isset($option['placeholder']) && is_numeric($option['placeholder'])) {
                 // Set placeholder to minimum value if current placeholder is outside range
                 $current_placeholder = (int)$option['placeholder'];
-                if ($current_placeholder < $ranges['input_height_start'] || 
+                if ($current_placeholder < $ranges['input_height_start'] ||
                     $current_placeholder > $ranges['input_height_end']) {
                     $option['placeholder'] = (string)$ranges['input_height_start'];
                 }
             }
-            
+
             return $option;
         }
     }
-    
+
     // Return unchanged if not a width/height field
     return $option;
 }
 
 /**
  * Add dynamic width/height options for products with price matrices
- * 
+ *
  * Creates breite/hoehe options automatically for products that have price matrices
  * but don't already have these options applied through normal filtering.
  * Uses the base templates from options.php and applies dynamic ranges.
- * 
- * OPTIMIZATION: For products in dachschraege categories, delegates to 
+ *
+ * OPTIMIZATION: For products in dachschraege categories, delegates to
  * add_dynamic_dachschraege_options() to add specialized dachschraege fields instead.
- * 
+ *
  * @param array $all_options All available options from options.php
  * @param int $product_id Product ID for targeting
  * @param array $dynamic_ranges Dynamic ranges from price matrix
@@ -1024,66 +1024,66 @@ function apply_dynamic_ranges_to_option($option, $ranges) {
  */
 function add_dynamic_width_height_options($all_options, $product_id, $dynamic_ranges) {
     $dynamic_options = array();
-    
+
     // Check if product is in dachschraege categories that need special fields
     $dachschraege_categories = array('badspiegel-fuer-dachschraege', 'spiegelschaenke-fuer-dachschraege');
     $product_categories = wp_get_post_terms($product_id, 'product_cat', array('fields' => 'slugs'));
-    
+
     if (!is_wp_error($product_categories) && array_intersect($product_categories, $dachschraege_categories)) {
         // Product is in dachschraege category - add special dachschraege fields instead
         return add_dynamic_dachschraege_options($all_options, $product_id, $dynamic_ranges);
     }
-    
+
     // Base templates for width/height options from options.php
     $base_width_option = $all_options['breite'] ?? null;
     $base_height_option = $all_options['hoehe'] ?? null;
-    
+
     if ($base_width_option) {
         // Create dynamic width option
         $width_option = $base_width_option;
-        
+
         // Apply dynamic ranges
         $width_option['min'] = (string)$dynamic_ranges['input_width_start'];
         $width_option['max'] = (string)$dynamic_ranges['input_width_end'];
         // Use options.php placeholder if available, otherwise use min value as fallback
         $width_option['placeholder'] = $width_option['placeholder'] ?? (string)$dynamic_ranges['input_width_start'];
-        
+
         // Target this specific product
         $width_option['applies_to']['products'] = array($product_id);
-        
+
         // Create unique key to avoid conflicts
         $width_option_key = 'dynamic_breite_' . $product_id;
         $dynamic_options[$width_option_key] = $width_option;
     }
-    
+
     if ($base_height_option) {
         // Create dynamic height option
         $height_option = $base_height_option;
-        
+
         // Apply dynamic ranges
         $height_option['min'] = (string)$dynamic_ranges['input_height_start'];
         $height_option['max'] = (string)$dynamic_ranges['input_height_end'];
         // Use options.php placeholder if available, otherwise use min value as fallback
         $height_option['placeholder'] = $height_option['placeholder'] ?? (string)$dynamic_ranges['input_height_start'];
-        
+
         // Target this specific product
         $height_option['applies_to']['products'] = array($product_id);
-        
+
         // Create unique key to avoid conflicts
         $height_option_key = 'dynamic_hoehe_' . $product_id;
         $dynamic_options[$height_option_key] = $height_option;
     }
-    
+
     return $dynamic_options;
 }
 
 /**
  * Add dynamic dachschraege options for products in dachschraege categories
- * 
- * Creates breite_oben, breite_unten, hoehe_links, hoehe_rechts options automatically 
+ *
+ * Creates breite_oben, breite_unten, hoehe_links, hoehe_rechts options automatically
  * for products in dachschraege categories that have price matrices.
  * Uses the base templates from options.php and applies dynamic ranges.
- * 
+ *
  * @param array $all_options All available options from options.php
  * @param int $product_id Product ID for targeting
  * @param array $dynamic_ranges Dynamic ranges from price matrix
@@ -1091,7 +1091,7 @@ function add_dynamic_width_height_options($all_options, $product_id, $dynamic_ra
  */
 function add_dynamic_dachschraege_options($all_options, $product_id, $dynamic_ranges) {
     $dynamic_options = array();
-    
+
     // Base templates for dachschraege options from options.php
     $dachschraege_fields = array(
         'breite_oben' => 'dynamic_breite_oben_' . $product_id,
@@ -1099,14 +1099,14 @@ function add_dynamic_dachschraege_options($all_options, $product_id, $dynamic_ra
         'hoehe_links' => 'dynamic_hoehe_links_' . $product_id,
         'hoehe_rechts' => 'dynamic_hoehe_rechts_' . $product_id
     );
-    
+
     foreach ($dachschraege_fields as $field_name => $dynamic_key) {
         $base_option = $all_options[$field_name] ?? null;
-        
+
         if ($base_option) {
             // Create dynamic dachschraege option
             $dachschraege_option = $base_option;
-            
+
             // Apply dynamic ranges based on field type (width vs height)
             if (strpos($field_name, 'breite') !== false) {
                 // Width-related field
@@ -1121,25 +1121,25 @@ function add_dynamic_dachschraege_options($all_options, $product_id, $dynamic_ra
                 // Use options.php placeholder if available, otherwise use min value as fallback
                 $dachschraege_option['placeholder'] = $dachschraege_option['placeholder'] ?? (string)$dynamic_ranges['input_height_start'];
             }
-            
+
             // Target this specific product
             $dachschraege_option['applies_to']['products'] = array($product_id);
-            
+
             // Add to dynamic options
             $dynamic_options[$dynamic_key] = $dachschraege_option;
         }
     }
-    
+
     return $dynamic_options;
 }
 
 /**
  * Add automatic input fields for assigned PriceCalc options
- * 
+ *
  * For each assigned PriceCalc option (pxd_, pxt_), this function automatically
  * adds the corresponding input field (durchmesser, tiefe) without checking applies_to.
  * This ensures that PriceCalcs never appear without their required input fields.
- * 
+ *
  * @param array $backend_assigned_options Array of assigned PriceCalc options
  * @param array $all_options All available options from options.php
  * @param int $product_id Product ID for targeting
@@ -1147,14 +1147,14 @@ function add_dynamic_dachschraege_options($all_options, $product_id, $dynamic_ra
  */
 function add_pricecalc_input_fields($backend_assigned_options, $all_options, $product_id) {
     $input_options = array();
-    
+
     // Map PriceCalc prefixes to their corresponding input field names
     // Priority order: specific fields first, then fallback to general fields
     $pricecalc_to_input_mapping = array(
         'pxd_' => array('durchmesser'),                                    // Diameter price calcs need diameter input
         'pxt_' => array('tiefe')                                          // Depth/thickness price calcs need depth input
     );
-    
+
     foreach ($backend_assigned_options as $pricecalc_key => $pricecalc_option) {
         // Determine which input field(s) this PriceCalc needs
         $possible_input_keys = array();
@@ -1164,12 +1164,12 @@ function add_pricecalc_input_fields($backend_assigned_options, $all_options, $pr
                 break;
             }
         }
-        
+
         // Skip if we can't determine the required input field
         if (empty($possible_input_keys)) {
             continue;
         }
-        
+
         // Find the first available input field from the possible options
         $chosen_input_key = null;
         $base_input_option = null;
@@ -1180,23 +1180,23 @@ function add_pricecalc_input_fields($backend_assigned_options, $all_options, $pr
                 break;
             }
         }
-        
+
         // Skip if no input field template was found
         if (!$chosen_input_key || !$base_input_option) {
             continue;
         }
-        
+
         // Extract min/max values from PriceCalc option values
         $min_max_values = extract_min_max_from_pricecalc($pricecalc_option);
-        
+
         // Create the input option with automatic targeting
         $input_option = $base_input_option;
-        
+
         // PRESERVE original min/max values from options.php - do NOT override with PriceCalc values
         // The original values are authoritative and should not be changed by backend assignments
         $original_min = isset($input_option['min']) ? (int)$input_option['min'] : null;
         $original_max = isset($input_option['max']) ? (int)$input_option['max'] : null;
-        
+
         // Only set min/max if they are NOT already defined in the original option
         if ($min_max_values['min'] !== null && $original_min === null) {
             $input_option['min'] = (string)$min_max_values['min'];
@@ -1204,18 +1204,18 @@ function add_pricecalc_input_fields($backend_assigned_options, $all_options, $pr
         if ($min_max_values['max'] !== null && $original_max === null) {
             $input_option['max'] = (string)$min_max_values['max'];
         }
-        
+
         // Use the ORIGINAL min value for placeholder, fallback to PriceCalc min if no original exists
         $final_min = $original_min ?? (isset($input_option['min']) ? (int)$input_option['min'] : null);
         if ($final_min !== null) {
             $input_option['placeholder'] = 'Geben Sie einen Wert ein (min: ' . $final_min . ')';
         }
-        
+
         // Add debug comment to the label for development
         $pricecalc_label = $pricecalc_option['label'] ?? $pricecalc_key;
         $input_option['label'] = $input_option['label'];
         // $input_option['label'] = $input_option['label'] . ' (für ' . $pricecalc_label . ')';
-        
+
         // Override applies_to to target this specific product (ignore original applies_to)
         $input_option['applies_to'] = array(
             'products' => array($product_id),
@@ -1225,45 +1225,45 @@ function add_pricecalc_input_fields($backend_assigned_options, $all_options, $pr
             'excluded_categories' => array(),
             'excluded_attributes' => array(),
         );
-        
+
         // Create unique key to avoid conflicts
         $input_option_key = 'auto_' . $chosen_input_key . '_for_' . $pricecalc_key;
         $input_options[$input_option_key] = $input_option;
     }
-    
+
     return $input_options;
 }
 
 /**
  * Extract minimum and maximum values from PriceCalc option values
- * 
+ *
  * Analyzes the options array of a PriceCalc to determine the valid input range.
  * This helps set appropriate min/max values for the corresponding input fields.
- * 
+ *
  * @param array $pricecalc_option The PriceCalc option array
  * @return array Array with 'min' and 'max' keys (null if not determinable)
  */
 function extract_min_max_from_pricecalc($pricecalc_option) {
     $min_value = null;
     $max_value = null;
-    
+
     if (isset($pricecalc_option['options']) && is_array($pricecalc_option['options'])) {
         $numeric_keys = array();
-        
+
         // Extract numeric values from option keys
         foreach ($pricecalc_option['options'] as $key => $option_data) {
             if (is_numeric($key)) {
                 $numeric_keys[] = (int)$key;
             }
         }
-        
+
         // Determine min/max from numeric keys
         if (!empty($numeric_keys)) {
             $min_value = min($numeric_keys);
             $max_value = max($numeric_keys);
         }
     }
-    
+
     return array(
         'min' => $min_value,
         'max' => $max_value
@@ -1276,18 +1276,18 @@ function extract_min_max_from_pricecalc($pricecalc_option) {
 
 /**
  * Quick function to check price matrix status (can be called from anywhere)
- * 
+ *
  * Usage: $status = check_pricematrix_status();
- * 
+ *
  * @return array Status information about price matrices
  */
 function check_pricematrix_status() {
     $pricematrix_dir = get_stylesheet_directory() . '/inc/configurator/pricematrices/php/';
-    
+
     // Count available files
     $available_files = glob($pricematrix_dir . '*.php');
     $total_files = count($available_files);
-    
+
     // Get products with price matrix assignments
     global $wpdb;
     $assignments = $wpdb->get_results($wpdb->prepare("
@@ -1300,11 +1300,11 @@ function check_pricematrix_status() {
         AND pm.meta_value != ''
         ORDER BY p.post_title ASC
     ", 'product', 'publish', '_pricematrix_file'));
-    
+
     $total_products_with_matrix = count($assignments);
     $missing_files = [];
     $existing_assignments = [];
-    
+
     // Check each assignment
     foreach ($assignments as $assignment) {
         $file_path = $pricematrix_dir . $assignment->pricematrix_file;
@@ -1322,7 +1322,7 @@ function check_pricematrix_status() {
             ];
         }
     }
-    
+
     return [
         'total_files' => $total_files,
         'total_products_with_matrix' => $total_products_with_matrix,
@@ -1405,7 +1405,7 @@ function product_configurator_add_cart_item_data($cart_item_data, $product_id)
             // Prepare data for configuration code generation (simplified structure)
             $config_data_for_code[$option_name] = [
                 'value' => $posted_value, // Store original posted value for accurate recreation
-                'type'  => $option_type, // Really needed here? Maybe important to filter pricematrices on cart? 
+                'type'  => $option_type, // Really needed here? Maybe important to filter pricematrices on cart?
             ];
 
             // Accumulate additional pricing using the correct price
@@ -1420,11 +1420,11 @@ function product_configurator_add_cart_item_data($cart_item_data, $product_id)
         if ($has_configuration && function_exists('product_configurator_save_configcode')) {
             // Generate configuration code for this cart item
             $generated_code = product_configurator_save_configcode($product_id, $config_data_for_code);
-            
+
             if ($generated_code) {
                 // Store the generated configuration code in cart item data
                 $cart_item_data['custom_configurator']['auto_generated_code'] = $generated_code;
-                
+
                 // Build the configuration URL for easy access
                 $product_url = get_permalink($product_id);
                 if ($product_url) {
@@ -1738,7 +1738,7 @@ class ProductPricematrixField
         foreach ($this->pricecalc_types as $type => $config) {
             $type_upper = strtoupper($type);
             $type_lower = strtolower($type);
-            
+
             $options["meta:_pricecalc_{$type}_option"] = "PriceCalc {$type_upper} Option Key";
             $options["pricecalc_{$type}_option"] = "PriceCalc {$type_upper} Option Key";
             $options["pricecalc_{$type}"] = "PriceCalc {$type_upper}";
@@ -1777,7 +1777,7 @@ class ProductPricematrixField
         foreach ($this->pricecalc_types as $type => $config) {
             $type_upper = strtoupper($type);
             $type_lower = strtolower($type);
-            
+
             $columns["PriceCalc {$type_upper}"] = "meta:_pricecalc_{$type}_option";
             $columns["pricecalc_{$type}"] = "meta:_pricecalc_{$type}_option";
             $columns["price_calc_{$type}"] = "meta:_pricecalc_{$type}_option";
@@ -1927,7 +1927,7 @@ class ProductPricematrixField
 
             // Validate that the option exists in options.php
             $all_options = get_all_product_options();
-            
+
             // Check if option matches any of our configured prefixes
             $prefix_found = false;
             foreach ($this->pricecalc_types as $type => $config) {
@@ -1940,7 +1940,7 @@ class ProductPricematrixField
                     }
                 }
             }
-            
+
             if ($prefix_found) {
                 // Also save to legacy field for compatibility
                 $product->update_meta_data('_pricecalc_option', $pricecalc_option);
@@ -1958,13 +1958,13 @@ class ProductPricematrixField
     public function add_export_column($columns)
     {
         $columns['meta:_pricematrix_file'] = 'Preismatrix';
-        
+
         // Add PriceCalc export columns dynamically
         foreach ($this->pricecalc_types as $type => $config) {
             $type_upper = strtoupper($type);
             $columns["meta:_pricecalc_{$type}_option"] = "PriceCalc {$type_upper}";
         }
-        
+
         return $columns;
     }
 
@@ -1974,12 +1974,12 @@ class ProductPricematrixField
     public function add_export_default($columns)
     {
         $columns['meta:_pricematrix_file'] = 'meta:_pricematrix_file';
-        
+
         // Add PriceCalc export defaults dynamically
         foreach ($this->pricecalc_types as $type => $config) {
             $columns["meta:_pricecalc_{$type}_option"] = "meta:_pricecalc_{$type}_option";
         }
-        
+
         return $columns;
     }
 
@@ -2072,7 +2072,7 @@ class ProductPricematrixField
             'target' => 'pricematrix_data',
             'class' => [],
         ];
-        
+
         // PriceCalc tabs - dynamically generated
         foreach ($this->pricecalc_types as $type => $config) {
             $type_upper = strtoupper($type);
@@ -2082,7 +2082,7 @@ class ProductPricematrixField
                 'class' => [],
             ];
         }
-        
+
         return $tabs;
     }
 
@@ -2226,7 +2226,7 @@ class ProductPricematrixField
         }
 
         echo '</div>';
-        
+
         // === ADD PRICECALC PANELS ===
         // Dynamically generate PriceCalc panels for all configured types
         foreach ($this->pricecalc_types as $type => $config) {
@@ -2236,16 +2236,16 @@ class ProductPricematrixField
 
     /**
      * Generic PriceCalc admin panel renderer
-     * 
+     *
      * Creates a standardized admin interface for any PriceCalc type
      */
     private function render_pricecalc_data_panel($type, $config)
     {
         global $post;
-        
+
         $type_upper = strtoupper($type);
         $current_pricecalc = get_post_meta($post->ID, "_pricecalc_{$type}_option", true);
-        
+
         // Get available options for this type using the modular method
         $available_options = $this->get_available_pricecalc_options_by_type($type);
 
@@ -2260,7 +2260,7 @@ class ProductPricematrixField
             'desc_tip' => true,
             'value' => $current_pricecalc,
             'options' => array_merge(
-                ['' => "Keine {$type_upper} Aufpreis-Option"], 
+                ['' => "Keine {$type_upper} Aufpreis-Option"],
                 $available_options
             )
         ]);
@@ -2280,13 +2280,13 @@ class ProductPricematrixField
         // Option details and preview
         if (!empty($current_pricecalc) && isset($available_options[$current_pricecalc])) {
             echo '<div class="options_group">';
-            
+
             $option_data = $this->get_option_details($current_pricecalc);
-            
+
             echo '<p class="form-field">';
             echo '<label style="display: block; margin-bottom: 8px;"><strong>' . $type_upper . ' Option Details</strong></label>';
             echo '<div style="background: #f8f9fa; border: 1px solid #e1e1e1; border-radius: 4px; padding: 15px;">';
-            
+
             // Show key very prominently at the top with type-specific color
             echo '<div style="background: #fff; border: 2px solid ' . $config['color'] . '; border-radius: 6px; padding: 10px; margin-bottom: 15px; text-align: center;">';
             echo '<strong style="color: ' . $config['color'] . '; font-size: 16px;">' . $type_upper . ' Option Key:</strong><br>';
@@ -2294,20 +2294,20 @@ class ProductPricematrixField
             echo "'" . esc_html($current_pricecalc) . "'";
             echo '</code>';
             echo '</div>';
-            
+
             echo '<p><strong>Label:</strong> ' . esc_html($option_data['label'] ?? 'N/A') . '</p>';
             echo '<p><strong>Typ:</strong> ' . esc_html($option_data['type'] ?? 'N/A') . '</p>';
             echo '<p><strong>Gruppe:</strong> ' . esc_html($option_data['group'] ?? 'N/A') . '</p>';
-            
+
             // Show available pricing options if any
             if (!empty($option_data['options'])) {
                 echo '<p><strong>Verfügbare Preisstufen:</strong></p>';
                 echo '<div style="max-height: 150px; overflow-y: auto; background: #fff; border: 1px solid #ddd; border-radius: 3px; padding: 10px;">';
-                
+
                 foreach ($option_data['options'] as $value => $price_data) {
                     $price = is_array($price_data) ? ($price_data['price'] ?? 0) : 0;
                     $label = is_array($price_data) ? ($price_data['label'] ?? $value) : $value;
-                    
+
                     echo '<div style="margin-bottom: 5px;">';
                     echo '<span style="font-family: monospace;">' . esc_html($value) . '</span>';
                     echo ' → <strong>' . esc_html($label) . '</strong>';
@@ -2318,15 +2318,15 @@ class ProductPricematrixField
                     }
                     echo '</div>';
                 }
-                
+
                 echo '</div>';
             } else {
                 echo '<p style="color: #666; font-style: italic;">Noch keine Preisstufen konfiguriert.</p>';
             }
-            
+
             echo '</div>';
             echo '</p>';
-            
+
             echo '</div>';
         }
 
@@ -2351,7 +2351,7 @@ class ProductPricematrixField
      * Get available price calculation options for a specific type
      *
      * This modular method replaces individual get_available_pxd_options() and
-     * get_available_pxt_options() methods. It dynamically filters options based 
+     * get_available_pxt_options() methods. It dynamically filters options based
      * on the prefix configured in $pricecalc_types.
      *
      * @param string $type The PriceCalc type (pxd, pxt)
@@ -2367,23 +2367,23 @@ class ProductPricematrixField
         $prefix = $this->pricecalc_types[$type]['prefix'];
         $all_options = get_all_product_options();
         $filtered_options = [];
-        
+
         foreach ($all_options as $key => $option) {
             // Only include options with the correct prefix
             if (strpos($key, $prefix) === 0) {
                 $label = $option['label'] ?? $key;
                 $group = $option['group'] ?? 'Unknown';
-                
+
                 // Show key prominently in the dropdown
                 $filtered_options[$key] = sprintf(
-                    '[%s] %s (%s)', 
-                    $key, 
-                    $label, 
+                    '[%s] %s (%s)',
+                    $key,
+                    $label,
                     $group
                 );
             }
         }
-        
+
         return $filtered_options;
     }
 
@@ -2398,13 +2398,13 @@ class ProductPricematrixField
     private function get_available_pricecalc_options()
     {
         $all_pricecalc_options = [];
-        
+
         // Dynamically aggregate options from all configured PriceCalc types
         foreach ($this->pricecalc_types as $type => $config) {
             $type_options = $this->get_available_pricecalc_options_by_type($type);
             $all_pricecalc_options = array_merge($all_pricecalc_options, $type_options);
         }
-        
+
         return $all_pricecalc_options;
     }
 
@@ -2417,11 +2417,11 @@ class ProductPricematrixField
     private function get_option_details($option_key)
     {
         $all_options = get_all_product_options();
-        
+
         if (!isset($all_options[$option_key])) {
             return [];
         }
-        
+
         return $all_options[$option_key];
     }
 
@@ -2474,7 +2474,7 @@ class ProductPricematrixField
     private function save_pricecalc_option($post_id, $type, $config)
     {
         $field_name = "_pricecalc_{$type}_option";
-        
+
         if (isset($_POST[$field_name])) {
             $pricecalc_option = sanitize_text_field($_POST[$field_name]);
             $pricecalc_option = trim($pricecalc_option);
@@ -2485,7 +2485,7 @@ class ProductPricematrixField
             } else {
                 // Validate that the option exists in options.php and has correct prefix
                 $all_options = get_all_product_options();
-                if (array_key_exists($pricecalc_option, $all_options) && 
+                if (array_key_exists($pricecalc_option, $all_options) &&
                     strpos($pricecalc_option, $config['prefix']) === 0) {
                     update_post_meta($post_id, $field_name, $pricecalc_option);
                 } else {

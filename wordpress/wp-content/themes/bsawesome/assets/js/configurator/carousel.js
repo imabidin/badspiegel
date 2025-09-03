@@ -14,8 +14,10 @@
  * - Modal dialogs for incomplete configurations
  * - Mobile-optimized touch interactions
  *
- * @version 2.2.0
+ * @version 2.3.0
  * @package Configurator
+ *
+ * @todo Check if the carousel functions need to be refactored for better reusability (carouselheight)
  */
 
 // ====================== CONFIGURATION CONSTANTS ======================
@@ -949,7 +951,14 @@ class ProductConfigurator {
  * Creates single instance to manage entire configurator experience
  */
 document.addEventListener("DOMContentLoaded", () => {
-  new ProductConfigurator();
+  const configuratorInstance = new ProductConfigurator();
+  
+  // Make carousel height update globally available for validation feedback
+  window.updateCarouselHeight = function() {
+    if (configuratorInstance && configuratorInstance.setCarouselHeight) {
+      configuratorInstance.setCarouselHeight();
+    }
+  };
 });
 
 /**

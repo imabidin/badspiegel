@@ -1026,7 +1026,7 @@ function add_dynamic_width_height_options($all_options, $product_id, $dynamic_ra
     $dynamic_options = array();
 
     // Check if product is in dachschraege categories that need special fields
-    $dachschraege_categories = array('badspiegel-fuer-dachschraege', 'spiegelschaenke-fuer-dachschraege');
+    $dachschraege_categories = array('badspiegel-fuer-dachschraege', 'spiegelschraenke-fuer-dachschraege');
     $product_categories = wp_get_post_terms($product_id, 'product_cat', array('fields' => 'slugs'));
 
     if (!is_wp_error($product_categories) && array_intersect($product_categories, $dachschraege_categories)) {

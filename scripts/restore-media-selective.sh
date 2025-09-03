@@ -49,8 +49,8 @@ echo -e "${GREEN}✅ Sicherheits-Backup erstellt: $SAFETY_BACKUP${NC}"
 echo -e "${YELLOW}🗑️ Lösche aktuelle Medien-Einträge...${NC}"
 docker-compose exec db mysql -u root -proot_password wordpress -e "
 DELETE FROM wp_posts WHERE post_type = 'attachment';
-DELETE pm FROM wp_postmeta pm 
-LEFT JOIN wp_posts p ON pm.post_id = p.ID 
+DELETE pm FROM wp_postmeta pm
+LEFT JOIN wp_posts p ON pm.post_id = p.ID
 WHERE p.ID IS NULL;
 "
 
@@ -79,7 +79,7 @@ if [ ! -z "$ATTACHMENT_IDS" ]; then
     echo -e "${CYAN}   - Extrahiere Postmeta für Attachment-IDs...${NC}"
     # Erstelle Regex-Pattern für die IDs
     ID_PATTERN=$(echo "$ATTACHMENT_IDS" | sed 's/,/\\|/g')
-    
+
     # Extrahiere postmeta Einträge für diese IDs
     grep -E "INSERT INTO \`wp_postmeta\`" "$BACKUP_SQL" | \
     grep -E "\(($ID_PATTERN)," >> temp_media_restore.sql || true
@@ -95,10 +95,10 @@ rm temp_media_restore.sql
 
 echo -e "${YELLOW}📊 Neue Medien-Statistiken:${NC}"
 docker-compose exec db mysql -u root -proot_password wordpress -e "
-SELECT 
+SELECT
     COUNT(*) as 'Wiederhergestellte Attachments',
     COUNT(DISTINCT post_title) as 'Eindeutige Titel'
-FROM wp_posts 
+FROM wp_posts
 WHERE post_type = 'attachment';
 "
 

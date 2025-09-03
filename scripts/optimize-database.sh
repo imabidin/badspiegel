@@ -30,47 +30,47 @@ echo
 # Aktuelle Statistiken
 echo -e "${CYAN}📊 Aktuelle Datenbank-Statistiken:${NC}"
 docker-compose exec db mysql -u root -proot_password wordpress -e "
-SELECT 
-    'Posts' as Tabelle, COUNT(*) as Anzahl 
-FROM wp_posts 
+SELECT
+    'Posts' as Tabelle, COUNT(*) as Anzahl
+FROM wp_posts
 UNION ALL
-SELECT 
-    'Attachments', COUNT(*) 
+SELECT
+    'Attachments', COUNT(*)
 FROM wp_posts WHERE post_type = 'attachment'
 UNION ALL
-SELECT 
-    'Post Meta', COUNT(*) 
+SELECT
+    'Post Meta', COUNT(*)
 FROM wp_postmeta
 UNION ALL
-SELECT 
-    'Comments', COUNT(*) 
+SELECT
+    'Comments', COUNT(*)
 FROM wp_comments
 UNION ALL
-SELECT 
-    'Comment Meta', COUNT(*) 
+SELECT
+    'Comment Meta', COUNT(*)
 FROM wp_commentmeta;
 "
 
 echo
 echo -e "${CYAN}📊 Medien-Duplikate Analyse:${NC}"
 docker-compose exec db mysql -u root -proot_password wordpress -e "
-SELECT 
+SELECT
     COUNT(*) as 'Gesamt Attachments',
     COUNT(DISTINCT post_title) as 'Eindeutige Titel',
     COUNT(*) - COUNT(DISTINCT post_title) as 'Duplikate'
-FROM wp_posts 
+FROM wp_posts
 WHERE post_type = 'attachment';
 "
 
 echo
 echo -e "${CYAN}🔍 Top 10 duplizierte Medien:${NC}"
 docker-compose exec db mysql -u root -proot_password wordpress -e "
-SELECT post_title, COUNT(*) as count 
-FROM wp_posts 
-WHERE post_type = 'attachment' 
-GROUP BY post_title 
-HAVING count > 1 
-ORDER BY count DESC 
+SELECT post_title, COUNT(*) as count
+FROM wp_posts
+WHERE post_type = 'attachment'
+GROUP BY post_title
+HAVING count > 1
+ORDER BY count DESC
 LIMIT 10;
 "
 
@@ -95,7 +95,7 @@ DELETE p1 FROM wp_posts p1
 INNER JOIN wp_posts p2
 INNER JOIN wp_postmeta pm1 ON p1.ID = pm1.post_id
 INNER JOIN wp_postmeta pm2 ON p2.ID = pm2.post_id
-WHERE p1.post_type = 'attachment' 
+WHERE p1.post_type = 'attachment'
 AND p2.post_type = 'attachment'
 AND p1.ID > p2.ID
 AND p1.post_title = p2.post_title
@@ -108,10 +108,10 @@ AND pm1.meta_value = pm2.meta_value;
 echo "   - Entferne Duplikate mit gleichem Titel..."
 docker-compose exec db mysql -u root -proot_password wordpress -e "
 DELETE p1 FROM wp_posts p1
-INNER JOIN wp_posts p2 
-WHERE p1.post_type = 'attachment' 
+INNER JOIN wp_posts p2
+WHERE p1.post_type = 'attachment'
 AND p2.post_type = 'attachment'
-AND p1.post_title = p2.post_title 
+AND p1.post_title = p2.post_title
 AND p1.ID > p2.ID;
 "
 
@@ -158,8 +158,8 @@ DELETE FROM wp_posts WHERE post_status = 'trash';
 
 echo "   - Entferne Auto-Drafts (älter als 7 Tage)..."
 docker-compose exec db mysql -u root -proot_password wordpress -e "
-DELETE FROM wp_posts 
-WHERE post_status = 'auto-draft' 
+DELETE FROM wp_posts
+WHERE post_status = 'auto-draft'
 AND post_date < DATE_SUB(NOW(), INTERVAL 7 DAY);
 "
 
@@ -170,15 +170,15 @@ echo -e "${YELLOW}📝 4. Bereinige Post-Revisionen...${NC}"
 
 echo "   - Entferne alte Revisionen (behalte nur die letzten 3 pro Post)..."
 docker-compose exec db mysql -u root -proot_password wordpress -e "
-DELETE FROM wp_posts 
-WHERE post_type = 'revision' 
+DELETE FROM wp_posts
+WHERE post_type = 'revision'
 AND ID NOT IN (
     SELECT revision_id FROM (
         SELECT ID as revision_id,
                ROW_NUMBER() OVER (PARTITION BY post_parent ORDER BY post_date DESC) as rn
-        FROM wp_posts 
+        FROM wp_posts
         WHERE post_type = 'revision'
-    ) ranked_revisions 
+    ) ranked_revisions
     WHERE rn <= 3
 );
 "
@@ -189,8 +189,8 @@ echo -e "${GREEN}   ✅ Revisionen bereinigt${NC}"
 echo -e "${YELLOW}⚡ 5. Bereinige abgelaufene Transients...${NC}"
 
 docker-compose exec db mysql -u root -proot_password wordpress -e "
-DELETE FROM wp_options 
-WHERE option_name LIKE '_transient_%' 
+DELETE FROM wp_options
+WHERE option_name LIKE '_transient_%'
 OR option_name LIKE '_site_transient_%';
 "
 
@@ -226,34 +226,34 @@ echo -e "${GREEN}   ✅ Tabellen analysiert${NC}"
 echo
 echo -e "${CYAN}📊 Optimierung abgeschlossen! Neue Statistiken:${NC}"
 docker-compose exec db mysql -u root -proot_password wordpress -e "
-SELECT 
-    'Posts' as Tabelle, COUNT(*) as Anzahl 
-FROM wp_posts 
+SELECT
+    'Posts' as Tabelle, COUNT(*) as Anzahl
+FROM wp_posts
 UNION ALL
-SELECT 
-    'Attachments', COUNT(*) 
+SELECT
+    'Attachments', COUNT(*)
 FROM wp_posts WHERE post_type = 'attachment'
 UNION ALL
-SELECT 
-    'Post Meta', COUNT(*) 
+SELECT
+    'Post Meta', COUNT(*)
 FROM wp_postmeta
 UNION ALL
-SELECT 
-    'Comments', COUNT(*) 
+SELECT
+    'Comments', COUNT(*)
 FROM wp_comments
 UNION ALL
-SELECT 
-    'Comment Meta', COUNT(*) 
+SELECT
+    'Comment Meta', COUNT(*)
 FROM wp_commentmeta;
 "
 
 echo
 echo -e "${CYAN}📊 Medien nach Optimierung:${NC}"
 docker-compose exec db mysql -u root -proot_password wordpress -e "
-SELECT 
+SELECT
     COUNT(*) as 'Gesamt Attachments',
     COUNT(DISTINCT post_title) as 'Eindeutige Titel'
-FROM wp_posts 
+FROM wp_posts
 WHERE post_type = 'attachment';
 "
 
@@ -261,9 +261,9 @@ WHERE post_type = 'attachment';
 echo
 echo -e "${CYAN}💾 Datenbank-Größe:${NC}"
 docker-compose exec db mysql -u root -proot_password wordpress -e "
-SELECT 
+SELECT
     ROUND(SUM(data_length + index_length) / 1024 / 1024, 2) AS 'Datenbank Größe (MB)'
-FROM information_schema.tables 
+FROM information_schema.tables
 WHERE table_schema = 'wordpress';
 "
 

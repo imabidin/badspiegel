@@ -72,7 +72,7 @@ while read -r hash; do
         printf " (+%d weitere)" $((count-1))
     fi
     echo
-    
+
     # Speichere Duplikat-Info für später
     echo "$hash:${files[*]}" >> "$TEMP_DIR/duplicate_details.txt"
 done < "$TEMP_DIR/duplicate_hashes.txt"
@@ -88,17 +88,17 @@ while read -r line; do
     hash=$(echo "$line" | cut -d':' -f1)
     files_str=$(echo "$line" | cut -d':' -f2-)
     files=($files_str)
-    
+
     # Größe der ersten Datei (die behalten wird)
     first_file_size=$(stat -c%s "${files[0]}" 2>/dev/null || echo 0)
-    
+
     # Größe aller Duplikate (die gelöscht werden)
     duplicate_size=0
     for ((i=1; i<${#files[@]}; i++)); do
         size=$(stat -c%s "${files[i]}" 2>/dev/null || echo 0)
         duplicate_size=$((duplicate_size + size))
     done
-    
+
     TOTAL_DUPLICATE_SIZE=$((TOTAL_DUPLICATE_SIZE + duplicate_size))
 done < "$TEMP_DIR/duplicate_details.txt"
 
@@ -118,18 +118,18 @@ echo -e "${CYAN}📋 Dateien die entfernt werden:${NC}"
 while read -r line; do
     files_str=$(echo "$line" | cut -d':' -f2-)
     files=($files_str)
-    
+
     # Zeige welche Datei behalten wird
     keep_file=$(basename "${files[0]}")
     echo "   📁 Behalte: $keep_file"
-    
+
     # Zeige welche Dateien entfernt werden
     for ((i=1; i<${#files[@]}; i++)); do
         remove_file="${files[i]}"
         remove_basename=$(basename "$remove_file")
         echo "   🗑️  Entferne: $remove_basename"
         echo "$remove_file" >> "$BACKUP_DIR/removed_files_list.txt"
-        
+
         # Kopiere zu löschende Datei ins Backup
         cp "$remove_file" "$BACKUP_DIR/removed_files/" 2>/dev/null || echo "   ⚠️  Warnung: Konnte $remove_file nicht sichern"
     done
@@ -153,7 +153,7 @@ REMOVED_SIZE=0
 while read -r line; do
     files_str=$(echo "$line" | cut -d':' -f2-)
     files=($files_str)
-    
+
     # Entferne alle Duplikate (außer dem ersten)
     for ((i=1; i<${#files[@]}; i++)); do
         remove_file="${files[i]}"
@@ -163,7 +163,7 @@ while read -r line; do
             REMOVED_COUNT=$((REMOVED_COUNT + 1))
             REMOVED_SIZE=$((REMOVED_SIZE + file_size))
             echo "   ✅ Entfernt: $(basename "$remove_file")"
-            
+
             # Entferne auch zugehörige Thumbnails
             base_name=$(basename "$remove_file" | sed 's/\.[^.]*$//')
             dir_name=$(dirname "$remove_file")
@@ -183,7 +183,7 @@ find "$UPLOAD_DIR" -name "*-[0-9]*x[0-9]*.*" | while read -r thumbnail; do
     base_name=$(basename "$thumbnail" | sed 's/-[0-9]*x[0-9]*\././')
     dir_name=$(dirname "$thumbnail")
     original_file="$dir_name/$base_name"
-    
+
     if [ ! -f "$original_file" ]; then
         rm "$thumbnail" 2>/dev/null
         ORPHANED_THUMBNAILS=$((ORPHANED_THUMBNAILS + 1))

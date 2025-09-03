@@ -38,16 +38,16 @@ echo -e "${YELLOW}🔍 Identifiziere sichere Duplikate...${NC}"
 # Erstelle temporäre Tabelle mit den zu löschenden IDs
 docker-compose exec db mysql -u root -proot_password wordpress -e "
 CREATE TEMPORARY TABLE temp_safe_delete AS
-SELECT 
+SELECT
     p2.ID as delete_id,
     p2.post_title,
     pm2.meta_value as file_path,
     COUNT(*) as total_count
 FROM wp_posts p1
-JOIN wp_postmeta pm1 ON p1.ID = pm1.post_id 
+JOIN wp_postmeta pm1 ON p1.ID = pm1.post_id
 JOIN wp_posts p2 ON p1.post_title = p2.post_title
 JOIN wp_postmeta pm2 ON p2.ID = pm2.post_id
-WHERE p1.post_type = 'attachment' 
+WHERE p1.post_type = 'attachment'
 AND p2.post_type = 'attachment'
 AND pm1.meta_key = '_wp_attached_file'
 AND pm2.meta_key = '_wp_attached_file'
@@ -70,9 +70,9 @@ fi
 echo
 echo -e "${YELLOW}📋 Beispiele der zu löschenden Duplikate:${NC}"
 docker-compose exec db mysql -u root -proot_password wordpress -e "
-SELECT delete_id, post_title, file_path 
-FROM temp_safe_delete 
-ORDER BY total_count DESC 
+SELECT delete_id, post_title, file_path
+FROM temp_safe_delete
+ORDER BY total_count DESC
 LIMIT 10;
 "
 
@@ -141,7 +141,7 @@ if [ "$DELETED_COUNT" -gt 0 ]; then
     echo "   2. WordPress-Cache leeren"
     echo "   3. Medienbibliothek im Admin prüfen"
     echo "   4. Bei Problemen: Restore aus $BACKUP_DIR/pre_safe_cleanup.sql"
-    
+
     if [ "$REMAINING_DUPLICATES" -gt 0 ]; then
         echo
         echo -e "${CYAN}ℹ️  Verbleibende $REMAINING_DUPLICATES Duplikate sind Produktvarianten${NC}"

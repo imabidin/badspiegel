@@ -36,8 +36,8 @@ echo -e "${YELLOW}🔍 2. Analysiere Titel-Duplikate...${NC}"
 
 # Finde Duplikate nach Titel
 docker-compose exec db mysql -u root -proot_password wordpress -e "
-SELECT 
-    post_title, 
+SELECT
+    post_title,
     COUNT(*) as count,
     GROUP_CONCAT(ID ORDER BY ID) as ids,
     GROUP_CONCAT(DISTINCT pm.meta_value ORDER BY pm.meta_value SEPARATOR ' | ') as file_paths
@@ -59,9 +59,9 @@ echo -e "${YELLOW}🗂️ 3. Klassifiziere Duplikate...${NC}"
 # Analysiere DB-Duplikate (gleicher Dateipfad)
 DB_DUPLICATES=$(docker-compose exec db mysql -u root -proot_password wordpress -e "
 SELECT COUNT(*) FROM (
-    SELECT pm.meta_value 
+    SELECT pm.meta_value
     FROM wp_posts p
-    JOIN wp_postmeta pm ON p.ID = pm.post_id 
+    JOIN wp_postmeta pm ON p.ID = pm.post_id
     WHERE p.post_type = 'attachment' AND pm.meta_key = '_wp_attached_file'
     GROUP BY p.post_title, pm.meta_value
     HAVING COUNT(*) > 1
@@ -74,7 +74,7 @@ echo "   - DB-Duplikate (gleicher Dateipfad): $DB_DUPLICATES"
 echo -e "${YELLOW}🎯 4. Identifiziere SICHERE Duplikate...${NC}"
 
 docker-compose exec db mysql -u root -proot_password wordpress -e "
-SELECT 
+SELECT
     'SICHER ZU LÖSCHEN' as status,
     p.post_title,
     COUNT(*) as count,
@@ -83,8 +83,8 @@ SELECT
     SUBSTRING_INDEX(GROUP_CONCAT(p.ID ORDER BY p.ID), ',', 1) as keep_id,
     SUBSTRING(GROUP_CONCAT(p.ID ORDER BY p.ID), LENGTH(SUBSTRING_INDEX(GROUP_CONCAT(p.ID ORDER BY p.ID), ',', 1)) + 2) as delete_ids
 FROM wp_posts p
-JOIN wp_postmeta pm ON p.ID = pm.post_id 
-WHERE p.post_type = 'attachment' 
+JOIN wp_postmeta pm ON p.ID = pm.post_id
+WHERE p.post_type = 'attachment'
 AND pm.meta_key = '_wp_attached_file'
 GROUP BY p.post_title, pm.meta_value
 HAVING COUNT(*) > 1

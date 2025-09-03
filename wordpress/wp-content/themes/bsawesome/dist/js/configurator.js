@@ -71,6 +71,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
  * @package Configurator
  *
  * @todo Check if the carousel functions need to be refactored for better reusability (carouselheight)
+ * @todo Check if it is possible just to scroll to add to cart button after pressing "Fertig", if the button is not properly visible on screen
  */
 
 // ====================== CONFIGURATION CONSTANTS ======================
@@ -79,8 +80,9 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
  * Add to cart behavior configuration
  * - 'steps': Requires completion of all steps
  * - 'primary-button': Requires button state change to primary
+ * - 'summary-visible': Requires summary to be visible (handles pre-loaded state)
  */
-var ADD_TO_CART_MODE = "primary-button";
+var ADD_TO_CART_MODE = "summary-visible";
 
 /**
  * Shine effect configuration
@@ -146,6 +148,7 @@ var ProductConfigurator = /*#__PURE__*/function () {
     this.hasEverCompleted = false;
     this.isProgrammaticClick = false;
     this.isComplete = false;
+    this.shineEffectTriggered = false; // Prevent multiple shine effects
 
     // Validate critical elements exist before initialization
     if (!this.carouselEl || !this.addtocartBtn) {
@@ -219,6 +222,9 @@ var ProductConfigurator = /*#__PURE__*/function () {
       this.updateProgressBar(1);
       this.setCarouselHeight();
       this.addCarouselOverflow();
+
+      // Check if summary is already visible on load and sync button state
+      this.syncButtonStateWithSummary();
     }
 
     /**
@@ -462,10 +468,17 @@ var ProductConfigurator = /*#__PURE__*/function () {
   }, {
     key: "setCarouselHeight",
     value: function setCarouselHeight(slide) {
-      var _this$carouselInner;
+      var _this$carouselInner,
+        _this5 = this;
       var targetSlide = slide || ((_this$carouselInner = this.carouselInner) === null || _this$carouselInner === void 0 ? void 0 : _this$carouselInner.querySelector(".carousel-item.active"));
       if (targetSlide) {
-        this.carouselInner.style.height = "".concat(targetSlide.offsetHeight, "px");
+        // Use requestAnimationFrame to batch DOM reads/writes and prevent forced reflow
+        requestAnimationFrame(function () {
+          var height = targetSlide.offsetHeight;
+          requestAnimationFrame(function () {
+            _this5.carouselInner.style.height = "".concat(height, "px");
+          });
+        });
       }
     }
 
@@ -509,16 +522,21 @@ var ProductConfigurator = /*#__PURE__*/function () {
   }, {
     key: "scrollToConfiguratorTop",
     value: function scrollToConfiguratorTop() {
+      var _this6 = this;
       if (!this.progressBar) return;
-      var rect = this.progressBar.getBoundingClientRect();
-      var isFullyVisible = rect.top >= 0 && rect.left >= 0 && rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && rect.right <= (window.innerWidth || document.documentElement.clientWidth);
-      if (!isFullyVisible) {
-        var _this$configuratorEl2;
-        (_this$configuratorEl2 = this.configuratorEl) === null || _this$configuratorEl2 === void 0 || _this$configuratorEl2.scrollIntoView({
-          behavior: "smooth",
-          block: "start"
-        });
-      }
+
+      // Use requestAnimationFrame to batch DOM reads and prevent forced reflow
+      requestAnimationFrame(function () {
+        var rect = _this6.progressBar.getBoundingClientRect();
+        var isFullyVisible = rect.top >= 0 && rect.left >= 0 && rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && rect.right <= (window.innerWidth || document.documentElement.clientWidth);
+        if (!isFullyVisible) {
+          var _this6$configuratorEl;
+          (_this6$configuratorEl = _this6.configuratorEl) === null || _this6$configuratorEl === void 0 || _this6$configuratorEl.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+          });
+        }
+      });
     }
 
     /**
@@ -602,26 +620,31 @@ var ProductConfigurator = /*#__PURE__*/function () {
   }, {
     key: "scrollIndicatorIntoView",
     value: function scrollIndicatorIntoView(stepIndex) {
+      var _this7 = this;
       if (!this.indicatorsRow || !this.indicators) return;
       var activeIndicator = this.indicators[stepIndex];
       if (!activeIndicator) return;
-      var containerRect = this.indicatorsRow.getBoundingClientRect();
-      var indicatorRect = activeIndicator.getBoundingClientRect();
 
-      // Scroll left if indicator is cut off on left side
-      if (indicatorRect.left < containerRect.left) {
-        this.indicatorsRow.scrollTo({
-          left: this.indicatorsRow.scrollLeft + (indicatorRect.left - containerRect.left) - 10,
-          behavior: "smooth"
-        });
-      }
-      // Scroll right if indicator is cut off on right side
-      else if (indicatorRect.right > containerRect.right) {
-        this.indicatorsRow.scrollTo({
-          left: this.indicatorsRow.scrollLeft + (indicatorRect.right - containerRect.right) + 10,
-          behavior: "smooth"
-        });
-      }
+      // Use requestAnimationFrame to batch DOM reads and prevent forced reflow
+      requestAnimationFrame(function () {
+        var containerRect = _this7.indicatorsRow.getBoundingClientRect();
+        var indicatorRect = activeIndicator.getBoundingClientRect();
+
+        // Scroll left if indicator is cut off on left side
+        if (indicatorRect.left < containerRect.left) {
+          _this7.indicatorsRow.scrollTo({
+            left: _this7.indicatorsRow.scrollLeft + (indicatorRect.left - containerRect.left) - 10,
+            behavior: "smooth"
+          });
+        }
+        // Scroll right if indicator is cut off on right side
+        else if (indicatorRect.right > containerRect.right) {
+          _this7.indicatorsRow.scrollTo({
+            left: _this7.indicatorsRow.scrollLeft + (indicatorRect.right - containerRect.right) + 10,
+            behavior: "smooth"
+          });
+        }
+      });
     }
 
     /**
@@ -647,7 +670,7 @@ var ProductConfigurator = /*#__PURE__*/function () {
   }, {
     key: "updatePrevButton",
     value: function updatePrevButton() {
-      var _this5 = this;
+      var _this8 = this;
       if (!this.carouselPrevBtn) return;
       var isFirstStep = this.currentStep === 1;
       this.carouselPrevBtn.disabled = isFirstStep;
@@ -659,10 +682,10 @@ var ProductConfigurator = /*#__PURE__*/function () {
       } else {
         this.carouselPrevBtn.classList.add("show");
         setTimeout(function () {
-          _this5.carouselPrevBtn.classList.remove("fade");
-          _this5.carouselPrevBtn.classList.remove("show");
+          _this8.carouselPrevBtn.classList.remove("fade");
+          _this8.carouselPrevBtn.classList.remove("show");
           // Restore tabindex to 0 to make button focusable again
-          _this5.carouselPrevBtn.setAttribute("tabindex", "0");
+          _this8.carouselPrevBtn.setAttribute("tabindex", "0");
         }, 75);
       }
     }
@@ -674,7 +697,7 @@ var ProductConfigurator = /*#__PURE__*/function () {
   }, {
     key: "updateNextButton",
     value: function updateNextButton() {
-      var _this6 = this;
+      var _this9 = this;
       if (!this.carouselNextBtn) return;
       if (this.currentStep === this.totalSteps) {
         // Final step: Change to "Finished" and setup summary
@@ -685,10 +708,10 @@ var ProductConfigurator = /*#__PURE__*/function () {
         this.carouselNextBtn.classList.remove("show");
         this.carouselNextBtn.innerHTML = "Weiter";
         setTimeout(function () {
-          _this6.carouselNextBtn.removeAttribute("data-bs-toggle");
-          _this6.carouselNextBtn.removeAttribute("aria-expanded");
-          _this6.carouselNextBtn.removeAttribute("aria-controls");
-          _this6.carouselNextBtn.setAttribute("data-bs-target", "#productConfiguratorCarousel");
+          _this9.carouselNextBtn.removeAttribute("data-bs-toggle");
+          _this9.carouselNextBtn.removeAttribute("aria-expanded");
+          _this9.carouselNextBtn.removeAttribute("aria-controls");
+          _this9.carouselNextBtn.setAttribute("data-bs-target", "#productConfiguratorCarousel");
         }, 300);
       }
     }
@@ -703,27 +726,87 @@ var ProductConfigurator = /*#__PURE__*/function () {
   }, {
     key: "handleSummary",
     value: function handleSummary() {
-      var _this7 = this;
-      if (!this.summaryEl) return;
+      var _this0 = this;
+      console.log("🔧 handleSummary() called");
+      if (!this.summaryEl) {
+        console.log("❌ No summaryEl found");
+        return;
+      }
+      console.log("📊 Summary element:", this.summaryEl);
+      console.log("📊 Summary has 'show' class:", this.summaryEl.classList.contains("show"));
 
       // Show button if summary is already visible
       if (this.summaryEl.classList.contains("show")) {
         this.carouselNextBtn.classList.add("show");
+        console.log("✅ Summary already visible, added 'show' to next button");
+
+        // Only apply completion styling automatically for non-summary-visible modes
+        if (ADD_TO_CART_MODE !== "summary-visible") {
+          console.log("🎯 Non-summary-visible mode, applying completion styling directly");
+          this.applyCompletionStyling();
+        } else {
+          console.log("🎯 Summary-visible mode, styling will be applied on 'Fertig' click only");
+        }
       }
 
       // Configure button for Bootstrap collapse
       setTimeout(function () {
-        _this7.carouselNextBtn.setAttribute("data-bs-toggle", "collapse");
-        _this7.carouselNextBtn.setAttribute("data-bs-target", "#productConfiguratorSummary");
-        _this7.carouselNextBtn.setAttribute("aria-expanded", "false");
-        _this7.carouselNextBtn.setAttribute("aria-controls", "productConfiguratorSummary");
+        _this0.carouselNextBtn.setAttribute("data-bs-toggle", "collapse");
+        _this0.carouselNextBtn.setAttribute("data-bs-target", "#productConfiguratorSummary");
+        _this0.carouselNextBtn.setAttribute("aria-expanded", "false");
+        _this0.carouselNextBtn.setAttribute("aria-controls", "productConfiguratorSummary");
+        console.log("✅ Bootstrap collapse attributes set");
       }, 1);
 
       // Setup summary event listeners (once only)
       if (!this.summaryEl.dataset.listenerAdded) {
+        console.log("🎯 Setting up event listeners for first time");
         this.lockSummaryOnShow();
         this.setupFinishedButtonScrollBehavior();
+        this.summaryEl.dataset.listenerAdded = "true";
+      } else {
+        console.log("⚠️ Event listeners already added, skipping setup");
       }
+    }
+
+    /**
+     * Apply completion styling to button and progress bar
+     * Centralized method for consistent completion effects
+     */
+  }, {
+    key: "applyCompletionStyling",
+    value: function applyCompletionStyling() {
+      var _this1 = this;
+      console.log("🎨 applyCompletionStyling() called");
+
+      // Prevent multiple styling applications - check and set flag immediately
+      if (this.isComplete) {
+        console.log("⚠️ Already completed, skipping styling");
+        return;
+      }
+
+      // Mark configuration as complete immediately to prevent race conditions
+      this.isComplete = true;
+      console.log("🔒 Configuration marked as complete (early)");
+      console.log("📊 Add to cart button before:", this.addtocartBtn.className);
+
+      // Transform add to cart button to primary state
+      this.addtocartBtn.classList.add("btn-primary");
+      this.addtocartBtn.classList.remove("text-start", "btn-light");
+      console.log("📊 Add to cart button after:", this.addtocartBtn.className);
+
+      // Complete progress bar
+      if (this.progressBar) {
+        this.progressBar.style.width = "100%";
+        this.progressBar.setAttribute("aria-valuenow", "100");
+        console.log("✅ Progress bar set to 100%");
+      }
+      console.log("✅ Configuration styling complete");
+
+      // Trigger shine effect only once
+      setTimeout(function () {
+        _this1.triggerCompletionEffects();
+      }, 300);
     }
 
     /**
@@ -733,50 +816,51 @@ var ProductConfigurator = /*#__PURE__*/function () {
   }, {
     key: "lockSummaryOnShow",
     value: function lockSummaryOnShow() {
-      var _this8 = this;
+      var _this10 = this;
+      console.log("🔒 lockSummaryOnShow() called");
       var onSummaryShow = function onSummaryShow() {
-        var _this8$carouselNextBt;
+        var _this10$carouselNextB;
+        console.log("🎉 SUMMARY SHOW EVENT TRIGGERED!");
+
         // Update button state
-        (_this8$carouselNextBt = _this8.carouselNextBtn) === null || _this8$carouselNextBt === void 0 || _this8$carouselNextBt.classList.add("show");
+        (_this10$carouselNextB = _this10.carouselNextBtn) === null || _this10$carouselNextB === void 0 || _this10$carouselNextB.classList.add("show");
 
-        // Transform add to cart button to primary state
-        _this8.addtocartBtn.classList.add("btn-primary");
-        _this8.addtocartBtn.classList.remove("text-start", "btn-light");
+        // Apply completion styling
+        _this10.applyCompletionStyling();
 
-        // Complete progress bar
-        if (_this8.progressBar) {
-          _this8.progressBar.style.width = "100%";
-          _this8.progressBar.setAttribute("aria-valuenow", "100");
-        }
-
-        // Scroll to summary and trigger shine effect
+        // Scroll to summary
         setTimeout(function () {
-          _this8.scrollToSummary();
-          _this8.triggerCompletionEffects();
+          _this10.scrollToSummary();
         }, 1);
-
-        // Mark configuration as complete
-        _this8.isComplete = true;
       };
 
       // Setup event listeners
+      console.log("🎯 Adding show.bs.collapse event listener");
       this.summaryEl.addEventListener("show.bs.collapse", onSummaryShow);
       this.summaryEl.addEventListener("hide.bs.collapse", function (e) {
         return e.preventDefault();
       });
-      this.summaryEl.dataset.listenerAdded = "true";
-    }
-
-    /**
-     * Trigger completion visual effects (shine effect on add-to-cart button)
-     * Centralized method to ensure consistent completion feedback
-     */
+    } /**
+      * Trigger completion visual effects (shine effect on add-to-cart button)
+      * Centralized method to ensure consistent completion feedback
+      */
   }, {
     key: "triggerCompletionEffects",
     value: function triggerCompletionEffects() {
-      var _this9 = this;
+      var _this11 = this;
+      console.log("✨ triggerCompletionEffects() called");
+
+      // Prevent multiple shine effects
+      if (this.shineEffectTriggered) {
+        console.log("⚠️ Shine effect already triggered, skipping");
+        return;
+      }
+      this.shineEffectTriggered = true;
+      console.log("🔒 Shine effect marked as triggered");
+
+      // Add slight delay to ensure button styling is complete
       setTimeout(function () {
-        _this9.addShineEffectToButton();
+        _this11.addShineEffectToButton();
       }, 300);
     }
 
@@ -787,20 +871,53 @@ var ProductConfigurator = /*#__PURE__*/function () {
   }, {
     key: "setupFinishedButtonScrollBehavior",
     value: function setupFinishedButtonScrollBehavior() {
-      var _this0 = this;
-      if (!this.carouselNextBtn) return;
+      var _this12 = this;
+      console.log("🎯 setupFinishedButtonScrollBehavior() called");
+      if (!this.carouselNextBtn) {
+        console.log("❌ No carouselNextBtn found");
+        return;
+      }
       this.carouselNextBtn.addEventListener("click", function (event) {
+        var _this12$summaryEl;
+        console.log("🔘 Fertig button clicked!");
+        console.log("📊 Current step:", _this12.currentStep, "Total steps:", _this12.totalSteps);
+        console.log("📊 ADD_TO_CART_MODE:", ADD_TO_CART_MODE);
+
         // Only handle when button is in "Fertig" state (last step)
-        if (_this0.currentStep !== _this0.totalSteps) return;
+        if (_this12.currentStep !== _this12.totalSteps) {
+          console.log("⚠️ Not on last step, ignoring click");
+          return;
+        }
+        console.log("✅ On last step, checking summary visibility");
+        console.log("📊 Summary element:", _this12.summaryEl);
+        console.log("📊 Summary has 'show' class:", (_this12$summaryEl = _this12.summaryEl) === null || _this12$summaryEl === void 0 ? void 0 : _this12$summaryEl.classList.contains("show"));
+
+        // For summary-visible mode: Apply styling on every "Fertig" click
+        if (ADD_TO_CART_MODE === "summary-visible") {
+          console.log("🎯 Summary-visible mode: Applying completion styling on Fertig click");
+
+          // Reset shine effect flag to allow multiple triggers
+          _this12.shineEffectTriggered = false;
+          console.log("🔄 Shine effect flag reset for new trigger");
+          _this12.applyCompletionStyling();
+        }
 
         // Check if summary is already visible
-        if (_this0.summaryEl && _this0.summaryEl.classList.contains("show")) {
+        if (_this12.summaryEl && _this12.summaryEl.classList.contains("show")) {
+          console.log("📋 Summary already visible, scrolling to it");
           // Small delay to ensure any collapse animation is complete
           setTimeout(function () {
-            _this0.scrollToSummary();
+            _this12.scrollToSummary();
+
+            // Reset shine effect flag for re-trigger
+            _this12.shineEffectTriggered = false;
+            console.log("🔄 Shine effect flag reset for re-trigger");
+
             // Trigger shine effect when re-clicking "Fertig" on visible summary
-            _this0.triggerCompletionEffects();
+            _this12.triggerCompletionEffects();
           }, 100);
+        } else {
+          console.log("📋 Summary not visible, Bootstrap collapse should handle it");
         }
       });
     }
@@ -838,7 +955,7 @@ var ProductConfigurator = /*#__PURE__*/function () {
   }, {
     key: "addtocartLoadingState",
     value: function addtocartLoadingState() {
-      this.addtocartBtn.innerHTML = "\n            <span class=\"spinner-border me-2\" \n                  style=\"--bs-spinner-width:1.25rem; --bs-spinner-height:1.25rem; --bs-spinner-border-width:0.225rem\" \n                  role=\"status\">\n            </span>\n            <span aria-live=\"polite\">Warenkorb wird vorbereitet...</span>\n        ";
+      this.addtocartBtn.innerHTML = "\n            <span class=\"spinner-border me-2\"\n                  style=\"--bs-spinner-width:1.25rem; --bs-spinner-height:1.25rem; --bs-spinner-border-width:0.225rem\"\n                  role=\"status\">\n            </span>\n            <span aria-live=\"polite\">Warenkorb wird vorbereitet...</span>\n        ";
       this.addtocartBtn.setAttribute("aria-busy", "true");
     }
 
@@ -851,12 +968,23 @@ var ProductConfigurator = /*#__PURE__*/function () {
   }, {
     key: "configuratorCompleted",
     value: function configuratorCompleted() {
+      var _this$summaryEl;
+      console.log("🔍 configuratorCompleted() check - Mode:", ADD_TO_CART_MODE);
       switch (ADD_TO_CART_MODE) {
         case "steps":
-          return this.hasEverCompleted;
+          var stepsResult = this.hasEverCompleted;
+          console.log("📊 Steps mode result:", stepsResult, "(hasEverCompleted:", this.hasEverCompleted, ")");
+          return stepsResult;
         case "primary-button":
-          return this.addtocartBtn.classList.contains("btn-primary");
+          var primaryResult = this.addtocartBtn.classList.contains("btn-primary");
+          console.log("📊 Primary-button mode result:", primaryResult, "(button classes:", this.addtocartBtn.className, ")");
+          return primaryResult;
+        case "summary-visible":
+          var summaryResult = this.summaryEl && this.summaryEl.classList.contains("show");
+          console.log("📊 Summary-visible mode result:", summaryResult, "(summary element exists:", !!this.summaryEl, ", has show class:", (_this$summaryEl = this.summaryEl) === null || _this$summaryEl === void 0 ? void 0 : _this$summaryEl.classList.contains("show"), ")");
+          return summaryResult;
         default:
+          console.log("❌ Unknown mode, returning false");
           return false;
       }
     }
@@ -873,7 +1001,7 @@ var ProductConfigurator = /*#__PURE__*/function () {
   }, {
     key: "showIncompleteConfigModal",
     value: function showIncompleteConfigModal() {
-      var _this1 = this;
+      var _this13 = this;
       createModal({
         title: '<i class="fa-sharp fa-light fa-exclamation-triangle text-warning me-2"></i>Hinweis',
         body: "\n                <p class=\"alert alert-warning mb-3\">Konfiguration noch nicht abgeschlossen!</p>\n                <p class=\"border border-warning-subtle p-3 text-warning-emphasis mb-0\">\n                    Sie k\xF6nnen zur\xFCck zum Konfigurator, <strong>oder</strong> das Produkt direkt in den Warenkorb legen.\n                </p>\n                ",
@@ -889,7 +1017,7 @@ var ProductConfigurator = /*#__PURE__*/function () {
           dismiss: true,
           // Schließt das Modal nach dem Klick
           onClick: function onClick() {
-            _this1.triggerProgrammaticClick();
+            _this13.triggerProgrammaticClick();
           }
         }],
         size: "lg"
@@ -924,6 +1052,42 @@ var ProductConfigurator = /*#__PURE__*/function () {
     }
 
     /**
+     * Sync button state with summary visibility on initialization
+     * Handles cases where summary is pre-loaded with "show" class
+     */
+  }, {
+    key: "syncButtonStateWithSummary",
+    value: function syncButtonStateWithSummary() {
+      var _this14 = this;
+      if (!this.summaryEl || !this.addtocartBtn) return;
+
+      // Only auto-sync button styling for "primary-button" mode
+      // "summary-visible" mode should only style button on active "Fertig" click
+      if (ADD_TO_CART_MODE !== "primary-button") return;
+
+      // If summary is already visible but button is not primary, sync the state
+      if (this.summaryEl.classList.contains("show") && !this.addtocartBtn.classList.contains("btn-primary")) {
+        // Transform add to cart button to primary state
+        this.addtocartBtn.classList.add("btn-primary");
+        this.addtocartBtn.classList.remove("text-start", "btn-light");
+
+        // Complete progress bar
+        if (this.progressBar) {
+          this.progressBar.style.width = "100%";
+          this.progressBar.setAttribute("aria-valuenow", "100");
+        }
+
+        // Mark configuration as complete
+        this.isComplete = true;
+
+        // Optional: Trigger shine effect after a short delay
+        setTimeout(function () {
+          _this14.triggerCompletionEffects();
+        }, 500);
+      }
+    }
+
+    /**
      * Add shine effect to add-to-cart button
      * Creates visual feedback for configuration completion
      */
@@ -931,10 +1095,14 @@ var ProductConfigurator = /*#__PURE__*/function () {
     key: "addShineEffectToButton",
     value: function addShineEffectToButton() {
       if (!this.addtocartBtn) return;
-      var existingShine = this.addtocartBtn.querySelector(".btn-shine-effect");
-      if (existingShine) {
-        existingShine.remove();
-      }
+      console.log("✨ Adding shine effect to button");
+
+      // Remove any existing shine effects to prevent overlap
+      var existingShines = this.addtocartBtn.querySelectorAll(".btn-shine-effect");
+      existingShines.forEach(function (shine) {
+        console.log("🧹 Removing existing shine effect");
+        shine.remove();
+      });
       var shineElement = document.createElement("div");
       shineElement.className = "btn-shine-effect";
       if (getComputedStyle(this.addtocartBtn).position === "static") {
@@ -958,25 +1126,25 @@ var ProductConfigurator = /*#__PURE__*/function () {
   }, {
     key: "initIndicatorFocusHighlight",
     value: function initIndicatorFocusHighlight() {
-      var _this10 = this;
+      var _this15 = this;
       if (!this.indicators) return;
       this.indicators.forEach(function (indicator, index) {
         // Add focus event listener
         indicator.addEventListener("focus", function () {
-          _this10.highlightCarouselHeader(index, true);
+          _this15.highlightCarouselHeader(index, true);
         });
 
         // Add blur event listener
         indicator.addEventListener("blur", function () {
-          _this10.highlightCarouselHeader(index, false);
+          _this15.highlightCarouselHeader(index, false);
         });
 
         // Optional: Also handle mouse hover for consistent UX
         indicator.addEventListener("mouseenter", function () {
-          _this10.highlightCarouselHeader(index, true);
+          _this15.highlightCarouselHeader(index, true);
         });
         indicator.addEventListener("mouseleave", function () {
-          _this10.highlightCarouselHeader(index, false);
+          _this15.highlightCarouselHeader(index, false);
         });
       });
     }

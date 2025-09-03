@@ -17,7 +17,7 @@
  * - Data attribute synchronization for price display
  * - Prevention of redundant calculations through value caching
  *
- * @version 2.2.0
+ * @version 2.3.0
  * @package Configurator
  * @subpackage PriceCalculations
  */
@@ -443,4 +443,145 @@ export function calcPrice2x100(
   const price = optionToSelect.dataset.price || "0";
   inputElement1.dataset.price = price;
   inputElement2.dataset.price = price;
+}
+
+/**
+ * Calculates price for four dimension inputs (breite_unten, breite_oben, hoehe_links, hoehe_rechts)
+ * Takes the maximum values from width inputs and height inputs, then uses progressive rounding
+ * strategy like calcPrice2x100: attempts 100-unit rounding first, falls back to 50-unit rounding
+ *
+ * @param {HTMLInputElement} breiteUntenElement - Bottom width input element
+ * @param {HTMLInputElement} breiteObenElement - Top width input element  
+ * @param {HTMLInputElement} hoeheLinksElement - Left height input element
+ * @param {HTMLInputElement} hoeheRechtsElement - Right height input element
+ * @param {HTMLSelectElement} pricematrixSelect - The price matrix select element
+ * @param {Object} pricematrixCache - Cached option elements (currently unused but preserved for consistency)
+ * @param {Object} lastValueCache - Cache object to prevent redundant calculations
+ * @param {string} lastValueCache.lastRoundedValue - Previously calculated dimension string
+ *
+ * @example
+ * // Usage for four dimension inputs
+ * calcPrice4x100(breiteUntenInput, breiteObenInput, hoeheLinksInput, hoeheRechtsInput, matrixSelect, cache, { lastRoundedValue: null });
+ *
+ * // Input: breiteUnten=350, breiteOben=400, hoeheLinks=780, hoeheRechts=750
+ * // Max width=400, Max height=780 → Try: 400x800 → Found: Select option
+ */
+export function calcPrice4x100(
+  breiteUntenElement,
+  breiteObenElement,
+  hoeheLinksElement,
+  hoeheRechtsElement,
+  pricematrixSelect,
+  pricematrixCache,
+  lastValueCache
+) {
+  // Parse and validate all four input values
+  const breiteUntenValue = parseInt(breiteUntenElement.value, 10);
+  const breiteObenValue = parseInt(breiteObenElement.value, 10);
+  const hoeheLinksValue = parseInt(hoeheLinksElement.value, 10);
+  const hoeheRechtsValue = parseInt(hoeheRechtsElement.value, 10);
+
+  // Exit if any value is invalid
+  if (isNaN(breiteUntenValue) || isNaN(breiteObenValue) || 
+      isNaN(hoeheLinksValue) || isNaN(hoeheRechtsValue)) return;
+
+  // Calculate maximum values for width and height
+  const maxBreite = Math.max(breiteUntenValue, breiteObenValue);
+  const maxHoehe = Math.max(hoeheLinksValue, hoeheRechtsValue);
+
+  /**
+   * PROGRESSIVE ROUNDING STRATEGY WITH INTELLIGENT FALLBACK
+   * ======================================================
+   * Step 1: Round to nearest 100 (primary strategy for common sizes)
+   * Step 2: Round to nearest 50 (fallback for intermediate sizes)
+   * Step 3: Smart fallback to next available size in matrix
+   */
+
+  // Step 1: Round both max dimensions to next multiple of 100
+  let roundedValue1 = Math.ceil(maxBreite / 100) * 100;
+  let roundedValue2 = Math.ceil(maxHoehe / 100) * 100;
+  let potentialValue = `${roundedValue1}x${roundedValue2}`;
+
+  // Performance optimization: Skip if dimension string hasn't changed
+  if (lastValueCache.lastRoundedValue === potentialValue) return;
+
+  /**
+   * PRIMARY OPTION SEARCH (100-unit rounding)
+   * ========================================
+   * Search for exact match in price matrix using 100-unit rounded dimensions
+   */
+  let optionToSelect = Array.from(pricematrixSelect.options).find(
+    (opt) => opt.value === potentialValue
+  );
+
+  /**
+   * FALLBACK OPTION SEARCH (50-unit rounding)
+   * ========================================
+   * If 100-unit rounding doesn't yield results, try 50-unit rounding
+   * This covers intermediate sizes not available in the primary matrix
+   */
+  if (!optionToSelect) {
+    roundedValue1 = Math.ceil(maxBreite / 50) * 50;
+    roundedValue2 = Math.ceil(maxHoehe / 50) * 50;
+    potentialValue = `${roundedValue1}x${roundedValue2}`;
+
+    optionToSelect = Array.from(pricematrixSelect.options).find(
+      (opt) => opt.value === potentialValue
+    );
+  }
+
+  /**
+   * INTELLIGENT SIZE FALLBACK (similar to calcPrice2x100)
+   * ====================================================
+   * If both 100 and 50 unit rounding fail, find next available size combination
+   */
+  if (!optionToSelect) {
+    // Get all available dimension combinations from the select options
+    const availableOptions = Array.from(pricematrixSelect.options)
+      .map((opt) => opt.value)
+      .filter((val) => val.includes("x"))
+      .map((val) => {
+        const [w, h] = val.split("x").map((v) => parseInt(v, 10));
+        return {
+          value: val,
+          width: w,
+          height: h,
+          element: pricematrixSelect.querySelector(`option[value="${val}"]`),
+        };
+      })
+      .filter((opt) => !isNaN(opt.width) && !isNaN(opt.height));
+
+    // Find the smallest option that can accommodate both max dimensions
+    const suitableOption = availableOptions.find(
+      (opt) => opt.width >= roundedValue1 && opt.height >= roundedValue2
+    );
+
+    if (suitableOption) {
+      optionToSelect = suitableOption.element;
+      potentialValue = suitableOption.value;
+    }
+  }
+
+  // Exit if no option found even with intelligent fallback
+  if (!optionToSelect) return;
+
+  /**
+   * MATRIX UPDATE AND EVENT PROPAGATION
+   * ===================================
+   * Update the price matrix selection and propagate changes to dependent systems
+   * Using the same pattern as calcPrice2x100 for consistency
+   */
+
+  // Update the cache with successful calculation result
+  lastValueCache.lastRoundedValue = potentialValue;
+
+  // Use the same updateSelectAndTrigger function for consistency
+  updateSelectAndTrigger(pricematrixSelect, optionToSelect);
+
+  // Synchronize data-price attributes for all four input elements
+  const price = optionToSelect.dataset.price || "0";
+  breiteUntenElement.dataset.price = price;
+  breiteObenElement.dataset.price = price;
+  hoeheLinksElement.dataset.price = price;
+  hoeheRechtsElement.dataset.price = price;
 }

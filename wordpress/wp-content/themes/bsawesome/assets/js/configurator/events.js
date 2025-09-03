@@ -12,8 +12,10 @@
  * - Dynamic event binding for configurator elements
  * - Performance optimizations with caching and debouncing
  *
- * @version 2.2.0
+ * @version 2.3.0
  * @package Configurator
+ * 
+ * @todo Use for "dachschraege" calcPrice2x100, whilst using a "prefunction" to get the higher "breite" or "hoehe" value
  */
 
 import {
@@ -21,6 +23,10 @@ import {
   breiteInput,
   hoeheInput,
   tiefeInput,
+  breiteUntenInput,
+  breiteObenInput,
+  hoeheLinksInput,
+  hoeheRechtsInput,
   isSK,
   isSK1,
   isSK2,
@@ -33,6 +39,7 @@ import {
   calcPrice1x50,
   calcPrice1x10,
   calcPrice2x100,
+  calcPrice4x100,
 } from "./pricecalcs/pricematrices";
 
 /**
@@ -310,6 +317,42 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     }
   });
+
+  // ====================== DACHSCHRAEGE DIMENSION CALCULATIONS ======================
+  const fourDimensionPriceMatrix = document.querySelector('.option-price[name*="pxbh"]');
+  if (breiteUntenInput && breiteObenInput && hoeheLinksInput && hoeheRechtsInput && fourDimensionPriceMatrix) {
+    const fourDimensionCache = {};
+    const fourDimensionLastValue = { lastRoundedValue: null };
+
+    // Build cache for four dimension calculations
+    fourDimensionPriceMatrix.querySelectorAll("option").forEach((option) => {
+      if (option.value.includes("x")) {
+        fourDimensionCache[option.value] = option;
+      }
+    });
+
+    // Calculation function
+    function calcFourDimensionPrice() {
+      calcPrice4x100(
+        breiteUntenInput,
+        breiteObenInput,
+        hoeheLinksInput,
+        hoeheRechtsInput,
+        fourDimensionPriceMatrix,
+        fourDimensionCache,
+        fourDimensionLastValue
+      );
+    }
+
+    // Event listeners for all four inputs
+    breiteUntenInput.addEventListener("input", calcFourDimensionPrice);
+    breiteObenInput.addEventListener("input", calcFourDimensionPrice);
+    hoeheLinksInput.addEventListener("input", calcFourDimensionPrice);
+    hoeheRechtsInput.addEventListener("input", calcFourDimensionPrice);
+
+    // Initial calculation
+    calcFourDimensionPrice();
+  }
 });
 
 /**

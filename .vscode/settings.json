@@ -33,7 +33,7 @@
 
   // PHP intelephense
   "intelephense.environment.phpVersion": "8.2.0",
-  "intelephense.stubs": ["Core", "standard", "pcre", "json", "mysqli", "PDO", "curl", "gd", "mbstring", "openssl", "session", "xml", "zip", "wordpress"],
+  "intelephense.stubs": ["Core", "standard", "pcre", "json", "mysqli", "PDO", "curl", "gd", "mbstring", "openssl", "session", "xml", "zip", "wordpress", "date", "hash", "filter", "ctype", "SPL"],
   "intelephense.files.exclude": ["**/.git/**", "**/.svn/**", "**/.hg/**", "**/CVS/**", "**/.DS_Store/**", "**/node_modules/**", "**/bower_components/**", "**/vendor/**/{Tests,tests}/**", "**/.history/**", "**/vendor/**/vendor/**"],
   "intelephense.format.braces": "k&r",
   "intelephense.completion.triggerParameterHints": true,

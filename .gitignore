@@ -1,30 +1,35 @@
 # WordPress Development Environment .gitignore
 
+# =============================================================================
+# WordPress Core & Content
+# =============================================================================
 # WordPress Dateien (werden lokal generiert), außer Theme BSAWESOME
 wordpress/*
 !wordpress/wp-content/
 wordpress/wp-content/*
-!wordpress/wp-content/themes
+!wordpress/wp-content/themes/
 wordpress/wp-content/themes/*
 !wordpress/wp-content/themes/bsawesome/
+
+# =============================================================================
+# BSAwesome Theme spezifische Dateien
+# =============================================================================
+# Build-Ausgaben
 wordpress/wp-content/themes/bsawesome/dist/*
 
-# Builds
-# wordpress/wp-content/themes/bsawesome/dist/*
-# wordpress/wp-content/themes/bsawesome/dist/js/configurator.js
-# wordpress/wp-content/themes/bsawesome/dist/js/configurator.js.map
+# Dependencies
+wordpress/wp-content/themes/bsawesome/node_modules/
 
-# BSAwesome Theme spezifische Dateien
-# Node modules
-# wordpress/wp-content/themes/bsawesome/node_modules/
+# Excel-Konfigurationsdateien
+wordpress/wp-content/themes/bsawesome/inc/configurator/*.xlsx
+wordpress/wp-content/themes/bsawesome/inc/configurator/~$*.xlsx
 
-# Excel-Dateien (Konfiguration)
-# wordpress/wp-content/themes/bsawesome/inc/configurator/*.xlsx
-# wordpress/wp-content/themes/bsawesome/inc/configurator/~$*.xlsx
+# Package Lock Files
+wordpress/wp-content/themes/bsawesome/package-lock.json
 
-# Andere temporäre Dateien
-# wordpress/wp-content/themes/bsawesome/package-lock.json
-
+# =============================================================================
+# Project Data & Backups
+# =============================================================================
 # Persistente Daten
 data/
 !data/.gitkeep
@@ -41,48 +46,68 @@ backups/
 kinsta-import/
 !kinsta-import/.gitkeep
 
-# Build
+# =============================================================================
+# Build & Dependencies
+# =============================================================================
+# Build Ausgaben
 dist/
 !dist/.gitkeep
 
-# Umgebungsvariablen (falls sensible Daten enthalten)
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# PHP Dependencies
+vendor/
+composer.lock
+
+# =============================================================================
+# Environment & Configuration
+# =============================================================================
+# Umgebungsvariablen
+.env
 .env.local
 .env.production
+.env.*.local
 
 # Docker
 .docker/
 
+# SSL Zertifikate
+*.pem
+*.key
+*.crt
+
+# =============================================================================
+# Temporary & Cache Files
+# =============================================================================
 # Temporäre Dateien
 *.tmp
 *.temp
 *.log
+*.bak
 
+# Cache
+.cache/
+cache/
+
+# =============================================================================
+# Development Tools
+# =============================================================================
 # IDE/Editor Dateien
 .idea/
+.vscode/
 *.swp
 *.swo
 *~
 
 # OS Dateien
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
-*.bak
-
-# Node.js (falls für Theme-Development verwendet)
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# PHP
-vendor/
-composer.lock
-
-# SSL Zertifikate (falls lokal generiert)
-*.pem
-*.key
-*.crt
-
-# Cache Dateien
-.cache/
-cache/

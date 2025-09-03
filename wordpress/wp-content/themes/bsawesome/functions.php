@@ -29,6 +29,11 @@ require_once $inc_dir . 'modal.php';         // Modal functionality
 require_once $inc_dir . 'redirects.php';     // Redirects outside Yoast
 // require_once $inc_dir . 'cli.php';           // WP-CLI commands
 
+// Media Duplicate Manager (Admin Tool)
+if (is_admin()) {
+    require_once $stylesheet_directory . '/media-duplicate-admin.php';
+}
+
 /**
  * LAYOUT COMPONENTS
  * 

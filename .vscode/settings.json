@@ -14,6 +14,10 @@
   "files.exclude": {
     "**/data": true,
     "**/logs": true,
+    "**/backups": true,
+    "**/kinsta-import": true,
+    "**/node_modules": true,
+    "**/dist": true,
     "**/.git": true,
     "**/.svn": true,
     "**/.hg": true,
@@ -50,5 +54,8 @@
   // Emmet
   "emmet.includeLanguages": {
     "php": "html"
-  }
+  },
+
+  // Port forwarding settings - disable all notifications
+  "remote.autoForwardPorts": false
 }

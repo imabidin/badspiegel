@@ -1,9 +1,14 @@
 /**
  * Product Configurator - Input Validation Module
  *
- * This module handles form input validation for the product configurator.
+ * This module serves as the central validation engine for the product configurator.
  * It provides real-time validation feedback, custom error messages,
  * relational field validation, and Bootstrap form state management.
+ * 
+ * ARCHITECTURE (DRY Principle):
+ * - input.js: Central validation engine with generic event listeners
+ * - Specialized modules (e.g., dachschraege.js): Domain-specific validation rules
+ * - Callback system: Specialized modules provide callback functions for input.js
  *
  * Features:
  * - Real-time validation with visual feedback
@@ -11,10 +16,21 @@
  * - Relational field constraints (e.g., width dependencies)
  * - Bootstrap form state classes (is-valid, is-invalid)
  * - Dynamic min/max attribute updates
+ * - Modular validation rules via callback system
  *
- * @version 2.2.0
+ * @version 2.3.0
  * @package Configurator
  */
+
+import {
+  getDachschraegeValidationMessage,
+  getDependentFields,
+  isDachschraegeField,
+  triggerCarouselHeightUpdate,
+  validateAndUpdateAllPositionFields,
+  onDachschraegeFieldInput,
+  onDachschraegeFieldChange,
+} from "./dependencies/dachschraege.js";
 
 document.addEventListener("DOMContentLoaded", function () {
   /**
@@ -27,22 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /**
    * Special field references for relational validation
-   * These fields have interdependencies that require custom validation logic
-   * For Dachschrägen (sloped roof configurations):
-   * - breite_unten: bottom width (base reference)
-   * - breite_oben: top width (must not exceed bottom width)
-   * - hoehe_links: left height
-   * - hoehe_rechts: right height
    */
-  const breiteUntenField = document.querySelector('input[name="breite_unten"]');
-  const breiteObenField = document.querySelector('input[name="breite_oben"]');
-  const hoeheLinksField = document.querySelector('input[name="hoehe_links"]');
-  const hoeheRechtsField = document.querySelector('input[name="hoehe_rechts"]');
-
-  // Legacy field support (for shelf width validation)
-  const ablageBreiteField = document.querySelector(
-    'input[name="ablage_breite"]'
-  );
 
   /**
    * Ensures that an invalid feedback container exists for the given field
@@ -102,6 +103,9 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
       feedbackElement.style.display = "none";
     }
+    
+    // Trigger carousel height update when feedback visibility changes
+    triggerCarouselHeightUpdate();
   }
 
   /**
@@ -135,65 +139,17 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
-    // 3. Custom relational validation rules for Dachschrägen
+    // 3. Custom relational validation rules
 
-    // Validate top width against bottom width (Dachschräge)
-    if (field.name === "breite_oben") {
-      const breiteOben = parseFloat(field.value) || 0;
-      const breiteUnten =
-        parseFloat(document.querySelector('input[name="breite_unten"]')?.value) || 0;
-      if (breiteOben > breiteUnten) {
-        messages.push(
-          'Die "Breite oben" darf nicht größer sein als die "Breite unten".'
-        );
+    // Dachschräge validation (outsourced to dedicated module)
+    if (isDachschraegeField(field)) {
+      const dachschraegeMessage = getDachschraegeValidationMessage(field);
+      if (dachschraegeMessage) {
+        messages.push(dachschraegeMessage);
       }
     }
 
-    // Validate left height against right height (ensure reasonable difference)
-    if (field.name === "hoehe_links") {
-      const hoeheLinks = parseFloat(field.value) || 0;
-      const hoeheRechts =
-        parseFloat(document.querySelector('input[name="hoehe_rechts"]')?.value) || 0;
-      // Optional: Add validation if one height should not exceed the other by too much
-      // Example: if (Math.abs(hoeheLinks - hoeheRechts) > someMaxDifference) { ... }
-    }
-
-    // Validate right height against left height (ensure reasonable difference)
-    if (field.name === "hoehe_rechts") {
-      const hoeheRechts = parseFloat(field.value) || 0;
-      const hoeheLinks =
-        parseFloat(document.querySelector('input[name="hoehe_links"]')?.value) || 0;
-      // Optional: Add validation if one height should not exceed the other by too much
-      // Example: if (Math.abs(hoeheRechts - hoeheLinks) > someMaxDifference) { ... }
-    }
-
-    // Cross-validate bottom width (base reference for other measurements)
-    if (field.name === "breite_unten") {
-      const breiteUnten = parseFloat(field.value) || 0;
-      const breiteOben =
-        parseFloat(document.querySelector('input[name="breite_oben"]')?.value) || 0;
-      if (breiteOben > breiteUnten) {
-        // Trigger validation on the dependent field
-        const breiteObenField = document.querySelector('input[name="breite_oben"]');
-        if (breiteObenField) {
-          setTimeout(() => validateField(breiteObenField), 0);
-        }
-      }
-    }
-
-    // 4. Shelf width validation (currently disabled)
-    // Uncomment to enable shelf width validation against main width
-    /*
-    if (field.name === "ablage_breite") {
-      const ablageBreite = parseFloat(field.value) || 0;
-      const breite = parseFloat(breiteField ? breiteField.value : 0) || 0;
-      if (ablageBreite > breite) {
-        messages.push("Die Ablage Breite darf nicht größer sein als die Breite.");
-      }
-    }
-    */
-
-    // 5. Apply validation state based on collected messages
+    // 4. Apply validation state based on collected messages
     if (messages.length > 0) {
       field.classList.add("is-invalid");
       setInvalidFeedback(field, messages.join(" "));
@@ -202,6 +158,9 @@ document.addEventListener("DOMContentLoaded", function () {
       setInvalidFeedback(field, "");
     }
   }
+
+  // Make validateField globally available for other modules (e.g., dachschraege.js)
+  window.validateField = validateField;
 
   /**
    * Updates field state classes based on focus and content:
@@ -240,6 +199,8 @@ document.addEventListener("DOMContentLoaded", function () {
    * This provides dynamic constraint updates for related fields
    */
   function updateAblageBreiteMax() {
+    const breiteUntenField = document.querySelector('input[name="breite_unten"]');
+    const ablageBreiteField = document.querySelector('input[name="ablage_breite"]');
     if (breiteUntenField && ablageBreiteField) {
       const breiteUntenValue = parseFloat(breiteUntenField.value) || 0;
       ablageBreiteField.setAttribute("max", breiteUntenValue);
@@ -278,18 +239,11 @@ document.addEventListener("DOMContentLoaded", function () {
       // Handle width field changes for relational validation
       if (field.name === "breite_unten") {
         updateAblageBreiteMax();
-        // Also trigger validation on dependent top width field
-        if (breiteObenField) {
-          setTimeout(() => validateField(breiteObenField), 0);
-        }
       }
 
-      // Trigger cross-validation for height fields
-      if (field.name === "hoehe_links" && hoeheRechtsField) {
-        setTimeout(() => validateField(hoeheRechtsField), 0);
-      }
-      if (field.name === "hoehe_rechts" && hoeheLinksField) {
-        setTimeout(() => validateField(hoeheLinksField), 0);
+      // Handle Dachschräge field dependencies using centralized logic
+      if (isDachschraegeField(field)) {
+        onDachschraegeFieldInput(field);
       }
 
       // Show 'is-valid' state during typing when no errors exist
@@ -301,6 +255,17 @@ document.addEventListener("DOMContentLoaded", function () {
         field.classList.add("is-valid");
       } else {
         field.classList.remove("is-valid");
+      }
+    });
+
+    /**
+     * Change event handler  
+     * Handles cross-field validation and position suggestions when user completes input
+     */
+    field.addEventListener("change", function () {
+      // Handle Dachschräge field dependencies and position suggestions  
+      if (isDachschraegeField(field)) {
+        onDachschraegeFieldChange(field);
       }
     });
 
@@ -324,9 +289,8 @@ document.addEventListener("DOMContentLoaded", function () {
   /**
    * Initialize shelf width constraints on page load
    * Sets up initial max attribute if main width field has a value
-   * Currently disabled - uncomment to enable initial constraint setup
    */
-  // updateAblageBreiteMax();
+  updateAblageBreiteMax();
 });
 
 /**

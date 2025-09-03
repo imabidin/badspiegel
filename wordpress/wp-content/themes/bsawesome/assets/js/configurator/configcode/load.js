@@ -13,7 +13,7 @@
  * - Auto-redirect functionality for code URLs
  * - Comprehensive debug logging system
  *
- * @version 2.2.0
+ * @version 2.3.0
  * @package Configurator
  */
 

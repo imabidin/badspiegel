@@ -16,6 +16,14 @@ services:
       - ./config/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
     networks:
       - wordpress-network
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '2.0'
+        reservations:
+          memory: 512M
+          cpus: '0.5'
 
   # WordPress
   wordpress:
@@ -49,6 +57,14 @@ services:
       - ./logs/wordpress:/var/log/wordpress
     networks:
       - wordpress-network
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '2.0'
+        reservations:
+          memory: 256M
+          cpus: '0.5'
 
   # Nginx Webserver
   nginx:
@@ -89,11 +105,16 @@ services:
     image: redis:7-alpine
     container_name: wordpress-redis
     restart: unless-stopped
-    command: redis-server --appendonly yes --maxmemory ${REDIS_MAXMEMORY:-256mb} --maxmemory-policy allkeys-lru
+    command: redis-server --appendonly yes --maxmemory ${REDIS_MAXMEMORY:-512mb} --maxmemory-policy allkeys-lru
     volumes:
       - ./data/redis:/data
     networks:
       - wordpress-network
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '1.0'
 
   # MailHog für E-Mail Testing
   mailhog:

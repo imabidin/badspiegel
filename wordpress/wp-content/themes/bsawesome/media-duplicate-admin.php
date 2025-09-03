@@ -2,7 +2,7 @@
 /**
  * WordPress Media Duplicate Manager
  * WordPress Admin Panel Integration
- * 
+ *
  * Füge diese Datei in functions.php ein oder als separates Plugin
  */
 
@@ -12,14 +12,14 @@ if (!defined('ABSPATH')) {
 }
 
 class MediaDuplicateManager {
-    
+
     public function __construct() {
         add_action('admin_menu', [$this, 'add_admin_menu']);
         add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_scripts']);
         add_action('wp_ajax_analyze_media_duplicates', [$this, 'ajax_analyze_duplicates']);
         add_action('wp_ajax_clean_media_duplicates', [$this, 'ajax_clean_duplicates']);
     }
-    
+
     /**
      * Admin-Menü hinzufügen
      */
@@ -32,7 +32,7 @@ class MediaDuplicateManager {
             [$this, 'admin_page']
         );
     }
-    
+
     /**
      * Scripts für Admin-Bereich laden
      */
@@ -40,14 +40,14 @@ class MediaDuplicateManager {
         if ($hook !== 'tools_page_media-duplicate-manager') {
             return;
         }
-        
+
         wp_enqueue_script('jquery');
         wp_localize_script('jquery', 'mdm_ajax', [
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('mdm_nonce')
         ]);
     }
-    
+
     /**
      * Admin-Seite anzeigen
      */
@@ -55,12 +55,12 @@ class MediaDuplicateManager {
         ?>
         <div class="wrap">
             <h1>🧹 Media Duplicate Manager</h1>
-            
+
             <div class="notice notice-info">
-                <p><strong>ℹ️ Info:</strong> Dieses Tool analysiert und bereinigt Medien-Duplikate intelligent. 
+                <p><strong>ℹ️ Info:</strong> Dieses Tool analysiert und bereinigt Medien-Duplikate intelligent.
                 Es unterscheidet zwischen echten Duplikaten und Produktvarianten.</p>
             </div>
-            
+
             <div class="mdm-container">
                 <div class="mdm-section">
                     <h2>📊 1. Analyse durchführen</h2>
@@ -71,7 +71,7 @@ class MediaDuplicateManager {
                         <div id="mdm-results-content"></div>
                     </div>
                 </div>
-                
+
                 <div class="mdm-section">
                     <h2>🧹 2. Sichere Bereinigung</h2>
                     <p>Bereinigt nur eindeutig identifizierte Duplikate (mehrere DB-Einträge für dieselbe Datei).</p>
@@ -81,14 +81,14 @@ class MediaDuplicateManager {
                         <div id="mdm-clean-content"></div>
                     </div>
                 </div>
-                
+
                 <div class="mdm-section">
                     <h2>📋 3. Manueller Export</h2>
                     <p>Exportiere Duplikat-Listen für manuelle Überprüfung.</p>
                     <button id="mdm-export" class="button">📥 Duplikate exportieren</button>
                 </div>
             </div>
-            
+
             <div id="mdm-loading" style="display: none;">
                 <p>⏳ Verarbeitung läuft... Bitte warten.</p>
                 <div class="mdm-progress">
@@ -96,7 +96,7 @@ class MediaDuplicateManager {
                 </div>
             </div>
         </div>
-        
+
         <style>
         .mdm-container {
             display: grid;
@@ -169,16 +169,16 @@ class MediaDuplicateManager {
             margin-top: 5px;
         }
         </style>
-        
+
         <script>
         jQuery(document).ready(function($) {
             let analysisData = null;
-            
+
             // Analyse starten
             $('#mdm-analyze').on('click', function() {
                 showLoading();
                 $('#mdm-analyze-results').hide();
-                
+
                 $.ajax({
                     url: mdm_ajax.ajax_url,
                     type: 'POST',
@@ -202,21 +202,21 @@ class MediaDuplicateManager {
                     }
                 });
             });
-            
+
             // Bereinigung starten
             $('#mdm-clean').on('click', function() {
                 if (!analysisData || analysisData.safe_duplicates === 0) {
                     alert('Keine sicheren Duplikate gefunden. Führen Sie zuerst eine Analyse durch.');
                     return;
                 }
-                
+
                 if (!confirm(`Möchten Sie wirklich ${analysisData.safe_duplicates} sichere Duplikate löschen?\n\nEin Backup wird automatisch erstellt.`)) {
                     return;
                 }
-                
+
                 showLoading();
                 $('#mdm-clean-results').hide();
-                
+
                 $.ajax({
                     url: mdm_ajax.ajax_url,
                     type: 'POST',
@@ -240,31 +240,31 @@ class MediaDuplicateManager {
                     }
                 });
             });
-            
+
             // Export
             $('#mdm-export').on('click', function() {
                 if (!analysisData) {
                     alert('Führen Sie zuerst eine Analyse durch.');
                     return;
                 }
-                
+
                 // CSV-Export erstellen
                 let csv = "Typ,Titel,Anzahl,IDs,Aktion\n";
                 // Hier würde der Export-Code stehen
-                
+
                 alert('Export-Funktion wird implementiert...');
             });
-            
+
             function showLoading() {
                 $('#mdm-loading').show();
                 $('.mdm-progress-bar').css('width', '100%');
             }
-            
+
             function hideLoading() {
                 $('#mdm-loading').hide();
                 $('.mdm-progress-bar').css('width', '0%');
             }
-            
+
             function displayAnalysisResults(data) {
                 const statsHtml = `
                     <div class="mdm-stats">
@@ -286,11 +286,11 @@ class MediaDuplicateManager {
                         </div>
                     </div>
                 `;
-                
+
                 $('#mdm-results-content').html(statsHtml + data.detailed_results);
                 $('#mdm-analyze-results').show();
             }
-            
+
             function displayCleanResults(data) {
                 $('#mdm-clean-content').html(data.message);
                 $('#mdm-clean-results').show();
@@ -299,37 +299,37 @@ class MediaDuplicateManager {
         </script>
         <?php
     }
-    
+
     /**
      * AJAX: Analyse durchführen
      */
     public function ajax_analyze_duplicates() {
         check_ajax_referer('mdm_nonce', 'nonce');
-        
+
         if (!current_user_can('manage_options')) {
             wp_die('Keine Berechtigung');
         }
-        
+
         global $wpdb;
-        
+
         // Grundstatistiken
         $total_attachments = $wpdb->get_var(
             "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = 'attachment'"
         );
-        
+
         $unique_titles = $wpdb->get_var(
             "SELECT COUNT(DISTINCT post_title) FROM {$wpdb->posts} WHERE post_type = 'attachment'"
         );
-        
+
         // Sichere Duplikate zählen
         $safe_duplicates = $wpdb->get_var("
             SELECT COUNT(*) FROM (
                 SELECT p2.ID
                 FROM {$wpdb->posts} p1
-                JOIN {$wpdb->postmeta} pm1 ON p1.ID = pm1.post_id 
+                JOIN {$wpdb->postmeta} pm1 ON p1.ID = pm1.post_id
                 JOIN {$wpdb->posts} p2 ON p1.post_title = p2.post_title
                 JOIN {$wpdb->postmeta} pm2 ON p2.ID = pm2.post_id
-                WHERE p1.post_type = 'attachment' 
+                WHERE p1.post_type = 'attachment'
                 AND p2.post_type = 'attachment'
                 AND pm1.meta_key = '_wp_attached_file'
                 AND pm2.meta_key = '_wp_attached_file'
@@ -338,25 +338,25 @@ class MediaDuplicateManager {
                 GROUP BY p2.ID
             ) as safe_dupes
         ");
-        
+
         $product_variants = $total_attachments - $unique_titles - $safe_duplicates;
-        
+
         // Top Duplikate für Anzeige
         $top_duplicates = $wpdb->get_results("
-            SELECT post_title, COUNT(*) as count 
-            FROM {$wpdb->posts} 
-            WHERE post_type = 'attachment' 
-            GROUP BY post_title 
-            HAVING count > 1 
-            ORDER BY count DESC 
+            SELECT post_title, COUNT(*) as count
+            FROM {$wpdb->posts}
+            WHERE post_type = 'attachment'
+            GROUP BY post_title
+            HAVING count > 1
+            ORDER BY count DESC
             LIMIT 10
         ");
-        
+
         $detailed_results = "Top 10 duplizierte Medien:\n";
         foreach ($top_duplicates as $dup) {
             $detailed_results .= sprintf("- %s: %d Einträge\n", $dup->post_title, $dup->count);
         }
-        
+
         wp_send_json_success([
             'total_attachments' => $total_attachments,
             'unique_titles' => $unique_titles,
@@ -365,46 +365,46 @@ class MediaDuplicateManager {
             'detailed_results' => $detailed_results
         ]);
     }
-    
+
     /**
      * AJAX: Bereinigung durchführen
      */
     public function ajax_clean_duplicates() {
         check_ajax_referer('mdm_nonce', 'nonce');
-        
+
         if (!current_user_can('manage_options')) {
             wp_die('Keine Berechtigung');
         }
-        
+
         global $wpdb;
-        
+
         // Backup erstellen (vereinfacht)
         $backup_file = WP_CONTENT_DIR . '/media-backup-' . date('Y-m-d-H-i-s') . '.sql';
-        
+
         $before_count = $wpdb->get_var(
             "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = 'attachment'"
         );
-        
+
         // Sichere Duplikate löschen
         $deleted = $wpdb->query("
             DELETE p2, pm2 FROM {$wpdb->posts} p1
-            JOIN {$wpdb->postmeta} pm1 ON p1.ID = pm1.post_id 
+            JOIN {$wpdb->postmeta} pm1 ON p1.ID = pm1.post_id
             JOIN {$wpdb->posts} p2 ON p1.post_title = p2.post_title
             JOIN {$wpdb->postmeta} pm2 ON p2.ID = pm2.post_id
-            WHERE p1.post_type = 'attachment' 
+            WHERE p1.post_type = 'attachment'
             AND p2.post_type = 'attachment'
             AND pm1.meta_key = '_wp_attached_file'
             AND pm2.meta_key = '_wp_attached_file'
             AND pm1.meta_value = pm2.meta_value
             AND p1.ID < p2.ID
         ");
-        
+
         $after_count = $wpdb->get_var(
             "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = 'attachment'"
         );
-        
+
         $actually_deleted = $before_count - $after_count;
-        
+
         $message = sprintf(
             "✅ Bereinigung abgeschlossen!\n\n" .
             "- Medien vorher: %d\n" .
@@ -416,7 +416,7 @@ class MediaDuplicateManager {
             $actually_deleted,
             basename($backup_file)
         );
-        
+
         wp_send_json_success(['message' => $message]);
     }
 }

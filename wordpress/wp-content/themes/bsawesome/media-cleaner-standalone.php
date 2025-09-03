@@ -105,7 +105,7 @@ if (!current_user_can('manage_options')) {
         analyzeBtn.addEventListener('click', async function() {
             showLoading();
             analyzeResults.classList.add('hidden');
-            
+
             try {
                 const response = await fetch('', {
                     method: 'POST',
@@ -114,10 +114,10 @@ if (!current_user_can('manage_options')) {
                     },
                     body: 'action=analyze_duplicates'
                 });
-                
+
                 const data = await response.json();
                 hideLoading();
-                
+
                 if (data.success) {
                     analysisData = data.data;
                     displayAnalysisResults(data.data);
@@ -137,14 +137,14 @@ if (!current_user_can('manage_options')) {
                 alert('Keine sicheren Duplikate gefunden. Führen Sie zuerst eine Analyse durch.');
                 return;
             }
-            
+
             if (!confirm(`Möchten Sie wirklich ${analysisData.safe_duplicates} sichere Duplikate löschen?\n\nEin Backup wird automatisch erstellt.\n\nNur redundante DB-Einträge werden gelöscht - alle Dateien bleiben erhalten!`)) {
                 return;
             }
-            
+
             showLoading();
             cleanResults.classList.add('hidden');
-            
+
             try {
                 const response = await fetch('', {
                     method: 'POST',
@@ -153,10 +153,10 @@ if (!current_user_can('manage_options')) {
                     },
                     body: 'action=clean_duplicates'
                 });
-                
+
                 const data = await response.json();
                 hideLoading();
-                
+
                 if (data.success) {
                     displayCleanResults(data.data);
                     // Neue Analyse nach Bereinigung
@@ -202,11 +202,11 @@ if (!current_user_can('manage_options')) {
                         <div class="stat-label">Dateien bleiben erhalten</div>
                     </div>
                 </div>
-                
+
                 <strong>🔍 Detaillierte Ergebnisse:</strong>
                 ${data.detailed_results}
             `;
-            
+
             analyzeContent.innerHTML = statsHtml;
             analyzeResults.classList.remove('hidden');
         }
@@ -223,7 +223,7 @@ if (!current_user_can('manage_options')) {
 // AJAX Handler für die Anfragen
 if ($_POST['action'] ?? '') {
     global $wpdb;
-    
+
     switch ($_POST['action']) {
         case 'analyze_duplicates':
             try {
@@ -231,20 +231,20 @@ if ($_POST['action'] ?? '') {
                 $total_attachments = $wpdb->get_var(
                     "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = 'attachment'"
                 );
-                
+
                 $unique_titles = $wpdb->get_var(
                     "SELECT COUNT(DISTINCT post_title) FROM {$wpdb->posts} WHERE post_type = 'attachment'"
                 );
-                
+
                 // Sichere Duplikate (mehrere DB-Einträge, gleiche Datei)
                 $safe_duplicates = $wpdb->get_var("
                     SELECT COUNT(*) FROM (
                         SELECT p2.ID
                         FROM {$wpdb->posts} p1
-                        JOIN {$wpdb->postmeta} pm1 ON p1.ID = pm1.post_id 
+                        JOIN {$wpdb->postmeta} pm1 ON p1.ID = pm1.post_id
                         JOIN {$wpdb->posts} p2 ON p1.post_title = p2.post_title
                         JOIN {$wpdb->postmeta} pm2 ON p2.ID = pm2.post_id
-                        WHERE p1.post_type = 'attachment' 
+                        WHERE p1.post_type = 'attachment'
                         AND p2.post_type = 'attachment'
                         AND pm1.meta_key = '_wp_attached_file'
                         AND pm2.meta_key = '_wp_attached_file'
@@ -252,10 +252,10 @@ if ($_POST['action'] ?? '') {
                         AND p1.ID < p2.ID
                     ) as safe_dupes
                 ");
-                
+
                 // Top problematische Duplikate
                 $problem_duplicates = $wpdb->get_results("
-                    SELECT 
+                    SELECT
                         p1.post_title,
                         COUNT(*) as total_entries,
                         COUNT(DISTINCT pm1.meta_value) as unique_files
@@ -267,19 +267,19 @@ if ($_POST['action'] ?? '') {
                     ORDER BY total_entries DESC
                     LIMIT 10
                 ");
-                
+
                 $detailed_results = "\n🚨 Top 10 problematische Duplikate:\n";
                 $detailed_results .= "=====================================\n";
                 foreach ($problem_duplicates as $dup) {
-                    $detailed_results .= sprintf("❌ %s: %d DB-Einträge → 1 Datei\n", 
+                    $detailed_results .= sprintf("❌ %s: %d DB-Einträge → 1 Datei\n",
                         $dup->post_title, $dup->total_entries);
                 }
-                
+
                 $detailed_results .= "\n💡 Diese {$safe_duplicates} Duplikate können SICHER gelöscht werden:\n";
                 $detailed_results .= "- Es werden nur redundante Datenbank-Einträge entfernt\n";
                 $detailed_results .= "- Alle physischen Dateien bleiben vollständig erhalten\n";
                 $detailed_results .= "- Produktvarianten werden NICHT berührt\n";
-                
+
                 wp_send_json_success([
                     'total_attachments' => (int)$total_attachments,
                     'unique_titles' => (int)$unique_titles,
@@ -287,41 +287,41 @@ if ($_POST['action'] ?? '') {
                     'files_preserved' => (int)$total_attachments, // Alle Dateien bleiben erhalten
                     'detailed_results' => $detailed_results
                 ]);
-                
+
             } catch (Exception $e) {
                 wp_send_json_error('Analyse-Fehler: ' . $e->getMessage());
             }
             break;
-            
+
         case 'clean_duplicates':
             try {
                 // Backup erstellen
                 $backup_file = 'media-backup-' . date('Y-m-d-H-i-s') . '.sql';
-                
+
                 $before_count = $wpdb->get_var(
                     "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = 'attachment'"
                 );
-                
+
                 // Sichere Duplikate löschen (nur redundante DB-Einträge)
                 $deleted = $wpdb->query("
                     DELETE p2, pm2 FROM {$wpdb->posts} p1
-                    JOIN {$wpdb->postmeta} pm1 ON p1.ID = pm1.post_id 
+                    JOIN {$wpdb->postmeta} pm1 ON p1.ID = pm1.post_id
                     JOIN {$wpdb->posts} p2 ON p1.post_title = p2.post_title
                     JOIN {$wpdb->postmeta} pm2 ON p2.ID = pm2.post_id
-                    WHERE p1.post_type = 'attachment' 
+                    WHERE p1.post_type = 'attachment'
                     AND p2.post_type = 'attachment'
                     AND pm1.meta_key = '_wp_attached_file'
                     AND pm2.meta_key = '_wp_attached_file'
                     AND pm1.meta_value = pm2.meta_value
                     AND p1.ID < p2.ID
                 ");
-                
+
                 $after_count = $wpdb->get_var(
                     "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = 'attachment'"
                 );
-                
+
                 $actually_deleted = $before_count - $after_count;
-                
+
                 $message = sprintf(
                     "✅ BEREINIGUNG ERFOLGREICH ABGESCHLOSSEN!\n\n" .
                     "📊 Statistiken:\n" .
@@ -340,15 +340,15 @@ if ($_POST['action'] ?? '') {
                     $actually_deleted,
                     $backup_file
                 );
-                
+
                 wp_send_json_success(['message' => $message]);
-                
+
             } catch (Exception $e) {
                 wp_send_json_error('Bereinigung-Fehler: ' . $e->getMessage());
             }
             break;
     }
-    
+
     exit;
 }
 ?>

@@ -36,7 +36,7 @@ if (is_admin()) {
 
 /**
  * LAYOUT COMPONENTS
- * 
+ *
  * Template parts for different sections of the theme layout
  */
 
@@ -64,7 +64,7 @@ require_once $inc_dir . 'layout/footer/footer-credits.php';
 
 /**
  * CONTENT COMPONENTS
- * 
+ *
  * Page-specific and content-related functionality
  */
 
@@ -85,7 +85,7 @@ require_once $inc_dir . 'pages/product/crosselling.php';
 // require_once $inc_dir . 'pages/product/usp.php';
 
 /**
- * CONFIGURATOR 
+ * CONFIGURATOR
  */
 
 require_once $inc_dir . 'configurator/groups.php';

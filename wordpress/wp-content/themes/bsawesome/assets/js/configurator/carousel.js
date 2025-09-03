@@ -26,8 +26,9 @@
  * Add to cart behavior configuration
  * - 'steps': Requires completion of all steps
  * - 'primary-button': Requires button state change to primary
+ * - 'summary-visible': Requires summary to be visible (handles pre-loaded state)
  */
-const ADD_TO_CART_MODE = "primary-button";
+const ADD_TO_CART_MODE = "summary-visible";
 
 /**
  * Shine effect configuration
@@ -91,6 +92,7 @@ class ProductConfigurator {
     this.hasEverCompleted = false;
     this.isProgrammaticClick = false;
     this.isComplete = false;
+    this.shineEffectTriggered = false; // Prevent multiple shine effects
 
     // Validate critical elements exist before initialization
     if (!this.carouselEl || !this.addtocartBtn) {
@@ -155,6 +157,9 @@ class ProductConfigurator {
     this.updateProgressBar(1);
     this.setCarouselHeight();
     this.addCarouselOverflow();
+
+    // Check if summary is already visible on load and sync button state
+    this.syncButtonStateWithSummary();
   }
 
   /**
@@ -370,7 +375,13 @@ class ProductConfigurator {
   setCarouselHeight(slide) {
     const targetSlide = slide || this.carouselInner?.querySelector(".carousel-item.active");
     if (targetSlide) {
-      this.carouselInner.style.height = `${targetSlide.offsetHeight}px`;
+      // Use requestAnimationFrame to batch DOM reads/writes and prevent forced reflow
+      requestAnimationFrame(() => {
+        const height = targetSlide.offsetHeight;
+        requestAnimationFrame(() => {
+          this.carouselInner.style.height = `${height}px`;
+        });
+      });
     }
   }
 
@@ -406,19 +417,22 @@ class ProductConfigurator {
   scrollToConfiguratorTop() {
     if (!this.progressBar) return;
 
-    const rect = this.progressBar.getBoundingClientRect();
-    const isFullyVisible =
-      rect.top >= 0 &&
-      rect.left >= 0 &&
-      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-      rect.right <= (window.innerWidth || document.documentElement.clientWidth);
+    // Use requestAnimationFrame to batch DOM reads and prevent forced reflow
+    requestAnimationFrame(() => {
+      const rect = this.progressBar.getBoundingClientRect();
+      const isFullyVisible =
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth);
 
-    if (!isFullyVisible) {
-      this.configuratorEl?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }
+      if (!isFullyVisible) {
+        this.configuratorEl?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    });
   }
 
   /**
@@ -503,23 +517,26 @@ class ProductConfigurator {
     const activeIndicator = this.indicators[stepIndex];
     if (!activeIndicator) return;
 
-    const containerRect = this.indicatorsRow.getBoundingClientRect();
-    const indicatorRect = activeIndicator.getBoundingClientRect();
+    // Use requestAnimationFrame to batch DOM reads and prevent forced reflow
+    requestAnimationFrame(() => {
+      const containerRect = this.indicatorsRow.getBoundingClientRect();
+      const indicatorRect = activeIndicator.getBoundingClientRect();
 
-    // Scroll left if indicator is cut off on left side
-    if (indicatorRect.left < containerRect.left) {
-      this.indicatorsRow.scrollTo({
-        left: this.indicatorsRow.scrollLeft + (indicatorRect.left - containerRect.left) - 10,
-        behavior: "smooth",
-      });
-    }
-    // Scroll right if indicator is cut off on right side
-    else if (indicatorRect.right > containerRect.right) {
-      this.indicatorsRow.scrollTo({
-        left: this.indicatorsRow.scrollLeft + (indicatorRect.right - containerRect.right) + 10,
-        behavior: "smooth",
-      });
-    }
+      // Scroll left if indicator is cut off on left side
+      if (indicatorRect.left < containerRect.left) {
+        this.indicatorsRow.scrollTo({
+          left: this.indicatorsRow.scrollLeft + (indicatorRect.left - containerRect.left) - 10,
+          behavior: "smooth",
+        });
+      }
+      // Scroll right if indicator is cut off on right side
+      else if (indicatorRect.right > containerRect.right) {
+        this.indicatorsRow.scrollTo({
+          left: this.indicatorsRow.scrollLeft + (indicatorRect.right - containerRect.right) + 10,
+          behavior: "smooth",
+        });
+      }
+    });
   }
 
   /**
@@ -595,11 +612,27 @@ class ProductConfigurator {
    * Configures collapse functionality for final step
    */
   handleSummary() {
-    if (!this.summaryEl) return;
+    console.log("🔧 handleSummary() called");
+    if (!this.summaryEl) {
+      console.log("❌ No summaryEl found");
+      return;
+    }
+
+    console.log("📊 Summary element:", this.summaryEl);
+    console.log("📊 Summary has 'show' class:", this.summaryEl.classList.contains("show"));
 
     // Show button if summary is already visible
     if (this.summaryEl.classList.contains("show")) {
       this.carouselNextBtn.classList.add("show");
+      console.log("✅ Summary already visible, added 'show' to next button");
+
+      // Only apply completion styling automatically for non-summary-visible modes
+      if (ADD_TO_CART_MODE !== "summary-visible") {
+        console.log("🎯 Non-summary-visible mode, applying completion styling directly");
+        this.applyCompletionStyling();
+      } else {
+        console.log("🎯 Summary-visible mode, styling will be applied on 'Fertig' click only");
+      }
     }
 
     // Configure button for Bootstrap collapse
@@ -608,13 +641,58 @@ class ProductConfigurator {
       this.carouselNextBtn.setAttribute("data-bs-target", "#productConfiguratorSummary");
       this.carouselNextBtn.setAttribute("aria-expanded", "false");
       this.carouselNextBtn.setAttribute("aria-controls", "productConfiguratorSummary");
+      console.log("✅ Bootstrap collapse attributes set");
     }, 1);
 
     // Setup summary event listeners (once only)
     if (!this.summaryEl.dataset.listenerAdded) {
+      console.log("🎯 Setting up event listeners for first time");
       this.lockSummaryOnShow();
       this.setupFinishedButtonScrollBehavior();
+      this.summaryEl.dataset.listenerAdded = "true";
+    } else {
+      console.log("⚠️ Event listeners already added, skipping setup");
     }
+  }
+
+  /**
+   * Apply completion styling to button and progress bar
+   * Centralized method for consistent completion effects
+   */
+  applyCompletionStyling() {
+    console.log("🎨 applyCompletionStyling() called");
+
+    // Prevent multiple styling applications - check and set flag immediately
+    if (this.isComplete) {
+      console.log("⚠️ Already completed, skipping styling");
+      return;
+    }
+
+    // Mark configuration as complete immediately to prevent race conditions
+    this.isComplete = true;
+    console.log("🔒 Configuration marked as complete (early)");
+
+    console.log("📊 Add to cart button before:", this.addtocartBtn.className);
+
+    // Transform add to cart button to primary state
+    this.addtocartBtn.classList.add("btn-primary");
+    this.addtocartBtn.classList.remove("text-start", "btn-light");
+
+    console.log("📊 Add to cart button after:", this.addtocartBtn.className);
+
+    // Complete progress bar
+    if (this.progressBar) {
+      this.progressBar.style.width = "100%";
+      this.progressBar.setAttribute("aria-valuenow", "100");
+      console.log("✅ Progress bar set to 100%");
+    }
+
+    console.log("✅ Configuration styling complete");
+
+    // Trigger shine effect only once
+    setTimeout(() => {
+      this.triggerCompletionEffects();
+    }, 300);
   }
 
   /**
@@ -622,41 +700,44 @@ class ProductConfigurator {
    * Handles completion effects and prevents summary hiding
    */
   lockSummaryOnShow() {
+    console.log("🔒 lockSummaryOnShow() called");
+
     const onSummaryShow = () => {
+      console.log("🎉 SUMMARY SHOW EVENT TRIGGERED!");
+
       // Update button state
       this.carouselNextBtn?.classList.add("show");
 
-      // Transform add to cart button to primary state
-      this.addtocartBtn.classList.add("btn-primary");
-      this.addtocartBtn.classList.remove("text-start", "btn-light");
+      // Apply completion styling
+      this.applyCompletionStyling();
 
-      // Complete progress bar
-      if (this.progressBar) {
-        this.progressBar.style.width = "100%";
-        this.progressBar.setAttribute("aria-valuenow", "100");
-      }
-
-      // Scroll to summary and trigger shine effect
+      // Scroll to summary
       setTimeout(() => {
         this.scrollToSummary();
-        this.triggerCompletionEffects();
       }, 1);
-
-      // Mark configuration as complete
-      this.isComplete = true;
     };
 
     // Setup event listeners
+    console.log("🎯 Adding show.bs.collapse event listener");
     this.summaryEl.addEventListener("show.bs.collapse", onSummaryShow);
     this.summaryEl.addEventListener("hide.bs.collapse", e => e.preventDefault());
-    this.summaryEl.dataset.listenerAdded = "true";
-  }
-
-  /**
+  }  /**
    * Trigger completion visual effects (shine effect on add-to-cart button)
    * Centralized method to ensure consistent completion feedback
    */
   triggerCompletionEffects() {
+    console.log("✨ triggerCompletionEffects() called");
+
+    // Prevent multiple shine effects
+    if (this.shineEffectTriggered) {
+      console.log("⚠️ Shine effect already triggered, skipping");
+      return;
+    }
+
+    this.shineEffectTriggered = true;
+    console.log("🔒 Shine effect marked as triggered");
+
+    // Add slight delay to ensure button styling is complete
     setTimeout(() => {
       this.addShineEffectToButton();
     }, 300);
@@ -667,20 +748,54 @@ class ProductConfigurator {
    * Ensures clicking "Fertig" always scrolls to summary if it's already visible
    */
   setupFinishedButtonScrollBehavior() {
-    if (!this.carouselNextBtn) return;
+    console.log("🎯 setupFinishedButtonScrollBehavior() called");
+    if (!this.carouselNextBtn) {
+      console.log("❌ No carouselNextBtn found");
+      return;
+    }
 
     this.carouselNextBtn.addEventListener("click", event => {
+      console.log("🔘 Fertig button clicked!");
+      console.log("📊 Current step:", this.currentStep, "Total steps:", this.totalSteps);
+      console.log("📊 ADD_TO_CART_MODE:", ADD_TO_CART_MODE);
+
       // Only handle when button is in "Fertig" state (last step)
-      if (this.currentStep !== this.totalSteps) return;
+      if (this.currentStep !== this.totalSteps) {
+        console.log("⚠️ Not on last step, ignoring click");
+        return;
+      }
+
+      console.log("✅ On last step, checking summary visibility");
+      console.log("📊 Summary element:", this.summaryEl);
+      console.log("📊 Summary has 'show' class:", this.summaryEl?.classList.contains("show"));
+
+      // For summary-visible mode: Apply styling on every "Fertig" click
+      if (ADD_TO_CART_MODE === "summary-visible") {
+        console.log("🎯 Summary-visible mode: Applying completion styling on Fertig click");
+
+        // Reset shine effect flag to allow multiple triggers
+        this.shineEffectTriggered = false;
+        console.log("🔄 Shine effect flag reset for new trigger");
+
+        this.applyCompletionStyling();
+      }
 
       // Check if summary is already visible
       if (this.summaryEl && this.summaryEl.classList.contains("show")) {
+        console.log("📋 Summary already visible, scrolling to it");
         // Small delay to ensure any collapse animation is complete
         setTimeout(() => {
           this.scrollToSummary();
+
+          // Reset shine effect flag for re-trigger
+          this.shineEffectTriggered = false;
+          console.log("🔄 Shine effect flag reset for re-trigger");
+
           // Trigger shine effect when re-clicking "Fertig" on visible summary
           this.triggerCompletionEffects();
         }, 100);
+      } else {
+        console.log("📋 Summary not visible, Bootstrap collapse should handle it");
       }
     });
   }
@@ -715,8 +830,8 @@ class ProductConfigurator {
    */
   addtocartLoadingState() {
     this.addtocartBtn.innerHTML = `
-            <span class="spinner-border me-2" 
-                  style="--bs-spinner-width:1.25rem; --bs-spinner-height:1.25rem; --bs-spinner-border-width:0.225rem" 
+            <span class="spinner-border me-2"
+                  style="--bs-spinner-width:1.25rem; --bs-spinner-height:1.25rem; --bs-spinner-border-width:0.225rem"
                   role="status">
             </span>
             <span aria-live="polite">Warenkorb wird vorbereitet...</span>
@@ -731,12 +846,23 @@ class ProductConfigurator {
    * @returns {boolean} True if configuration is complete
    */
   configuratorCompleted() {
+    console.log("🔍 configuratorCompleted() check - Mode:", ADD_TO_CART_MODE);
+
     switch (ADD_TO_CART_MODE) {
       case "steps":
-        return this.hasEverCompleted;
+        const stepsResult = this.hasEverCompleted;
+        console.log("📊 Steps mode result:", stepsResult, "(hasEverCompleted:", this.hasEverCompleted, ")");
+        return stepsResult;
       case "primary-button":
-        return this.addtocartBtn.classList.contains("btn-primary");
+        const primaryResult = this.addtocartBtn.classList.contains("btn-primary");
+        console.log("📊 Primary-button mode result:", primaryResult, "(button classes:", this.addtocartBtn.className, ")");
+        return primaryResult;
+      case "summary-visible":
+        const summaryResult = this.summaryEl && this.summaryEl.classList.contains("show");
+        console.log("📊 Summary-visible mode result:", summaryResult, "(summary element exists:", !!this.summaryEl, ", has show class:", this.summaryEl?.classList.contains("show"), ")");
+        return summaryResult;
       default:
+        console.log("❌ Unknown mode, returning false");
         return false;
     }
   }
@@ -803,16 +929,53 @@ class ProductConfigurator {
   }
 
   /**
+   * Sync button state with summary visibility on initialization
+   * Handles cases where summary is pre-loaded with "show" class
+   */
+  syncButtonStateWithSummary() {
+    if (!this.summaryEl || !this.addtocartBtn) return;
+
+    // Only auto-sync button styling for "primary-button" mode
+    // "summary-visible" mode should only style button on active "Fertig" click
+    if (ADD_TO_CART_MODE !== "primary-button") return;
+
+    // If summary is already visible but button is not primary, sync the state
+    if (this.summaryEl.classList.contains("show") && !this.addtocartBtn.classList.contains("btn-primary")) {
+      // Transform add to cart button to primary state
+      this.addtocartBtn.classList.add("btn-primary");
+      this.addtocartBtn.classList.remove("text-start", "btn-light");
+
+      // Complete progress bar
+      if (this.progressBar) {
+        this.progressBar.style.width = "100%";
+        this.progressBar.setAttribute("aria-valuenow", "100");
+      }
+
+      // Mark configuration as complete
+      this.isComplete = true;
+
+      // Optional: Trigger shine effect after a short delay
+      setTimeout(() => {
+        this.triggerCompletionEffects();
+      }, 500);
+    }
+  }
+
+  /**
    * Add shine effect to add-to-cart button
    * Creates visual feedback for configuration completion
    */
   addShineEffectToButton() {
     if (!this.addtocartBtn) return;
 
-    const existingShine = this.addtocartBtn.querySelector(".btn-shine-effect");
-    if (existingShine) {
-      existingShine.remove();
-    }
+    console.log("✨ Adding shine effect to button");
+
+    // Remove any existing shine effects to prevent overlap
+    const existingShines = this.addtocartBtn.querySelectorAll(".btn-shine-effect");
+    existingShines.forEach(shine => {
+      console.log("🧹 Removing existing shine effect");
+      shine.remove();
+    });
 
     const shineElement = document.createElement("div");
     shineElement.className = "btn-shine-effect";

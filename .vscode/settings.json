@@ -6,7 +6,8 @@
 
   // File associations
   "files.associations": {
-    "*.php": "php"
+    "*.php": "php",
+    "*.html": "php"
   },
 
   // File exclusions (Performance)

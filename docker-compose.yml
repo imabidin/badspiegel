@@ -149,6 +149,32 @@ services:
     profiles:
       - cli
 
+  # Python Tools für Datenverarbeitung und Automatisierung
+  python-tools:
+    build:
+      context: .
+      dockerfile: Dockerfile.python
+    container_name: badspiegel-python
+    depends_on:
+      - db
+    environment:
+      DB_HOST: ${DB_HOST:-db}
+      DB_PORT: ${DB_PORT:-3306}
+      DB_NAME: ${DB_NAME:-wordpress}
+      DB_USER: ${DB_USER:-wordpress}
+      DB_PASSWORD: ${DB_PASSWORD:-wordpress_password}
+    volumes:
+      - ./scripts:/app/scripts
+      - ./wordpress:/app/wordpress:ro
+      - ./data:/app/data
+      - ./backups:/app/backups
+      - ./logs:/app/logs
+    working_dir: /app
+    networks:
+      - wordpress-network
+    profiles:
+      - tools
+
 networks:
   wordpress-network:
     driver: bridge

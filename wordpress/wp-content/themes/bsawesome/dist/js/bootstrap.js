@@ -7496,7 +7496,8 @@ __webpack_require__.r(__webpack_exports__);
 // bootstrap.js
 
 window.bootstrap = bootstrap__WEBPACK_IMPORTED_MODULE_0__;
-console.log("bootstrap loaded:", window.bootstrap);
+// PRODUCTION: Debug logging disabled
+// bootstrap loaded successfully
 })();
 
 /******/ })()

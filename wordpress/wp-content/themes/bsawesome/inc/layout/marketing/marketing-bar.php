@@ -1,19 +1,20 @@
 <?php defined('ABSPATH') || exit;
 
-// Marketing campaign end date configuration
-const MARKETING_COUNTDOWN_END_DATE = '2025-05-31';
+// Marketing campaign configuration
+const MARKETING_COUNTDOWN_START_DATE = '2025-09-01';
+const MARKETING_COUNTDOWN_END_DATE = '2025-09-30';
 
 /**
  * Marketing Bar Component
- * 
+ *
  * Displays promotional content with countdown timer and category-specific
  * call-to-action buttons. Automatically hides when countdown expires.
- * 
+ *
  * @package BSAwesome
  * @subpackage LayoutComponents
  * @since 1.0.0
  * @author BS Awesome Team
- * @version 2.2.0
+ * @version 2.4.0
  */
 
 /**
@@ -27,9 +28,16 @@ const MARKETING_COUNTDOWN_END_DATE = '2025-05-31';
  */
 function marketing_bar()
 {
-    // Check if promotional countdown has ended
-    $countdown_ended = strtotime(MARKETING_COUNTDOWN_END_DATE) < time();
-    $marketing_class = $countdown_ended ? 'site-marketing order-md-first bg-info-subtle py-1 py-md-2 d-none' : 'site-marketing order-md-first bg-info-subtle py-1 py-md-2';
+    // Check if promotional campaign is within active timeframe
+    $current_time = time();
+    $start_time = strtotime(MARKETING_COUNTDOWN_START_DATE);
+    $end_time = strtotime(MARKETING_COUNTDOWN_END_DATE);
+
+    $campaign_not_started = $start_time > $current_time;
+    $campaign_ended = $end_time < $current_time;
+    $campaign_inactive = $campaign_not_started || $campaign_ended;
+
+    $marketing_class = $campaign_inactive ? 'site-marketing order-md-first bg-info-subtle py-1 py-md-2 d-none' : 'site-marketing order-md-first bg-info-subtle py-1 py-md-2';
 ?>
     <section id="site-marketing" class="<?php echo $marketing_class; ?>" aria-label="<?php esc_attr_e('Sonderangebot', 'bsawesome'); ?>">
         <div class="container-md">

@@ -34,11 +34,18 @@
 
   // PHP intelephense
   "intelephense.environment.phpVersion": "8.2.0",
-  "intelephense.stubs": ["Core", "standard", "pcre", "json", "mysqli", "PDO", "curl", "gd", "mbstring", "openssl", "session", "xml", "zip", "wordpress", "date", "hash", "filter", "ctype", "SPL"],
   "intelephense.files.exclude": ["**/.git/**", "**/.svn/**", "**/.hg/**", "**/CVS/**", "**/.DS_Store/**", "**/node_modules/**", "**/bower_components/**", "**/vendor/**/{Tests,tests}/**", "**/.history/**", "**/vendor/**/vendor/**"],
   "intelephense.format.braces": "k&r",
   "intelephense.completion.triggerParameterHints": true,
   "intelephense.completion.insertUseDeclaration": true,
+  "intelephense.stubs": [
+    "apache", "bcmath", "bz2", "calendar", "Core", "ctype", "curl", "date", "dba", "dom", "enchant", "exif", "FFI", "fileinfo", "filter", "fpm", "ftp", "gd", "gettext", "gmp", "hash", "iconv", "imap", "intl", "json", "ldap", "libxml", "mbstring", "meta", "mysqli", "oci8", "odbc", "openssl", "pcntl", "pcre", "PDO", "pgsql", "Phar", "posix", "pspell", "readline", "Reflection", "session", "shmop", "SimpleXML", "snmp", "soap", "sockets", "sodium", "SPL", "sqlite3", "standard", "superglobals", "sysvmsg", "sysvsem", "sysvshm", "tidy", "tokenizer", "xml", "xmlreader", "xmlrpc", "xmlwriter", "xsl", "Zend OPcache", "zip", "zlib", "wordpress"
+  ],
+  "intelephense.environment.includePaths": [
+    "../../../../",
+    "../../plugins/woocommerce",
+    "../../plugins/woocommerce-germanized",
+  ],
 
   // Language specific settings
   "[php]": {

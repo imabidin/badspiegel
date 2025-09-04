@@ -1,6 +1,10 @@
 <?php defined('ABSPATH') || exit;
 
 /**
+ * @version 2.4.0
+ */
+
+/**
  * Category description.
  */
 
@@ -11,8 +15,7 @@
 // 1. display field on "add new product category" @ admin page
 add_action('product_cat_add_form_fields', 'bbloomer_wp_editor_add', 10, 2);
 
-function bbloomer_wp_editor_add()
-{
+function bbloomer_wp_editor_add() {
 ?>
     <div class="form-field">
         <label for="seconddesc"><?php echo __('Zweite Beschreibung', 'woocommerce'); ?></label>
@@ -31,7 +34,7 @@ function bbloomer_wp_editor_add()
         ?>
         <p class="description"><?php echo __('Die zweite Kategoriebeschreibung.', 'woocommerce'); ?></p>
     </div>
-    
+
     <div class="form-field">
         <label for="thirddesc"><?php echo __('Dritte Beschreibung', 'woocommerce'); ?></label>
         <?php
@@ -46,8 +49,7 @@ function bbloomer_wp_editor_add()
 // 2. display field on "edit product category" @ admin page
 add_action('product_cat_edit_form_fields', 'bbloomer_wp_editor_edit', 10, 2);
 
-function bbloomer_wp_editor_edit($term)
-{
+function bbloomer_wp_editor_edit($term) {
     $second_desc = htmlspecialchars_decode(get_term_meta($term->term_id, 'seconddesc', true));
 ?>
     <tr class="form-field">
@@ -69,7 +71,7 @@ function bbloomer_wp_editor_edit($term)
             <p class="description"><?php echo __('Die zweite Kategoriebeschreibung.', 'woocommerce'); ?></p>
         </td>
     </tr>
-    
+
     <tr class="form-field">
         <th scope="row" valign="top"><label for="third-desc"><?php echo __('Dritte Beschreibung', 'woocommerce'); ?></label></th>
         <td><?php
@@ -87,8 +89,7 @@ function bbloomer_wp_editor_edit($term)
 add_action('edit_term', 'bbloomer_save_wp_editor', 10, 3);
 add_action('created_term', 'bbloomer_save_wp_editor', 10, 3);
 
-function bbloomer_save_wp_editor($term_id, $tt_id = '', $taxonomy = '')
-{
+function bbloomer_save_wp_editor($term_id, $tt_id = '', $taxonomy = '') {
     if ('product_cat' === $taxonomy) {
         if (isset($_POST['seconddesc'])) {
             update_term_meta($term_id, 'seconddesc', esc_attr($_POST['seconddesc']));
@@ -102,11 +103,10 @@ function bbloomer_save_wp_editor($term_id, $tt_id = '', $taxonomy = '')
 // 4. display second description under WooCommerce header @ product category page
 add_action('woocommerce_archive_description', 'bbloomer_display_wp_editor_content', 15);
 
-function bbloomer_display_wp_editor_content()
-{
+function bbloomer_display_wp_editor_content() {
     if (is_product_taxonomy() && 0 === absint(get_query_var('paged'))) {
         $term = get_queried_object();
-        
+
         // Second description
         if ($term && !empty(get_term_meta($term->term_id, 'seconddesc', true))) {
             $content = wc_format_content(htmlspecialchars_decode(get_term_meta($term->term_id, 'seconddesc', true)));
@@ -114,7 +114,7 @@ function bbloomer_display_wp_editor_content()
             $content = preg_replace('/<p>/', '<p class="lead fs-5">', $content, 1);
             // echo '<div class="term-description-second">' . $content . '</div>';
         }
-        
+
         // Third description
         if ($term && !empty(get_term_meta($term->term_id, 'thirddesc', true))) {
             $content = wc_format_content(htmlspecialchars_decode(get_term_meta($term->term_id, 'thirddesc', true)));
@@ -130,5 +130,3 @@ remove_action('woocommerce_archive_description', 'woocommerce_taxonomy_archive_d
 remove_action('woocommerce_archive_description', 'woocommerce_product_archive_description', 10);
 add_action('woocommerce_after_main_content', 'woocommerce_taxonomy_archive_description', 5);
 add_action('woocommerce_after_main_content', 'woocommerce_product_archive_description', 5);
-
-

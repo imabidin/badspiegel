@@ -7,7 +7,9 @@
  * security measures, rate limiting, and performance optimizations. This is an
  * improved, modular version that follows DRY principles for better maintainability.
  *
- * @version 2.3.4
+ * @version 2.4.0
+ *
+ * @todo improve performance, maybe preload all files if debug is false
  *
  * Features:
  * - Modular, DRY-compliant architecture
@@ -156,9 +158,9 @@ function verify_modal_nonce()
 {
     $nonce = isset($_POST['nonce']) ? sanitize_text_field($_POST['nonce']) : '';
     $result = wp_verify_nonce($nonce, 'modal_content_nonce');
-    
+
     // PRODUCTION: Debug logging removed
-    
+
     return $result;
 }
 
@@ -491,6 +493,47 @@ function create_category_lookup($product_categories = array()) {
         foreach ($product_categories as $category) {
             if (isset($category->slug)) {
                 $lookup[$category->slug] = true;
+            }
+        }
+    }
+
+    return $lookup;
+}
+
+/**
+ * Create attribute lookup for efficient template usage
+ * Creates a fast lookup array for product attribute checks
+ *
+ * @param WC_Product $product WooCommerce product object
+ * @return array Associative array of attribute_name-value => true for existing attributes
+ */
+function create_attribute_lookup($product) {
+    $lookup = array();
+
+    if (!$product) {
+        return $lookup;
+    }
+
+    // Get all product attributes
+    $attributes = $product->get_attributes();
+
+    foreach ($attributes as $attribute_name => $attribute) {
+        if ($attribute->is_taxonomy()) {
+            // Taxonomy attribute - get term values
+            $terms = wc_get_product_terms($product->get_id(), $attribute_name, array('fields' => 'slugs'));
+            foreach ($terms as $term_slug) {
+                // Create lookup key: attribute_name-value (e.g., "faecherposition-seitlich")
+                $clean_attribute_name = str_replace('pa_', '', $attribute_name);
+                $lookup_key = $clean_attribute_name . '-' . $term_slug;
+                $lookup[$lookup_key] = true;
+            }
+        } else {
+            // Custom attribute - get option values
+            $values = $attribute->get_options();
+            foreach ($values as $value) {
+                $clean_attribute_name = str_replace('pa_', '', $attribute_name);
+                $lookup_key = $clean_attribute_name . '-' . sanitize_title($value);
+                $lookup[$lookup_key] = true;
             }
         }
     }
@@ -970,7 +1013,7 @@ function handle_modal_file_request()
     // Debug logging
     error_log("MODAL DEBUG: handle_modal_file_request started");
     error_log("MODAL DEBUG: POST data: " . json_encode($_POST));
-    
+
     try {
         // Centralized validation pipeline
         $requested_file = validate_modal_request_pipeline('file', 'file_name', 'text');
@@ -978,7 +1021,7 @@ function handle_modal_file_request()
             error_log("MODAL DEBUG: validate_modal_request_pipeline failed");
             return; // Error already sent
         }
-        
+
         error_log("MODAL DEBUG: requested_file: " . $requested_file);
 
         // File path validation
@@ -988,7 +1031,7 @@ function handle_modal_file_request()
             send_modal_error($file_path);
             return;
         }
-        
+
         error_log("MODAL DEBUG: file_path validated: " . $file_path);
 
         // Set up product context from frontend data
@@ -1001,10 +1044,10 @@ function handle_modal_file_request()
             send_modal_error($content);
             return;
         }
-        
+
         error_log("MODAL DEBUG: Content loaded successfully, length: " . strlen($content));
         wp_send_json_success($content);
-        
+
     } catch (Throwable $e) {
         error_log("MODAL DEBUG: Exception caught: " . $e->getMessage());
         error_log("MODAL DEBUG: Exception trace: " . $e->getTraceAsString());
@@ -1030,7 +1073,8 @@ function setup_modal_product_context() {
         'current_url' => $current_url,
         'product' => null,
         'product_categories' => array(),
-        'category_lookup' => array()
+        'category_lookup' => array(),
+        'attribute_lookup' => array()
     );
 
     // Try to get product from provided ID
@@ -1046,6 +1090,9 @@ function setup_modal_product_context() {
 
             // Create simple category lookup for fast O(1) checks
             $modal_context['category_lookup'] = create_category_lookup($modal_context['product_categories']);
+
+            // Create attribute lookup for fast O(1) attribute checks
+            $modal_context['attribute_lookup'] = create_attribute_lookup($product);
         }
     }
 
@@ -1066,14 +1113,20 @@ function setup_modal_product_context() {
 
                     // Create simple category lookup for fast O(1) checks
                     $modal_context['category_lookup'] = create_category_lookup($modal_context['product_categories']);
+
+                    // Create attribute lookup for fast O(1) attribute checks
+                    $modal_context['attribute_lookup'] = create_attribute_lookup($product);
                 }
             }
         }
     }
 
-    // Ensure category_lookup is always available, even if no product found
+    // Ensure category_lookup and attribute_lookup are always available, even if no product found
     if (!isset($modal_context['category_lookup'])) {
         $modal_context['category_lookup'] = create_category_lookup(array());
+    }
+    if (!isset($modal_context['attribute_lookup'])) {
+        $modal_context['attribute_lookup'] = create_attribute_lookup(null);
     }
 }
 

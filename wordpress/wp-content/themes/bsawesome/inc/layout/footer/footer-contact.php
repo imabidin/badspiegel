@@ -2,8 +2,8 @@
 
 /**
  * Display the site contact.
- * 
- * @version 2.2.0
+ *
+ * @version 2.4.0
  */
 function site_contact()
 {

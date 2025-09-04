@@ -58,6 +58,18 @@ __webpack_require__.r(__webpack_exports__);
  * @version 2.3.0
  */
 
+// PRODUCTION MODE: Set to false to disable debug logging
+var HERO_DEBUG_ENABLED = false;
+
+/**
+ * Debug logging function (disabled in production)
+ */
+function heroDebugLog() {
+  if (HERO_DEBUG_ENABLED) {
+    heroDebugLog.apply(void 0, arguments);
+  }
+}
+
 // ====================== PAGE LOAD ANIMATION SYSTEM ======================
 
 /**
@@ -234,8 +246,7 @@ document.addEventListener("DOMContentLoaded", function () {
       modeToSet = "hero-img-day";
     }
 
-    // Debug log for verification (remove in production if desired)
-    console.log("[Hero] Auto-selected ".concat(modeToSet, " mode for hour ").concat(currentHour));
+    // PRODUCTION: Debug logging removed
 
     // Apply the determined mode using existing switchMode function
     switchMode(modeToSet);
@@ -251,11 +262,11 @@ document.addEventListener("DOMContentLoaded", function () {
   /**
    * Development helper functions for testing time-based mode selection
    * Available in browser console for manual testing and debugging
-   * 
+   *
    * PRODUCTION NOTE: These utilities are designed for development and testing.
    * They can safely remain in production as they don't affect normal operation
    * and are only accessible via browser console for debugging purposes.
-   * 
+   *
    * Usage in browser console:
    * - testHeroMode.night()     // Test night mode (22:00-05:59)
    * - testHeroMode.dawn()      // Test dawn mode (06:00-08:59 & 17:00-21:59)
@@ -269,21 +280,21 @@ document.addEventListener("DOMContentLoaded", function () {
      * Test night mode (simulates 2 AM)
      */
     night: function night() {
-      console.log('🌙 Testing NIGHT mode (simulating 02:00)');
+      heroDebugLog("🌙 Testing NIGHT mode (simulating 02:00)");
       this._simulateTime(2);
     },
     /**
      * Test dawn mode (simulates 7 AM)
      */
     dawn: function dawn() {
-      console.log('🌅 Testing DAWN mode (simulating 07:00)');
+      heroDebugLog("🌅 Testing DAWN mode (simulating 07:00)");
       this._simulateTime(7);
     },
     /**
      * Test day mode (simulates 2 PM)
      */
     day: function day() {
-      console.log('☀️ Testing DAY mode (simulating 14:00)');
+      heroDebugLog("☀️ Testing DAY mode (simulating 14:00)");
       this._simulateTime(14);
     },
     /**
@@ -292,10 +303,10 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     time: function time(hour) {
       if (hour < 0 || hour > 23) {
-        console.error('❌ Invalid hour! Please use 0-23');
+        console.error("❌ Invalid hour! Please use 0-23");
         return;
       }
-      console.log("\uD83D\uDD50 Testing specific time: ".concat(hour, ":00"));
+      heroDebugLog("\uD83D\uDD50 Testing specific time: ".concat(hour, ":00"));
       this._simulateTime(hour);
     },
     /**
@@ -303,7 +314,7 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     reset: function reset() {
       var realHour = new Date().getHours();
-      console.log("\uD83D\uDD04 Resetting to real time: ".concat(realHour, ":00"));
+      heroDebugLog("\uD83D\uDD04 Resetting to real time: ".concat(realHour, ":00"));
       this._simulateTime(realHour);
     },
     /**
@@ -313,18 +324,18 @@ document.addEventListener("DOMContentLoaded", function () {
       var currentHour = new Date().getHours();
       var mode, timeRange;
       if (currentHour >= 22 || currentHour < 6) {
-        mode = 'NIGHT';
-        timeRange = '22:00 - 05:59';
+        mode = "NIGHT";
+        timeRange = "22:00 - 05:59";
       } else if (currentHour >= 6 && currentHour < 9 || currentHour >= 17 && currentHour < 22) {
-        mode = 'DAWN';
-        timeRange = '06:00 - 08:59 & 17:00 - 21:59';
+        mode = "DAWN";
+        timeRange = "06:00 - 08:59 & 17:00 - 21:59";
       } else {
-        mode = 'DAY';
-        timeRange = '09:00 - 16:59';
+        mode = "DAY";
+        timeRange = "09:00 - 16:59";
       }
-      var activeButton = document.querySelector('.hero-switch .btn.active');
-      var activeMode = activeButton ? activeButton.dataset.hero : 'none';
-      console.log("\uD83D\uDCCA Hero Mode Info:\n\uD83D\uDD50 Current time: ".concat(currentHour, ":00\n\uD83C\uDFAF Expected mode: ").concat(mode, " (").concat(timeRange, ")\n\u2705 Active button: ").concat(activeMode, "\n\uD83D\uDDBC\uFE0F Visible images: ").concat(this._getVisibleImages()));
+      var activeButton = document.querySelector(".hero-switch .btn.active");
+      var activeMode = activeButton ? activeButton.dataset.hero : "none";
+      heroDebugLog("\uD83D\uDCCA Hero Mode Info:\n\uD83D\uDD50 Current time: ".concat(currentHour, ":00\n\uD83C\uDFAF Expected mode: ").concat(mode, " (").concat(timeRange, ")\n\u2705 Active button: ").concat(activeMode, "\n\uD83D\uDDBC\uFE0F Visible images: ").concat(this._getVisibleImages()));
     },
     /**
      * Internal helper to simulate specific time
@@ -335,13 +346,13 @@ document.addEventListener("DOMContentLoaded", function () {
       var modeToSet;
       if (hour >= 22 || hour < 6) {
         modeToSet = "hero-img-night";
-        console.log("   \u2192 Should activate NIGHT mode (hour ".concat(hour, ")"));
+        heroDebugLog("   \u2192 Should activate NIGHT mode (hour ".concat(hour, ")"));
       } else if (hour >= 6 && hour < 9 || hour >= 17 && hour < 22) {
         modeToSet = "hero-img-dawn";
-        console.log("   \u2192 Should activate DAWN mode (hour ".concat(hour, ")"));
+        heroDebugLog("   \u2192 Should activate DAWN mode (hour ".concat(hour, ")"));
       } else {
         modeToSet = "hero-img-day";
-        console.log("   \u2192 Should activate DAY mode (hour ".concat(hour, ")"));
+        heroDebugLog("   \u2192 Should activate DAY mode (hour ".concat(hour, ")"));
       }
 
       // Apply the mode
@@ -349,8 +360,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Show result
       setTimeout(function () {
-        console.log("   \u2705 Active mode: ".concat(modeToSet));
-        console.log("   \uD83D\uDDBC\uFE0F Visible images: ".concat(_this._getVisibleImages()));
+        heroDebugLog("   \u2705 Active mode: ".concat(modeToSet));
+        heroDebugLog("   \uD83D\uDDBC\uFE0F Visible images: ".concat(_this._getVisibleImages()));
       }, 100);
     },
     /**
@@ -359,20 +370,20 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     _getVisibleImages: function _getVisibleImages() {
       var visibleImages = [];
-      document.querySelectorAll('.hero-img').forEach(function (img) {
-        if (!img.classList.contains('opacity-0')) {
-          if (img.classList.contains('hero-img-night')) visibleImages.push('night');
-          if (img.classList.contains('hero-img-dawn')) visibleImages.push('dawn');
-          if (img.classList.contains('hero-img-day')) visibleImages.push('day');
+      document.querySelectorAll(".hero-img").forEach(function (img) {
+        if (!img.classList.contains("opacity-0")) {
+          if (img.classList.contains("hero-img-night")) visibleImages.push("night");
+          if (img.classList.contains("hero-img-dawn")) visibleImages.push("dawn");
+          if (img.classList.contains("hero-img-day")) visibleImages.push("day");
         }
       });
-      return visibleImages.join(', ') || 'none';
+      return visibleImages.join(", ") || "none";
     }
   };
 
   // Development mode detection and conditional logging
-  if (window.location.hostname === 'localhost' || window.location.hostname.includes('dev') || window.console) {
-    console.log("\uD83E\uDDEA Hero Mode Testing Commands Available:\n\uD83C\uDF19 testHeroMode.night()    - Test night mode\n\uD83C\uDF05 testHeroMode.dawn()     - Test dawn mode  \n\u2600\uFE0F testHeroMode.day()      - Test day mode\n\uD83D\uDD50 testHeroMode.time(14)   - Test specific hour\n\uD83D\uDD04 testHeroMode.reset()    - Reset to real time\n\uD83D\uDCCA testHeroMode.info()     - Show current info");
+  if (window.location.hostname === "localhost" || window.location.hostname.includes("dev") || window.console) {
+    heroDebugLog("\n\uD83E\uDDEA Hero Mode Testing Commands Available:\n\uD83C\uDF19 testHeroMode.night()    - Test night mode\n\uD83C\uDF05 testHeroMode.dawn()     - Test dawn mode\n\u2600\uFE0F testHeroMode.day()      - Test day mode\n\uD83D\uDD50 testHeroMode.time(14)   - Test specific hour\n\uD83D\uDD04 testHeroMode.reset()    - Reset to real time\n\uD83D\uDCCA testHeroMode.info()     - Show current info");
   }
 
   // ====================== EVENT LISTENER REGISTRATION ======================

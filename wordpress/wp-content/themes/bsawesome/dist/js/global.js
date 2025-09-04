@@ -15883,6 +15883,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _js_configurator_configcode_load__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./js/configurator/configcode/load */ "./assets/js/configurator/configcode/load.js");
 // global.js
 
+// PRODUCTION MODE: Debug logging disabled
+if (typeof window !== 'undefined') {
+  window.addEventListener('DOMContentLoaded', function () {
+    // Check if myAjaxData is loaded (silent in production)
+    if (typeof myAjaxData === 'undefined') {
+      // AJAX functionality may fail - debug in development only
+      return;
+    }
+
+    // PRODUCTION: AJAX monitoring disabled for performance
+    // Debug code removed for production deployment
+  });
+}
+
 // Import Scss
 
 

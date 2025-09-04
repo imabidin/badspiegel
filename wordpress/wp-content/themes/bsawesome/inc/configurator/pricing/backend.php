@@ -5,8 +5,12 @@ if (!defined('ABSPATH')) {
 }
 
 /**
+ * @version 2.4.0
+ */
+
+/**
  * Custom Pricing Options Backend Management
- * 
+ *
  * Handles backend administration for pxd_ (Aufpreis Durchmesser) and pxt_ (Aufpreis Tiefe) options
  * Similar to pricematrix system but for individual pricing configurations
  */
@@ -56,7 +60,7 @@ class CustomPricingOptionsBackend
 
         // Add CSS
         wp_add_inline_style('wp-admin', $this->get_admin_css());
-        
+
         // Add JavaScript
         wp_add_inline_script('wp-admin', $this->get_admin_js());
     }
@@ -67,7 +71,7 @@ class CustomPricingOptionsBackend
     public function init_custom_options()
     {
         $existing_options = get_option('custom_pricing_options', []);
-        
+
         if (empty($existing_options)) {
             // Set default structure for pxd_ and pxt_ options
             $default_options = [
@@ -78,7 +82,7 @@ class CustomPricingOptionsBackend
                 ],
                 'pxd_led' => [
                     'label' => 'Aufpreis Durchmesser (LED)',
-                    'type' => 'diameter', 
+                    'type' => 'diameter',
                     'options' => []
                 ],
                 'pxd_tv' => [
@@ -272,7 +276,7 @@ class CustomPricingOptionsBackend
         }
 
         $pricing_data = json_decode(stripslashes($_POST['pricing_data'] ?? ''), true);
-        
+
         if (!is_array($pricing_data)) {
             wp_send_json_error('Invalid data format');
         }
@@ -306,7 +310,7 @@ class CustomPricingOptionsBackend
     {
         // This function would need to be implemented to dynamically update the get_all_product_options()
         // For now, we'll store the data and modify the loading logic
-        
+
         // Store in a separate option that can be loaded by get_all_product_options
         update_option('dynamic_pricing_options', $pricing_data);
     }
@@ -320,19 +324,19 @@ class CustomPricingOptionsBackend
             .custom-pricing-management {
                 margin-top: 20px;
             }
-            
+
             .nav-tab-wrapper {
                 margin-bottom: 20px;
             }
-            
+
             .tab-content {
                 display: none;
             }
-            
+
             .tab-content.active {
                 display: block;
             }
-            
+
             .pricing-option-card {
                 background: #fff;
                 border: 1px solid #c3c4c7;
@@ -340,7 +344,7 @@ class CustomPricingOptionsBackend
                 margin-bottom: 20px;
                 box-shadow: 0 1px 1px rgba(0,0,0,.04);
             }
-            
+
             .card-header {
                 display: flex;
                 justify-content: space-between;
@@ -349,34 +353,34 @@ class CustomPricingOptionsBackend
                 border-bottom: 1px solid #e1e1e1;
                 background: #f8f9fa;
             }
-            
+
             .card-header h3 {
                 margin: 0;
                 font-size: 14px;
                 font-weight: 600;
             }
-            
+
             .card-content {
                 padding: 20px;
             }
-            
+
             .option-meta {
                 display: grid;
                 grid-template-columns: 1fr 2fr;
                 gap: 15px;
                 margin-bottom: 25px;
             }
-            
+
             .option-meta label {
                 display: flex;
                 flex-direction: column;
                 gap: 5px;
             }
-            
+
             .option-meta input {
                 width: 100%;
             }
-            
+
             .pricing-values h4 {
                 margin-top: 0;
                 margin-bottom: 15px;
@@ -385,7 +389,7 @@ class CustomPricingOptionsBackend
                 text-transform: uppercase;
                 letter-spacing: 0.5px;
             }
-            
+
             .pricing-value-row {
                 border: 1px solid #e1e1e1;
                 border-radius: 3px;
@@ -393,26 +397,26 @@ class CustomPricingOptionsBackend
                 margin-bottom: 10px;
                 background: #fafafa;
             }
-            
+
             .value-inputs {
                 display: grid;
                 grid-template-columns: 1fr 1fr 2fr auto;
                 gap: 15px;
                 align-items: end;
             }
-            
+
             .value-inputs label {
                 display: flex;
                 flex-direction: column;
                 gap: 5px;
             }
-            
+
             .value-inputs span {
                 font-size: 12px;
                 font-weight: 600;
                 color: #666;
             }
-            
+
             .pricing-save-section {
                 margin-top: 30px;
                 padding: 20px;
@@ -423,24 +427,24 @@ class CustomPricingOptionsBackend
                 align-items: center;
                 gap: 15px;
             }
-            
+
             #save-message {
                 font-weight: 600;
             }
-            
+
             #save-message.success {
                 color: #46b450;
             }
-            
+
             #save-message.error {
                 color: #dc3232;
             }
-            
+
             .spinner {
                 float: none;
                 visibility: hidden;
             }
-            
+
             .spinner.is-active {
                 visibility: visible;
             }
@@ -453,27 +457,27 @@ class CustomPricingOptionsBackend
     private function get_admin_js()
     {
         $nonce = wp_create_nonce('custom_pricing_nonce');
-        
+
         return '
             jQuery(document).ready(function($) {
-                
+
                 // Tab switching
                 $(".nav-tab").click(function(e) {
                     e.preventDefault();
-                    
+
                     $(".nav-tab").removeClass("nav-tab-active");
                     $(this).addClass("nav-tab-active");
-                    
+
                     var target = $(this).attr("href");
                     $(".tab-content").removeClass("active");
                     $(target).addClass("active");
                 });
-                
+
                 // Expand/collapse cards
                 $(document).on("click", ".expand-collapse", function() {
                     var cardContent = $(this).closest(".pricing-option-card").find(".card-content");
                     var isVisible = cardContent.is(":visible");
-                    
+
                     if (isVisible) {
                         cardContent.hide();
                         $(this).text("Bearbeiten");
@@ -482,7 +486,7 @@ class CustomPricingOptionsBackend
                         $(this).text("Schließen");
                     }
                 });
-                
+
                 // Add new pricing value
                 $(document).on("click", ".add-pricing-value", function() {
                     var valuesList = $(this).siblings(".values-list");
@@ -505,45 +509,45 @@ class CustomPricingOptionsBackend
                             </div>
                         </div>
                     `);
-                    
+
                     valuesList.append(newRow);
                 });
-                
+
                 // Remove pricing value
                 $(document).on("click", ".remove-value", function() {
                     $(this).closest(".pricing-value-row").remove();
                 });
-                
+
                 // Auto-fill label from value
                 $(document).on("blur", ".value-field", function() {
                     var row = $(this).closest(".pricing-value-row");
                     var labelField = row.find(".label-field");
-                    
+
                     if (!labelField.val()) {
                         labelField.val($(this).val());
                     }
                 });
-                
+
                 // Save all pricing data
                 $("#save-all-pricing").click(function() {
                     var pricingData = {};
                     var spinner = $("#save-spinner");
                     var message = $("#save-message");
-                    
+
                     spinner.addClass("is-active");
                     message.text("").removeClass("success error");
-                    
+
                     $(".pricing-option-card").each(function() {
                         var optionKey = $(this).data("option-key");
                         var label = $(this).find(".option-label-field").val();
                         var type = optionKey.startsWith("pxd_") ? "diameter" : "depth";
-                        
+
                         var options = {};
                         $(this).find(".pricing-value-row").each(function() {
                             var value = $(this).find(".value-field").val();
                             var price = parseFloat($(this).find(".price-field").val()) || 0;
                             var valueLabel = $(this).find(".label-field").val() || value;
-                            
+
                             if (value) {
                                 options[value] = {
                                     key: value,
@@ -553,14 +557,14 @@ class CustomPricingOptionsBackend
                                 };
                             }
                         });
-                        
+
                         pricingData[optionKey] = {
                             label: label,
                             type: type,
                             options: options
                         };
                     });
-                    
+
                     // AJAX save
                     $.post(ajaxurl, {
                         action: "save_custom_pricing",
@@ -568,13 +572,13 @@ class CustomPricingOptionsBackend
                         nonce: "' . $nonce . '"
                     }, function(response) {
                         spinner.removeClass("is-active");
-                        
+
                         if (response.success) {
                             message.addClass("success").text(response.data);
                         } else {
                             message.addClass("error").text("Fehler: " + response.data);
                         }
-                        
+
                         setTimeout(function() {
                             message.text("").removeClass("success error");
                         }, 5000);

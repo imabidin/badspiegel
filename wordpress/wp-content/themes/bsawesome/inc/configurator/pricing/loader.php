@@ -5,8 +5,12 @@ if (!defined('ABSPATH')) {
 }
 
 /**
+ * @version 2.4.0
+ */
+
+/**
  * Dynamic Pricing Options Loader
- * 
+ *
  * Integrates backend-managed pricing options with the existing options system
  */
 class DynamicPricingOptionsLoader
@@ -26,7 +30,7 @@ class DynamicPricingOptionsLoader
     public function merge_dynamic_pricing_options($options)
     {
         $dynamic_pricing = get_option('dynamic_pricing_options', []);
-        
+
         if (empty($dynamic_pricing)) {
             return $options;
         }
@@ -35,7 +39,7 @@ class DynamicPricingOptionsLoader
             if (isset($options[$option_key])) {
                 // Update existing option with dynamic pricing
                 $options[$option_key]['options'] = $pricing_data['options'] ?? [];
-                
+
                 // Update label if changed
                 if (!empty($pricing_data['label'])) {
                     $options[$option_key]['label'] = $pricing_data['label'];

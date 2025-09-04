@@ -30,7 +30,7 @@
  * - $posted_value: Current/submitted value for auto-loading
  * - $modal_link: Link for description modal
  *
- * @version 2.2.0
+ * @version 2.4.0
  * @package configurator
  */
 
@@ -41,7 +41,7 @@
 $auto_load_selected_value = '';
 if (!empty($posted_value)) {
     $auto_load_selected_value = $posted_value;
-    
+
     // Debug output for auto-load process
     product_configurator_debug("BtnGroup Auto-Load", [
         'option' => $option_key,
@@ -92,7 +92,7 @@ if (!empty($posted_value)) {
                      * Determine if this button should be selected based on auto-loaded value
                      */
                     $is_selected = false;
-                    
+
                     if (!empty($auto_load_selected_value)) {
                         // Auto-Load: Check if this value should be selected
                         if ($auto_load_selected_value === $sub_name) {
@@ -117,7 +117,7 @@ if (!empty($posted_value)) {
                         <?php echo $is_selected ? 'checked' : ''; ?>
                         <?php echo $option_required ? 'required aria-required="true"' : ''; ?>
                         >
-                    
+
                     <!-- Button Label -->
                     <label class="btn btn-outline-secondary focus-ring text-hind"
                         for="<?php echo esc_attr($sub_option_id); ?>">
@@ -162,7 +162,7 @@ if (!empty($posted_value)) {
             if (!$option_required): ?>
                 <?php
                 $sub_none_id = uniqid();
-                
+
                 /**
                  * Auto-Load None Option Selection Logic
                  * Select "none" option only when no auto-load value is present
@@ -173,7 +173,7 @@ if (!empty($posted_value)) {
                     $none_is_selected = true;
                 }
                 ?>
-                
+
                 <!-- None Option Radio Input -->
                 <input type="radio"
                     class="option-radio option-none btn-check"
@@ -185,7 +185,7 @@ if (!empty($posted_value)) {
                     data-price="0"
                     <?php echo $none_is_selected ? 'checked' : ''; ?>
                     >
-                
+
                 <!-- Reset Button -->
                 <label class="btn btn-link border-0 text-hind d-inline-flex align-items-center<?php echo ($option_type === 'btngroup-child') ? ' d-none' : ' fade'; ?>"
                     for="<?php echo esc_attr($sub_none_id); ?>">

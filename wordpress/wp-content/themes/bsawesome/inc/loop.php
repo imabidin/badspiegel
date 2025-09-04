@@ -2,17 +2,19 @@
 
 /**
  * Product Loop Customizations and Hover Image Functionality
- * 
+ *
  * Provides enhanced product display features including hover images that can be
  * configured in the WordPress admin. Adds meta boxes for product hover images
  * and handles the display logic for product loops and grids.
- * 
+ *
  * @package BSAwesome
  * @subpackage Loop
  * @since 1.0.0
  * @author BS Awesome Team
- * @version 2.3.0
+ * @version 2.4.0
  * @feature Product Hover Images
+ *
+ * @todo Combine codes inside woocommerce.php if possible
  */
 
 /**
@@ -32,7 +34,7 @@ function bsawesome_add_hover_image_meta_box()
         __('Product Hover Image', 'woocommerce'), // Title of the meta box
         'bsawesome_hover_image_meta_box_callback', // Callback function to render the meta box
         'product', // Post type where this meta box should appear
-        'side', // Context where the meta box should appear 
+        'side', // Context where the meta box should appear
         'default' // Priority of the meta box
     );
 }
@@ -264,7 +266,7 @@ function bsawesome_hover_image_script()
 
 /**
  * Get hover image ID for a product
- * 
+ *
  * @param int|WC_Product|null $product Product ID or product object
  * @return int|false Hover image attachment ID or false if not set
  */
@@ -272,7 +274,7 @@ function bsawesome_get_product_hover_image_id($product = null)
 {
     // Static cache for main images to avoid repeated database calls
     static $main_image_cache = [];
-    
+
     // Get product object and ID
     if (!$product) {
         global $product;
@@ -302,7 +304,7 @@ function bsawesome_get_product_hover_image_id($product = null)
 
     if ($hover_image_id) {
         $hover_image_id = (int) $hover_image_id;
-        
+
         // Don't return hover image if it's the same as main image
         if ($hover_image_id === $main_image_cache[$product_id]) {
             // Fall through to gallery fallback
@@ -316,7 +318,7 @@ function bsawesome_get_product_hover_image_id($product = null)
         $gallery_ids = $product_obj->get_gallery_image_ids();
         if (!empty($gallery_ids)) {
             $first_gallery_id = (int) $gallery_ids[0];
-            
+
             // Don't use gallery image if it's the same as main image
             if ($first_gallery_id !== $main_image_cache[$product_id]) {
                 return $first_gallery_id;
@@ -329,7 +331,7 @@ function bsawesome_get_product_hover_image_id($product = null)
 
 /**
  * Get hover image HTML for a product
- * 
+ *
  * @param int|WC_Product|null $product Product ID or product object
  * @param string $size Image size
  * @param array $attr Additional image attributes
@@ -353,14 +355,14 @@ function bsawesome_get_product_hover_image_html($product = null, $size = 'woocom
 
     // Generate the image HTML
     $image_html = wp_get_attachment_image($hover_image_id, $size, false, $attr);
-    
+
     // Allow other plugins/themes to modify the hover image HTML
     return apply_filters('bsawesome_hover_image_html', $image_html, $product, $hover_image_id, $size, $attr);
 }
 
 /**
  * Check if product has hover image
- * 
+ *
  * @param int|WC_Product|null $product Product ID or product object
  * @return bool
  */

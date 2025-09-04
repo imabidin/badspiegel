@@ -7,7 +7,9 @@
  * @subpackage Forms
  * @since 1.0.0
  * @author BS Awesome Team
- * @version 2.3.0
+ * @version 2.4.0
+ *
+ * @todo Check if floating label is an option
  */
 add_filter('woocommerce_form_field', 'custom_customize_checkout_fields', 10, 4);
 

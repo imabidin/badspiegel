@@ -10,7 +10,9 @@
  * @subpackage Shortcodes
  * @since 1.0.0
  * @author BS Awesome Team
- * @version 2.3.0
+ * @version 2.4.0
+ *
+ * @todo Optimize img shortcode for better src and sizes generation
  */
 
 /**
@@ -221,17 +223,17 @@ function initialize_custom_shortcodes()
         } else if ($atts['responsive'] === 'true' && isset($container_widths[$atts['container']])) {
             $widths = $container_widths[$atts['container']];
             $sizes_array = array();
-            
+
             // Build sizes string with Bootstrap breakpoints
             foreach ($bootstrap_breakpoints as $breakpoint => $px) {
                 if (isset($widths[$breakpoint]) && $widths[$breakpoint] !== $widths['base']) {
                     $sizes_array[] = "(min-width: {$px}px) {$widths[$breakpoint]}";
                 }
             }
-            
+
             // Add base size as fallback
             $sizes_array[] = $widths['base'];
-            
+
             $custom_sizes = implode(', ', $sizes_array);
         } else {
             $custom_sizes = $image_sizes;

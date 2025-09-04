@@ -1,11 +1,12 @@
-<?php
+<?php defined('ABSPATH') || exit;
 
-if (! defined('ABSPATH')) {
-    exit;
-}
+/**
+ * @version 2.4.0
+ *
+ * Move product meta (SKU, categories, tags) below the product summary.
+ */
 
-function bsawesome_move_product_meta()
-{
+function bsawesome_move_product_meta() {
     // Remove the default meta data action
     remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_meta', 40);
 

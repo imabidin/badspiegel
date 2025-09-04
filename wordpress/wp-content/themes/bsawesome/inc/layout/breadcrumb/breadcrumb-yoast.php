@@ -2,8 +2,10 @@
 
 /**
  * Display Yoast Breadcrumbs
- * 
- * @version 2.2.0
+ *
+ * @version 2.4.0
+ *
+ * @todo Maybe optimize mobile view
  */
 
 // Remove WooCommerce Breadcrumb

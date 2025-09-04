@@ -11,7 +11,10 @@
  * @subpackage WooCommerce
  * @since 1.0.0
  * @author BS Awesome Team
- * @version 2.3.0
+ * @version 2.4.0
+ *
+ * @todo Check all the functions and functionalites if neceressary
+ * @todo Optimize loop for better marketing, egg. badges for differences between mirrors.
  */
 
 /**
@@ -89,7 +92,7 @@ function wc_product_post_classes($classes, $post_id)
 		$classes[] = 'sku-' . sanitize_html_class($sku);
 	}
 
-	// 2) Array with desired attributes (without "pa_")
+	// 2) Array with desired attributes (without "pa_") // in js use
 	$attributes = array('form', 'beleuchtung', 'lichtposition', 'schnittkante');
 
 	// Loop through each attribute and append classes
@@ -125,12 +128,12 @@ add_filter('post_class', 'wc_product_post_classes', 21, 2);
 
 /**
  * WC Number of products per page
- * 
+ *
  * @param integer $args number of products per page
  */
 function wc_number_products($args)
 {
-	$custom_per_page = 20;
+	$custom_per_page = 24;
 
 	return $custom_per_page;
 }
@@ -158,7 +161,7 @@ add_filter('woocommerce_output_related_products_args', 'wc_related_products');
  * WC Product gallery thumbnail columns
  *
  * @return integer number of columns
- * 
+ *
  * Imabi: Might be useful for the future.
  */
 //  public function thumbnail_columns() {
@@ -200,7 +203,7 @@ function wc_wrapper_after()
 
 /**
  * WC Product loop.
- * 
+ *
  * Overriding product loop.
  */
 add_action('woocommerce_before_shop_loop_item', 'wrapping_loop_start', 1);
@@ -355,7 +358,7 @@ function woocommerce_template_loop_favourite_button()
 remove_action('woocommerce_before_checkout_form', 'woocommerce_checkout_coupon_form', 10);
 
 // /**
-//  * Entfernt das <span class="woocommerce-input-wrapper">-Element aus den Checkout-Feldern 
+//  * Entfernt das <span class="woocommerce-input-wrapper">-Element aus den Checkout-Feldern
 //  */
 //
 // add_filter('woocommerce_form_field', 'custom_remove_input_wrapper_span', 10, 4);
@@ -487,7 +490,7 @@ function remove_h1_heading_by_slug($show)
 add_filter('woocommerce_show_page_title', 'remove_h1_heading_by_slug');
 
 /**
- * Gibt den Versandpreis als formatierten Betrag zurück – 
+ * Gibt den Versandpreis als formatierten Betrag zurück –
  * je nach WooCommerce-Einstellung inkl. oder exkl. Steuern.
  */
 add_filter('woocommerce_cart_shipping_method_full_label', 'custom_shipping_method_full_label', 10, 2);
@@ -513,7 +516,7 @@ function custom_shipping_method_full_label($label, $method)
 
 /**
  * Entfernt den Standard-Labeltext aus den Versandraten.
- * 
+ *
  * Maybe not needed
  */
 // add_filter('woocommerce_package_rates', 'custom_clear_shipping_method_label', 10, 2);

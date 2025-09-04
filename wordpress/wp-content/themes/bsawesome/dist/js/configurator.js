@@ -5195,7 +5195,7 @@ document.addEventListener("DOMContentLoaded", function () {
   //*********************************/
   // Dependencies: Values X Container
   //*********************************/
-  if (!isRund) {
+  if (!_variables_js__WEBPACK_IMPORTED_MODULE_1__.isRund) {
     (0,_dependencies_js__WEBPACK_IMPORTED_MODULE_0__.dependenciesValuesXcontainer)("verblendung", function (value) {
       return value !== "";
     }, "verblendung_ausfuehrung");

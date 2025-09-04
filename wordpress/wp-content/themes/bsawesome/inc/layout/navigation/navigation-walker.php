@@ -3,16 +3,16 @@ defined('ABSPATH') || exit;
 
 /**
  * Bootstrap 5 Nav Menu Walker mit SEO & Accessibility Features
- * 
+ *
  * Features:
  * - Schema.org ListItem Markup
  * - WooCommerce Kategoriebilder
  * - ARIA Attributes
  * - Lazy Loading
  * - Responsive Images
- * 
- * @version 2.2.0
- * 
+ *
+ * @version 2.4.0
+ *
  */
 class Bootstrap_Walker_Nav_Menu extends Walker_Nav_Menu
 {
@@ -138,8 +138,8 @@ class Bootstrap_Walker_Nav_Menu extends Walker_Nav_Menu
     protected function get_item_attributes($item, $depth)
     {
         $base_class = ($depth > 0) ? 'is-child-link ' : '';
-        $link_class = in_array('menu-item-has-children', (array) $item->classes) 
-            ? $base_class . 'nav-link dropdown-toggle' 
+        $link_class = in_array('menu-item-has-children', (array) $item->classes)
+            ? $base_class . 'nav-link dropdown-toggle'
             : $base_class . 'nav-link';
 
         $atts = [

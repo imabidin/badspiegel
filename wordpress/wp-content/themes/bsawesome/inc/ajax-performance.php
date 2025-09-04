@@ -2,6 +2,13 @@
 /**
  * AJAX Performance Booster
  * Reduziert WordPress-Overhead für AJAX-Requests drastisch
+ *
+ * @version 2.4.1
+ *
+ * Empfohlene Verbesserungen
+ * 1. Sicherere Plugin-Liste
+ * 2. Bessere Memory Management
+ * 3. Checkout prüfen
  */
 
 // Prevent direct access
@@ -27,8 +34,18 @@ function debug_ajax_request() {
         'action' => $action,
         'nonce_provided' => isset($_POST['nonce']),
         'post_data_keys' => array_keys($_POST),
-        'timestamp' => current_time('mysql')
+        'timestamp' => current_time('mysql'),
+        'is_checkout_related' => false // Will be updated by the class if needed
     ];
+
+    // Check if this looks like a checkout request
+    $checkout_actions = array('woocommerce_checkout', 'checkout', 'add_to_cart', 'woocommerce_update_order_review');
+    foreach ($checkout_actions as $checkout_action) {
+        if (strpos($action, $checkout_action) !== false) {
+            $debug_data['is_checkout_related'] = true;
+            break;
+        }
+    }
 
     error_log("AJAX DEBUG: " . json_encode($debug_data));
 
@@ -68,8 +85,59 @@ class AjaxPerformanceBooster {
 
         $this->is_modal_request = (
             isset($_POST['action']) &&
-            (strpos($_POST['action'], 'load_modal') !== false)
+            (strpos($_POST['action'], 'load_modal') !== false) &&
+            !$this->is_checkout_related_request()
         );
+    }
+
+    /**
+     * Check if current request is checkout-related and should not be optimized
+     *
+     * @return bool True if checkout-related, false otherwise
+     */
+    private function is_checkout_related_request() {
+        // Check for checkout-related AJAX actions
+        $checkout_actions = array(
+            'woocommerce_checkout',
+            'woocommerce_update_order_review',
+            'woocommerce_apply_coupon',
+            'woocommerce_remove_coupon',
+            'woocommerce_update_shipping_method',
+            'woocommerce_get_refreshed_fragments',
+            'wc_checkout_form',
+            'checkout',
+            'add_to_cart',
+            'remove_from_cart',
+            'update_cart',
+            'get_cart_fragments'
+        );
+
+        $current_action = $_POST['action'] ?? '';
+
+        // Check if action contains checkout-related keywords
+        foreach ($checkout_actions as $checkout_action) {
+            if (strpos($current_action, $checkout_action) !== false) {
+                return true;
+            }
+        }
+
+        // Check if we're on checkout page via URL
+        $current_url = $_POST['current_url'] ?? $_SERVER['HTTP_REFERER'] ?? '';
+        if (!empty($current_url)) {
+            $checkout_keywords = array('/checkout', '/cart', '/my-account', '/pay-for-order');
+            foreach ($checkout_keywords as $keyword) {
+                if (strpos($current_url, $keyword) !== false) {
+                    return true;
+                }
+            }
+        }
+
+        // Check if WooCommerce checkout is in progress
+        if (function_exists('is_checkout') || function_exists('is_cart')) {
+            return true;
+        }
+
+        return false;
     }
 
     private function optimize_ajax_request() {
@@ -120,9 +188,16 @@ class AjaxPerformanceBooster {
             return;
         }
 
+        // SAFETY: Extra check to prevent checkout interference
+        if ($this->is_checkout_related_request()) {
+            error_log("AJAX PERFORMANCE: Skipping plugin optimization for checkout-related request");
+            return;
+        }
+
         // List of plugins to keep active for modal requests
         $essential_plugins = array(
             'woocommerce/woocommerce.php',
+            'wordpress-seo/wp-seo.php', // Yoast SEO if used
             // Add other essential plugins here
         );
 
@@ -188,6 +263,17 @@ class AjaxPerformanceBooster {
      * Force early optimization for specific AJAX actions
      */
     public static function force_optimization() {
+        // SAFETY: Check for checkout-related requests first
+        $current_action = $_POST['action'] ?? '';
+        $checkout_actions = array('woocommerce_checkout', 'checkout', 'add_to_cart', 'woocommerce_update_order_review');
+
+        foreach ($checkout_actions as $checkout_action) {
+            if (strpos($current_action, $checkout_action) !== false) {
+                error_log("AJAX PERFORMANCE: Skipping force optimization for checkout action: " . $current_action);
+                return; // Don't optimize checkout requests
+            }
+        }
+
         if (isset($_POST['action']) && strpos($_POST['action'], 'load_modal') !== false) {
             // Set performance constants
             if (!defined('WP_USE_THEMES')) {
@@ -199,8 +285,17 @@ class AjaxPerformanceBooster {
                 define('SAVEQUERIES', false);
             }
 
-            // Optimize memory
-            ini_set('memory_limit', '256M');
+            // Dynamically optimize memory based on current limit
+            $current_limit = ini_get('memory_limit');
+            if (function_exists('wp_convert_hr_to_bytes')) {
+                $current_bytes = wp_convert_hr_to_bytes($current_limit);
+                if ($current_bytes < 268435456) { // Less than 256MB
+                    ini_set('memory_limit', '256M');
+                }
+            } else {
+                // Fallback for older WordPress versions
+                ini_set('memory_limit', '256M');
+            }
         }
     }
 }

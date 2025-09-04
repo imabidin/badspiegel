@@ -2,11 +2,11 @@
 
 /**
  * Main Navigation.
- * 
- * @version 2.2.0
- * 
+ *
+ * @version 2.4.0
+ *
  * Snippet - Load conga configuration code from the navigation.
- * 
+ *
  *     <div id="site-conficode" class="d-none site-conficode border-top border-top-md-0 border-start-md ps-0 ps-md-3 pt-3 pt-md-0 ms-md-3 mt-5 mt-md-0">
  *         <span class="d-md-none text-muted small d-block mb-2">
  *            <span class="text-muted">Bereits bei uns konfiguriert?</span><br>

@@ -7,7 +7,7 @@
  * Provides AJAX endpoints for saving and loading configurations, URL rewriting
  * for shareable configuration links, and debugging capabilities.
  *
- * @version 2.2.0
+ * @version 2.4.0
  * @package configurator
  */
 

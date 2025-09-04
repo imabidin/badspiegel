@@ -2,10 +2,12 @@
 
 /**
  * Displays site credits.
- * 
+ *
  * Trusted Shops logo and text.
- * 
- * @version 2.2.0
+ *
+ * @version 2.4.0
+ *
+ * @todo Create and link a Landing trusted shops page
  */
 function site_credits()
 {

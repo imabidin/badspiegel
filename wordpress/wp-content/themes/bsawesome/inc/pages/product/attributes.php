@@ -1,18 +1,21 @@
 <?php defined('ABSPATH') || exit;
 
 /**
+ * @version 2.4.0
+ */
+
+/**
  * Display product attributes in a custom table format, splitting tables when headings are defined.
  *
  * @param WC_Product $product The product object.
- * 
- * @imabi: Ready for launch 02/25
+ *
+ * @todo Add new headings as needed.
  */
 
 remove_action('woocommerce_product_additional_information', 'wc_display_product_attributes', 10);
 add_action('woocommerce_product_additional_information', 'custom_wc_display_product_attributes', 10);
 
-function custom_wc_display_product_attributes($product)
-{
+function custom_wc_display_product_attributes($product) {
     if (! $product) {
         return;
     }
@@ -25,6 +28,9 @@ function custom_wc_display_product_attributes($product)
         'attribute_pa_lieferumfang' => __('Lieferung', 'your-text-domain'),
         'attribute_pa_rahmenmaterial' => __('Rahmen', 'your-text-domain'),
         'attribute_pa_glasmaterial' => __('Glas', 'your-text-domain'),
+        'attribute_pa_korpusmaterial' => __('Korpus', 'your-text-domain'),
+        'attribute_pa_tueranzahl' => __('Tür', 'your-text-domain'),
+        'attribute_pa_schubladenanzahl' => __('Schubladen', 'your-text-domain'),
         'attribute_pa_montage' => __('Montage', 'your-text-domain'),
         'attribute_pa_lichttechnik' => __('Beleuchtung', 'your-text-domain'),
     );

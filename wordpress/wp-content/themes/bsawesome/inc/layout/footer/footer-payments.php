@@ -2,9 +2,11 @@
 
 /**
  * Get payment methods array
- * 
- * @version 2.2.0
+ *
+ * @version 2.4.0
  * @return array Array of payment method configurations
+ *
+ * @todo Add Klarna back when available
  */
 function get_payment_methods()
 {
@@ -51,7 +53,7 @@ function get_payment_methods()
 
 /**
  * Get payment icons HTML with flexible options
- * 
+ *
  * @param array $options Configuration options
  *                      - height: Custom height (default: '30px')
  *                      - wrapper_class: CSS class for wrapper div (default: 'col-auto')
@@ -68,15 +70,15 @@ function get_payment_icons_html($options = array())
         'img_class' => '',
         'upload_path' => '/wp-content/uploads/'
     );
-    
+
     $options = wp_parse_args($options, $defaults);
     $payment_methods = get_payment_methods();
     $html = '';
-    
+
     foreach ($payment_methods as $method) {
         $custom_style = isset($method['style']) ? $method['style'] : '';
         $img_classes = !empty($options['img_class']) ? ' class="' . esc_attr($options['img_class']) . '"' : '';
-        
+
         $html .= '<div class="' . esc_attr($options['wrapper_class']) . '">';
         $html .= '<img';
         $html .= ' style="height:' . esc_attr($options['height']) . ';' . $custom_style . '"';
@@ -87,13 +89,13 @@ function get_payment_icons_html($options = array())
         $html .= '>';
         $html .= '</div>';
     }
-    
+
     return $html;
 }
 
 /**
  * Render payment method icons directly (legacy support)
- * 
+ *
  * @param string $custom_height Height for the images (default: '30px')
  */
 function render_payment_icons($custom_height = '30px')
@@ -103,7 +105,7 @@ function render_payment_icons($custom_height = '30px')
 
 /**
  * Display the site payments (original function, now using new helpers)
- * 
+ *
  * @imabi: Ready for launch 02/25
  */
 function site_payments()

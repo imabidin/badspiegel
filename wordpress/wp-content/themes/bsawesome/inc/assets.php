@@ -11,7 +11,7 @@
  * @subpackage Assets
  * @since 1.0.0
  * @author BS Awesome Team
- * @version 2.3.0
+ * @version 2.4.0
  */
 
 /**
@@ -45,7 +45,7 @@ function assets()
         array(),
         filemtime($stylesheet_directory . '/dist/css/global.css'),
     );
-    
+
     // Enqueue global theme scripts with dependencies
     wp_enqueue_script(
         'global-script',
@@ -54,7 +54,7 @@ function assets()
         filemtime($stylesheet_directory . '/dist/js/global.js'),
         true // Load in footer
     );
-    
+
     // Localize script data for AJAX functionality
     wp_localize_script(
         'global-script',
@@ -71,19 +71,19 @@ function assets()
     );
 
     if (is_product()) {
-        wp_enqueue_style(
-            'product-style',
-            $stylesheet_directory_uri . '/dist/css/product.css',
-            array(),
-            filemtime($stylesheet_directory . '/dist/css/product.css'),
-        );
-        wp_enqueue_script(
-            'product-script',
-            $stylesheet_directory_uri . '/dist/js/product.js',
-            array('jquery', 'bootstrap'),
-            filemtime($stylesheet_directory . '/dist/js/product.js'),
-            true
-        );
+        // wp_enqueue_style(
+        //     'product-style',
+        //     $stylesheet_directory_uri . '/dist/css/product.css',
+        //     array(),
+        //     filemtime($stylesheet_directory . '/dist/css/product.css'),
+        // );
+        // wp_enqueue_script(
+        //     'product-script',
+        //     $stylesheet_directory_uri . '/dist/js/product.js',
+        //     array('jquery', 'bootstrap'),
+        //     filemtime($stylesheet_directory . '/dist/js/product.js'),
+        //     true
+        // );
         wp_enqueue_style(
             'configurator-style',
             $stylesheet_directory_uri . '/dist/css/configurator.css',
@@ -149,7 +149,7 @@ function assets()
 
     /**
      * Dequeue styles and scripts.
-     * 
+     *
      * @link https://developer.wordpress.org/reference/functions/wp_dequeue_style/
      * @link https://developer.wordpress.org/reference/functions/wp_dequeue_script/
      */

@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
  * - Option grouping and sorting functionality
  * - Single-step interface fallback for simple configurations
  *
- * @version 2.2.0
+ * @version 2.4.0
  * @package configurator
  */
 
@@ -37,7 +37,7 @@ add_action('woocommerce_before_add_to_cart_button', 'render_product_configurator
  * Main function to render the complete product configurator interface
  *
  * Renders a comprehensive multi-step carousel-based product configurator with support for:
- * 
+ *
  * Interface Features:
  * - Auto-loading saved configurations via URL parameters (?load_config={code})
  * - Multi-step progress tracking with visual indicators
@@ -45,7 +45,7 @@ add_action('woocommerce_before_add_to_cart_button', 'render_product_configurator
  * - Responsive carousel navigation with touch support
  * - Option grouping with customizable order sorting
  * - Single-step fallback interface for simple products
- * 
+ *
  * Data Processing:
  * - Validates product objects and option availability
  * - Groups options by configured categories
@@ -67,7 +67,7 @@ add_action('woocommerce_before_add_to_cart_button', 'render_product_configurator
  *
  * @global WC_Product $product The current WooCommerce product object
  * @return void Outputs HTML directly to the page, no return value
- * 
+ *
  * @see get_product_options() For retrieving filtered product options
  * @see get_all_product_option_groups() For option group definitions
  * @see render_options_group() For individual option group rendering
@@ -104,16 +104,16 @@ function render_product_configurator()
     // ======== AUTO-LOAD CONFIGURATION PROCESSING ========
     /**
      * Auto-Load Configuration System
-     * 
+     *
      * Processes URL parameters to automatically load saved configurations.
      * Supports the format: ?load_config={6-character-alphanumeric-code}
-     * 
+     *
      * Security measures:
      * - Validates code format with regex pattern
      * - Sanitizes input using WordPress functions
      * - Uses prepared statements for database queries
      * - Validates JSON integrity before processing
-     * 
+     *
      * Database integration:
      * - Queries wp_product_config_codes table
      * - Matches both config code and product ID
@@ -143,7 +143,7 @@ function render_product_configurator()
             // Validate database result and decode configuration data
             if ($row && !empty($row->config_data)) {
                 $decoded_config = json_decode($row->config_data, true);
-                
+
                 // Ensure valid JSON structure before proceeding
                 if (is_array($decoded_config) && json_last_error() === JSON_ERROR_NONE) {
                     $auto_load_config = $decoded_config;
@@ -157,18 +157,18 @@ function render_product_configurator()
     // ======== OPTION GROUPING AND FILTERING ========
     /**
      * Option Grouping and Validation System
-     * 
+     *
      * Groups product options by their assigned categories and validates
      * that all groups exist in the global option groups configuration.
      * This prevents rendering of undefined or misconfigured option groups.
-     * 
+     *
      * Processing steps:
      * 1. Groups options by their 'group' key assignment
      * 2. Validates each group exists in global configuration
      * 3. Filters out options with invalid group assignments
      * 4. Stores unique group data to avoid duplicate processing
      * 5. Sorts groups and options by their defined order values
-     * 
+     *
      * Data structures:
      * - $product_options_grouped: Options organized by group key
      * - $used_groups: Validated group definitions for this product
@@ -179,7 +179,7 @@ function render_product_configurator()
     // Group options and filter by valid group definitions
     foreach ($product_options as $option) {
         $group_key = $option['group'] ?? 'default';
-        
+
         // Only include options with valid group assignments
         if (isset($product_option_groups[$group_key])) {
             // Initialize group array if not exists
@@ -216,15 +216,15 @@ function render_product_configurator()
     // ======== HTML RENDERING SYSTEM ========
     /**
      * HTML Output Generation
-     * 
+     *
      * Uses output buffering for clean HTML generation and better performance.
      * Renders either multi-step carousel interface or single-step interface
      * based on the number of available option groups.
-     * 
+     *
      * Interface Selection Logic:
      * - Multi-step: When $total_steps > 1
      * - Single-step: When $total_steps = 1
-     * 
+     *
      * Multi-step features:
      * - Configuration code save/load interface
      * - Progress bar with step indicators
@@ -232,7 +232,7 @@ function render_product_configurator()
      * - Scrollable step indicators with overflow controls
      * - Configuration summary and total price display
      */
-    
+
     // Start output buffering for cleaner HTML rendering
     ob_start();
 ?>
@@ -447,7 +447,7 @@ function render_product_configurator()
  * Used as a callback function for sorting arrays of options or groups
  * based on their numeric 'order' value. Provides consistent sorting
  * behavior across the configurator system.
- * 
+ *
  * Sorting Logic:
  * - Elements without an 'order' key default to 0
  * - Lower order values appear first in sorted arrays
@@ -481,13 +481,13 @@ function compare_order($a, $b)
  * Processes auto-loaded configuration data to determine the appropriate
  * value for a specific option. Used during the rendering process to
  * pre-populate form fields with saved configuration values.
- * 
+ *
  * Processing Logic:
  * 1. Validates auto-load configuration data structure
  * 2. Creates sanitized lookup key from option configuration
  * 3. Searches for matching value in auto-load data
  * 4. Falls back to posted value if no auto-load data found
- * 
+ *
  * Key Generation:
  * - Uses sanitize_title() for consistent key formatting
  * - Matches the key generation used in JavaScript save/load system
@@ -525,19 +525,19 @@ function process_auto_load_for_option($option, $posted_value, $auto_load_config)
  * auto-load configuration data and maintaining proper option ordering.
  * This function bridges the gap between grouped option data and individual
  * option rendering through the template system.
- * 
+ *
  * Rendering Process:
  * 1. Iterates through all options in the provided group
  * 2. Processes posted values and auto-load configuration data
  * 3. Calls individual option rendering through template system
  * 4. Maintains sequential option ordering for consistent display
  * 5. Returns updated option order counter for multi-group rendering
- * 
+ *
  * Integration Points:
  * - Uses process_auto_load_for_option() for configuration data
  * - Calls render_option() function for individual option rendering
  * - Integrates with template system for flexible option display
- * 
+ *
  * Performance Considerations:
  * - Processes options sequentially to maintain order
  * - Sanitizes posted data for security
@@ -567,7 +567,7 @@ function render_options_group($options, $product_id, $template_path, $auto_load_
         if (function_exists('render_option')) {
             render_option($option, $posted_value, $product_id, $option_order, $template_path, $auto_load_config);
         }
-        
+
         // Increment order counter for next option
         $option_order++;
     }

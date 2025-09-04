@@ -2,21 +2,21 @@
 
 /**
  * WooCommerce Subcategories Display Module
- * 
+ *
  * Handles the display of product subcategories with image filtering
  * and URL optimization for better SEO and user experience.
- * 
+ *
  * @package BSAwesome
- * @version 1.0.0
+ * @version 2.4.0
  * @author BadSpiegel Team
  */
 
 /**
  * Remove parent category slug from subcategory URLs for cleaner SEO-friendly URLs
- * 
+ *
  * Transforms URLs from /parent-category/subcategory/ to /subcategory/
  * to avoid deep nested URL structures and improve SEO ranking.
- * 
+ *
  * @param string $url      The term URL
  * @param object $term     The term object
  * @param string $taxonomy The taxonomy name
@@ -40,18 +40,18 @@ function remove_product_cat_parent_from_link($url, $term, $taxonomy)
 
 /**
  * Display subcategories with thumbnails in product category pages
- * 
+ *
  * Renders a horizontal scrollable grid of subcategories that have thumbnail images.
  * Only shows subcategories with actual images (no placeholders) for better visual appeal.
  * Integrates seamlessly with WooCommerce shop layout using Bootstrap components.
- * 
+ *
  * Features:
  * - Responsive grid layout (4 cols on medium, 5 cols on large screens)
  * - Horizontal scrolling with custom styling
  * - Image filtering (only categories with thumbnails)
  * - Drop shadow effects for visual depth
  * - Hover effects for better interactivity
- * 
+ *
  * @hooks woocommerce_before_shop_loop Priority 15 (after description, before products)
  * @return void Outputs HTML directly
  */
@@ -134,7 +134,7 @@ function custom_list_product_subcategories_row()
 ?>
         <li class="<?php echo esc_attr(trim($col_classes)); ?>">
             <div class="card h-100 border-0 position-relative">
-                <?php // Category Image Link 
+                <?php // Category Image Link
                 ?>
                 <a href="<?php echo $term_link; ?>"
                     class="opacity-75-hover transition"
@@ -149,7 +149,7 @@ function custom_list_product_subcategories_row()
                         width="300"
                         height="300">
                 </a>
-                <?php // Category Title Link positioned at bottom 
+                <?php // Category Title Link positioned at bottom
                 ?>
                 <div class="card-body p-0 text-center mt-n3">
                     <a href="<?php echo $term_link; ?>"

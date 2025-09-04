@@ -6,7 +6,9 @@
  * This file handles the loading of all theme functionality including
  * setup, assets, shortcodes, WooCommerce integration, and layout components.
  *
- * @version 2.3.1
+ * @version 2.4.0
+ *
+ * @todo: Cleanup unnecessary includes and comments
  */
 
 // Get theme directory paths for file inclusions
@@ -26,7 +28,7 @@ require_once $inc_dir . 'germanized.php';    // German market compliance
 require_once $inc_dir . 'yoast.php';         // Yoast SEO integration
 require_once $inc_dir . 'zendesk.php';       // Zendesk support integration
 require_once $inc_dir . 'modal.php';         // Modal functionality
-require_once $inc_dir . 'modal-performance.php'; // Modal performance optimization
+// require_once $inc_dir . 'modal-performance.php'; // Modal performance optimization - TEMP DISABLED: FILE MISSING
 require_once $inc_dir . 'ajax-performance.php'; // AJAX performance booster
 require_once $inc_dir . 'redirects.php';     // Redirects outside Yoast
 // require_once $inc_dir . 'cli.php';           // WP-CLI commands
@@ -74,7 +76,7 @@ require_once $inc_dir . 'layout/footer/footer-credits.php';
 require_once $inc_dir . 'pages/category/subcategories.php';  // Category grid display
 require_once $inc_dir . 'pages/category/sorting.php';        // Filtering and sorting
 require_once $inc_dir . 'pages/category/description.php';    // Category descriptions
-require_once $inc_dir . 'pages/category/import-descriptions.php'; // Import category descriptions
+// require_once $inc_dir . 'pages/category/import-descriptions.php'; // Import category descriptions - File missing, commented out
 
 // Product page components
 require_once $inc_dir . 'pages/product/wrappers.php';        // Product layout wrappers

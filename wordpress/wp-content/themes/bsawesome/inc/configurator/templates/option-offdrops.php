@@ -34,8 +34,10 @@
  * - $posted_value: Current/submitted value for auto-loading
  * - $modal_link: Link for description modal
  *
- * @version 2.2.0
+ * @version 2.4.0
  * @package configurator
+ *
+ * @todo Imrove description icons, image zoom icons, etc.
  */
 
 /**
@@ -188,7 +190,7 @@ if (!empty($posted_value)) {
                                 </span>
                                 <!-- Placeholder Image -->
                                 <?php if (!empty($option_placeholder_image)): ?>
-                                    <span class="col-3">
+                                    <span class="col-3 me-3">
                                         <?php
                                         echo do_shortcode(
                                             '[img id="' . esc_attr($option_placeholder_image) . '" class="pe-none border" size="thumbnail"]'
@@ -238,7 +240,7 @@ if (!empty($posted_value)) {
                                             style="--bs-bt-color: var(--bs-body-color);--bs-btn-hover-bg: transparent; --bs-btn-active-bg: transparent;"
                                             data-modal-image="<?= esc_attr($option_placeholder_image); ?>"
                                             data-modal-title="<?= !empty($option_placeholder) ? esc_attr($option_placeholder) : esc_attr__('Keins', 'my-product-configurator'); ?>">
-                                            <i class="fa-sharp fa-lg mt-1 fa-light fa-magnifying-glass" aria-hidden="true"></i>
+                                            <i class="fa-sharp fa-lg mt-1 fa-light fa-image" aria-hidden="true"></i>
                                         </button>
                                     </span>
                                 <?php endif; ?>
@@ -351,7 +353,7 @@ if (!empty($posted_value)) {
                                             style="--bs-bt-color: var(--bs-body-color);--bs-btn-hover-bg: transparent; --bs-btn-active-bg: transparent;"
                                             data-modal-image="<?= esc_attr($sub_image); ?>"
                                             data-modal-title="<?= esc_attr($sub_label); ?>">
-                                            <i class="fa-sharp fa-lg mt-1 fa-light fa-magnifying-glass" aria-hidden="true"></i>
+                                            <i class="fa-sharp fa-lg mt-1 fa-light fa-image" aria-hidden="true"></i>
                                         </button>
                                     </span>
                                 <?php else: ?>

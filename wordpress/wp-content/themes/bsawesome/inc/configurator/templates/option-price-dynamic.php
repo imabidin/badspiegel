@@ -1,11 +1,11 @@
 <?php
 /**
  * Template for price option type
- * 
+ *
  * Handles dropdown selection for pricing options with dynamically managed values#
- * 
- * @version 2.3.0
- * 
+ *
+ * @version 2.4.0
+ *
  */
 
 if (!defined('ABSPATH')) {
@@ -48,7 +48,7 @@ if (current_user_can('manage_options') && defined('WP_DEBUG') && WP_DEBUG) {
 ?>
 
 <div class="product-configurator-option" data-option="<?= esc_attr($option_key); ?>" data-group="<?= esc_attr($option_group); ?>">
-    
+
     <?php if (!empty($option_label)): ?>
         <label for="<?= esc_attr($option_id); ?>" class="form-label">
             <?= wp_kses_post($option_label); ?>
@@ -77,7 +77,7 @@ if (current_user_can('manage_options') && defined('WP_DEBUG') && WP_DEBUG) {
             <?= esc_html($option_placeholder ?: 'Auswählen...'); ?>
         </option>
 
-        <?php 
+        <?php
         /**
          * Render each pricing option
          * Loop through available price options from backend or static configuration
@@ -92,14 +92,14 @@ if (current_user_can('manage_options') && defined('WP_DEBUG') && WP_DEBUG) {
                     return $order_a - $order_b;
                 });
             }
-            
+
             foreach ($sorted_options as $option_value => $value):
                 if (!is_array($value)) continue;
-                
+
                 $price = isset($value['price']) ? (float)$value['price'] : 0;
                 $label = isset($value['label']) ? $value['label'] : $option_value;
                 $selected = ($posted_value == $option_value) ? 'selected' : '';
-                
+
                 // Format price for display
                 $price_display = '';
                 if ($price > 0) {
@@ -108,8 +108,8 @@ if (current_user_can('manage_options') && defined('WP_DEBUG') && WP_DEBUG) {
                     $price_display = ' (' . number_format($price, 2, ',', '.') . ' €)';
                 }
                 ?>
-                <option value="<?= esc_attr($option_value); ?>" 
-                        data-price="<?= esc_attr($price); ?>" 
+                <option value="<?= esc_attr($option_value); ?>"
+                        data-price="<?= esc_attr($price); ?>"
                         <?= $selected; ?>>
                     <?= esc_html($label . $price_display); ?>
                 </option>
@@ -124,15 +124,15 @@ if (current_user_can('manage_options') && defined('WP_DEBUG') && WP_DEBUG) {
     /**
      * Option description with modal trigger
      */
-    if (!empty($option_description_file) || !empty($option_description)): 
+    if (!empty($option_description_file) || !empty($option_description)):
         // Generate modal link for option descriptions
         // Preserve subfolder structure by removing only .html extension (like in option-offdrops.php)
         $modal_link = 'configurator/' . preg_replace('/\.html$/', '', $option_description_file);
     ?>
         <div class="form-text">
             <?php if (!empty($option_description_file)): ?>
-                <a href="#" class="text-decoration-none" 
-                   data-bs-toggle="modal" 
+                <a href="#" class="text-decoration-none"
+                   data-bs-toggle="modal"
                    data-bs-target="#productConfiguratorModal"
                    data-bs-url="<?= esc_attr($modal_link); ?>">
                     <i class="fa-sharp fa-light fa-circle-info text-primary me-1"></i>
@@ -149,8 +149,8 @@ if (current_user_can('manage_options') && defined('WP_DEBUG') && WP_DEBUG) {
 <?php if ($has_dynamic_pricing && current_user_can('manage_options')): ?>
 <!-- Admin quick edit link for dynamic pricing -->
 <div class="admin-quick-edit" style="margin-top: 5px; font-size: 11px;">
-    <a href="<?= admin_url('edit.php?post_type=product&page=custom-pricing-management#' . ($option_key . '-option')); ?>" 
-       target="_blank" 
+    <a href="<?= admin_url('edit.php?post_type=product&page=custom-pricing-management#' . ($option_key . '-option')); ?>"
+       target="_blank"
        style="color: #666; text-decoration: none;">
         ⚙️ Preise bearbeiten
     </a>

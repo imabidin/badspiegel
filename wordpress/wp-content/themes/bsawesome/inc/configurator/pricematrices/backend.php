@@ -4,12 +4,16 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+/**
+ * @version 2.4.0
+ */
+
 // Include the centralized file matcher
 require_once get_stylesheet_directory() . '/inc/configurator/pricematrices/file-matcher.php';
 
 /**
  * Preismatrix Admin-Übersicht
- * 
+ *
  * Bietet eine umfassende Übersicht über alle Preismatrizen:
  * - Verfügbare Preismatrix-Dateien im System
  * - Produktzuweisungen zu Preismatrizen

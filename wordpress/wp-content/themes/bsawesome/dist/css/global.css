@@ -37045,6 +37045,18 @@ textarea.form-control-lg {
   opacity: 1;
 }
 
+/* Chevron rotation animation for collapse buttons */
+[data-bs-toggle=collapse] .fa-chevron-down {
+  -webkit-transition: -webkit-transform 0.25s ease;
+  transition: -webkit-transform 0.25s ease;
+  transition: transform 0.25s ease;
+  transition: transform 0.25s ease, -webkit-transform 0.25s ease;
+}
+[data-bs-toggle=collapse][aria-expanded=true] .fa-chevron-down {
+  -webkit-transform: rotate(180deg);
+          transform: rotate(180deg);
+}
+
 .mb-last-0:last-child {
   margin-bottom: 0;
 }

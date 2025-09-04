@@ -2,34 +2,34 @@
 
 /**
  * Add to Cart Button CSS Classes Helper
- * 
+ *
  * Provides standardized CSS classes for WooCommerce Add to Cart buttons
  * based on product configurator availability and specific product features.
- * 
- * @version 2.2.0 - Update ready for June 2025
+ *
+ * @version 2.4.0
  * @package bsawesome
  */
 
 if (!function_exists('get_add_to_cart_button_classes')) {
     /**
      * Returns CSS classes for "Add to Cart" buttons
-     * 
+     *
      * Generates standardized CSS classes for WooCommerce Add to Cart buttons.
      * Button styling varies based on whether the product has configurator options:
      * - Products with multiple option groups: Light button with left-aligned text (configurator mode)
      * - Products with single/no option groups: Primary button with standard styling
-     * 
+     *
      * Uses performance-optimized caching to avoid repeated calculations for the same product.
-     * 
+     *
      * @since 1.0.0
      * @param WC_Product|null $product             The WooCommerce product object (optional)
      * @param string|array    $additional_classes Additional CSS classes to append (optional)
      * @return string                             Space-separated CSS class string
-     * 
+     *
      * @example
      * // Basic usage
      * $classes = get_add_to_cart_button_classes($product);
-     * 
+     *
      * // With additional classes
      * $classes = get_add_to_cart_button_classes($product, 'custom-class another-class');
      * $classes = get_add_to_cart_button_classes($product, ['custom-class', 'another-class']);
@@ -106,9 +106,9 @@ if (!function_exists('get_add_to_cart_button_classes')) {
 
         /**
          * Filter the final Add to Cart button classes
-         * 
+         *
          * Allows themes and plugins to modify the button classes before output.
-         * 
+         *
          * @since 1.0.0
          * @param string     $final_classes The generated CSS classes string
          * @param WC_Product $product      The product object (may be null)

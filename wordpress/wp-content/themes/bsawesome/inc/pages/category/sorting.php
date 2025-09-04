@@ -2,15 +2,15 @@
 
 /**
  * Product Filter and Sorting Component
- * 
+ *
  * Provides advanced filtering and sorting functionality for WooCommerce
  * product category pages including visual display toggles and collapsible filters.
- * 
+ *
  * @package BSAwesome
  * @subpackage CategoryComponents
  * @since 1.0.0
  * @author BS Awesome Team
- * @version 2.2.0
+ * @version 2.4.0
  */
 
 /**
@@ -23,8 +23,7 @@
  * @return void
  */
 add_action('woocommerce_before_shop_loop', 'imabi_product_filter_and_ordering', 40);
-function imabi_product_filter_and_ordering()
-{
+function imabi_product_filter_and_ordering() {
     // Define consistent text domain for translations
     $text_domain = 'bsawesome';
 ?>
@@ -32,25 +31,25 @@ function imabi_product_filter_and_ordering()
         <div class="row g-3">
 
             <div class="col-auto">
-                <?php // Toggle button for collapsible filter section 
+                <?php // Toggle button for collapsible filter section
                 ?>
-                
+
                 <div class="d-flex align-items-center">
                     <div class="form-control border-end-0" data-bs-tooltip-md="true" title="<?php esc_html_e('Filter anzeigen:', $text_domain); ?>">
                         <i class="fa-light fa-filter text-muted" aria-hidden="true"></i>
                         <span class="visually-hidden"><?php esc_html_e('Ansicht auswählen', $text_domain); ?></span>
                     </div>
-                <button
-                    class="btn btn-dark"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#filterCollapse"
-                    aria-expanded="false"
-                    aria-controls="filterCollapse"
-                    aria-label="<?php esc_attr_e('Filter und Sortierung ein-/ausblenden', $text_domain); ?>">
-                    
-                    <?php echo esc_html__('Filter & Sortierung', $text_domain); ?>
-                </button>
+                    <button
+                        class="btn btn-dark"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#filterCollapse"
+                        aria-expanded="false"
+                        aria-controls="filterCollapse"
+                        aria-label="<?php esc_attr_e('Filter und Sortierung ein-/ausblenden', $text_domain); ?>">
+
+                        <?php echo esc_html__('Filter & Sortierung', $text_domain); ?>
+                    </button>
                 </div>
             </div>
 
@@ -82,18 +81,18 @@ function imabi_product_filter_and_ordering()
             </div>
 
             <div class="col-12 mt-0">
-                <?php // Collapse container: Filter options & Sorting 
+                <?php // Collapse container: Filter options & Sorting
                 ?>
                 <div class="collapse" id="filterCollapse">
                     <div class="card card-body mt-3">
-                        <?php // Filter shortcode (filter options only) 
+                        <?php // Filter shortcode (filter options only)
                         ?>
                         <?php
                         echo do_shortcode('[wcpf_filters id="749"]');
                         ?>
-                        <?php // Add sorting 
+                        <?php // Add sorting
                         ?>
-                        <div class="pt-3">
+                        <div>
                             <label for="orderby" class="form-label h5">
                                 <?php esc_html_e('Sortierung', $text_domain); ?>
                             </label>
@@ -108,7 +107,7 @@ function imabi_product_filter_and_ordering()
             </div>
 
             <div class="col-12">
-                <?php // Always visible area: Filter results (Notes) and result count 
+                <?php // Always visible area: Filter results (Notes) and result count
                 ?>
                 <div class="imabi-filter-results">
                     <?php

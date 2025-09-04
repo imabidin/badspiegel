@@ -8,7 +8,7 @@ if (typeof window !== 'undefined') {
       // AJAX functionality may fail - debug in development only
       return;
     }
-    
+
     // PRODUCTION: AJAX monitoring disabled for performance
     // Debug code removed for production deployment
   });

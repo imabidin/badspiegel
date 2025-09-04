@@ -7,7 +7,7 @@
  * @subpackage Germanized
  * @since 1.0.0
  * @author BS Awesome Team
- * @version 2.3.0
+ * @version 2.4.0
  */
 
 /**
@@ -21,7 +21,7 @@ function woocommerce_gzd_template_cart_total_tax()
 ?>
         <tr class="order-tax">
             <th><?php echo wp_kses_post($label); ?></th>
-            <td class="text-end" data-title="<?php echo esc_attr($label); ?>"><?php echo wc_price($tax['amount']); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
+            <td class="text-end" data-title="<?php echo esc_attr($label); ?>"><?php echo wc_price($tax['amount']); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                                                                                 ?></td>
         </tr>
 <?php

@@ -1,4 +1,7 @@
 <?php
+	// Include helper functions
+	require_once dirname(__DIR__) . '/filter-helper.php';
+
 	$field_class = array(
 		'wcpf-field-item',
 		'wcpf-front-element',
@@ -35,7 +38,11 @@
 	if ( ! count( $option_items ) || ! $is_enabled_element ) {
 		$field_class[] = 'wcpf-status-disabled';
 	}
+
+	// Hide filter if it has only one or no meaningful options
+	$should_hide_filter = wcpf_should_hide_filter( $option_items );
 	?>
+<?php if ( ! $should_hide_filter ) : ?>
 <div class="<?php echo esc_attr( implode( ' ', $field_class ) ); ?>">
 	<div class="wcpf-inner">
 		<?php if ( $is_display_title ) : ?>
@@ -77,3 +84,4 @@
 		</div>
 	</div>
 </div>
+<?php endif; ?>

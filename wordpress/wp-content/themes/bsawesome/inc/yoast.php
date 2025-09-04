@@ -7,8 +7,8 @@
  * @subpackage SEO
  * @since 1.0.0
  * @author BS Awesome Team
- * @version 2.3.0
- * 
+ * @version 2.4.0
+ *
  * Updated 08/06/2025 - Added wpseo_canonical filter to change canonical URL for WooCommerce shop page.
  */
 
@@ -20,7 +20,7 @@ add_filter('Yoast\WP\SEO\term_redirect_slug_change', '__return_true'); // Disabl
 
 /**
  * Modify the canonical URL for the WooCommerce shop page.
- * 
+ *
  * Not working through backend settings, so we use a filter.
  */
 function yoast_seo_canonical_change_woocom_shop($canonical)

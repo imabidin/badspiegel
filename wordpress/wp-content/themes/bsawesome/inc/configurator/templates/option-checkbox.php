@@ -14,7 +14,7 @@
  *
  * Supported Types:
  * - radio/radio-child: Radio button groups
- * - select/select-child: Dropdown select fields  
+ * - select/select-child: Dropdown select fields
  * - checkbox/checkbox-child: Checkbox inputs
  *
  * Template Variables Available:
@@ -24,7 +24,7 @@
  * - $option_values: Array of selectable values
  * - $posted_value: Current/submitted value
  *
- * @version 2.2.0
+ * @version 2.4.0
  * @package configurator
  * @todo    Implement proper checkbox/radio/select functionality
  * @todo    Fix cart integration for these option types
@@ -33,7 +33,7 @@
 // TODO: Implement checkbox template functionality
 // This template needs to be developed to handle:
 // - Checkbox inputs with multiple selections
-// - Radio button groups 
+// - Radio button groups
 // - Select dropdown fields
 // - Proper cart integration
 // - Auto-load functionality

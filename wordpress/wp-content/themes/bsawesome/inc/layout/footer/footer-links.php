@@ -2,12 +2,32 @@
 
 /**
  * Display the footer links.
- * 
- * @version 2.2.0
+ *
+ * @version 2.4.0
+ *
+ * @todo Add more links if needed
  */
 function site_links()
 {
     $footer_links = [
+        __('Beliebt', 'imabi') => [
+            [
+                'label' => __('Badspiegel', 'imabi'),
+                'url'   => '/shop/badspiegel/',
+            ],
+            [
+                'label' => __('Klappspiegel', 'imabi'),
+                'url'   => '/shop/klappspiegel/',
+            ],
+            [
+                'label' => __('Spiegelschränke', 'imabi'),
+                'url'   => '/shop/spiegelschraenke/',
+            ],
+            [
+                'label' => __('Unterschränke', 'imabi'),
+                'url'   => '/shop/unterschraenke/',
+            ],
+        ],
         __('Unternehmen', 'imabi') => [
             [
                 'label' => __('AGB', 'imabi'),

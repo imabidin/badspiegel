@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
  * - CSV import/export support for price matrix assignments
  * - Comprehensive caching system for performance optimization
  *
- * @version 2.2.0
+ * @version 2.4.0
  * @package configurator
  */
 
@@ -1465,10 +1465,18 @@ function product_configurator_get_item_data($item_data, $cart_item)
     }
 
     // System keys that should not be displayed to customers
-    $skip_keys = array('original_price', 'additional_price', 'auto_generated_code', 'config_url');
+    $skip_keys = array('original_price', 'additional_price', 'config_url');
 
     // Option types that should not be displayed (internal pricing options)
     $skip_types = array('price', 'pricematrix');
+
+    $has_actual_config_data = false;
+    $config_code = '';
+
+    // Extract configuration code if present
+    if (isset($cart_item['custom_configurator']['auto_generated_code'])) {
+        $config_code = $cart_item['custom_configurator']['auto_generated_code'];
+    }
 
     // Process each saved configurator option
     foreach ($cart_item['custom_configurator'] as $key => $option_data) {
@@ -1490,6 +1498,8 @@ function product_configurator_get_item_data($item_data, $cart_item)
 
             // Only add to display if both label and value are present
             if ($display_label && $display_value) {
+                $has_actual_config_data = true;
+
                 // Build display value with optional description indicator
                 $final_display_value = wp_kses_post($display_value);
 
@@ -1498,16 +1508,29 @@ function product_configurator_get_item_data($item_data, $cart_item)
                     $final_display_value .= ' <span class="value-description-indicator" title="' . esc_attr($description) . '">ⓘ</span>';
                 }
 
-                // Optional: Append price information to display value
-                // if ($price > 0) {
-                //     $final_display_value .= ' (+ ' . wc_price($price) . ')';
-                // }
-
                 $item_data[] = array(
                     'key'   => $display_label,
                     'value' => $final_display_value,
                 );
             }
+        }
+    }
+
+    // Add meta flag to identify this as configurator data for the template
+    if ($has_actual_config_data && !empty($item_data)) {
+        $item_data[] = array(
+            'key'     => '__is_configurator_data',
+            'value'   => '1',
+            'display' => '',
+        );
+
+        // Add configuration code if available
+        if (!empty($config_code)) {
+            $item_data[] = array(
+                'key'     => '__config_code',
+                'value'   => $config_code,
+                'display' => '',
+            );
         }
     }
 

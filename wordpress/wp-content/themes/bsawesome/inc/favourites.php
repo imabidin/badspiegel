@@ -5,8 +5,8 @@ defined('ABSPATH') || exit;
 /**
  * Favourites System for BS Awesome Theme
  * Production-ready favourites system with config code support
- * 
- * @version 2.3.0
+ *
+ * @version 2.4.0
  */
 
 // Configuration
@@ -55,7 +55,7 @@ function bsawesome_get_user_favourites($user_id = null, $auto_cleanup = true)
 {
     try {
         error_log("FAVOURITES DEBUG: bsawesome_get_user_favourites started, user_id: " . ($user_id ?? 'null'));
-        
+
         if (!$user_id) {
             $user_id = get_current_user_id();
             error_log("FAVOURITES DEBUG: Using current user ID: " . $user_id);
@@ -64,13 +64,13 @@ function bsawesome_get_user_favourites($user_id = null, $auto_cleanup = true)
         if ($user_id) {
             global $wpdb;
             $table_name = $wpdb->prefix . 'user_favourites';
-            
+
             error_log("FAVOURITES DEBUG: Checking table: " . $table_name);
-            
+
             // Check if table exists
             $table_exists = $wpdb->get_var("SHOW TABLES LIKE '$table_name'") == $table_name;
             error_log("FAVOURITES DEBUG: Table exists: " . ($table_exists ? 'yes' : 'no'));
-            
+
             if (!$table_exists) {
                 error_log("FAVOURITES DEBUG: Table does not exist, returning empty array");
                 return array();
@@ -78,11 +78,11 @@ function bsawesome_get_user_favourites($user_id = null, $auto_cleanup = true)
 
             if ($auto_cleanup) {
                 $cleanup_result = $wpdb->query($wpdb->prepare("
-                    DELETE FROM $table_name 
-                    WHERE user_id = %d 
+                    DELETE FROM $table_name
+                    WHERE user_id = %d
                     AND product_id NOT IN (
-                        SELECT ID FROM {$wpdb->posts} 
-                        WHERE post_type = 'product' 
+                        SELECT ID FROM {$wpdb->posts}
+                        WHERE post_type = 'product'
                         AND post_status = 'publish'
                     )
                 ", $user_id));
@@ -93,7 +93,7 @@ function bsawesome_get_user_favourites($user_id = null, $auto_cleanup = true)
                 "SELECT product_id FROM $table_name WHERE user_id = %d ORDER BY date_added DESC",
                 $user_id
             ));
-            
+
             error_log("FAVOURITES DEBUG: Raw favourites: " . json_encode($favourites));
 
             return is_array($favourites) ? array_map('intval', $favourites) : array();
@@ -132,7 +132,7 @@ function bsawesome_get_user_favourites($user_id = null, $auto_cleanup = true)
 
         error_log("FAVOURITES DEBUG: Returning empty array");
         return array();
-        
+
     } catch (Throwable $e) {
         error_log("FAVOURITES DEBUG: Exception in bsawesome_get_user_favourites: " . $e->getMessage());
         error_log("FAVOURITES DEBUG: Exception trace: " . $e->getTraceAsString());
@@ -155,11 +155,11 @@ function bsawesome_get_all_user_favourites($user_id = null, $auto_cleanup = true
 
         if ($auto_cleanup) {
             $wpdb->query($wpdb->prepare("
-                DELETE FROM $table_name 
-                WHERE user_id = %d 
+                DELETE FROM $table_name
+                WHERE user_id = %d
                 AND product_id NOT IN (
-                    SELECT ID FROM {$wpdb->posts} 
-                    WHERE post_type = 'product' 
+                    SELECT ID FROM {$wpdb->posts}
+                    WHERE post_type = 'product'
                     AND post_status = 'publish'
                 )
             ", $user_id));
@@ -779,7 +779,7 @@ function bsawesome_display_login_form($atts)
     echo '</div>';
     echo '</div>';
 
-    // Register Form (hidden by default) - Direct WooCommerce Integration  
+    // Register Form (hidden by default) - Direct WooCommerce Integration
     if (get_option('woocommerce_enable_myaccount_registration') === 'yes') {
         echo '<div class="collapse" id="favourites-register-form">';
         echo '<div class="card border-0 shadow-sm">';
@@ -803,7 +803,7 @@ function bsawesome_display_login_form($atts)
         const registerBtn = document.querySelector(\'[data-bs-target="#favourites-register-form"]\');
         const loginForm = document.getElementById("favourites-login-form");
         const registerForm = document.getElementById("favourites-register-form");
-        
+
         if (loginBtn && registerBtn) {
             loginBtn.addEventListener("click", function() {
                 this.classList.remove("btn-outline-primary");
@@ -811,7 +811,7 @@ function bsawesome_display_login_form($atts)
                 registerBtn.classList.remove("btn-primary");
                 registerBtn.classList.add("btn-outline-primary");
             });
-            
+
             registerBtn.addEventListener("click", function() {
                 this.classList.remove("btn-outline-primary");
                 this.classList.add("btn-primary");
@@ -819,7 +819,7 @@ function bsawesome_display_login_form($atts)
                 loginBtn.classList.add("btn-outline-primary");
             });
         }
-        
+
         // Auto-focus first input when forms are shown
         if (loginForm) {
             loginForm.addEventListener("shown.bs.collapse", function() {
@@ -827,7 +827,7 @@ function bsawesome_display_login_form($atts)
                 if (firstInput) firstInput.focus();
             });
         }
-        
+
         if (registerForm) {
             registerForm.addEventListener("shown.bs.collapse", function() {
                 const firstInput = this.querySelector("input[type=text], input[type=email]");
@@ -1146,7 +1146,7 @@ function bsawesome_display_favourites_content($favourites, $atts, $is_logged_use
             add_filter('woocommerce_loop_product_link', $link_filter_callback, 10, 1);
 
             $title_action_callback = function () use ($config_code) {
-                echo '<span class="favourite-config-code small mb-2">';
+                echo '<span class="favourite-config-code small mb-2 mx-3">';
                 // echo '<i class="fa-light fa-sharp fa-key me-1"></i>';
                 echo esc_html__('Konfiguration:', 'bsawesome') . ' ';
                 echo '<span class="user-select-all text-info">' . esc_html($config_code) . '</span>';

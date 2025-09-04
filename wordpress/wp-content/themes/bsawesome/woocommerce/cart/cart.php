@@ -13,29 +13,24 @@
  *
  * @see     https://woocommerce.com/document/template-structure/
  * @package WooCommerce\Templates
- * @version 7.9.0
+ * @version 10.1.0
  */
 
 defined('ABSPATH') || exit;
 
 do_action('woocommerce_before_cart'); ?>
-
 <div class="row g">
-
 	<div class="col-12 col-md-7 col-lg-7">
 
 		<form class="woocommerce-cart-form" action="<?php echo esc_url(wc_get_cart_url()); ?>" method="post">
 			<?php do_action('woocommerce_before_cart_table'); ?>
 
-			<table class="table table-light mb-0 shop_table table shop_table_responsive cart woocommerce-cart-form__contents" cellspacing="0">
-				<thead style="--bs-table-bg: var(--bs-dark-bg-subtle);">
+			<table class="table table-light mb-0 shop_table shop_table_responsive cart woocommerce-cart-form__contents" cellspacing="0">
+				<thead>
 					<tr>
-						<th class="product-remove"><span class="visually-hidden-focusable"><?php esc_html_e('Remove item', 'woocommerce'); ?></span></th>
-						<th class="product-thumbnail" style="padding-left: 0;"><span aria-hidden="true"><?php esc_html_e('Product', 'woocommerce'); ?></span><span class="visually-hidden-focusable"><?php esc_html_e('Thumbnail image', 'woocommerce'); ?></span></th>
-						<th class="product-name"><span class="visually-hidden"><?php esc_html_e('Product', 'woocommerce'); ?></span></th>
-						<!-- <th class="product-price"><?php esc_html_e('Price', 'woocommerce'); ?></th> -->
-						<!-- <th class="product-quantity"><?php esc_html_e('Quantity', 'woocommerce'); ?></th> -->
-						<th class="product-subtotal text-end"><?php esc_html_e('Subtotal', 'woocommerce'); ?></th>
+						<th class="product-thumbnail"><span class="visually-hidden-focusable"><?php esc_html_e('Thumbnail image', 'woocommerce'); ?></span><span class="visually-hidden-focusable"><?php esc_html_e('Thumbnail image', 'woocommerce'); ?></span></th>
+						<th scope="col" class="product-name"><?php esc_html_e('Product', 'woocommerce'); ?></th>
+						<th scope="col" class="product-subtotal text-end"><?php esc_html_e('Subtotal', 'woocommerce'); ?></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -60,30 +55,25 @@ do_action('woocommerce_before_cart'); ?>
 					?>
 							<tr class="woocommerce-cart-form__cart-item <?php echo esc_attr(apply_filters('woocommerce_cart_item_class', 'cart_item', $cart_item, $cart_item_key)); ?>">
 
-								<td class="product-remove">
-									<?php
-									echo apply_filters( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-										'woocommerce_cart_item_remove_link',
-										sprintf(
-											'<a href="%s" class="remove link-danger" aria-label="%s" data-product_id="%s" data-product_sku="%s"><i class="fa-sharp fa-light fa-xmark" aria-hidden="true"></i></a>',
-											esc_url(wc_get_cart_remove_url($cart_item_key)),
-											/* translators: %s is the product name */
-											esc_attr(sprintf(__('Remove %s from cart', 'woocommerce'), wp_strip_all_tags($product_name))),
-											esc_attr($product_id),
-											esc_attr($_product->get_sku())
-										),
-										$cart_item_key
-									);
-									?>
-								</td>
-
 								<td class="product-thumbnail align-top" style="max-width: 200px; padding-left: 0; padding-right: 0">
 									<?php
+									/**
+									 * Filter the product thumbnail displayed in the WooCommerce cart.
+									 *
+									 * This filter allows developers to customize the HTML output of the product
+									 * thumbnail. It passes the product image along with cart item data
+									 * for potential modifications before being displayed in the cart.
+									 *
+									 * @param string $thumbnail     The HTML for the product image.
+									 * @param array  $cart_item     The cart item data.
+									 * @param string $cart_item_key Unique key for the cart item.
+									 *
+									 * @since 2.1.0
+									 */
 									/**
 									 * Define the desired image size, e.g., 'thumbnail' or 'small'.
 									 */
 									$image_size = 'medium'; // or 'small'
-
 									/**
 									 * Passes the image size to the get_image() method
 									 */
@@ -97,9 +87,8 @@ do_action('woocommerce_before_cart'); ?>
 									?>
 								</td>
 
-								<td class="product-name" data-title="<?php esc_attr_e('Product', 'woocommerce'); ?>">
-
-									<div class="d-block test">
+								<td scope="row" role="rowheader" class="product-name" data-title="<?php esc_attr_e('Product', 'woocommerce'); ?>">
+									<div class="d-block">
 										<?php
 										if (! $product_permalink) {
 											echo wp_kses_post($product_name . '&nbsp;');
@@ -109,20 +98,21 @@ do_action('woocommerce_before_cart'); ?>
 											 *
 											 * @since 2.1.0
 											 */
-											// echo wp_kses_post(apply_filters('woocommerce_cart_item_name', sprintf('<a class="link-body-emphasis" href="%s">%s</a>', esc_url($product_permalink), $_product->get_name()), $cart_item, $cart_item_key));
-											echo wp_kses_post(apply_filters('woocommerce_cart_item_name', sprintf('<a>%s</a>', esc_url($product_permalink), $_product->get_name()), $cart_item, $cart_item_key));
+											echo wp_kses_post(apply_filters('woocommerce_cart_item_name', sprintf('<a class="link-body-emphasis" href="%s">%s</a>', esc_url($product_permalink), $_product->get_name()), $cart_item, $cart_item_key));
 										}
 										?>
 									</div>
-
+									<?php
+									/**
+									 * Filter and display product price and quantity in one line
+									 */
+									?>
 									<div class="text-muted small">
 										Preis:
 										<?php // product-price
 										echo apply_filters('woocommerce_cart_item_price', WC()->cart->get_product_price($_product), $cart_item, $cart_item_key); // PHPCS: XSS ok.
-										?>
-										<?php do_action('woocommerce_after_cart_item_name', $cart_item, $cart_item_key); ?>
+										do_action('woocommerce_after_cart_item_name', $cart_item, $cart_item_key); ?>
 									</div>
-
 									<?php
 									// Meta data.
 									echo wc_get_formatted_cart_item_data($cart_item); // PHPCS: XSS ok.
@@ -133,7 +123,10 @@ do_action('woocommerce_before_cart'); ?>
 									}
 									?>
 
-									<?php // product-quantity
+									<?php
+									/**
+									 * Filter and display product quantity in one line
+									 */
 									if ($_product->is_sold_individually()) {
 										$min_quantity = 1;
 										$max_quantity = 1;
@@ -156,39 +149,24 @@ do_action('woocommerce_before_cart'); ?>
 
 									echo apply_filters('woocommerce_cart_item_quantity', $product_quantity, $cart_item_key, $cart_item); // PHPCS: XSS ok.
 									?>
+
+									<div class="mt-3">
+										<?php
+										echo apply_filters( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+											'woocommerce_cart_item_remove_link',
+											sprintf(
+												'<a role="button" href="%s" class="btn btn-sm btn-link link-danger remove" aria-label="%s" data-product_id="%s" data-product_sku="%s"><i class="fa-sharp fa-light fa-xmark me-1" aria-hidden="true"></i>Artikel entfernen</a>',
+												esc_url(wc_get_cart_remove_url($cart_item_key)),
+												/* translators: %s is the product name */
+												esc_attr(sprintf(__('Remove %s from cart', 'woocommerce'), wp_strip_all_tags($product_name))),
+												esc_attr($product_id),
+												esc_attr($_product->get_sku())
+											),
+											$cart_item_key
+										);
+										?>
+									</div>
 								</td>
-
-								<!-- <td class="product-price" data-title="<?php esc_attr_e('Price', 'woocommerce'); ?>">
-									<?php
-									echo apply_filters('woocommerce_cart_item_price', WC()->cart->get_product_price($_product), $cart_item, $cart_item_key); // PHPCS: XSS ok.
-									?>
-								</td> -->
-
-								<!-- <td class="product-quantity" data-title="<?php esc_attr_e('Quantity', 'woocommerce'); ?>">
-									<?php
-									if ($_product->is_sold_individually()) {
-										$min_quantity = 1;
-										$max_quantity = 1;
-									} else {
-										$min_quantity = 0;
-										$max_quantity = $_product->get_max_purchase_quantity();
-									}
-
-									$product_quantity = woocommerce_quantity_input(
-										array(
-											'input_name'   => "cart[{$cart_item_key}][qty]",
-											'input_value'  => $cart_item['quantity'],
-											'max_value'    => $max_quantity,
-											'min_value'    => $min_quantity,
-											'product_name' => $product_name,
-										),
-										$_product,
-										false
-									);
-
-									echo apply_filters('woocommerce_cart_item_quantity', $product_quantity, $cart_item_key, $cart_item); // PHPCS: XSS ok.
-									?>
-								</td> -->
 
 								<td class="product-subtotal text-end" data-title="<?php esc_attr_e('Subtotal', 'woocommerce'); ?>">
 									<?php
@@ -204,7 +182,7 @@ do_action('woocommerce_before_cart'); ?>
 					<?php do_action('woocommerce_cart_contents'); ?>
 
 					<tr>
-						<td colspan="6" class="actions">
+						<td colspan="3" class="actions">
 
 							<?php if (wc_coupons_enabled()) { ?>
 								<div class="coupon input-group col-12">
@@ -226,9 +204,7 @@ do_action('woocommerce_before_cart'); ?>
 			</table>
 			<?php do_action('woocommerce_after_cart_table'); ?>
 		</form>
-
 	</div>
-
 	<div class="col-12 col-md-5 col-lg-5">
 
 		<?php do_action('woocommerce_before_cart_collaterals'); ?>
@@ -244,9 +220,8 @@ do_action('woocommerce_before_cart'); ?>
 			do_action('woocommerce_cart_collaterals');
 			?>
 		</div>
-
 	</div>
 
 </div>
 
-<?php do_action('woocommerce_after_cart');
+<?php do_action('woocommerce_after_cart'); ?>

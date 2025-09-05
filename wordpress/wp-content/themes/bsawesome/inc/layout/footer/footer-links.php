@@ -12,73 +12,73 @@ function site_links()
     $footer_links = [
         __('Beliebt', 'imabi') => [
             [
-                'label' => __('Badspiegel', 'imabi'),
+                'label' => __('Badspiegel', 'bsawesome'),
                 'url'   => '/shop/badspiegel/',
             ],
             [
-                'label' => __('Klappspiegel', 'imabi'),
+                'label' => __('Klappspiegel', 'bsawesome'),
                 'url'   => '/shop/klappspiegel/',
             ],
             [
-                'label' => __('Spiegelschränke', 'imabi'),
+                'label' => __('Spiegelschränke', 'bsawesome'),
                 'url'   => '/shop/spiegelschraenke/',
             ],
             [
-                'label' => __('Unterschränke', 'imabi'),
+                'label' => __('Unterschränke', 'bsawesome'),
                 'url'   => '/shop/unterschraenke/',
             ],
         ],
         __('Unternehmen', 'imabi') => [
             [
-                'label' => __('AGB', 'imabi'),
+                'label' => __('AGB', 'bsawesome'),
                 'url'   => '/agb/',
             ],
             [
-                'label' => __('Widerruf', 'imabi'),
+                'label' => __('Widerruf', 'bsawesome'),
                 'url'   => '/widerruf/',
             ],
             [
-                'label' => __('Datenschutz', 'imabi'),
+                'label' => __('Datenschutz', 'bsawesome'),
                 'url'   => '/datenschutz/',
             ],
             [
-                'label' => __('Impressum', 'imabi'),
+                'label' => __('Impressum', 'bsawesome'),
                 'url'   => '/impressum/',
             ],
         ],
         __('Shop', 'imabi') => [
             [
-                'label' => __('Geschäftskunden', 'imabi'),
+                'label' => __('Geschäftskunden', 'bsawesome'),
                 'url'   => '/b2b/',
             ],
             [
-                'label' => __('Mein Konto', 'imabi'),
+                'label' => __('Mein Konto', 'bsawesome'),
                 'url'   => '/konto/',
             ],
             [
-                'label' => __('Warenkorb', 'imabi'),
+                'label' => __('Warenkorb', 'bsawesome'),
                 'url'   => '/warenkorb/',
             ],
             [
-                'label' => __('Kasse', 'imabi'),
+                'label' => __('Kasse', 'bsawesome'),
                 'url'   => '/kasse/',
             ],
         ],
         __('Support', 'imabi') => [
             [
-                'label' => __('Montage', 'imabi'),
+                'label' => __('Montage', 'bsawesome'),
                 'url'   => '/montage/',
             ],
             [
-                'label' => __('Sicherheit', 'imabi'),
+                'label' => __('Sicherheit', 'bsawesome'),
                 'url'   => '/sicherheit/',
             ],
             [
-                'label' => __('Zahlung', 'imabi'),
+                'label' => __('Zahlung', 'bsawesome'),
                 'url'   => '/zahlung/',
             ],
             [
-                'label' => __('Versand', 'imabi'),
+                'label' => __('Versand', 'bsawesome'),
                 'url'   => '/versand/',
             ],
         ],

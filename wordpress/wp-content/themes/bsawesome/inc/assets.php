@@ -10,7 +10,6 @@
  * @package BSAwesome
  * @subpackage Assets
  * @since 1.0.0
- * @author BS Awesome Team
  * @version 2.4.0
  */
 
@@ -29,16 +28,14 @@ function assets()
     $stylesheet_directory = get_stylesheet_directory();
     $stylesheet_directory_uri = get_stylesheet_directory_uri();
 
-    // Enqueue Bootstrap JavaScript with jQuery dependency
     wp_enqueue_script(
         'bootstrap',
         $stylesheet_directory_uri . '/dist/js/bootstrap.js',
         array(),
         filemtime($stylesheet_directory . '/dist/js/bootstrap.js'),
-        true // Load in footer
+        true
     );
 
-    // Enqueue global theme styles
     wp_enqueue_style(
         'global-style',
         $stylesheet_directory_uri . '/dist/css/global.css',
@@ -46,16 +43,14 @@ function assets()
         filemtime($stylesheet_directory . '/dist/css/global.css'),
     );
 
-    // Enqueue global theme scripts with dependencies
     wp_enqueue_script(
         'global-script',
         $stylesheet_directory_uri . '/dist/js/global.js',
         array('jquery', 'bootstrap'),
         filemtime($stylesheet_directory . '/dist/js/global.js'),
-        true // Load in footer
+        true
     );
 
-    // Localize script data for AJAX functionality
     wp_localize_script(
         'global-script',
         'myAjaxData',
@@ -70,6 +65,7 @@ function assets()
         )
     );
 
+    // Product page assets
     if (is_product()) {
         // wp_enqueue_style(
         //     'product-style',
@@ -99,6 +95,7 @@ function assets()
         );
     }
 
+    // Cart page assets
     if (is_cart()) {
         wp_enqueue_style(
             'cart-style',
@@ -115,6 +112,7 @@ function assets()
         );
     }
 
+    // Checkout page assets
     if (is_checkout()) {
         wp_enqueue_style(
             'checkout-style',
@@ -131,6 +129,7 @@ function assets()
         );
     }
 
+    // Homepage assets
     if (is_front_page()) {
         wp_enqueue_style(
             'home-style',
@@ -147,63 +146,24 @@ function assets()
         );
     }
 
-    /**
-     * Dequeue styles and scripts.
-     *
-     * @link https://developer.wordpress.org/reference/functions/wp_dequeue_style/
-     * @link https://developer.wordpress.org/reference/functions/wp_dequeue_script/
-     */
+    // Asset dequeuing for performance optimization
 
-    // Classis theme
-    // wp_dequeue_style('classic-theme-styles');
-
-    // Select2
-    // if (class_exists('woocommerce')) {
-    //     wp_dequeue_style('select2');
-    //     wp_dequeue_script('selectWoo');
-    // }
-
-    // Wordpress
-    // add_filter('use_block_editor_for_post_type', '__return_false');
+    // WordPress core assets
     wp_dequeue_style('wp-blocks-style');
-    // wp_deregister_script('wp-blocks-style');
     wp_dequeue_style('wp-block-library');
     wp_dequeue_style('global-styles');
 
-    // WooCommerce
-    // add_filter('woocommerce_enqueue_styles', '__return_empty_array');
+    // WooCommerce assets
     wp_dequeue_style('woocommerce-layout');
     wp_dequeue_style('woocommerce-general');
     wp_dequeue_style('woocommerce-smallscreen');
     wp_dequeue_style('woocommerce-inline');
     wp_dequeue_style('brands-styles');
-    // wp_dequeue_script('woo-tracks');
 
-    // Germanized
+    // Germanized assets
     wp_dequeue_style('woocommerce-gzd-layout');
-    // wp_dequeue_script('wc-cart');
 
-
-    // Product filter
+    // Third-party plugin assets
     wp_dequeue_style('wcpf-plugin-style');
-
-    // WPML
-    wp_dequeue_style('wpml-legacy-horizontal-list-0');
-
-    // Product Addons (removed JS in core files)
-    // wp_dequeue_style('woocommerce-addons-css');
-
-    // Mailpoet
-    // wp_dequeue_style('mailpoet_public');
-
-    // Wishlist
-    // wp_dequeue_style('woocommerce-wishlists');
-
-    // Paypal
-    // wp_dequeue_style('paypalplus-woocommerce-front');
-
-    // Borlabs
-    // wp_dequeue_style('borlabs-cookie');
-    // wp_dequeue_style('borlabs-cookie-custom');
 }
 add_action('wp_enqueue_scripts', 'assets', 9999);

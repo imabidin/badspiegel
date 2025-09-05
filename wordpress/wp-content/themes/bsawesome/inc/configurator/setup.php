@@ -175,7 +175,6 @@ function get_product_options($product)
         $pricematrix_cache = array_slice($pricematrix_cache, -200, null, true);
         $category_cache = array_slice($category_cache, -300, null, true);
         $cache_hit_count = 500;
-        error_log("Product options cache pruned (kept recent entries for better performance)");
     }
 
     // Return cached result if available to avoid reprocessing
@@ -256,7 +255,6 @@ function get_product_options($product)
                             // Cache for 1 hour, automatically invalidated when file changes
                             set_transient('pricematrix_' . md5($cache_key), $pricematrix_data, HOUR_IN_SECONDS);
                         } else {
-                            error_log("Preismatrix-Datei returned invalid data: " . $pricematrix_path);
                             $pricematrix_cache[$pricematrix_file] = null;
                         }
                     } catch (Exception $e) {
@@ -559,8 +557,20 @@ function get_product_options($product)
     }
 
     // =================================================================
-    // STEP 6: Final result caching and return
+    // STEP 6: Sort all options by their order property and final result caching
     // =================================================================
+
+    // Sort all options by their order property to ensure correct display order
+    // This is crucial for automatic/dynamic options that are added after regular options
+    uasort($applicable_options, function($a, $b) {
+        $order_a = isset($a['order']) ? intval($a['order']) : 0;
+        $order_b = isset($b['order']) ? intval($b['order']) : 0;
+
+        if ($order_a === $order_b) {
+            return 0;
+        }
+        return ($order_a < $order_b) ? -1 : 1;
+    });
 
     // Cache the final result for this product to improve performance
     $options_cache[$product_id] = $applicable_options;
@@ -1334,6 +1344,212 @@ function check_pricematrix_status() {
     ];
 }
 
+/**
+ * Calculate configured product price from config data or POST data
+ *
+ * Central function for calculating the total price of a configured product.
+ * This function handles both config code lookups and live POST data processing.
+ * Used by cart, favourites, and any other system that needs accurate pricing.
+ *
+ * @param WC_Product $product The product object
+ * @param string|null $config_code Optional config code to load configuration from
+ * @param array|null $post_data Optional POST data array (if not provided, uses global $_POST)
+ * @return array Array with 'base_price', 'additional_price', 'total_price', and 'config_data'
+ */
+function calculate_configured_product_price($product, $config_code = null, $post_data = null) {
+    $options = get_product_options($product);
+    $additional_price = 0.0;
+    $config_data = [];
+
+    // Use provided POST data or fall back to global $_POST
+    if ($post_data === null && isset($GLOBALS['_POST'])) {
+        $post_data = $GLOBALS['_POST'];
+    } elseif ($post_data === null) {
+        $post_data = [];
+    }
+
+    // If config code is provided, load the configuration
+    if ($config_code) {
+        $decoded_config = null;
+
+        // Try to decode config code if decode function exists
+        if (function_exists('bsawesome_decode_config_code')) {
+            $decoded_config = bsawesome_decode_config_code($config_code);
+        } else {
+            // Fallback: Load from database directly
+            global $wpdb;
+            $result = $wpdb->get_row($wpdb->prepare(
+                "SELECT config_data FROM {$wpdb->prefix}product_config_codes WHERE config_code = %s",
+                $config_code
+            ));
+            if ($result) {
+                $decoded_config = json_decode($result->config_data, true);
+            }
+        }
+
+        if ($decoded_config && is_array($decoded_config)) {
+            // Convert decoded config to POST-like format
+            $post_data = [];
+            foreach ($decoded_config as $key => $data) {
+                if (is_array($data) && isset($data['value'])) {
+                    $post_data[$key] = $data['value'];
+                } else {
+                    $post_data[$key] = $data;
+                }
+            }
+        }
+    }
+
+    if (!empty($options) && is_array($options)) {
+        foreach ($options as $option) {
+            $option_name = sanitize_title($option['key'] ?? '');
+            $posted_value = null;
+
+            // Look for the value in post data using multiple possible keys
+            $possible_keys = [
+                $option_name,
+                $option['key'] ?? '',
+                $option_name . '_value',
+                str_replace('-', '_', $option_name)
+            ];
+
+            foreach ($possible_keys as $key) {
+                if (isset($post_data[$key]) && $post_data[$key] !== '') {
+                    $posted_value = sanitize_text_field($post_data[$key]);
+                    break;
+                }
+            }
+
+            // SPECIAL HANDLING: PriceCalc options (type='price' with px prefix)
+            if (!$posted_value && ($option['type'] ?? '') === 'price' && strpos($option['key'] ?? '', 'px') === 0) {
+                $option_key = $option['key'] ?? '';
+
+                // COMPLETE mapping for ALL PriceCalc prefixes based on existing system
+                $pricecalc_mapping = [
+                    'pxd_' => ['durchmesser'],                    // Diameter
+                    'pxt_' => ['tiefe'],                          // Depth/Thickness
+                    'pxbh_' => ['breite', 'hoehe'],             // Width & Height
+                    'pxb_' => ['breite'],                        // Width only
+                    'pxh_' => ['hoehe'],                         // Height only
+                    'pxl_' => ['laenge'],                        // Length
+                    'pxs_' => ['staerke'],                       // Thickness/Strength
+                    'pxw_' => ['weite'],                         // Width (alternative)
+                    'pxg_' => ['groesse'],                       // Size
+                    'pxf_' => ['flaeche'],                       // Area
+                    'pxv_' => ['volumen'],                       // Volume
+                    'pxm_' => ['masse'],                         // Mass
+                    'pxp_' => ['position'],                      // Position
+                    'pxr_' => ['radius'],                        // Radius
+                    'pxu_' => ['umfang'],                        // Circumference
+                    'pxa_' => ['abstand'],                       // Distance
+                    'pxk_' => ['kante'],                         // Edge
+                    'pxo_' => ['oeffnung'],                      // Opening
+                    'pxn_' => ['neigung'],                       // Inclination
+                    'pxe_' => ['ecke'],                          // Corner
+                    'pxi_' => ['innen'],                         // Interior
+                    'pxz_' => ['zone'],                          // Zone
+                ];
+
+                foreach ($pricecalc_mapping as $prefix => $input_fields) {
+                    if (strpos($option_key, $prefix) === 0) {
+                        // Special case for pxbh_ (width x height combination)
+                        if ($prefix === 'pxbh_' && count($input_fields) >= 2) {
+                            $breite = isset($post_data['breite']) ? intval($post_data['breite']) : null;
+                            $hoehe = isset($post_data['hoehe']) ? intval($post_data['hoehe']) : null;
+
+                            if ($breite && $hoehe) {
+                                // Create combination key like "1000x800"
+                                $combination_key = $breite . 'x' . $hoehe;
+                                $posted_value = $combination_key;
+                                break;
+                            }
+                        } else {
+                            // Standard single-value mapping
+                            foreach ($input_fields as $input_field) {
+                                if (isset($post_data[$input_field])) {
+                                    $numeric_value = intval($post_data[$input_field]);
+
+                                    // Intelligent matching with price list
+                                    $price_options = $option['options'] ?? [];
+                                    if (!isset($price_options[$numeric_value])) {
+                                        // Find the next higher value in the price list
+                                        $available_values = array_keys($price_options);
+                                        sort($available_values, SORT_NUMERIC);
+
+                                        foreach ($available_values as $available_value) {
+                                            if (intval($available_value) >= $numeric_value) {
+                                                $numeric_value = intval($available_value);
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    $posted_value = $numeric_value;
+                                    break 2; // Exit both loops once we find a value
+                                }
+                            }
+                        }
+                        break; // Exit prefix loop once we find a matching prefix
+                    }
+                }
+            }
+
+            // ADDITIONAL HANDLING: PriceMatrix options (type='pricematrix')
+            if (!$posted_value && ($option['type'] ?? '') === 'pricematrix') {
+                $option_key = $option['key'] ?? '';
+
+                // Check if this is a dimension-based pricematrix (pxbh_, etc.)
+                if (strpos($option_key, 'pxbh_') === 0) {
+                    $breite = isset($post_data['breite']) ? intval($post_data['breite']) : null;
+                    $hoehe = isset($post_data['hoehe']) ? intval($post_data['hoehe']) : null;
+
+                    if ($breite && $hoehe) {
+                        // Create combination key like "1000x800"
+                        $combination_key = $breite . 'x' . $hoehe;
+                        $posted_value = $combination_key;
+                    }
+                }
+            }
+
+            // Skip empty values
+            if (!$posted_value) {
+                continue;
+            }
+
+            // Prepare normalized option data for pricing
+            $prepared_data = prepare_option_data($option, $posted_value, $product->get_id());
+
+            // Extract option type and price
+            $option_type = $option['type'] ?? '';
+            $option_price = $prepared_data['value_price'] ?? 0.0;
+
+            // Store config data
+            $config_data[$option_name] = [
+                'key' => $prepared_data['option_key'],
+                'label' => $prepared_data['option_label'],
+                'value' => $prepared_data['value_label'],
+                'price' => $option_price,
+                'type' => $option_type,
+                'description' => $prepared_data['value_description'],
+                'description_file' => $prepared_data['value_description_file'],
+            ];
+
+            // Accumulate additional pricing
+            $additional_price += floatval($option_price);
+        }
+    }
+
+    $base_price = floatval($product->get_price());
+    $total_price = $base_price + $additional_price;
+
+    return [
+        'base_price' => $base_price,
+        'additional_price' => $additional_price,
+        'total_price' => $total_price,
+        'config_data' => $config_data
+    ];
+}
+
 // =============================================================================
 // CART AND CHECKOUT INTEGRATION
 // =============================================================================
@@ -1346,6 +1562,7 @@ function check_pricematrix_status() {
  * choices for display throughout the cart/checkout process.
  *
  * ENHANCED: Now automatically generates configuration codes for configured products
+ * UPDATED: Uses central calculate_configured_product_price function
  *
  * Processing steps:
  * 1. Retrieves applicable options for the product
@@ -1364,60 +1581,57 @@ add_filter('woocommerce_add_cart_item_data', 'product_configurator_add_cart_item
 function product_configurator_add_cart_item_data($cart_item_data, $product_id)
 {
     $product = wc_get_product($product_id);
-    $options = get_product_options($product);
 
-    $additional_price = 0.0;
-    $has_configuration = false;
-    $config_data_for_code = []; // Data structure for configuration code generation
+    // Use central pricing calculation function
+    $price_result = calculate_configured_product_price($product);
 
-    if (!empty($options) && is_array($options)) {
-        foreach ($options as $option) {
-            $option_name  = sanitize_title($option['key'] ?? '');
-            $posted_value = sanitize_text_field($_POST[$option_name] ?? '');
+    $additional_price = $price_result['additional_price'];
+    $config_data = $price_result['config_data'];
+    $has_configuration = !empty($config_data);
 
-            // Skip empty values
-            if (!$posted_value) {
-                continue;
-            }
-
-            $has_configuration = true;
-
-            // Prepare normalized option data with product ID for better performance
-            $prepared_data = prepare_option_data($option, $posted_value, $product_id);
-
-            // Extract option type for filtering purposes
-            $option_type = $option['type'] ?? '';
-
-            // FIXED: Use value_price instead of option_price for correct pricing
-            $option_price = $prepared_data['value_price']; // This includes sub-option pricing
-
-            // Store essential data in cart (avoid storing entire prepared_data for performance)
-            $cart_item_data['custom_configurator'][$option_name] = [
-                'key'              => $prepared_data['option_key'],
-                'label'            => $prepared_data['option_label'],
-                'value'            => $prepared_data['value_label'],
-                'price'            => $option_price,
-                'type'             => $option_type,
-                'description'      => $prepared_data['value_description'],
-                'description_file' => $prepared_data['value_description_file'],
-            ];
-
-            // Prepare data for configuration code generation (simplified structure)
-            $config_data_for_code[$option_name] = [
-                'value' => $posted_value, // Store original posted value for accurate recreation
-                'type'  => $option_type, // Really needed here? Maybe important to filter pricematrices on cart?
-            ];
-
-            // Accumulate additional pricing using the correct price
-            $additional_price += $option_price;
-        }
+    if ($has_configuration) {
+        // Store the calculated config data in cart
+        $cart_item_data['custom_configurator'] = $config_data;
 
         // Store pricing information for cart total calculations
-        $cart_item_data['custom_configurator']['original_price']   = $product->get_price();
+        $cart_item_data['custom_configurator']['original_price'] = $price_result['base_price'];
         $cart_item_data['custom_configurator']['additional_price'] = $additional_price;
 
         // ========= NEW: AUTOMATIC CONFIGURATION CODE GENERATION =========
-        if ($has_configuration && function_exists('product_configurator_save_configcode')) {
+        if (function_exists('product_configurator_save_configcode')) {
+            // Prepare data for configuration code generation (complete structure)
+            $config_data_for_code = [];
+
+            // FIRST: Add all processed config data
+            foreach ($config_data as $option_name => $option_data) {
+                if (isset($_POST[$option_name])) {
+                    $config_data_for_code[$option_name] = [
+                        'value' => sanitize_text_field($_POST[$option_name]),
+                        'type' => $option_data['type'] ?? '',
+                    ];
+                }
+            }
+
+            // SECOND: Add ALL POST data that might be missing (like pxbh_ options)
+            $all_options = get_product_options($product);
+            foreach ($all_options as $option) {
+                $option_key = $option['key'] ?? '';
+                $option_type = $option['type'] ?? '';
+
+                // Check if this option was posted but not processed yet
+                if (isset($_POST[$option_key]) && !isset($config_data_for_code[$option_key])) {
+                    $posted_value = sanitize_text_field($_POST[$option_key]);
+
+                    // Only store non-empty values
+                    if (!empty($posted_value)) {
+                        $config_data_for_code[$option_key] = [
+                            'value' => $posted_value,
+                            'type' => $option_type,
+                        ];
+                    }
+                }
+            }
+
             // Generate configuration code for this cart item
             $generated_code = product_configurator_save_configcode($product_id, $config_data_for_code);
 
@@ -1435,7 +1649,7 @@ function product_configurator_add_cart_item_data($cart_item_data, $product_id)
         }
 
         // Prevent multiple configurations from being merged in cart
-        $cart_item_data['unique_key'] = md5(microtime() . rand());
+        $cart_item_data['unique_key'] = md5(microtime() . wp_rand());
     }
 
     return $cart_item_data;

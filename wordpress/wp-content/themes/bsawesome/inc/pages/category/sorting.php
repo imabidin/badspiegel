@@ -9,7 +9,6 @@
  * @package BSAwesome
  * @subpackage CategoryComponents
  * @since 1.0.0
- * @author BS Awesome Team
  * @version 2.4.0
  */
 

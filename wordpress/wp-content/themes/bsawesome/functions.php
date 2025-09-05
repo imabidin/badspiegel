@@ -3,110 +3,107 @@
 /**
  * Main Theme Functions File
  *
- * This file handles the loading of all theme functionality including
- * setup, assets, shortcodes, WooCommerce integration, and layout components.
+ * Features:
+ * - Theme setup and configuration management
+ * - Asset management (CSS/JS) with versioning and conditional loading
+ * - WooCommerce integration with custom hooks and filters
+ * - User account functionality with AJAX authentication
+ * - Product configurator system with dynamic pricing
+ * - Favourites system with session and database storage
+ * - SEO optimization through Yoast integration
+ * - German market compliance features
+ * - Custom layout components and navigation
+ * - Modal system for product details and configurations
  *
+ * Architecture:
+ * - Modular structure with organized file inclusions
+ * - Separation of concerns across different functional areas
+ * - Layout components organized by header, navigation, footer sections
+ * - Page-specific functionality for categories and products
+ * - Helper functions for development and debugging
+ *
+ * @package BSAwesome
+ * @subpackage Core
+ * @since 1.0.0
  * @version 2.4.0
- *
- * @todo: Cleanup unnecessary includes and comments
  */
 
-// Get theme directory paths for file inclusions
+// =============================================================================
+// CORE THEME FUNCTIONALITY
+// =============================================================================
+
 $stylesheet_directory = get_stylesheet_directory();
 $inc_dir = $stylesheet_directory . '/inc/';
 
-// Core theme functionality
-require_once $inc_dir . 'setup.php';         // Theme setup and configuration
-require_once $inc_dir . 'assets.php';        // Asset management (CSS/JS)
-require_once $inc_dir . 'shortcodes.php';    // Custom shortcodes
-require_once $inc_dir . 'woocommerce.php';   // WooCommerce integration
-require_once $inc_dir . 'account.php';       // Account functionality
+require_once $inc_dir . 'setup.php';         // Theme setup and configuration management
+require_once $inc_dir . 'assets.php';        // Asset management (CSS/JS) with versioning and conditional loading
+require_once $inc_dir . 'shortcodes.php';    // Custom shortcodes functionality
+require_once $inc_dir . 'woocommerce.php';   // WooCommerce integration with custom hooks and filters
+require_once $inc_dir . 'account.php';       // User account functionality with AJAX authentication
 require_once $inc_dir . 'loop.php';          // Product loop customizations
-require_once $inc_dir . 'favourites.php';    // Favourites functionality
-require_once $inc_dir . 'forms.php';         // Form handling
-require_once $inc_dir . 'germanized.php';    // German market compliance
-require_once $inc_dir . 'yoast.php';         // Yoast SEO integration
-require_once $inc_dir . 'zendesk.php';       // Zendesk support integration
-require_once $inc_dir . 'modal.php';         // Modal functionality
-// require_once $inc_dir . 'modal-performance.php'; // Modal performance optimization - TEMP DISABLED: FILE MISSING
-require_once $inc_dir . 'ajax-performance.php'; // AJAX performance booster
-require_once $inc_dir . 'redirects.php';     // Redirects outside Yoast
-// require_once $inc_dir . 'cli.php';           // WP-CLI commands
+require_once $inc_dir . 'favourites.php';    // Favourites system with session and database storage
+require_once $inc_dir . 'forms.php';         // Form handling and validation
+require_once $inc_dir . 'germanized.php';    // German market compliance features
+require_once $inc_dir . 'yoast.php';         // SEO optimization through Yoast integration
+require_once $inc_dir . 'zendesk.php';       // Customer support integration
+require_once $inc_dir . 'modal.php';         // Modal system for product details and configurations
+require_once $inc_dir . 'redirects.php';     // Custom redirect management
 
-// Media Duplicate Manager (Admin Tool)
 if (is_admin()) {
-    require_once $inc_dir . 'plugins/media-duplicate-admin.php';
+    require_once $inc_dir . 'plugins/media-duplicate-admin.php';  // Media duplicate manager (admin only)
 }
 
-/**
- * LAYOUT COMPONENTS
- *
- * Template parts for different sections of the theme layout
- */
+// =============================================================================
+// LAYOUT COMPONENTS
+// =============================================================================
 
-// Marketing and promotional components
-require_once $inc_dir . 'layout/marketing/marketing-bar.php';
+require_once $inc_dir . 'layout/marketing/marketing-bar.php';            // Marketing and promotional bar
 
-// Header components
-require_once $inc_dir . 'layout/header/header-logo.php';
-require_once $inc_dir . 'layout/header/header-cart.php';
-require_once $inc_dir . 'layout/header/header-search.php';
-require_once $inc_dir . 'layout/header/header-account.php';
-require_once $inc_dir . 'layout/header/header-navigation-toggle.php';
+require_once $inc_dir . 'layout/header/header-logo.php';                 // Header logo component
+require_once $inc_dir . 'layout/header/header-cart.php';                 // Header cart widget
+require_once $inc_dir . 'layout/header/header-search.php';               // Header search functionality
+require_once $inc_dir . 'layout/header/header-account.php';              // Header account menu
+require_once $inc_dir . 'layout/header/header-navigation-toggle.php';    // Mobile navigation toggle
 
-// Navigation components
-require_once $inc_dir . 'layout/navigation/navigation.php';
-require_once $inc_dir . 'layout/navigation/navigation-walker.php';
-require_once $inc_dir . 'layout/breadcrumb/breadcrumb-yoast.php';
+require_once $inc_dir . 'layout/navigation/navigation.php';              // Main navigation menu
+require_once $inc_dir . 'layout/navigation/navigation-walker.php';       // Custom navigation walker
+require_once $inc_dir . 'layout/breadcrumb/breadcrumb-yoast.php';        // Breadcrumb navigation
 
-// Footer components
-require_once $inc_dir . 'layout/footer/footer-contact.php';
-require_once $inc_dir . 'layout/footer/footer-links.php';
-require_once $inc_dir . 'layout/footer/footer-payments.php';
-require_once $inc_dir . 'layout/footer/footer-note.php';
-require_once $inc_dir . 'layout/footer/footer-credits.php';
+require_once $inc_dir . 'layout/footer/footer-contact.php';              // Footer contact information
+require_once $inc_dir . 'layout/footer/footer-links.php';                // Footer links
+require_once $inc_dir . 'layout/footer/footer-payments.php';             // Footer payment methods
+require_once $inc_dir . 'layout/footer/footer-note.php';                 // Footer notes
+require_once $inc_dir . 'layout/footer/footer-credits.php';              // Footer credits
 
-/**
- * CONTENT COMPONENTS
- *
- * Page-specific and content-related functionality
- */
+// =============================================================================
+// CONTENT COMPONENTS
+// =============================================================================
 
-// Category page components
-require_once $inc_dir . 'pages/category/subcategories.php';  // Category grid display
-require_once $inc_dir . 'pages/category/sorting.php';        // Filtering and sorting
-require_once $inc_dir . 'pages/category/description.php';    // Category descriptions
-// require_once $inc_dir . 'pages/category/import-descriptions.php'; // Import category descriptions - File missing, commented out
+require_once $inc_dir . 'pages/category/subcategories.php';               // Category grid display
+require_once $inc_dir . 'pages/category/sorting.php';                     // Category filtering and sorting
+require_once $inc_dir . 'pages/category/description.php';                 // Category descriptions
 
-// Product page components
-require_once $inc_dir . 'pages/product/wrappers.php';        // Product layout wrappers
-require_once $inc_dir . 'pages/product/infos.php';
-require_once $inc_dir . 'pages/product/description.php';
-require_once $inc_dir . 'pages/product/attributes.php';
-require_once $inc_dir . 'pages/product/meta.php';
-require_once $inc_dir . 'pages/product/crosselling.php';
-// for later
-// require_once $inc_dir . 'pages/product/usp.php';
+require_once $inc_dir . 'pages/product/wrappers.php';                     // Product layout wrappers
+require_once $inc_dir . 'pages/product/infos.php';                        // Product information display
+require_once $inc_dir . 'pages/product/description.php';                  // Product descriptions
+require_once $inc_dir . 'pages/product/attributes.php';                   // Product attributes
+require_once $inc_dir . 'pages/product/meta.php';                         // Product metadata
+require_once $inc_dir . 'pages/product/crosselling.php';                  // Product cross-selling
 
-/**
- * CONFIGURATOR
- */
+// =============================================================================
+// CONFIGURATOR SYSTEM
+// =============================================================================
 
-require_once $inc_dir . 'configurator/groups.php';
-require_once $inc_dir . 'configurator/options.php';
+require_once $inc_dir . 'configurator/groups.php';                        // Product configurator system with dynamic pricing
+require_once $inc_dir . 'configurator/options.php';                       // Configurator option management
+require_once $inc_dir . 'configurator/setup.php';                         // Configurator setup and initialization
+require_once $inc_dir . 'configurator/configcode.php';                    // Configuration code generation
+require_once $inc_dir . 'configurator/render.php';                        // Configurator rendering engine
+require_once $inc_dir . 'configurator/templates/option.php';              // Option template system
 
-require_once $inc_dir . 'configurator/setup.php';
-require_once $inc_dir . 'configurator/configcode.php';
-require_once $inc_dir . 'configurator/render.php';
+// =============================================================================
+// HELPER FUNCTIONS
+// =============================================================================
 
-require_once $inc_dir . 'configurator/templates/option.php';
-
-/**
- * HELPERS
- */
-
-// require_once $inc_dir . 'helpers/display-breakpoints.php';
-// require_once $inc_dir . 'helpers/display-hooks.php';
-require_once $inc_dir . 'helpers/display-imgsizes.php';
-// require_once $inc_dir . 'helpers/display-optiondata.php';
-require_once $inc_dir . 'helpers/addtocart-classes.php'; // important for configurator
+require_once $inc_dir . 'helpers/display-imgsizes.php';                   // Image size helper functions
+require_once $inc_dir . 'helpers/addtocart-classes.php';                  // Add to cart CSS classes helper

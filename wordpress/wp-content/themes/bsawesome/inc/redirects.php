@@ -1,32 +1,42 @@
 <?php defined('ABSPATH') || exit;
 
 /**
- * Redirects for specific conditions, outside Yoast SEO
+ * Custom Redirect Rules and Canonical URL Handling
+ *
+ * Manages specialized URL redirects that extend beyond Yoast SEO capabilities.
+ * Focuses on pagination handling for WooCommerce shop and category pages to optimize
+ * SEO and prevent duplicate content from paginated archives.
+ *
+ * @version 2.4.0
+ *
+ * Features:
+ * - Pagination parameter removal for WooCommerce category pages
+ * - Pagination parameter removal for main WooCommerce shop page
+ * - SEO optimization to prevent duplicate content
+ * - More aggressive approach than canonical meta tags through actual HTTP redirects
+ *
+ * Scenarios handled:
+ * 1. Paginated product category pages (/category/page/2/) redirect to main category page
+ * 2. Paginated shop pages (/shop/page/2/) redirect to main shop page
  *
  * @package BSAwesome
  * @subpackage SEO
  * @since 1.0.0
- * @author BS Awesome Team
- * @version 2.4.0
+ * @author BSAwesome Team
+ *
+ * @param string $redirect_url The redirect URL suggested by WordPress
+ * @param string $requested_url The URL of the current request
+ * @return string Modified redirect URL (or original if no intervention needed)
  */
 
-/**
- * Avoid paged parameter in WooCommerce category and shop pages
- */
-
-add_filter( 'redirect_canonical', function( $redirect_url, $requested_url ) {
-    // Only intervene when it's a WooCommerce product category archive
-    if ( isset($_GET['paged']) && is_product_category() ) {
-        // Cleanly redirect to the main category page
-        return get_term_link( get_queried_object_id(), 'product_cat' );
+add_filter('redirect_canonical', function ($redirect_url, $requested_url) {
+    if (isset($_GET['paged']) && is_product_category()) {
+        return get_term_link(get_queried_object_id(), 'product_cat');
     }
 
-    // Also intervene for the WooCommerce shop page
-    if ( isset($_GET['paged']) && is_shop() ) {
-        // Cleanly redirect to the main shop page
-        return get_permalink( wc_get_page_id( 'shop' ) );
+    if (isset($_GET['paged']) && is_shop()) {
+        return get_permalink(wc_get_page_id('shop'));
     }
 
-    // For all other cases, don't block the default behavior
     return $redirect_url;
-}, 10, 2 );
+}, 10, 2);

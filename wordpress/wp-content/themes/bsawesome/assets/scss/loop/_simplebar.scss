@@ -1,0 +1,38 @@
+//
+// Simplebar x Loop
+//
+
+.simplebar ul.products {
+  flex-wrap: nowrap;
+  margin-bottom: 1rem;
+
+  li {
+    max-width: 40%;
+  }
+
+  li:first-child {
+    padding-left: 0;
+  }
+
+  li:last-child {
+    padding-right: 0;
+  }
+}
+
+.simplebar .row .col {
+  @media (max-width: 991.98px) {
+    max-width: 40%;
+  }
+}
+
+.subcategories {
+  ul.products li {
+    max-width: 30%;
+  }
+  .simplebar-scrollbar::before {
+    background-color: var(--bs-dark);
+  }
+  .simplebar-track.simplebar-horizontal {
+    height: 6px;
+  }
+}

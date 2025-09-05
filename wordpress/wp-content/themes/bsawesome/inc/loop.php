@@ -1,57 +1,56 @@
 <?php defined('ABSPATH') || exit;
 
 /**
- * Product Loop Customizations and Hover Image Functionality
+ * Product Loop and Hover Image System
  *
- * Provides enhanced product display features including hover images that can be
- * configured in the WordPress admin. Adds meta boxes for product hover images
- * and handles the display logic for product loops and grids.
+ * Provides comprehensive product display functionality including hover image management and
+ * WooCommerce product loop customizations. Features admin interface for hover image configuration,
+ * Bootstrap card-based product layouts, and favorites system integration.
  *
  * @package BSAwesome
  * @subpackage Loop
  * @since 1.0.0
- * @author BS Awesome Team
  * @version 2.4.0
- * @feature Product Hover Images
  *
- * @todo Combine codes inside woocommerce.php if possible
+ * Features:
+ * - Admin meta box for product hover image selection
+ * - Hover image display with fallback to gallery images
+ * - Bootstrap card-based product loop layout
+ * - WooCommerce template overrides for custom styling
+ * - Favorites button integration with configuration support
+ * - Media uploader with product-specific filtering
+ *
+ * @todo Combine codes inside woocommerce.php if possible (Legacy note - now separated)
  */
+
+// =============================================================================
+// ADMIN INTERFACE AND META BOXES
+// =============================================================================
 
 /**
  * Add hover image meta box to product edit screen
  *
- * Registers a meta box in the product edit screen sidebar that allows
- * administrators to select a hover image for each product.
- *
  * @since 1.0.0
- * @return void
  */
 add_action('add_meta_boxes', 'bsawesome_add_hover_image_meta_box');
-function bsawesome_add_hover_image_meta_box()
-{
+function bsawesome_add_hover_image_meta_box() {
     add_meta_box(
-        'bsawesome-hover-image', // ID of the meta box
-        __('Product Hover Image', 'woocommerce'), // Title of the meta box
-        'bsawesome_hover_image_meta_box_callback', // Callback function to render the meta box
-        'product', // Post type where this meta box should appear
-        'side', // Context where the meta box should appear
-        'default' // Priority of the meta box
+        'bsawesome-hover-image',
+        __('Product Hover Image', 'woocommerce'),
+        'bsawesome_hover_image_meta_box_callback',
+        'product',
+        'side',
+        'default'
     );
 }
 
 /**
  * Hover image meta box callback function
  *
- * Renders the HTML content for the hover image meta box including
- * image preview, upload button, and remove button functionality.
- *
  * @since 1.0.0
  * @param WP_Post $post The current post object
- * @return void
  */
-function bsawesome_hover_image_meta_box_callback($post)
-{
-    // Add nonce field for security
+function bsawesome_hover_image_meta_box_callback($post) {
     wp_nonce_field('bsawesome_hover_image_meta_box', 'bsawesome_hover_image_meta_box_nonce');
 
     $hover_image_id = get_post_meta($post->ID, '_hover_image_id', true);
@@ -94,13 +93,18 @@ function bsawesome_hover_image_meta_box_callback($post)
 <?php
 }
 
+// =============================================================================
+// DATA PERSISTENCE AND SECURITY
+// =============================================================================
+
 /**
  * Save hover image meta box data
+ *
+ * @since 1.0.0
+ * @param int $post_id Product post ID
  */
 add_action('save_post', 'bsawesome_save_hover_image_meta_box');
-function bsawesome_save_hover_image_meta_box($post_id)
-{
-    // Verify nonce for security
+function bsawesome_save_hover_image_meta_box($post_id) {
     if (!isset($_POST['bsawesome_hover_image_meta_box_nonce'])) {
         return;
     }
@@ -109,22 +113,18 @@ function bsawesome_save_hover_image_meta_box($post_id)
         return;
     }
 
-    // Check if user has permission to edit the post
     if (!current_user_can('edit_post', $post_id)) {
         return;
     }
 
-    // Don't save on autosave
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
         return;
     }
 
-    // Only save for product post type
     if (get_post_type($post_id) !== 'product') {
         return;
     }
 
-    // Save or delete the hover image ID
     if (isset($_POST['hover_image_id']) && !empty($_POST['hover_image_id'])) {
         update_post_meta($post_id, '_hover_image_id', sanitize_text_field($_POST['hover_image_id']));
     } else {
@@ -132,12 +132,17 @@ function bsawesome_save_hover_image_meta_box($post_id)
     }
 }
 
+// =============================================================================
+// ADMIN JAVASCRIPT AND MEDIA UPLOADER
+// =============================================================================
+
 /**
  * Add JavaScript for media uploader in admin
+ *
+ * @since 1.0.0
  */
 add_action('admin_footer', 'bsawesome_hover_image_script');
-function bsawesome_hover_image_script()
-{
+function bsawesome_hover_image_script() {
     global $post_type, $post;
 
     if ($post_type !== 'product' || !$post) {
@@ -170,9 +175,8 @@ function bsawesome_hover_image_script()
                     multiple: false,
                     library: {
                         type: 'image',
-                        uploadedTo: postId // Filter to show images uploaded to this post
+                        uploadedTo: postId
                     },
-                    // Enable the same states as WooCommerce
                     states: [
                         new wp.media.controller.Library({
                             id: 'library',
@@ -189,22 +193,7 @@ function bsawesome_hover_image_script()
                             allowLocalEdits: true,
                             displaySettings: true,
                             displayUserSettings: true
-                        }),
-                        // new wp.media.controller.Library({
-                        //     id: 'browse',
-                        //     title: '<?php esc_attr_e('All Media Items', 'woocommerce'); ?>',
-                        //     priority: 40,
-                        //     toolbar: 'main-insert',
-                        //     filterable: 'all',
-                        //     library: wp.media.query({
-                        //         type: 'image'
-                        //     }),
-                        //     multiple: false,
-                        //     editable: true,
-                        //     allowLocalEdits: true,
-                        //     displaySettings: true,
-                        //     displayUserSettings: true
-                        // })
+                        })
                     ]
                 });
 
@@ -215,7 +204,6 @@ function bsawesome_hover_image_script()
                     if (toolbar && toolbar.get && toolbar.get('filters')) {
                         var filters = toolbar.get('filters');
 
-                        // Add filter for images uploaded to this product
                         if (filters && filters.filters) {
                             filters.filters.uploaded = {
                                 text: '<?php esc_attr_e('Uploaded to this product', 'woocommerce'); ?>',
@@ -227,7 +215,6 @@ function bsawesome_hover_image_script()
                                 priority: 20
                             };
 
-                            // Set default filter
                             filters.select('uploaded');
                         }
                     }
@@ -239,13 +226,11 @@ function bsawesome_hover_image_script()
                     var imageSize = attachment.sizes.medium || attachment.sizes.full;
                     var imageHtml = '<img src="' + imageSize.url + '" alt="' + attachment.alt + '" style="max-width: 100%; height: auto;" />';
 
-                    // Update preview
                     $('#bsawesome_hover_image_preview').html(imageHtml);
                     $('#hover_image_id').val(attachment.id);
                     $('.remove_hover_image_button').show().removeClass('hidden');
                 });
 
-                // Open the media frame
                 hoverImageFrame.open();
             });
 
@@ -253,7 +238,6 @@ function bsawesome_hover_image_script()
             $(document).on('click', '.remove_hover_image_button', function(e) {
                 e.preventDefault();
 
-                // Reset preview to placeholder
                 var placeholder = '<div style="background: #f1f1f1; border: 1px dashed #ccc; padding: 20px; text-align: center; color: #666;">' + '<?php echo esc_js(__('No hover image selected', 'woocommerce')); ?>' + '</div>';
                 $('#bsawesome_hover_image_preview').html(placeholder);
                 $('#hover_image_id').val('');
@@ -264,18 +248,20 @@ function bsawesome_hover_image_script()
 <?php
 }
 
+// =============================================================================
+// HOVER IMAGE API FUNCTIONS
+// =============================================================================
+
 /**
  * Get hover image ID for a product
  *
+ * @since 1.0.0
  * @param int|WC_Product|null $product Product ID or product object
  * @return int|false Hover image attachment ID or false if not set
  */
-function bsawesome_get_product_hover_image_id($product = null)
-{
-    // Static cache for main images to avoid repeated database calls
+function bsawesome_get_product_hover_image_id($product = null) {
     static $main_image_cache = [];
 
-    // Get product object and ID
     if (!$product) {
         global $product;
         if (!$product) {
@@ -294,18 +280,15 @@ function bsawesome_get_product_hover_image_id($product = null)
         $product_id = $product_obj->get_id();
     }
 
-    // Cache the main image ID to avoid repeated calls
     if (!isset($main_image_cache[$product_id])) {
         $main_image_cache[$product_id] = $product_obj->get_image_id();
     }
 
-    // First, check for custom hover image
     $hover_image_id = get_post_meta($product_id, '_hover_image_id', true);
 
     if ($hover_image_id) {
         $hover_image_id = (int) $hover_image_id;
 
-        // Don't return hover image if it's the same as main image
         if ($hover_image_id === $main_image_cache[$product_id]) {
             // Fall through to gallery fallback
         } else {
@@ -313,13 +296,11 @@ function bsawesome_get_product_hover_image_id($product = null)
         }
     }
 
-    // Fallback: Use first gallery image if no custom hover image is set
     if (method_exists($product_obj, 'get_gallery_image_ids')) {
         $gallery_ids = $product_obj->get_gallery_image_ids();
         if (!empty($gallery_ids)) {
             $first_gallery_id = (int) $gallery_ids[0];
 
-            // Don't use gallery image if it's the same as main image
             if ($first_gallery_id !== $main_image_cache[$product_id]) {
                 return $first_gallery_id;
             }
@@ -332,20 +313,19 @@ function bsawesome_get_product_hover_image_id($product = null)
 /**
  * Get hover image HTML for a product
  *
+ * @since 1.0.0
  * @param int|WC_Product|null $product Product ID or product object
  * @param string $size Image size
  * @param array $attr Additional image attributes
  * @return string Image HTML or empty string
  */
-function bsawesome_get_product_hover_image_html($product = null, $size = 'woocommerce_thumbnail', $attr = array())
-{
+function bsawesome_get_product_hover_image_html($product = null, $size = 'woocommerce_thumbnail', $attr = array()) {
     $hover_image_id = bsawesome_get_product_hover_image_id($product);
 
     if (!$hover_image_id) {
         return '';
     }
 
-    // Default attributes
     $default_attr = array(
         'class' => 'attachment-' . $size . ' size-' . $size . ' hover-image',
         'loading' => 'lazy'
@@ -353,21 +333,122 @@ function bsawesome_get_product_hover_image_html($product = null, $size = 'woocom
 
     $attr = wp_parse_args($attr, $default_attr);
 
-    // Generate the image HTML
     $image_html = wp_get_attachment_image($hover_image_id, $size, false, $attr);
 
-    // Allow other plugins/themes to modify the hover image HTML
     return apply_filters('bsawesome_hover_image_html', $image_html, $product, $hover_image_id, $size, $attr);
 }
 
 /**
  * Check if product has hover image
  *
+ * @since 1.0.0
  * @param int|WC_Product|null $product Product ID or product object
  * @return bool
  */
-function bsawesome_product_has_hover_image($product = null)
-{
+function bsawesome_product_has_hover_image($product = null) {
     $hover_image_id = bsawesome_get_product_hover_image_id($product);
     return (bool) $hover_image_id;
 }
+
+// =============================================================================
+// WOOCOMMERCE PRODUCT LOOP CUSTOMIZATIONS
+// =============================================================================
+
+/**
+ * Custom product loop layout with Bootstrap card styling
+ *
+ * @since 1.0.0
+ */
+add_action('woocommerce_before_shop_loop_item', 'wrapping_loop_start', 1);
+add_action('woocommerce_after_shop_loop_item', 'wrapping_loop_end', 20);
+
+/**
+ * Start wrapper for product loop items
+ *
+ * @since 1.0.0
+ */
+function wrapping_loop_start() {
+    echo '<div class="card border-0 h-100 shadow-sm">';
+}
+
+/**
+ * End wrapper for product loop items
+ *
+ * @since 1.0.0
+ */
+function wrapping_loop_end() {
+    echo '</div>';
+}
+
+/**
+ * Override default WooCommerce product link wrapper (open)
+ *
+ * @since 1.0.0
+ */
+function woocommerce_template_loop_product_link_open() {
+    // Remove default WooCommerce product link wrapper
+}
+
+/**
+ * Custom product thumbnail implementation with hover image support
+ *
+ * @since 1.0.0
+ */
+function woocommerce_template_loop_product_thumbnail() {
+    global $product;
+    $link = apply_filters('woocommerce_loop_product_link', get_the_permalink(), $product);
+
+    echo '<div class="card-img position-relative mb-2">';
+    echo '<a tabindex="-1" class="woocommerce-LoopProduct-link woocommerce-loop-product__link woocommerce-loop-product__image transition shadow-sm mb-3" href="' . esc_attr($link) . '">';
+
+    echo '<div class="product-image-main">';
+    echo woocommerce_get_product_thumbnail();
+    echo '</div>';
+
+    if (function_exists('bsawesome_product_has_hover_image') && bsawesome_product_has_hover_image($product)) {
+        echo '<div class="product-image-hover">';
+        echo bsawesome_get_product_hover_image_html($product, 'woocommerce_thumbnail', array(
+            'class' => 'attachment-woocommerce_thumbnail size-woocommerce_thumbnail hover-image'
+        ));
+        echo '</div>';
+    }
+
+    echo '</a>';
+    do_action('after_product_thumbnail');
+    echo '</div>';
+}
+
+/**
+ * Custom product title implementation for product loops
+ *
+ * @since 1.0.0
+ */
+function woocommerce_template_loop_product_title() {
+    global $product;
+    $link = apply_filters('woocommerce_loop_product_link', get_the_permalink(), $product);
+
+    $title = get_the_title();
+
+    echo '<a class="woocommerce-LoopProduct-link woocommerce-loop-product__link woocommerce-loop-product__title text-montserrat link-body-emphasis lh-sm small mx-3 mb-2 mt-1" href="' . esc_url($link) . '" title="' . esc_attr($title) . '">' . esc_html($title) . '</a>';
+}
+
+/**
+ * Override default WooCommerce product link wrapper (close)
+ *
+ * @since 1.0.0
+ */
+function woocommerce_template_loop_product_link_close() {
+    // Remove default WooCommerce product link close wrapper
+}
+
+// =============================================================================
+// FAVORITES SYSTEM INTEGRATION
+// =============================================================================
+
+/**
+ * Favorites button integration is now handled by favourites.php
+ * The button is hooked into 'after_product_thumbnail' action
+ *
+ * @since 2.4.0
+ * @see favourites.php - bsawesome_render_loop_favourite_button()
+ */

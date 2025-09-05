@@ -3,31 +3,53 @@
 /**
  * WooCommerce Integration and Customizations
  *
- * Handles all WooCommerce-related functionality including theme support,
- * product customizations, cart modifications, checkout processes, and
- * various e-commerce specific features.
+ * Handles all WooCommerce-related functionality for the BSAwesome theme including theme support
+ * configuration, product customizations, cart modifications, checkout processes, and e-commerce
+ * specific features. Implements custom product loops, favorites system, B2B payment restrictions,
+ * and enhanced sorting algorithms.
+ *
+ * @version 2.4.0
+ *
+ * @todo Review all functions and functionalities for necessity
+ * @todo Optimize product loop for better marketing (e.g., badges for mirror differences)
+ * @todo Consider implementing product quick view functionality
+ *
+ * Features:
+ * - Theme support configuration with custom image sizes
+ * - Custom product loop styling with Bootstrap card layout
+ * - Favorites system integration with configuration support
+ * - B2B payment method restrictions and badges
+ * - Enhanced product sorting (popularity with fallback)
+ * - Custom shipping price display
+ * - Product attribute classes for dynamic styling
+ * - Responsive gallery thumbnails and hover images
+ *
+ * Security Measures:
+ * - User ID validation for B2B payment access
+ * - Configuration code validation (6-character alphanumeric)
+ * - Proper data sanitization for all user inputs
+ * - Admin area protection for payment modifications
  *
  * @package BSAwesome
  * @subpackage WooCommerce
  * @since 1.0.0
- * @author BS Awesome Team
- * @version 2.4.0
- *
- * @todo Check all the functions and functionalites if neceressary
- * @todo Optimize loop for better marketing, egg. badges for differences between mirrors.
+ * @author BSAwesome Team
  */
 
+// =============================================================================
+// THEME SUPPORT AND CONFIGURATION
+// =============================================================================
+
 /**
- * Initialize WooCommerce theme support
+ * Initialize WooCommerce theme support and configuration
  *
- * Adds theme support for WooCommerce and configures image sizes
- * for gallery thumbnails, product thumbnails, and single product images.
+ * Adds comprehensive theme support for WooCommerce including image size configurations
+ * and gallery features. Configures optimal image dimensions for different contexts.
  *
  * @since 1.0.0
  * @return void
  */
-function wc_setup()
-{
+function wc_setup() {
 	add_theme_support(
 		'woocommerce',
 		array(
@@ -43,17 +65,38 @@ function wc_setup()
 add_action('after_setup_theme', 'wc_setup');
 
 /**
- * Add WooCommerce-specific body classes
- *
- * Adds the 'woocommerce-active' class to the body when on WooCommerce pages.
- * This allows for targeted styling of WooCommerce-specific layouts.
+ * Remove WooCommerce sidebar from shop pages
  *
  * @since 1.0.0
- * @param array $classes Existing body classes
- * @return array Modified body classes
  */
-function wc_body_classes($classes)
-{
+function remove_woocommerce_sidebar() {
+	if (is_woocommerce()) {
+		remove_action('woocommerce_sidebar', 'woocommerce_get_sidebar', 10);
+	}
+}
+add_action('wp', 'remove_woocommerce_sidebar');
+
+/**
+ * Remove WooCommerce specific image sizes
+ *
+ * @since 1.0.0
+ */
+function wc_remove_image_sizes() {
+	remove_image_size('wc_order_status_icon');
+}
+add_action('init', 'wc_remove_image_sizes');
+
+/**
+ * Add WooCommerce-specific body classes for enhanced styling
+ *
+ * Automatically adds the 'woocommerce-active' class to the HTML body when viewing
+ * any WooCommerce page for targeted CSS styling.
+ *
+ * @since 1.0.0
+ * @param array $classes Array of existing body CSS classes
+ * @return array Array of modified body classes including WooCommerce class
+ */
+function wc_body_classes($classes) {
 	if (is_woocommerce()) {
 		$classes[] = 'woocommerce-active';
 	}
@@ -62,59 +105,50 @@ function wc_body_classes($classes)
 }
 add_filter('body_class', 'wc_body_classes');
 
+// =============================================================================
+// PRODUCT CUSTOMIZATIONS AND ATTRIBUTES
+// =============================================================================
+
 /**
- * Add custom post classes for WooCommerce products
+ * Add custom CSS classes to product posts based on attributes
  *
- * Adds product-specific CSS classes to enhance styling capabilities
- * on single product pages.
+ * Dynamically generates CSS classes for single product pages based on SKU and product
+ * attributes (form, lighting, light position, cut edge). Enables precise CSS targeting
+ * for product-specific styling and JavaScript functionality.
  *
  * @since 1.0.0
- * @param array $classes Existing post classes
- * @param int   $post_id Post ID
- * @return array Modified post classes
+ * @param array $classes Array of existing post CSS classes
+ * @param int   $post_id The post ID (product ID)
+ * @return array Array of modified post classes with product-specific classes
  */
-function wc_product_post_classes($classes, $post_id)
-{
-	// Only apply on single product pages
+function wc_product_post_classes($classes, $post_id) {
 	if (!is_product()) {
 		return $classes;
 	}
 
-	// Global WooCommerce product object
 	global $product;
 	if (!$product) {
 		return $classes;
 	}
 
-	// 1) Add SKU class (if available).
 	$sku = $product->get_sku();
 	if (!empty($sku)) {
 		$classes[] = 'sku-' . sanitize_html_class($sku);
 	}
 
-	// 2) Array with desired attributes (without "pa_") // in js use
 	$attributes = array('form', 'beleuchtung', 'lichtposition', 'schnittkante');
 
-	// Loop through each attribute and append classes
 	foreach ($attributes as $attr) {
-		// Build the actual WooCommerce attribute slug
-		// Global attribute: "pa_" + attribute name
 		$attribute_slug = 'pa_' . $attr;
-
-		// Get attribute value (can contain multiple comma-separated values)
 		$attribute_value = $product->get_attribute($attribute_slug);
 
-		// If empty, do nothing
 		if (empty($attribute_value)) {
 			continue;
 		}
 
-		// If multiple values (e.g., "Round, Square"), split into array with explode
 		$terms = array_map('trim', explode(',', $attribute_value));
 
-		// Create a class for each individual value
 		foreach ($terms as $term) {
-			// Example class: "product_attr-form_round"
 			$classes[] = 'product_attr-'
 				. sanitize_title($attr)
 				. '_'
@@ -126,27 +160,36 @@ function wc_product_post_classes($classes, $post_id)
 }
 add_filter('post_class', 'wc_product_post_classes', 21, 2);
 
-/**
- * WC Number of products per page
- *
- * @param integer $args number of products per page
- */
-function wc_number_products($args)
-{
-	$custom_per_page = 24;
+// =============================================================================
+// SHOP LAYOUT AND DISPLAY SETTINGS
+// =============================================================================
 
-	return $custom_per_page;
+/**
+ * Set number of products displayed per page in shop
+ *
+ * Overrides the default WooCommerce products per page setting to display 24 products
+ * per page for optimal grid layout.
+ *
+ * @since 1.0.0
+ * @param int $args Default number of products per page
+ * @return int Custom number of products per page (24)
+ */
+function wc_number_products($args) {
+	return 24;
 }
 add_filter('loop_shop_per_page', 'wc_number_products');
 
 /**
- * WC Related products
+ * Configure related products display settings
  *
- * @param	array $args related products args.
- * @return	array $args related products args
+ * Customizes the number of related products shown on single product pages to 24 products
+ * for consistency with shop page layout and enhanced cross-selling opportunities.
+ *
+ * @since 1.0.0
+ * @param array $args Array of arguments for related products query
+ * @return array Modified arguments with custom posts_per_page setting
  */
-function wc_related_products($args)
-{
+function wc_related_products($args) {
 	$defaults = array(
 		'posts_per_page' => 24,
 	);
@@ -157,35 +200,24 @@ function wc_related_products($args)
 }
 add_filter('woocommerce_output_related_products_args', 'wc_related_products');
 
-/**
- * WC Product gallery thumbnail columns
- *
- * @return integer number of columns
- *
- * Imabi: Might be useful for the future.
- */
-//  public function thumbnail_columns() {
-//  	$columns = 4;
-//  	if ( ! is_active_sidebar( 'sidebar-1' ) ) {
-//  		$columns = 5;
-//  	}
-//  	return intval( apply_filters( 'storefront_product_thumbnail_columns', $columns ) );
-//  }
-
-/**
- * WC Wrapper classes.
- *
- * Wraps all WooCommerce content in wrappers which match the theme markup.
- *
- * @return void
- */
+// =============================================================================
+// CONTENT WRAPPERS AND LAYOUT
+// =============================================================================
 remove_action('woocommerce_before_main_content', 'woocommerce_output_content_wrapper', 10);
 remove_action('woocommerce_after_main_content', 'woocommerce_output_content_wrapper_end', 10);
 add_action('woocommerce_before_main_content', 'wc_wrapper_before');
 add_action('woocommerce_after_main_content', 'wc_wrapper_after');
 
-function wc_wrapper_before()
-{
+/**
+ * Opening wrapper for WooCommerce content
+ *
+ * Outputs HTML structure for main content area with different container classes based on page type.
+ * Product pages use full-width layout, other pages use Bootstrap container-md.
+ *
+ * @since 1.0.0
+ * @see wc_wrapper_after()
+ */
+function wc_wrapper_before() {
 	if (is_product()) {
 		echo '<!-- #site-main start -->';
 		echo '<main id="primary" class="site-main mb" data-template="woocommerce.php">';
@@ -195,201 +227,66 @@ function wc_wrapper_before()
 	}
 }
 
-function wc_wrapper_after()
-{
+/**
+ * Closing wrapper for WooCommerce content
+ *
+ * Outputs HTML structure that closes the main content area for WooCommerce pages.
+ * Paired with wc_wrapper_before() to create complete content container.
+ *
+ * @since 1.0.0
+ * @see wc_wrapper_before()
+ */
+function wc_wrapper_after() {
 	echo '</main>';
 	echo '<!-- #site-main end -->';
 }
 
+// =============================================================================
+// CHECKOUT AND PAYMENT CUSTOMIZATIONS
+// =============================================================================
+
 /**
- * WC Product loop.
+ * Remove coupon form from checkout page
  *
- * Overriding product loop.
- */
-add_action('woocommerce_before_shop_loop_item', 'wrapping_loop_start', 1);
-add_action('woocommerce_after_shop_loop_item', 'wrapping_loop_end', 20);
-
-function wrapping_loop_start() // Wrapping loop with .card framework.
-{
-	echo '<div class="card border-0 h-100 shadow-sm">';
-}
-function wrapping_loop_end()
-{
-	echo '</div>';
-}
-
-function woocommerce_template_loop_product_link_open() // Open loop, override content
-{} // (remove content)
-function woocommerce_template_loop_product_thumbnail() // Overriding loop thumbnail
-{
-	global $product;
-	$link = apply_filters('woocommerce_loop_product_link', get_the_permalink(), $product);
-
-	echo '<div class="card-img position-relative mb-2">';
-	echo '<a tabindex="-1" class="woocommerce-LoopProduct-link woocommerce-loop-product__link woocommerce-loop-product__image transition shadow-sm mb-3" href="' . esc_attr($link) . '">';
-
-	// Main product image
-	echo '<div class="product-image-main">';
-	echo woocommerce_get_product_thumbnail();
-	echo '</div>';
-
-	// Hover image (if available)
-	if (function_exists('bsawesome_product_has_hover_image') && bsawesome_product_has_hover_image($product)) {
-		echo '<div class="product-image-hover">';
-		echo bsawesome_get_product_hover_image_html($product, 'woocommerce_thumbnail', array(
-			'class' => 'attachment-woocommerce_thumbnail size-woocommerce_thumbnail hover-image'
-		));
-		echo '</div>';
-	}
-
-	echo '</a>';
-	do_action('after_product_thumbnail');
-	echo '</div>';
-}
-function woocommerce_template_loop_product_title() // Overriding loop link
-{
-	global $product;
-	$link = apply_filters('woocommerce_loop_product_link', get_the_permalink(), $product);
-
-	echo '<a class="woocommerce-LoopProduct-link woocommerce-loop-product__link woocommerce-loop-product__title text-montserrat link-body-emphasis lh-sm small mx-3 mb-2 mt-1" href="' . esc_url($link) . '" title="' . esc_attr(get_the_title()) . '">' . esc_html(get_the_title()) . '</a>';
-}
-function woocommerce_template_loop_product_link_close() // Close loop, override content
-{} // (remove content)
-
-/**
- * WC product loop favourite button.
- */
-add_action('after_product_thumbnail', 'woocommerce_template_loop_favourite_button', 5);
-function woocommerce_template_loop_favourite_button()
-{
-	global $product;
-
-	$product_id = $product->get_id();
-	$user_id = get_current_user_id();
-	$is_user_logged_in = is_user_logged_in();
-
-	// Check if we're in favourites context (favourites page)
-	$is_favourites_context = apply_filters('bsawesome_favourites_context', false);
-
-	// NEUE FUNKTIONALITÄT: Config-Code aus verschiedenen Quellen ermitteln
-	$config_code = null;
-
-	// 1. WICHTIG: Auf Favoriten-Seite Config-Code aus aktueller Loop-Iteration holen
-	if ($is_favourites_context) {
-		global $bsawesome_current_favourite_config;
-		if (isset($bsawesome_current_favourite_config)) {
-			$config_code = $bsawesome_current_favourite_config;
-		}
-	}
-
-	// 2. Aus URL-Parameter (für Konfigurator-Seiten)
-	if (!$config_code) {
-		if (isset($_GET['load_config']) && !empty($_GET['load_config'])) {
-			$config_code = sanitize_text_field($_GET['load_config']);
-		} elseif (isset($_GET['config_code']) && !empty($_GET['config_code'])) {
-			$config_code = sanitize_text_field($_GET['config_code']);
-		}
-	}
-
-	// 3. Auf Produkt-Einzelseiten: Gespeicherten Config aus Session/Cookie holen
-	if (!$config_code && is_product()) {
-		if (function_exists('WC') && WC()->session) {
-			$current_config = WC()->session->get('current_product_config_' . $product_id, null);
-			if ($current_config && is_string($current_config) && strlen($current_config) === 6) {
-				$config_code = $current_config;
-			}
-		}
-	}
-
-	// 4. Validierung: Config-Code muss 6 Zeichen alphanumerisch sein
-	if ($config_code && !preg_match('/^[A-Z0-9]{6}$/', $config_code)) {
-		$config_code = null;
-	}
-
-	// Für eingeloggte Benutzer: Exakte Kombination prüfen
-	if ($is_user_logged_in && function_exists('bsawesome_is_product_config_favourite')) {
-		$is_favourite = bsawesome_is_product_config_favourite($product_id, $config_code, $user_id);
-	} else {
-		$is_favourite = false; // JavaScript übernimmt die Initialisierung
-	}
-
-	// WICHTIG: Auf Favoriten-Seite sind alle Items Favoriten
-	if ($is_favourites_context) {
-		$is_favourite = true;
-	}
-
-	$icon_classes = $is_favourite
-		? 'fa-solid fa-heart text-warning'
-		: 'fa-light fa-heart';
-
-	$button_attrs = [
-		'type' => 'button',
-		'class' => 'btn btn-dark btn-favourite-loop position-absolute end-0 bottom-0 z-3', // z-3 is important for stacking on product img hover effect
-		'data-product-id' => $product_id,
-		'aria-label' => esc_attr__('Add to favourites', 'bsawesome'),
-		'title' => $is_favourite
-			? esc_attr__('Aus Favoriten entfernen', 'bsawesome')
-			: esc_attr__('Zu Favoriten hinzufügen', 'bsawesome'),
-		'aria-pressed' => $is_favourite ? 'true' : 'false'
-	];
-
-	// KRITISCH: Config-Code als Data-Attribut hinzufügen
-	if ($config_code) {
-		$button_attrs['data-config-code'] = $config_code;
-	}
-
-	// Context-Klasse für Favoriten-Seite
-	if ($is_favourites_context) {
-		$button_attrs['class'] .= ' favourite-context';
-	}
-
-	echo '<button ';
-	foreach ($button_attrs as $attr => $value) {
-		echo esc_attr($attr) . '="' . esc_attr($value) . '" ';
-	}
-	echo '>';
-	echo '<i class="fa-sharp ' . esc_attr($icon_classes) . '" style="--fa-beat-fade-scale: 1.25;"></i>';
-	echo '</button>';
-}
-
-/**
- * WC Remove Coupon in Checkout.
+ * Removes the default WooCommerce coupon form that appears before the checkout form
+ * to streamline the checkout process.
+ *
+ * @since 1.0.0
  */
 remove_action('woocommerce_before_checkout_form', 'woocommerce_checkout_coupon_form', 10);
 
 // /**
-//  * Entfernt das <span class="woocommerce-input-wrapper">-Element aus den Checkout-Feldern
+//  * Removes the <span class="woocommerce-input-wrapper"> wrapper from checkout fields
 //  */
 //
 // add_filter('woocommerce_form_field', 'custom_remove_input_wrapper_span', 10, 4);
 // function custom_remove_input_wrapper_span($field, $key, $args, $value)
 // {
-// 	// Überprüfen, ob das span-Element vorhanden ist und entfernen
+// 	// Check if the span element is present and remove it
 // 	$field = preg_replace('/<span class="woocommerce-input-wrapper">(.*?)<\/span>/i', '$1', $field);
 // 	return $field;
 // }
 
 /**
- * WC Payment Method Conditional.
+ * Conditional payment method availability for B2B customers
+ *
+ * Restricts the "Invoice" payment method to specific authorized user IDs implementing
+ * a B2B payment system where only approved business customers can pay by invoice.
+ *
+ * @since 1.0.0
+ * @param array $available_gateways Array of available payment gateways
+ * @return array Filtered array of payment gateways
  */
 add_filter('woocommerce_available_payment_gateways', 'custom_invoice_gateway_for_specific_users');
-function custom_invoice_gateway_for_specific_users($available_gateways)
-{
-	// Im Admin-Bereich nicht ändern
+function custom_invoice_gateway_for_specific_users($available_gateways) {
 	if (is_admin()) {
 		return $available_gateways;
 	}
 
-	// Definiere die erlaubten Benutzer-IDs (ersetze diese Werte mit den gewünschten IDs)
-	$allowed_user_ids = array(2, 5, 8); // Beispiel: Benutzer mit den IDs 2, 5 und 8 dürfen "Invoice" nutzen
-
-	// Hole die aktuelle Benutzer-ID
+	$allowed_user_ids = array(2, 5, 8);
 	$current_user_id = get_current_user_id();
 
-	// Überprüfe, ob das Invoice-Gateway im Array vorhanden ist
 	if (isset($available_gateways['invoice'])) {
-		// Wenn die aktuelle Benutzer-ID nicht in der Liste der erlaubten IDs enthalten ist,
-		// entferne das Invoice-Gateway aus den verfügbaren Zahlungsmethoden
 		if (! in_array($current_user_id, $allowed_user_ids, true)) {
 			unset($available_gateways['invoice']);
 		}
@@ -397,74 +294,64 @@ function custom_invoice_gateway_for_specific_users($available_gateways)
 
 	return $available_gateways;
 }
+/**
+ * Add B2B badge to invoice payment method title
+ *
+ * Adds Bootstrap warning badge with "B2B" text to the invoice payment method title
+ * to clearly indicate it's for business customers.
+ *
+ * @since 1.0.0
+ * @param string $title The payment gateway title
+ * @param string $gateway_id The payment gateway ID
+ * @return string Modified title with B2B badge for invoice gateway
+ */
 add_filter('woocommerce_gateway_title', 'add_b2b_badge_to_invoice_title', 10, 2);
-function add_b2b_badge_to_invoice_title($title, $gateway_id)
-{
-	// Überprüfe, ob es sich um das Invoice-Gateway handelt
+function add_b2b_badge_to_invoice_title($title, $gateway_id) {
 	if ('invoice' === $gateway_id) {
-		// Füge einen Bootstrap-Badge (Pill) mit dem Text "B2B" hinzu
 		$badge = ' <span class="badge bg-warning fw-medium">B2B</span>';
 		return $title . $badge;
 	}
 	return $title;
 }
 
+// =============================================================================
+// IMAGE AND DISPLAY ENHANCEMENTS
+// =============================================================================
+
 /**
- * Filters the list of attachment image attributes.
+ * Enhanced attachment image attributes with custom classes
+ *
+ * Filters and modifies image attributes for WooCommerce product images adding custom
+ * CSS classes based on context and page type for enhanced styling.
  *
  * @since 2.8.0
- *
- * @param string[]     $attr       Array of attribute values for the image markup, keyed by attribute name.
- *                                 See wp_get_attachment_image().
- * @param WP_Post      $attachment Image attachment post.
- * @param string|int[] $size       Requested image size. Can be any registered image size name, or
- *                                 an array of width and height values in pixels (in that order).
+ * @param string[]     $attr       Array of attribute values for the image markup, keyed by attribute name
+ * @param WP_Post      $attachment Image attachment post object
+ * @param string|int[] $size       Requested image size (name or array of dimensions)
+ * @return string[] Modified array of image attributes
  */
-function filter_wp_get_attachment_image_attributes($attr, $attachment, $size)
-{
-	// 1. Add general class to the existing classes (use = versus .= to overwrite the existing classes)
+function filter_wp_get_attachment_image_attributes($attr, $attachment, $size) {
 	$attr['class'] .= ' my-class';
 
-	// 2. Returns true when on the product archive page (shop).
 	if (is_product_category()) {
-		// Add class
 		$attr['class'] .= ' w-100';
 	}
-
-	// 3.1 Specific product ID
-	// if ( $attachment->post_parent == 30 ) {
-	//     // Add class
-	//     $attr['class'] .= ' my-class-for-product-id-30';
-	// }
-
-	// OR
-
-	// 3.2 Specific product ID
-	// $product = wc_get_product( $attachment->post_parent );
-
-	// Is a WC product
-	// if ( is_a( $product, 'WC_Product' ) ) {
-	//     if ( $product->get_id() == 815 ) {
-	//         // Add class
-	//         $attr['class'] .= ' my-class-for-product-id-815';
-	//     }
-	// }
 
 	return $attr;
 }
 add_filter('wp_get_attachment_image_attributes', 'filter_wp_get_attachment_image_attributes', 10, 3);
 
 /**
- * Entfernt die H1-Überschrift auf WooCommerce-Seiten, wenn der aktuelle Seiten-Slug in einem vordefinierten Array enthalten ist.
+ * Remove H1 page titles on specific WooCommerce pages by slug
  *
- * In diesem Beispiel werden H1-Überschriften (WooCommerce Page Titles) nur dann ausgegeben,
- * wenn der Seiten- oder Taxonomie-Slug **nicht** in der Liste $slugs_to_remove enthalten ist.
+ * Conditionally removes the default WooCommerce page title (H1 heading) when the current
+ * page or taxonomy slug matches predefined slugs for custom page layouts without conflicting headings.
  *
- * @param bool $show Standardmäßig true (Überschrift wird angezeigt)
- * @return bool false, wenn der H1-Heading entfernt werden soll, ansonsten der Originalwert
+ * @since 1.0.0
+ * @param bool $show Default value (true = show title, false = hide title)
+ * @return bool Whether to show the page title (false = remove H1)
  */
-function remove_h1_heading_by_slug($show)
-{
+function remove_h1_heading_by_slug($show) {
 	// Array der Slugs, bei denen die H1-Überschrift entfernt werden soll
 	$slugs_to_remove = array('b2b');
 
@@ -489,26 +376,31 @@ function remove_h1_heading_by_slug($show)
 }
 add_filter('woocommerce_show_page_title', 'remove_h1_heading_by_slug');
 
+// =============================================================================
+// SHIPPING AND ACCOUNT CUSTOMIZATIONS
+// =============================================================================
+
 /**
- * Gibt den Versandpreis als formatierten Betrag zurück –
- * je nach WooCommerce-Einstellung inkl. oder exkl. Steuern.
+ * Custom shipping method price display
+ *
+ * Returns shipping price as formatted amount according to WooCommerce tax display settings.
+ * Replaces default shipping method label with clean price-only display.
+ *
+ * @since 1.0.0
+ * @param string $label The original shipping method label
+ * @param object $method The shipping method object containing cost and tax data
+ * @return string Formatted price only (no method name)
  */
 add_filter('woocommerce_cart_shipping_method_full_label', 'custom_shipping_method_full_label', 10, 2);
-function custom_shipping_method_full_label($label, $method)
-{
-	// Basisbetrag (ohne Steuern)
+function custom_shipping_method_full_label($label, $method) {
 	$cost_excluding_tax = floatval($method->cost);
 
-	// Aufsummieren der Steuern (falls definiert)
 	$tax_total = 0.0;
 	if (isset($method->taxes) && is_array($method->taxes)) {
 		$tax_total = array_sum(array_map('floatval', $method->taxes));
 	}
 
-	// Anzeigeeinstellung auslesen: 'excl' für exklusive oder 'incl' für inklusive Steuern
 	$display = get_option('woocommerce_tax_display_cart', 'incl');
-
-	// Endbetrag abhängig von der Anzeigeeinstellung berechnen
 	$final_cost = ('excl' === $display) ? $cost_excluding_tax : $cost_excluding_tax + $tax_total;
 
 	return wc_price($final_cost);
@@ -529,11 +421,18 @@ function custom_shipping_method_full_label($label, $method)
 // }
 
 /**
- * Customizes the title of the "My Account" page.
+ * Custom "My Account" page titles based on login status
+ *
+ * Dynamically changes the title of the WooCommerce My Account page depending on user's
+ * login status: "Mein Konto" for logged in users, "Anmelden oder registrieren" for guests.
+ *
+ * @since 1.0.0
+ * @param string $title Original page title
+ * @param int $id Page ID being filtered
+ * @return string Modified page title if on account page, original title otherwise
  */
 add_filter('the_title', 'custom_my_account_page_title', 10, 2);
-function custom_my_account_page_title($title, $id)
-{
+function custom_my_account_page_title($title, $id) {
 	if (is_account_page()) {
 		if (is_user_logged_in()) {
 			return 'Mein Konto';
@@ -544,33 +443,33 @@ function custom_my_account_page_title($title, $id)
 	return $title;
 }
 
+// =============================================================================
+// PRODUCT SORTING ENHANCEMENTS
+// =============================================================================
+
 /**
  * Enhanced product sorting: Popularity with fallback to menu order
  *
- * Modifies the 'popularity' sorting to first sort by total sales count (descending)
- * and then by menu order (ascending) for products with equal or zero sales.
- * This ensures proper ordering for new shops with limited sales data.
+ * Modifies 'popularity' sorting to first sort by total sales count (descending) and then
+ * by menu order (ascending) for products with equal or zero sales. Ensures proper ordering
+ * for new shops with limited sales data.
  *
  * @since 1.0.0
  * @param array $query_args WooCommerce product query arguments
  * @return array Modified query arguments
  */
 add_filter('woocommerce_get_catalog_ordering_args', 'custom_enhanced_popularity_sorting', 20);
-function custom_enhanced_popularity_sorting($query_args)
-{
-	// Only modify if current ordering is 'popularity'
+function custom_enhanced_popularity_sorting($query_args) {
 	if (!isset($query_args['orderby']) || $query_args['orderby'] !== 'popularity') {
 		return $query_args;
 	}
 
-	// Override the default popularity sorting
 	$query_args['orderby'] = array(
-		'total_sales' => 'DESC',  // First: Sort by sales count (best sellers first)
-		'menu_order'  => 'ASC',   // Second: Sort by internal positioning (lower = higher priority)
-		'title'       => 'ASC'    // Third: Sort alphabetically as final fallback
+		'total_sales' => 'DESC',
+		'menu_order'  => 'ASC',
+		'title'       => 'ASC'
 	);
 
-	// Ensure meta query exists for total_sales
 	if (!isset($query_args['meta_query'])) {
 		$query_args['meta_query'] = array();
 	}
@@ -581,8 +480,8 @@ function custom_enhanced_popularity_sorting($query_args)
 /**
  * Add total_sales to WooCommerce query orderby options
  *
- * Ensures that the total_sales meta field is available for sorting
- * by adding it to the posts_clauses if needed.
+ * Ensures that the total_sales meta field is available for sorting by adding it to
+ * the posts_clauses if needed.
  *
  * @since 1.0.0
  * @param array $clauses Query clauses
@@ -590,23 +489,18 @@ function custom_enhanced_popularity_sorting($query_args)
  * @return array Modified clauses
  */
 add_filter('posts_clauses', 'custom_add_sales_sorting_support', 20, 2);
-function custom_add_sales_sorting_support($clauses, $query)
-{
+function custom_add_sales_sorting_support($clauses, $query) {
 	global $wpdb;
 
-	// Only apply to main WooCommerce product queries
 	if (!$query->is_main_query() || !is_woocommerce() || is_admin()) {
 		return $clauses;
 	}
 
-	// Check if we're dealing with our custom popularity sorting
 	$orderby = $query->get('orderby');
 	if (is_array($orderby) && isset($orderby['total_sales'])) {
 
-		// Add LEFT JOIN for total_sales meta
 		$clauses['join'] .= " LEFT JOIN {$wpdb->postmeta} AS sales_meta ON ({$wpdb->posts}.ID = sales_meta.post_id AND sales_meta.meta_key = 'total_sales')";
 
-		// Modify ORDER BY to handle NULL values (treat as 0)
 		$order_parts = array();
 
 		foreach ($orderby as $key => $order) {

@@ -16,18 +16,18 @@ function site_contact()
         [
             'icon'  => 'fa-phone',
             'href'  => 'tel:' . sanitize_text_field($phone_href),
-            'label' => __('Telefonnummer', 'imabi'),
+            'label' => __('Telefonnummer', 'bsawesome'),
             'text'  => $phone_number,
         ],
         [
             'icon'  => 'fa-envelope',
             'href'  => 'mailto:' . sanitize_email($email_href),
-            'label' => __('E-Mail-Adresse', 'imabi'),
+            'label' => __('E-Mail-Adresse', 'bsawesome'),
             'text'  => $email_address,
         ],
         [
             'icon'  => 'fa-clock',
-            'label' => __('Öffnungszeiten', 'imabi'),
+            'label' => __('Öffnungszeiten', 'bsawesome'),
             'text'  => $opening_hours,
         ],
     ];

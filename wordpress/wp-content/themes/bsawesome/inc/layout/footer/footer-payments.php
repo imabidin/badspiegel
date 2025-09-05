@@ -13,39 +13,39 @@ function get_payment_methods()
     return array(
         // array(
         //     'src'  => 'payments-klarna.png',
-        //     'alt'  => __('Klarna', 'imabi'),
+        //     'alt'  => __('Klarna', 'bsawesome'),
         // ),
         array(
             'src'  => 'payments-googlepay.png',
-            'alt'  => __('Google Pay', 'imabi'),
+            'alt'  => __('Google Pay', 'bsawesome'),
         ),
         array(
             'src'  => 'payments-applepay.png',
-            'alt'  => __('Apple Pay', 'imabi'),
+            'alt'  => __('Apple Pay', 'bsawesome'),
         ),
         array(
             'src'  => 'payments-ideal.png',
-            'alt'  => __('iDEAL', 'imabi'),
+            'alt'  => __('iDEAL', 'bsawesome'),
         ),
         array(
             'src'  => 'payments-paypal.jpg',
-            'alt'  => __('PayPal', 'imabi'),
+            'alt'  => __('PayPal', 'bsawesome'),
         ),
         array(
             'src'  => 'payments-amex.jpg',
-            'alt'  => __('American Express', 'imabi'),
+            'alt'  => __('American Express', 'bsawesome'),
         ),
         array(
             'src'  => 'payments-maestro.png',
-            'alt'  => __('Maestro', 'imabi'),
+            'alt'  => __('Maestro', 'bsawesome'),
         ),
         array(
             'src'  => 'payments-mastercard.png',
-            'alt'  => __('Mastercard', 'imabi'),
+            'alt'  => __('Mastercard', 'bsawesome'),
         ),
         array(
             'src'  => 'payments-visa.png',
-            'alt'  => __('Visa', 'imabi'),
+            'alt'  => __('Visa', 'bsawesome'),
             'style' => 'padding: 6px;'
         ),
     );

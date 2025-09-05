@@ -1,0 +1,615 @@
+# PHP Dokumentations-Leitfaden für BadSpiegel Theme
+
+Dieser Leitfaden definiert die Standards für PHP-Dokumentation im BadSpiegel WordPress Theme, basierend auf den bewährten Praktiken aus `modal.php`.
+
+DOKUMENTIERE IN ENGLISCH!!!
+
+## 1. Datei-Header Dokumentation
+
+### Vollständiger Datei-Header
+Jede PHP-Datei sollte einen umfassenden Header haben:
+
+```php
+<?php
+
+/**
+ * [Kurze Beschreibung der Datei-Funktion]
+ *
+ * [Detaillierte Beschreibung der Funktionalität, Features und Zweck]
+ *
+ * @version [Versionsnummer]
+ *
+ * @todo [Geplante Verbesserungen oder bekannte Probleme]
+ *
+ * Features:
+ * - [Feature 1 mit kurzer Beschreibung]
+ * - [Feature 2 mit kurzer Beschreibung]
+ * - [etc.]
+ *
+ * Security Measures:
+ * - [Sicherheitsmaßnahme 1]
+ * - [Sicherheitsmaßnahme 2]
+ * - [etc.]
+ *
+ * Performance Features:
+ * - [Performance-Feature 1]
+ * - [Performance-Feature 2]
+ * - [etc.]
+ *
+ * Supported [Request Types/Functions/etc.]:
+ * - [Type 1]: [Beschreibung]
+ * - [Type 2]: [Beschreibung]
+ *
+ * Required [Parameters/Dependencies/etc.]:
+ * - [Requirement 1]: [Beschreibung]
+ * - [Requirement 2]: [Beschreibung]
+ */
+
+// Prevent direct access
+if (!defined('ABSPATH')) {
+    exit('Direct access denied.');
+}
+```
+ * - [Sicherheitsmaßnahme 2]
+ * - [etc.]
+ *
+ * Performance Features:
+ * - [Performance-Feature 1]
+ * - [Performance-Feature 2]
+ * - [etc.]
+ *
+ * Supported [Request Types/Functions/etc.]:
+ * - [Type 1]: [Beschreibung]
+ * - [Type 2]: [Beschreibung]
+ *
+ * Required [Parameters/Dependencies/etc.]:
+ * - [Requirement 1]: [Beschreibung]
+ * - [Requirement 2]: [Beschreibung]
+ */
+
+// Prevent direct access
+if (!defined('ABSPATH')) {
+    exit('Direct access denied.');
+}
+```
+
+### PHP-Öffnungs-Tag und Security Check
+**Standardformat für alle PHP-Dateien:**
+
+```php
+<?php defined('ABSPATH') || exit;
+```
+
+**Vorteile:**
+- ✅ **Kompakt**: Eine Zeile statt drei
+- ✅ **Sicher**: Direkter Zugriff sofort verhindert
+- ✅ **Konsistent**: Einheitlicher Standard für alle Dateien
+- ✅ **Performance**: Keine zusätzlichen Zeilen
+
+**Alternative (wenn mehr Klarheit gewünscht):**
+```php
+<?php
+
+// Prevent direct access
+if (!defined('ABSPATH')) {
+    exit('Direct access denied.');
+}
+```
+
+### Versionierung
+- Verwenden Sie semantische Versionierung (z.B. 2.4.0)
+- Erhöhen Sie die Version bei bedeutenden Änderungen
+- Dokumentieren Sie Änderungen in @todo oder separaten Changelog
+
+### @since Dokumentation
+**Regel für @since Tags:**
+- ❌ **NICHT hinzufügen** bei neuen Dateien oder Funktionen
+- ✅ **NICHT entfernen** falls bereits vorhanden
+- 🎯 **Fokus auf @version** für Versionskontrolle
+
+**Begründung:**
+- @since ist historisch und bei neuen Entwicklungen weniger relevant
+- @version bietet bessere Kontrolle über Änderungszyklen
+- Bestehende @since Tags bleiben für Kompatibilität erhalten
+
+## 2. Code-Struktur und Sektionen
+
+### Single-Function Dateien (WICHTIG!)
+**Bei Dateien mit nur einer Funktion:**
+- ✅ **Ein einziger DocBlock** als Datei-Header UND Funktions-Dokumentation
+- ❌ **NICHT** separate Sektions-Trennung verwenden
+- ❌ **NICHT** doppelte Dokumentation (Datei + Funktion)
+
+```php
+<?php defined('ABSPATH') || exit;
+
+/**
+ * [Datei-Titel und Funktionsbeschreibung in einem]
+ *
+ * [Kombinierte Beschreibung der Datei UND der einzigen Funktion]
+ *
+ * @version [Versionsnummer]
+ * @return [Return-Type] [Beschreibung]
+ */
+
+function single_function() {
+    // Direkter Code ohne zusätzliche DocBlock
+}
+```
+
+### Multi-Function Dateien
+Nur bei **mehreren Funktionen** verwenden Sie Sektions-Trennung:
+
+```php
+// =============================================================================
+// SEKTIONS-NAME (Großbuchstaben)
+// =============================================================================
+```
+
+### Empfohlene Sektions-Reihenfolge
+1. **AJAX HOOKS REGISTRATION** - Hook-Registrierungen
+2. **CORE UTILITY FUNCTIONS** - Grundlegende Hilfsfunktionen
+3. **SECURITY & VALIDATION FUNCTIONS** - Sicherheit und Validierung
+4. **CONTEXT FUNCTIONS** - Kontext-spezifische Funktionen
+5. **SPECIFIC HANDLERS** - Spezifische Handler-Funktionen
+6. **MAIN HANDLERS** - Haupt-Handler-Funktionen
+7. **UTILITY & MAINTENANCE FUNCTIONS** - Wartung und Utilities
+8. **DEVELOPMENT HOOKS** - Debug-spezifische Hooks
+
+## 3. Funktions-Dokumentation
+
+### Standard DocBlock Format
+
+```php
+/**
+ * [Kurze Funktionsbeschreibung]
+ *
+ * [Detaillierte Beschreibung der Funktionalität, des Zwecks und der
+ * Implementierung. Erklären Sie komplexe Logik und Entscheidungen.]
+ *
+ * [Spezifische Abschnitte je nach Funktionstyp:]
+ *
+ * Security Features: (für sicherheitskritische Funktionen)
+ * - [Sicherheitsfeature 1]
+ * - [Sicherheitsfeature 2]
+ *
+ * Validation Checks: (für Validierungsfunktionen)
+ * 1. [Check 1 mit Beschreibung]
+ * 2. [Check 2 mit Beschreibung]
+ *
+ * Performance Features: (für performance-kritische Funktionen)
+ * - [Performance-Feature 1]
+ * - [Performance-Feature 2]
+ *
+ * Dependencies: [function1(), function2()] (wenn vorhanden)
+ *
+ * @param string|int|array $param_name Parameter description
+ * @param bool $optional_param Optional parameter (default: value)
+ * @return type|WP_Error Return description
+ *
+ * @example
+ * $result = function_name('example');
+ * if (is_wp_error($result)) {
+ *     handle_error($result);
+ * }
+ * // $result = 'expected output'
+ */
+```
+
+### Parameter-Dokumentation
+- **Typ angeben**: `string|int|array` für multiple Typen
+- **Required/Optional kennzeichnen**: Standardwerte in Beschreibung
+- **WP_Error handling**: Immer erwähnen wenn Funktion WP_Error zurückgeben kann
+
+### Return-Dokumentation
+- **Mögliche Rückgabe-Typen** auflisten
+- **Error-Handling** explizit beschreiben
+- **Beispiel-Rückgabewerte** in @example zeigen
+
+## 4. Sicherheits-Dokumentation
+
+### Security Measures Sektion
+Dokumentieren Sie alle Sicherheitsmaßnahmen:
+
+```php
+/**
+ * Security Measures:
+ * - CSRF protection via WordPress nonce verification
+ * - File extension whitelist (HTML only)
+ * - Path sanitization and validation
+ * - Rate limiting (30 requests per minute per IP)
+ * - Directory traversal prevention
+ * - File existence and readability checks
+ * - Session-based rate limiting with IP tracking
+ */
+```
+
+### Sicherheitskritische Funktionen
+- **Validation Pipeline** dokumentieren
+- **Input Sanitization** beschreiben
+- **Access Control** erklären
+- **Rate Limiting** spezifizieren
+
+## 5. Performance-Dokumentation
+
+### Caching-Strategien
+```php
+/**
+ * Caching Strategy:
+ * - Cache key includes file path and modification time for auto-invalidation
+ * - 1-hour cache TTL (3600 seconds)
+ * - Uses WordPress object cache with 'modal_files' group
+ * - Safe file inclusion with output buffering
+ */
+```
+
+### Performance Features
+- **Caching-Mechanismen** erklären
+- **Memory Usage** optimierungen
+- **Database Queries** minimierung
+- **Load Time** verbesserungen
+
+## 6. Beispiel-Dokumentation
+
+### Praktische Beispiele
+Fügen Sie immer @example Blöcke hinzu:
+
+```php
+/**
+ * @example
+ * $file_path = validate_file_path('contact_de');
+ * if (is_wp_error($file_path)) {
+ *     return send_modal_error($file_path);
+ * }
+ * // $file_path = '/path/to/theme/html/contact_de.html'
+ */
+```
+
+### Use Cases
+Dokumentieren Sie konkrete Anwendungsfälle:
+
+```php
+/**
+ * Use Cases:
+ * - Development content updates
+ * - Cache debugging and troubleshooting
+ * - Manual cache invalidation after bulk content changes
+ * - System maintenance and cleanup
+ */
+```
+
+## 7. Error Handling Dokumentation
+
+### WP_Error Integration
+```php
+/**
+ * @param string $error Error message or WP_Error object
+ * @param int $code HTTP status code (default: 400)
+ * @return void Outputs JSON error response and exits
+ *
+ * @example
+ * send_modal_error('File not found', 404);
+ * send_modal_error($wp_error_object);
+ */
+```
+
+### Error Response Format
+Dokumentieren Sie Response-Strukturen:
+
+```php
+/**
+ * Response Format:
+ * - JSON error response with message and status code
+ * - Proper HTTP status headers
+ * - Consistent error structure for frontend handling
+ */
+```
+
+## 8. AJAX Handler Dokumentation
+
+### Request Processing Pipeline
+```php
+/**
+ * Request Processing Pipeline:
+ * 1. Security validation (rate limiting + nonce verification)
+ * 2. File parameter validation and sanitization
+ * 3. File path security checks and validation
+ * 4. Content loading with caching
+ * 5. Success response with content
+ */
+```
+
+### Expected Parameters
+```php
+/**
+ * Expected POST Parameters:
+ * - action: 'load_modal_file'
+ * - nonce: WordPress nonce (modal_content_nonce)
+ * - file_name: Relative path to HTML file (auto-appends .html if missing)
+ */
+```
+
+## 9. WordPress Integration
+
+### Hook-Dokumentation
+```php
+/**
+ * Register AJAX handlers for modal content requests
+ *
+ * Registers both authenticated and non-authenticated AJAX handlers for:
+ * - File modal content loading (HTML files)
+ * - Image modal content loading (WordPress attachments)
+ *
+ * Handler Registration:
+ * - wp_ajax_load_modal_file: For logged-in users
+ * - wp_ajax_nopriv_load_modal_file: For non-logged-in users
+ */
+```
+
+### WordPress Standards
+- **Hook-Namen** explizit dokumentieren
+- **Capability Requirements** beschreiben
+- **WordPress Functions** die verwendet werden auflisten
+
+## 10. Debugging und Development
+
+### Debug-Modus Features
+```php
+if (defined('WP_DEBUG') && WP_DEBUG) {
+    /**
+     * Development-only functionality and debugging hooks
+     *
+     * Debug Features:
+     * - Request logging for modal file requests
+     * - Error tracking and detailed logging
+     * - Performance monitoring hooks
+     * - Development-specific error reporting
+     *
+     * Security Note:
+     * These hooks are automatically disabled in production environments
+     * when WP_DEBUG is false.
+     */
+}
+```
+
+### Production vs Development
+- **Debug-Code** klar kennzeichnen
+- **Production Mode** unterscheiden
+- **Security Implications** von Debug-Features erwähnen
+
+## 11. Checkliste für neue PHP-Dateien
+
+### Single-Function Dateien:
+- [ ] Kompakte PHP-Öffnung: `<?php defined('ABSPATH') || exit;`
+- [ ] Ein einziger DocBlock (Datei + Funktion kombiniert)
+- [ ] Keine redundante Sektions-Trennung
+- [ ] Keine doppelte Dokumentation
+- [ ] **Wichtige Inline-Kommentare beibehalten** (Business Logic, Sicherheit, Performance)
+- [ ] **Deutsche Kommentare ins Englische übersetzen**
+- [ ] **Überflüssige Kommentare entfernen** (offensichtliche Syntax)
+- [ ] @example nur bei komplexen Funktionen
+- [ ] @since NICHT hinzufügen (aber nicht entfernen falls vorhanden)
+
+### Multi-Function Dateien:
+- [ ] Kompakte PHP-Öffnung: `<?php defined('ABSPATH') || exit;`
+- [ ] Vollständiger Datei-Header mit Versionsnummer
+- [ ] Klare Sektions-Trennung
+- [ ] Jede Funktion hat vollständige DocBlock-Dokumentation
+- [ ] **Wichtige Inline-Kommentare in allen Funktionen beibehalten**
+- [ ] **Deutsche Kommentare ins Englische übersetzen**
+- [ ] Sicherheitsmaßnahmen dokumentiert
+- [ ] Performance-Features beschrieben
+- [ ] @example Blöcke für komplexe Funktionen
+- [ ] Dependencies explizit aufgelistet
+- [ ] Error Handling dokumentiert
+- [ ] WordPress Integration Standards befolgt
+- [ ] @since NICHT hinzufügen (aber nicht entfernen falls vorhanden)
+
+### DRY-Compliance Check:
+- [ ] Keine redundanten Informationen zwischen Datei-Header und Funktionen
+- [ ] Dependencies nur einmal dokumentiert
+- [ ] Technische Details nicht mehrfach erwähnt
+- [ ] @example nur wo wirklich nötig
+- [ ] **Wichtige Inline-Kommentare BEIBEHALTEN** (siehe Abschnitt Inline-Kommentare)
+
+## 12. Inline-Kommentare innerhalb von Funktionen (WICHTIG!)
+
+### Was BEIBEHALTEN werden soll:
+
+**✅ Wichtige Inline-Kommentare die erklärt werden müssen:**
+- **Komplexe Logik**: Warum bestimmte Entscheidungen getroffen wurden
+- **Business Logic**: Spezifische Regeln oder Berechnungen
+- **Sicherheitschecks**: Warum bestimmte Validierungen notwendig sind
+- **Performance Optimierungen**: Cache-Strategien, Datenbankoptimierungen
+- **WordPress-spezifische Implementierungen**: Hooks, Filters, Custom Fields
+- **Temporäre Workarounds**: Mit Erklärung warum sie notwendig sind
+- **Konfigurationswerte**: Warum bestimmte Werte gewählt wurden
+
+```php
+function woocommerce_template_loop_favourite_button() {
+    global $product;
+
+    $product_id = $product->get_id();
+    $user_id = get_current_user_id();
+
+    // Check if we're in a favourites context (different behavior)
+    $is_favourites_context = apply_filters('bsawesome_favourites_context', false);
+
+    $config_code = null;
+
+    // Priority order for config code detection
+    if ($is_favourites_context) {
+        global $bsawesome_current_favourite_config;
+        if (isset($bsawesome_current_favourite_config)) {
+            $config_code = $bsawesome_current_favourite_config;
+        }
+    }
+
+    // Fallback: Check URL parameters for configuration
+    if (!$config_code) {
+        if (isset($_GET['load_config']) && !empty($_GET['load_config'])) {
+            $config_code = sanitize_text_field($_GET['load_config']);
+        } elseif (isset($_GET['config_code']) && !empty($_GET['config_code'])) {
+            $config_code = sanitize_text_field($_GET['config_code']);
+        }
+    }
+
+    // Validate config code format (must be 6-character alphanumeric)
+    if ($config_code && !preg_match('/^[A-Z0-9]{6}$/', $config_code)) {
+        $config_code = null;
+    }
+}
+```
+
+### Was ENTFERNT werden kann:
+
+**❌ Überflüssige Kommentare die entfernt werden können:**
+- Wiederholung des Funktionsnamens
+- Offensichtliche PHP-Syntax Erklärungen
+- Redundante Beschreibungen von Standard WordPress Funktionen
+- Kommentare die nur den Code in Worten wiederholen
+
+```php
+// ❌ ENTFERNEN - offensichtlich
+$product_id = $product->get_id(); // Get the product ID
+
+// ❌ ENTFERNEN - redundant
+echo '<div class="card">'; // Output card div
+
+// ❌ ENTFERNEN - Standard WordPress Funktion
+$user_id = get_current_user_id(); // Get current user ID using WordPress function
+```
+
+### Übersetzungsregel für bestehende Kommentare:
+
+**Deutsche Kommentare → Englische Kommentare:**
+```php
+// ❌ DEUTSCH (umwandeln)
+// Prüfe, ob es sich um eine Seite handelt und ob der Seiten-Slug in der Liste steht
+
+// ✅ ENGLISCH (neue Version)
+// Check if it's a page and if the page slug is in the removal list
+```
+
+### Kommentar-Qualitätsprüfung:
+
+**Fragen Sie sich bei jedem Kommentar:**
+1. **Erklärt der Kommentar WARUM, nicht WAS?**
+2. **Ist die Logik ohne Kommentar schwer verständlich?**
+3. **Enthält der Kommentar Business Logic oder technische Entscheidungen?**
+4. **Würde ein neuer Entwickler diesen Code ohne Kommentar verstehen?**
+
+**Wenn JA → Kommentar beibehalten und ins Englische übersetzen**
+**Wenn NEIN → Kommentar entfernen**
+
+## 13. DRY-Prinzip in der Dokumentation (KRITISCH!)
+
+### Häufige Redundanzen vermeiden
+
+**❌ Typische Wiederholungen:**
+- Funktionalität sowohl im Datei-Header als auch in Funktions-DocBlock beschreiben
+- Dependencies mehrfach auflisten (DocBlock + Code sichtbar)
+- Gleiche technische Details in verschiedenen Abschnitten
+- @example Blöcke für selbsterklärende, einfache Funktionen
+- Inline-Kommentare die das Offensichtliche wiederholen
+
+**✅ DRY-Lösungen:**
+
+### Single-Function Dateien
+```php
+<?php defined('ABSPATH') || exit;
+
+/**
+ * Zendesk Chat Integration for BadSpiegel Theme
+ *
+ * Floating chat button with German localization and intelligent page exclusions.
+ *
+ * Technical Implementation:
+ * - Bootstrap dark button positioned bottom-right
+ * - Excluded from checkout/cart to prevent purchase flow disruption
+ * - Font Awesome message icon with accessibility attributes
+ *
+ * @return void Outputs HTML chat button and Zendesk script
+ */
+
+function zendesk_chat() {
+    if (is_checkout() || is_cart()) {  // Code ist selbsterklärend
+        return;
+    }
+    // ... rest of function
+}
+```
+
+### Multi-Function Dateien
+```php
+<?php defined('ABSPATH') || exit;
+
+/**
+ * Modal Content AJAX Handler - DRY Version
+ *
+ * Handles secure AJAX requests with comprehensive security measures.
+ * All technical details, dependencies, and examples are documented once
+ * in relevant function DocBlocks to avoid repetition.
+ */
+
+/**
+ * Verify WordPress nonce for modal requests
+ *
+ * Dependencies: wp_verify_nonce(), sanitize_text_field()
+ */
+function verify_modal_nonce() { ... }
+```
+
+### DRY-Checkliste für jede Datei:
+- [ ] Information nur einmal dokumentiert?
+- [ ] Keine redundanten Feature-Listen?
+- [ ] Dependencies nur dort erwähnt wo relevant?
+- [ ] @example nur bei komplexen Funktionen?
+- [ ] **Wichtige Inline-Kommentare beibehalten und ins Englische übersetzt?**
+- [ ] **Überflüssige Kommentare entfernt?**
+- [ ] Single-Function = Single DocBlock?
+
+## 14. Best Practices
+
+### Do's
+✅ **Kompakte PHP-Öffnung verwenden**: `<?php defined('ABSPATH') || exit;`
+✅ **DRY-Prinzip strikt befolgen** - Information nur einmal dokumentieren
+✅ **Single-Function = Single DocBlock** verwenden
+✅ **Code selbsterklärend machen** statt Kommentare häufen
+✅ **Wichtige Inline-Kommentare beibehalten** und ins Englische übersetzen
+✅ **Überflüssige Kommentare entfernen** (offensichtliche Syntax, Redundanz)
+✅ **@since beibehalten** falls bereits vorhanden
+✅ **Chronologische Funktions-Reihenfolge** für bessere Dependency-Verwaltung
+✅ **Modular und DRY-Compliant** Architektur dokumentieren
+✅ **Unified Error Handling** beschreiben
+✅ **WordPress Coding Standards** befolgen
+✅ **Security-First Approach** in Dokumentation
+
+### Don'ts
+❌ **Nicht** `<?php` mit separatem Security Check verwenden wenn kompakte Form möglich
+❌ **Nicht** @since zu neuen Funktionen hinzufügen
+❌ **Nicht** bestehende @since Tags entfernen
+❌ **Nicht** redundante Dokumentation (Datei + Funktion bei Single-Function)
+❌ **Nicht** Dependencies mehrfach auflisten
+❌ **Nicht** selbsterklärenden Code kommentieren
+❌ **Nicht** wichtige Inline-Kommentare entfernen (Business Logic, Sicherheit, Performance)
+❌ **Nicht** deutsche Kommentare beibehalten - ins Englische übersetzen
+❌ **Nicht** @example für triviale Funktionen
+❌ **Nicht** Funktionen ohne DocBlock
+❌ **Nicht** vage oder unvollständige Beschreibungen
+❌ **Nicht** fehlende Parameter-Dokumentation
+❌ **Nicht** undokumentierte Sicherheitsmaßnahmen
+❌ **Nicht** vergessen WP_Error Möglichkeiten zu erwähnen
+
+## Fazit
+
+Diese Dokumentations-Standards basieren auf der hervorragenden Dokumentation in `modal.php` und wurden durch DRY-Prinzipien aus `zendesk.php` optimiert. Besonderer Fokus liegt auf der Vermeidung redundanter Dokumentation bei Single-Function Dateien.
+
+**Kernprinzipien:**
+- **DRY-First**: Information nur einmal dokumentieren
+- **Context-Aware**: Single-Function vs. Multi-Function Dateien unterschiedlich behandeln
+- **Smart Inline Comments**: Wichtige Inline-Kommentare beibehalten, überflüssige entfernen
+- **English Documentation**: Alle Kommentare auf Englisch (deutsche übersetzen)
+- **WordPress Standards**: Befolgen etablierter WordPress Dokumentations-Praktiken
+
+Konsistente, DRY-konforme Dokumentation mit intelligenter Inline-Kommentierung verbessert die Wartbarkeit, reduziert Pflege-Aufwand und erhöht die Entwicklererfahrung erheblich.

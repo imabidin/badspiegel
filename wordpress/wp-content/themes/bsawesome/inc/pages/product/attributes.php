@@ -22,17 +22,17 @@ function custom_wc_display_product_attributes($product) {
 
     // Define the headings for specific attributes.
     $headings = array(
-        'attribute_pa_herkunftsland'      => __('Allgemein', 'your-text-domain'),
-        'attribute_pa_breite'      => __('Maße', 'your-text-domain'),
-        'attribute_pa_beleuchtung' => __('LED Beleuchtung', 'your-text-domain'),
-        'attribute_pa_lieferumfang' => __('Lieferung', 'your-text-domain'),
-        'attribute_pa_rahmenmaterial' => __('Rahmen', 'your-text-domain'),
-        'attribute_pa_glasmaterial' => __('Glas', 'your-text-domain'),
-        'attribute_pa_korpusmaterial' => __('Korpus', 'your-text-domain'),
-        'attribute_pa_tueranzahl' => __('Tür', 'your-text-domain'),
-        'attribute_pa_schubladenanzahl' => __('Schubladen', 'your-text-domain'),
-        'attribute_pa_montage' => __('Montage', 'your-text-domain'),
-        'attribute_pa_lichttechnik' => __('Beleuchtung', 'your-text-domain'),
+        'attribute_pa_herkunftsland'      => __('Allgemein', 'bsawesome'),
+        'attribute_pa_breite'      => __('Maße', 'bsawesome'),
+        'attribute_pa_beleuchtung' => __('LED Beleuchtung', 'bsawesome'),
+        'attribute_pa_lieferumfang' => __('Lieferung', 'bsawesome'),
+        'attribute_pa_rahmenmaterial' => __('Rahmen', 'bsawesome'),
+        'attribute_pa_glasmaterial' => __('Glas', 'bsawesome'),
+        'attribute_pa_korpusmaterial' => __('Korpus', 'bsawesome'),
+        'attribute_pa_tueranzahl' => __('Tür', 'bsawesome'),
+        'attribute_pa_schubladenanzahl' => __('Schubladen', 'bsawesome'),
+        'attribute_pa_montage' => __('Montage', 'bsawesome'),
+        'attribute_pa_lichttechnik' => __('Beleuchtung', 'bsawesome'),
     );
 
     // Initialize an array to store product attributes.

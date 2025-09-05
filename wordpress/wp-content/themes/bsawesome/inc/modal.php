@@ -91,8 +91,7 @@ add_action('wp_ajax_nopriv_load_image_modal', 'handle_image_modal_request');
  * @param string $message Log message
  * @param string $context Optional context (error, info, etc.)
  */
-function log_modal_debug($message, $context = 'info')
-{
+function log_modal_debug($message, $context = 'info') {
     if (defined('WP_DEBUG') && WP_DEBUG) {
         $log_message = "Modal [{$context}]: {$message}";
 
@@ -122,8 +121,7 @@ function log_modal_debug($message, $context = 'info')
  * send_modal_error('File not found', 404);
  * send_modal_error($wp_error_object);
  */
-function send_modal_error($error, $code = 400)
-{
+function send_modal_error($error, $code = 400) {
     if (is_wp_error($error)) {
         wp_send_json_error($error->get_error_message(), $error->get_error_data() ?: $code);
     } else {
@@ -154,8 +152,7 @@ function send_modal_error($error, $code = 400)
  *     wp_send_json_error('Security verification failed', 403);
  * }
  */
-function verify_modal_nonce()
-{
+function verify_modal_nonce() {
     $nonce = isset($_POST['nonce']) ? sanitize_text_field($_POST['nonce']) : '';
     $result = wp_verify_nonce($nonce, 'modal_content_nonce');
 
@@ -185,8 +182,7 @@ function verify_modal_nonce()
  *     wp_send_json_error('Rate limit exceeded', 429);
  * }
  */
-function apply_rate_limiting($request_type)
-{
+function apply_rate_limiting($request_type) {
     $rate_limit_key = "modal_{$request_type}_" . md5($_SERVER['REMOTE_ADDR']);
     $current_time = time();
 
@@ -235,8 +231,7 @@ function apply_rate_limiting($request_type)
  *     return;
  * }
  */
-function validate_modal_request_security($request_type = 'modal')
-{
+function validate_modal_request_security($request_type = 'modal') {
     // Rate limiting
     if (!apply_rate_limiting($request_type)) {
         return new WP_Error('rate_limit', 'Rate limit exceeded. Please try again later.', 429);
@@ -278,8 +273,7 @@ function validate_modal_request_security($request_type = 'modal')
  *     return;
  * }
  */
-function validate_post_parameter($key, $type = 'text', $required = true)
-{
+function validate_post_parameter($key, $type = 'text', $required = true) {
     if (!isset($_POST[$key])) {
         if ($required) {
             return new WP_Error('missing_param', "Parameter '{$key}' is missing.", 400);
@@ -320,8 +314,7 @@ function validate_post_parameter($key, $type = 'text', $required = true)
  * @param string $param_type Parameter type ('text', 'int')
  * @return mixed|false Validated parameter value or false on error (error already sent)
  */
-function validate_modal_request_pipeline($request_type, $param_key, $param_type = 'text')
-{
+function validate_modal_request_pipeline($request_type, $param_key, $param_type = 'text') {
     // Security validation
     $security_check = validate_modal_request_security($request_type);
     if (is_wp_error($security_check)) {
@@ -721,8 +714,7 @@ function init_modal_business_logic_variables() {
  * }
  * // $path = '/path/to/theme/html/contact_de.html'
  */
-function validate_file_path($requested_file)
-{
+function validate_file_path($requested_file) {
     // Path format validation
     if (!preg_match('/^[a-z0-9\-_\/]+$/i', $requested_file)) {
         return new WP_Error('invalid_path', 'Invalid file path format.', 400);
@@ -788,8 +780,7 @@ function validate_file_path($requested_file)
  * }
  * // $content = '<div>HTML content...</div>'
  */
-function load_cached_file_content($file_path)
-{
+function load_cached_file_content($file_path) {
     // PRODUCTION MODE: Caching enabled for performance
     $development_mode = false; // Set to false for production
 
@@ -902,8 +893,7 @@ function load_cached_file_content($file_path)
  * }
  * // Attachment 123 is a valid image
  */
-function validate_image_attachment($image_id)
-{
+function validate_image_attachment($image_id) {
     $attachment = get_post($image_id);
     if (!$attachment || $attachment->post_type !== 'attachment') {
         return new WP_Error('attachment_not_found', 'Attachment not found.', 404);
@@ -950,8 +940,7 @@ function validate_image_attachment($image_id)
  * }
  * // $html = '<div class="text-center p-3">...</div>'
  */
-function generate_image_modal_html($image_id)
-{
+function generate_image_modal_html($image_id) {
     // Define shortcode once to avoid duplication
     $shortcode = '[img id="' . $image_id . '" size="medium"]';
     $image_html = do_shortcode($shortcode);
@@ -1008,8 +997,7 @@ function generate_image_modal_html($image_id)
  * Success: { success: true, data: '<div>Content...</div>' }
  * Error: { success: false, data: 'Error message' }
  */
-function handle_modal_file_request()
-{
+function handle_modal_file_request() {
     // Debug logging
     error_log("MODAL DEBUG: handle_modal_file_request started");
     error_log("MODAL DEBUG: POST data: " . json_encode($_POST));
@@ -1047,7 +1035,6 @@ function handle_modal_file_request()
 
         error_log("MODAL DEBUG: Content loaded successfully, length: " . strlen($content));
         wp_send_json_success($content);
-
     } catch (Throwable $e) {
         error_log("MODAL DEBUG: Exception caught: " . $e->getMessage());
         error_log("MODAL DEBUG: Exception trace: " . $e->getTraceAsString());
@@ -1170,8 +1157,7 @@ function setup_modal_product_context() {
  * Success: { success: true, data: '<div class="text-center">...</div>' }
  * Error: { success: false, data: 'Attachment not found' }
  */
-function handle_image_modal_request()
-{
+function handle_image_modal_request() {
     try {
         log_modal_debug('Image modal request received');
 
@@ -1229,8 +1215,7 @@ function handle_image_modal_request()
  *     echo 'Modal cache cleared successfully';
  * }
  */
-function clear_modal_content_cache()
-{
+function clear_modal_content_cache() {
     return wp_cache_flush();
 }
 
@@ -1261,8 +1246,7 @@ function clear_modal_content_cache()
  *     echo "Cache hits: {$stats['cache_hits']}";
  * }
  */
-function get_modal_file_stats()
-{
+function get_modal_file_stats() {
     if (!defined('WP_DEBUG') || !WP_DEBUG) {
         return [];
     }

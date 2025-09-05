@@ -13,7 +13,6 @@ const MARKETING_COUNTDOWN_END_DATE = '2025-09-30';
  * @package BSAwesome
  * @subpackage LayoutComponents
  * @since 1.0.0
- * @author BS Awesome Team
  * @version 2.4.0
  */
 

@@ -1,21 +1,20 @@
 <?php defined('ABSPATH') || exit;
 
 /**
- * Germanized mods
+ * WooCommerce Germanized Theme Integration
+ *
+ * Provides Bootstrap-compatible styling modifications for WooCommerce Germanized plugin
+ * checkout tables. Ensures consistent theme styling across German e-commerce requirements.
  *
  * @package BSAwesome
  * @subpackage Germanized
  * @since 1.0.0
- * @author BS Awesome Team
  * @version 2.4.0
+ *
+ * @return void Outputs modified checkout tax table HTML with Bootstrap classes
  */
 
-/**
- * Overriding order-tax html to add "text-end" class for matching theme, specifically "woocommerce-checkout-review-order-table".
- */
-function woocommerce_gzd_template_cart_total_tax()
-{
-
+function woocommerce_gzd_template_cart_total_tax() {
     foreach (wc_gzd_get_cart_total_taxes() as $tax) :
         $label = wc_gzd_get_tax_rate_label($tax['tax']->rate);
 ?>

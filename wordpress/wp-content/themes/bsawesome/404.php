@@ -9,7 +9,6 @@
  * @package BSAwesome
  * @subpackage Templates
  * @since 1.0.0
- * @author BS Awesome Team
  * @version 2.4.0
  *
  * @link https://codex.wordpress.org/Creating_an_Error_404_Page
@@ -37,7 +36,7 @@ get_header();
 				<div class="alert alert-warning mb">
 					<p class="mb-0">Die von Ihnen gesuchte Seite wurde möglicherweise entfernt oder ist vorübergehend nicht verfügbar.</p>
 				</div>
-				<a href="<?php echo esc_url(home_url('/')); ?>" class="btn btn-dark wc-backward">
+				<a href="<?php echo esc_url(home_url('/')); ?>" class="btn btn-dark">
 					Zurück zur Startseite
 				</a>
 			</div>

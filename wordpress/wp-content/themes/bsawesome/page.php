@@ -10,7 +10,6 @@
  * @package BSAwesome
  * @subpackage Templates
  * @since 1.0.0
- * @author BS Awesome Team
  * @version 2.4.0
  *
  * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
@@ -32,7 +31,7 @@ get_header();
 
 			<?php
 			// Array of slugs where the H1 heading should be removed.
-			$remove_title_slugs = array('b2b','montage','agb','datenschutz','impressum','widerruf','sicherheit','zahlung','versand');
+			$remove_title_slugs = array('b2b', 'montage', 'agb', 'datenschutz', 'impressum', 'widerruf', 'sicherheit', 'zahlung', 'versand');
 
 			// Get the current page slug.
 			$current_slug = '';
@@ -43,7 +42,7 @@ get_header();
 				}
 			}
 
-			 // Display page title conditionally
+			// Display page title conditionally
 			if (! is_front_page() && ! in_array($current_slug, $remove_title_slugs, true)) {
 				the_title('<h1 class="entry-title mb">', '</h1>');
 			}

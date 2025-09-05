@@ -1,24 +1,46 @@
 <?php
 
 /**
- * Forms customization
+ * WooCommerce Forms Bootstrap Integration
+ *
+ * Transforms WooCommerce form fields to use Bootstrap styling classes and removes
+ * default WooCommerce wrapper elements. Provides comprehensive form field customization
+ * with proper DOM manipulation and UTF-8 support.
  *
  * @package BSAwesome
  * @subpackage Forms
  * @since 1.0.0
- * @author BS Awesome Team
  * @version 2.4.0
+ *
+ * Features:
+ * - Bootstrap form classes for all input types
+ * - WooCommerce wrapper element removal
+ * - DOM-based HTML manipulation for reliability
+ * - UTF-8 encoding preservation
+ * - Address field placeholder customization
  *
  * @todo Check if floating label is an option
  */
-add_filter('woocommerce_form_field', 'custom_customize_checkout_fields', 10, 4);
 
-function custom_customize_checkout_fields($field, $key, $args, $value)
-{
-    // 1) Entferne das <span class="woocommerce-input-wrapper">-Element
+// =============================================================================
+// FORM FIELD CUSTOMIZATION
+// =============================================================================
+
+/**
+ * Customize WooCommerce checkout fields with Bootstrap classes
+ *
+ * @param string $field Generated form field HTML
+ * @param string $key Field identifier
+ * @param array $args Field configuration arguments
+ * @param mixed $value Current field value
+ * @return string Modified form field HTML with Bootstrap classes
+ */
+add_filter('woocommerce_form_field', 'custom_customize_checkout_fields', 10, 4);
+function custom_customize_checkout_fields($field, $key, $args, $value) {
+    // Remove WooCommerce input wrapper span element
     $field = preg_replace('/<span class="woocommerce-input-wrapper">(.*?)<\/span>/is', '$1', $field);
 
-    // 2) Bestimme auf Basis von $args['type'] passende Bootstrap-Klassen für das Input-Feld
+    // Determine Bootstrap classes based on field type
     $bootstrap_classes = '';
     switch ($args['type']) {
         case 'text':
@@ -37,41 +59,38 @@ function custom_customize_checkout_fields($field, $key, $args, $value)
             $bootstrap_classes = 'form-check-input';
             break;
         default:
-            // Fallback
             $bootstrap_classes = 'form-control';
             break;
     }
 
-    // 3) HTML parsen und Klassen einfügen
-    libxml_use_internal_errors(true); // Unterdrückt Warnungen beim Parsen
+    // Parse HTML and inject Bootstrap classes using DOM manipulation
+    libxml_use_internal_errors(true); // Suppress parsing warnings
     $dom = new DOMDocument();
-    // Wichtig: mb_convert_encoding für UTF-8 Korrektheit
+    // Ensure UTF-8 encoding compatibility
     $dom->loadHTML(mb_convert_encoding($field, 'HTML-ENTITIES', 'UTF-8'));
 
-    // 3a) Inputs verarbeiten
+    // Process input elements
     $inputs = $dom->getElementsByTagName('input');
     foreach ($inputs as $input_elem) {
         $existing_classes = $input_elem->getAttribute('class');
         $input_elem->setAttribute('class', trim($existing_classes . '' . $bootstrap_classes));
     }
 
-    // 3b) Selects verarbeiten
+    // Process select elements
     $selects = $dom->getElementsByTagName('select');
     foreach ($selects as $select_elem) {
         $existing_classes = $select_elem->getAttribute('class');
         $select_elem->setAttribute('class', trim($existing_classes . '' . $bootstrap_classes));
     }
 
-    // 3c) Textareas verarbeiten
+    // Process textarea elements
     $textareas = $dom->getElementsByTagName('textarea');
     foreach ($textareas as $textarea_elem) {
         $existing_classes = $textarea_elem->getAttribute('class');
         $textarea_elem->setAttribute('class', trim($existing_classes . '' . $bootstrap_classes));
     }
 
-    // 4) Labels verarbeiten
-    //    - Für Checkbox/Radio => form-check-label
-    //    - Für alle anderen => form-label
+    // Process labels with type-specific Bootstrap classes
     $labels = $dom->getElementsByTagName('label');
     foreach ($labels as $label_elem) {
         $existing_classes = $label_elem->getAttribute('class');
@@ -82,22 +101,27 @@ function custom_customize_checkout_fields($field, $key, $args, $value)
         }
     }
 
-    // 5) Hole den modifizierten HTML-Output
+    // Extract modified HTML output
     $field = $dom->saveHTML();
 
-    // 6) Entferne DOCTYPE und zusätzliche <html>/<body>-Tags
+    // Clean up DOCTYPE and html/body wrapper tags
     $field = preg_replace('~<(?:!DOCTYPE|/?(?:html|body))[^>]*>\s*~i', '', $field);
 
     return $field;
 }
 
-/* Remove address street field placeholder */
-// Hook in
-add_filter('woocommerce_default_address_fields', 'custom_override_default_address_fields');
+// =============================================================================
+// ADDRESS FIELD CUSTOMIZATION
+// =============================================================================
 
-// Our hooked in function - $address_fields is passed via the filter!
-function custom_override_default_address_fields($address_fields)
-{
+/**
+ * Remove address street field placeholder
+ *
+ * @param array $address_fields Default WooCommerce address fields
+ * @return array Modified address fields without street placeholder
+ */
+add_filter('woocommerce_default_address_fields', 'custom_override_default_address_fields');
+function custom_override_default_address_fields($address_fields) {
     $address_fields['address_1']['placeholder'] = '';
 
     return $address_fields;

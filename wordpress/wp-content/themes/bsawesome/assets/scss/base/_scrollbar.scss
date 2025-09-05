@@ -7,12 +7,12 @@
 //
 
 // Chrome, Edge and Safari
-.no-scrollbar::-webkit-scrollbar {
+.scollbar-none::-webkit-scrollbar {
   display: none;
 }
 
 // Firefox, IE, and Edge
-.no-scrollbar {
+.scollbar-none {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }

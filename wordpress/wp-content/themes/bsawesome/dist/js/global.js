@@ -1634,32 +1634,55 @@ if (document.readyState !== "loading") {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var core_js_modules_es_array_concat_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.concat.js */ "./node_modules/core-js/modules/es.array.concat.js");
-/* harmony import */ var core_js_modules_es_array_concat_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_concat_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.array.filter.js */ "./node_modules/core-js/modules/es.array.filter.js");
-/* harmony import */ var core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_es_array_find_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.array.find.js */ "./node_modules/core-js/modules/es.array.find.js");
-/* harmony import */ var core_js_modules_es_array_find_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_find_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var core_js_modules_es_array_iterator_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.array.iterator.js */ "./node_modules/core-js/modules/es.array.iterator.js");
-/* harmony import */ var core_js_modules_es_array_iterator_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_iterator_js__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "./node_modules/core-js/modules/es.object.to-string.js");
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es.promise.js */ "./node_modules/core-js/modules/es.promise.js");
-/* harmony import */ var core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es.regexp.exec.js */ "./node_modules/core-js/modules/es.regexp.exec.js");
-/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var core_js_modules_es_string_iterator_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/es.string.iterator.js */ "./node_modules/core-js/modules/es.string.iterator.js");
-/* harmony import */ var core_js_modules_es_string_iterator_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_iterator_js__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var core_js_modules_es_string_search_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es.string.search.js */ "./node_modules/core-js/modules/es.string.search.js");
-/* harmony import */ var core_js_modules_es_string_search_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_search_js__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core-js/modules/es.string.trim.js */ "./node_modules/core-js/modules/es.string.trim.js");
-/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var core_js_modules_web_dom_collections_iterator_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! core-js/modules/web.dom-collections.iterator.js */ "./node_modules/core-js/modules/web.dom-collections.iterator.js");
-/* harmony import */ var core_js_modules_web_dom_collections_iterator_js__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_iterator_js__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var core_js_modules_web_url_search_params_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! core-js/modules/web.url-search-params.js */ "./node_modules/core-js/modules/web.url-search-params.js");
-/* harmony import */ var core_js_modules_web_url_search_params_js__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_url_search_params_js__WEBPACK_IMPORTED_MODULE_11__);
-/* provided dependency */ var jQuery = __webpack_require__(/*! jquery */ "jquery");
-/* provided dependency */ var $ = __webpack_require__(/*! jquery */ "jquery");
+/* harmony import */ var core_js_modules_es_symbol_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.symbol.js */ "./node_modules/core-js/modules/es.symbol.js");
+/* harmony import */ var core_js_modules_es_symbol_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_symbol_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_symbol_description_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.symbol.description.js */ "./node_modules/core-js/modules/es.symbol.description.js");
+/* harmony import */ var core_js_modules_es_symbol_description_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_symbol_description_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_es_symbol_iterator_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.symbol.iterator.js */ "./node_modules/core-js/modules/es.symbol.iterator.js");
+/* harmony import */ var core_js_modules_es_symbol_iterator_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_symbol_iterator_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_es_symbol_to_primitive_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.symbol.to-primitive.js */ "./node_modules/core-js/modules/es.symbol.to-primitive.js");
+/* harmony import */ var core_js_modules_es_symbol_to_primitive_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_symbol_to_primitive_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_es_array_concat_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.array.concat.js */ "./node_modules/core-js/modules/es.array.concat.js");
+/* harmony import */ var core_js_modules_es_array_concat_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_concat_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es.array.filter.js */ "./node_modules/core-js/modules/es.array.filter.js");
+/* harmony import */ var core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var core_js_modules_es_array_includes_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es.array.includes.js */ "./node_modules/core-js/modules/es.array.includes.js");
+/* harmony import */ var core_js_modules_es_array_includes_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_includes_js__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var core_js_modules_es_array_iterator_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/es.array.iterator.js */ "./node_modules/core-js/modules/es.array.iterator.js");
+/* harmony import */ var core_js_modules_es_array_iterator_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_iterator_js__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var core_js_modules_es_date_to_primitive_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es.date.to-primitive.js */ "./node_modules/core-js/modules/es.date.to-primitive.js");
+/* harmony import */ var core_js_modules_es_date_to_primitive_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_date_to_primitive_js__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var core_js_modules_es_number_constructor_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core-js/modules/es.number.constructor.js */ "./node_modules/core-js/modules/es.number.constructor.js");
+/* harmony import */ var core_js_modules_es_number_constructor_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_number_constructor_js__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var core_js_modules_es_object_get_prototype_of_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! core-js/modules/es.object.get-prototype-of.js */ "./node_modules/core-js/modules/es.object.get-prototype-of.js");
+/* harmony import */ var core_js_modules_es_object_get_prototype_of_js__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_get_prototype_of_js__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var core_js_modules_es_object_set_prototype_of_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! core-js/modules/es.object.set-prototype-of.js */ "./node_modules/core-js/modules/es.object.set-prototype-of.js");
+/* harmony import */ var core_js_modules_es_object_set_prototype_of_js__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_set_prototype_of_js__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "./node_modules/core-js/modules/es.object.to-string.js");
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! core-js/modules/es.promise.js */ "./node_modules/core-js/modules/es.promise.js");
+/* harmony import */ var core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! core-js/modules/es.regexp.exec.js */ "./node_modules/core-js/modules/es.regexp.exec.js");
+/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_14__);
+/* harmony import */ var core_js_modules_es_set_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! core-js/modules/es.set.js */ "./node_modules/core-js/modules/es.set.js");
+/* harmony import */ var core_js_modules_es_set_js__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_set_js__WEBPACK_IMPORTED_MODULE_15__);
+/* harmony import */ var core_js_modules_es_string_includes_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! core-js/modules/es.string.includes.js */ "./node_modules/core-js/modules/es.string.includes.js");
+/* harmony import */ var core_js_modules_es_string_includes_js__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_includes_js__WEBPACK_IMPORTED_MODULE_16__);
+/* harmony import */ var core_js_modules_es_string_iterator_js__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! core-js/modules/es.string.iterator.js */ "./node_modules/core-js/modules/es.string.iterator.js");
+/* harmony import */ var core_js_modules_es_string_iterator_js__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_iterator_js__WEBPACK_IMPORTED_MODULE_17__);
+/* harmony import */ var core_js_modules_es_string_search_js__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! core-js/modules/es.string.search.js */ "./node_modules/core-js/modules/es.string.search.js");
+/* harmony import */ var core_js_modules_es_string_search_js__WEBPACK_IMPORTED_MODULE_18___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_search_js__WEBPACK_IMPORTED_MODULE_18__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_19___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_19__);
+/* harmony import */ var core_js_modules_web_dom_collections_iterator_js__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! core-js/modules/web.dom-collections.iterator.js */ "./node_modules/core-js/modules/web.dom-collections.iterator.js");
+/* harmony import */ var core_js_modules_web_dom_collections_iterator_js__WEBPACK_IMPORTED_MODULE_20___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_iterator_js__WEBPACK_IMPORTED_MODULE_20__);
+/* harmony import */ var core_js_modules_web_url_search_params_js__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! core-js/modules/web.url-search-params.js */ "./node_modules/core-js/modules/web.url-search-params.js");
+/* harmony import */ var core_js_modules_web_url_search_params_js__WEBPACK_IMPORTED_MODULE_21___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_url_search_params_js__WEBPACK_IMPORTED_MODULE_21__);
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i.return) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
 
 
 
@@ -1672,808 +1695,503 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+
+
+
+
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 /**
- * Product Favourites Management System
- *
- * This module handles the complete favourites functionality for products and
- * product configurations. It provides real-time favourites management with
- * visual feedback, configuration code integration, and badge/counter updates.
- *
- * Features:
- * - Real-time favourites toggle with instant visual feedback
- * - Product configuration code support for specific configurations
- * - Animated badge updates with pulse effects
- * - Haptic feedback for mobile devices
- * - Debounced AJAX requests for performance optimization
- * - Comprehensive error handling with user-friendly messages
- * - State persistence across page reloads
- * - Integration with product configurator system
- * - Bulk operations (clear all favourites)
- * - Responsive UI animations and transitions
- *
- * @version 2.3.1
- * @package Favourites
- * @requires jQuery, myAjaxData global object
- *
- * 01/09/2023 - Added SMART NAVIGATION UTILITIES
+ * Modern Favourites JavaScript - WordPress Best Practices
+ * 
+ * Key improvements:
+ * 1. Pre-loaded states (no initialization AJAX)
+ * 2. Optimistic UI updates
+ * 3. Single event handler
+ * 4. Simple state management
+ * 5. Automatic error recovery
  */
+var FavouritesManager = /*#__PURE__*/function () {
+  function FavouritesManager() {
+    _classCallCheck(this, FavouritesManager);
+    this.states = favouritesData.states || {};
+    this.count = favouritesData.count || 0;
+    this.isProcessing = new Set(); // Track processing products
 
-jQuery(document).ready(function ($) {
-  // ====================== INITIALIZATION AND VALIDATION ======================
+    this.init();
+  }
+  return _createClass(FavouritesManager, [{
+    key: "init",
+    value: function init() {
+      console.log('🚀 [Favourites] Initializing with pre-loaded states:', this.states);
 
-  /**
-   * Validate required AJAX data is available
-   * Exit early if WordPress AJAX data is not loaded
-   */
-  if (typeof myAjaxData === "undefined") {
+      // Initialize button states from server data
+      this.initializeButtonStates();
+
+      // Single event handler
+      this.attachEventHandlers();
+
+      // Update badge
+      this.updateBadge();
+    }
+
+    /**
+     * Initialize button states from pre-loaded server data
+     * No AJAX calls needed!
+     */
+  }, {
+    key: "initializeButtonStates",
+    value: function initializeButtonStates() {
+      var _this = this;
+      document.querySelectorAll('.btn-favourite-loop').forEach(function (button) {
+        var productId = parseInt(button.dataset.productId);
+        var configCode = _this.extractConfigCode(button);
+        if (!productId || !_this.states[productId]) {
+          console.warn('⚠️ [Favourites] No state data for product:', productId);
+          return;
+        }
+        var productState = _this.states[productId];
+        var isFavourite = _this.isProductFavourite(productId, configCode, productState);
+        _this.updateButtonVisualState(button, isFavourite);
+        console.log("\u2705 [Favourites] Initialized button for product ".concat(productId, ":"), {
+          configCode: configCode,
+          isFavourite: isFavourite,
+          availableConfigs: productState.config_codes
+        });
+      });
+    }
+
+    /**
+     * Check if product+config combination is favourite
+     */
+  }, {
+    key: "isProductFavourite",
+    value: function isProductFavourite(productId, configCode, productState) {
+      if (!productState) return false;
+
+      // If no config code, check if product has any favourites
+      if (!configCode) {
+        return productState.is_favourite;
+      }
+
+      // Check specific config
+      return productState.config_codes.includes(configCode);
+    }
+
+    /**
+     * Extract config code from button context
+     */
+  }, {
+    key: "extractConfigCode",
+    value: function extractConfigCode(button) {
+      // Method 1: Direct data attribute
+      if (button.dataset.configCode) {
+        return button.dataset.configCode;
+      }
+
+      // Method 2: From configurator (if available)
+      if (typeof window.getActiveConfiguration === 'function') {
+        var config = window.getActiveConfiguration();
+        return (config === null || config === void 0 ? void 0 : config.code) || null;
+      }
+
+      // Method 3: From URL params
+      var urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('config') || null;
+    }
+
+    /**
+     * Single event handler for all favourite buttons
+     */
+  }, {
+    key: "attachEventHandlers",
+    value: function attachEventHandlers() {
+      var _this2 = this;
+      document.addEventListener('click', function (e) {
+        // Handle toggle buttons (add/remove)
+        var toggleButton = e.target.closest('.btn-favourite-loop');
+        if (toggleButton) {
+          e.preventDefault();
+          e.stopPropagation();
+          _this2.handleButtonClick(toggleButton);
+          return;
+        }
+
+        // Handle dedicated remove buttons (in favourites shortcode)
+        var removeButton = e.target.closest('.btn-favourite-remove');
+        if (removeButton) {
+          e.preventDefault();
+          e.stopPropagation();
+          _this2.handleRemoveClick(removeButton);
+          return;
+        }
+      });
+    }
+
+    /**
+     * Handle button click with optimistic updates and debouncing
+     */
+  }, {
+    key: "handleButtonClick",
+    value: (function () {
+      var _handleButtonClick = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(button) {
+        var productId, configCode, action, key, currentState, _newState, response, _response$data, originalState, _t;
+        return _regenerator().w(function (_context) {
+          while (1) switch (_context.p = _context.n) {
+            case 0:
+              productId = parseInt(button.dataset.productId);
+              configCode = this.extractConfigCode(button); // Prevent concurrent requests for same product/action
+              action = newState ? 'add' : 'remove';
+              key = "".concat(action, "-").concat(productId, "-").concat(configCode || 'null');
+              if (!this.isProcessing.has(key)) {
+                _context.n = 1;
+                break;
+              }
+              console.log('⏸️ [Favourites] Already processing:', key);
+              return _context.a(2);
+            case 1:
+              console.log('🖱️ [Favourites] Button clicked:', {
+                productId: productId,
+                configCode: configCode
+              });
+              this.isProcessing.add(key);
+              _context.p = 2;
+              // Get current state
+              currentState = this.isProductFavourite(productId, configCode, this.states[productId]);
+              _newState = !currentState; // Optimistic update
+              this.updateButtonVisualState(button, _newState);
+              this.updateLocalState(productId, configCode, _newState);
+              console.log("\uD83D\uDD04 [Favourites] Optimistic update: ".concat(currentState, " \u2192 ").concat(_newState));
+
+              // Send AJAX request
+              _context.n = 3;
+              return this.sendToggleRequest(productId, configCode);
+            case 3:
+              response = _context.v;
+              if (!response.success) {
+                _context.n = 4;
+                break;
+              }
+              console.log('✅ [Favourites] Server confirmed:', response.data);
+
+              // Update global count
+              this.count = response.data.count;
+              this.updateBadge();
+
+              // Cache invalidation hint for next page load
+              if (favouritesData.cacheKey) {
+                sessionStorage.setItem('bsawesome_cache_invalid_' + favouritesData.cacheKey, '1');
+              }
+
+              // Server state should match our optimistic update
+              if (response.data.is_favourite !== _newState) {
+                console.warn('⚠️ [Favourites] State mismatch, correcting...');
+                this.updateButtonVisualState(button, response.data.is_favourite);
+                this.updateLocalState(productId, configCode, response.data.is_favourite);
+              }
+              _context.n = 5;
+              break;
+            case 4:
+              throw new Error(((_response$data = response.data) === null || _response$data === void 0 ? void 0 : _response$data.message) || 'Server error');
+            case 5:
+              _context.n = 7;
+              break;
+            case 6:
+              _context.p = 6;
+              _t = _context.v;
+              console.error('❌ [Favourites] Error:', _t);
+
+              // Rollback optimistic update
+              originalState = !this.isProductFavourite(productId, configCode, this.states[productId]);
+              this.updateButtonVisualState(button, originalState);
+              this.updateLocalState(productId, configCode, originalState);
+
+              // Show user-friendly error
+              this.showError('Fehler beim Aktualisieren der Favoriten. Bitte versuchen Sie es erneut.');
+            case 7:
+              _context.p = 7;
+              this.isProcessing.delete(key);
+              return _context.f(7);
+            case 8:
+              return _context.a(2);
+          }
+        }, _callee, this, [[2, 6, 7, 8]]);
+      }));
+      function handleButtonClick(_x) {
+        return _handleButtonClick.apply(this, arguments);
+      }
+      return handleButtonClick;
+    }()
+    /**
+     * Handle dedicated remove button click (for favourites shortcode)
+     */
+    )
+  }, {
+    key: "handleRemoveClick",
+    value: (function () {
+      var _handleRemoveClick = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2(button) {
+        var _this3 = this;
+        var productId, configCode, key, originalContent, response, productItem, _response$data2, _t2;
+        return _regenerator().w(function (_context2) {
+          while (1) switch (_context2.p = _context2.n) {
+            case 0:
+              productId = parseInt(button.dataset.productId);
+              configCode = button.dataset.configCode || null; // Prevent concurrent requests for same product
+              key = "remove-".concat(productId, "-").concat(configCode || 'null');
+              if (!this.isProcessing.has(key)) {
+                _context2.n = 1;
+                break;
+              }
+              console.log('⏸️ [Favourites] Already processing remove:', key);
+              return _context2.a(2);
+            case 1:
+              console.log('🗑️ [Favourites] Remove button clicked:', {
+                productId: productId,
+                configCode: configCode
+              });
+              this.isProcessing.add(key);
+
+              // Add loading state
+              originalContent = button.innerHTML;
+              button.innerHTML = '<i class="fa-sharp fa-light fa-spinner fa-spin"></i>';
+              button.disabled = true;
+              _context2.p = 2;
+              _context2.n = 3;
+              return this.sendToggleRequest(productId, configCode);
+            case 3:
+              response = _context2.v;
+              if (!response.success) {
+                _context2.n = 4;
+                break;
+              }
+              console.log('✅ [Favourites] Remove confirmed:', response.data);
+
+              // Update global count
+              this.count = response.data.count;
+              this.updateBadge();
+
+              // Remove the entire product item from view
+              productItem = button.closest('.favourite-product-item, .product, li');
+              if (productItem) {
+                // Smooth fade-out animation
+                productItem.style.transition = 'opacity 0.3s ease-out, transform 0.3s ease-out';
+                productItem.style.opacity = '0';
+                productItem.style.transform = 'scale(0.95)';
+                setTimeout(function () {
+                  productItem.remove();
+
+                  // Check if no more favourites
+                  var container = document.querySelector('.favourites-container');
+                  var remainingProducts = container ? container.querySelectorAll('.favourite-product-item, .product, li').length : 0;
+                  if (remainingProducts === 0) {
+                    // Show empty state
+                    _this3.showEmptyFavouritesMessage(container);
+                  }
+                }, 300);
+              }
+
+              // Update local state
+              this.updateLocalState(productId, configCode, false);
+              _context2.n = 5;
+              break;
+            case 4:
+              throw new Error(((_response$data2 = response.data) === null || _response$data2 === void 0 ? void 0 : _response$data2.message) || 'Remove failed');
+            case 5:
+              _context2.n = 7;
+              break;
+            case 6:
+              _context2.p = 6;
+              _t2 = _context2.v;
+              console.error('❌ [Favourites] Remove error:', _t2);
+
+              // Restore button state
+              button.innerHTML = originalContent;
+              button.disabled = false;
+
+              // Show user-friendly error
+              this.showError('Fehler beim Entfernen aus den Favoriten. Bitte versuchen Sie es erneut.');
+            case 7:
+              _context2.p = 7;
+              this.isProcessing.delete(key);
+              return _context2.f(7);
+            case 8:
+              return _context2.a(2);
+          }
+        }, _callee2, this, [[2, 6, 7, 8]]);
+      }));
+      function handleRemoveClick(_x2) {
+        return _handleRemoveClick.apply(this, arguments);
+      }
+      return handleRemoveClick;
+    }()
+    /**
+     * Show empty favourites message when all items are removed
+     */
+    )
+  }, {
+    key: "showEmptyFavouritesMessage",
+    value: function showEmptyFavouritesMessage(container) {
+      var emptyMessage = "\n            <div class=\"favourites-empty alert alert-light text-center py-5 border-2 border-dashed\">\n                <i class=\"fa-sharp fa-light fa-heart fa-4x text-muted mb-3 d-block\"></i>\n                <h4 class=\"text-muted mb-3\">Keine Favoriten gefunden</h4>\n                <p class=\"text-muted mb-4\">Sie haben alle Favoriten entfernt.</p>\n                <a href=\"".concat(this.getShopUrl(), "\" class=\"btn btn-primary\">\n                    <i class=\"fa-sharp fa-light fa-shopping-bag me-2\"></i>\n                    Jetzt Produkte entdecken\n                </a>\n            </div>\n        ");
+
+      // Replace content but keep container structure
+      var productLoop = container.querySelector('.woocommerce ul.products, .products');
+      if (productLoop) {
+        productLoop.outerHTML = emptyMessage;
+      } else {
+        container.innerHTML = emptyMessage;
+      }
+    }
+
+    /**
+     * Get shop URL for empty state button
+     */
+  }, {
+    key: "getShopUrl",
+    value: function getShopUrl() {
+      // Try to get shop URL from various sources
+      return favouritesData.shopUrl || '/shop/';
+    }
+
+    /**
+     * Update button visual state
+     */
+  }, {
+    key: "updateButtonVisualState",
+    value: function updateButtonVisualState(button, isFavourite) {
+      var icon = button.querySelector('i');
+      if (!icon) return;
+
+      // Clear all states
+      icon.className = 'fa-sharp fa-heart';
+      if (isFavourite) {
+        icon.classList.add('fa-solid', 'text-warning');
+        button.setAttribute('title', 'Aus Favoriten entfernen');
+        button.setAttribute('aria-pressed', 'true');
+      } else {
+        icon.classList.add('fa-light');
+        button.setAttribute('title', 'Zu Favoriten hinzufügen');
+        button.setAttribute('aria-pressed', 'false');
+      }
+    }
+
+    /**
+     * Update local state cache
+     */
+  }, {
+    key: "updateLocalState",
+    value: function updateLocalState(productId, configCode, isFavourite) {
+      if (!this.states[productId]) {
+        this.states[productId] = {
+          is_favourite: false,
+          config_codes: []
+        };
+      }
+      if (configCode) {
+        if (isFavourite) {
+          if (!this.states[productId].config_codes.includes(configCode)) {
+            this.states[productId].config_codes.push(configCode);
+          }
+        } else {
+          this.states[productId].config_codes = this.states[productId].config_codes.filter(function (code) {
+            return code !== configCode;
+          });
+        }
+
+        // Update general favourite state
+        this.states[productId].is_favourite = this.states[productId].config_codes.length > 0;
+      } else {
+        this.states[productId].is_favourite = isFavourite;
+        if (!isFavourite) {
+          this.states[productId].config_codes = [];
+        }
+      }
+    }
+
+    /**
+     * Send AJAX toggle request
+     */
+  }, {
+    key: "sendToggleRequest",
+    value: (function () {
+      var _sendToggleRequest = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3(productId, configCode) {
+        var formData, response;
+        return _regenerator().w(function (_context3) {
+          while (1) switch (_context3.n) {
+            case 0:
+              formData = new FormData();
+              formData.append('action', 'favourite_toggle');
+              formData.append('product_id', productId);
+              formData.append('nonce', favouritesData.nonce);
+              if (configCode) {
+                formData.append('config_code', configCode);
+              }
+              _context3.n = 1;
+              return fetch(favouritesData.ajaxUrl, {
+                method: 'POST',
+                body: formData
+              });
+            case 1:
+              response = _context3.v;
+              _context3.n = 2;
+              return response.json();
+            case 2:
+              return _context3.a(2, _context3.v);
+          }
+        }, _callee3);
+      }));
+      function sendToggleRequest(_x3, _x4) {
+        return _sendToggleRequest.apply(this, arguments);
+      }
+      return sendToggleRequest;
+    }()
+    /**
+     * Update badge counter
+     */
+    )
+  }, {
+    key: "updateBadge",
+    value: function updateBadge() {
+      var _this4 = this;
+      var badges = document.querySelectorAll('.favourites-count');
+      badges.forEach(function (badge) {
+        badge.textContent = _this4.count;
+        badge.style.display = _this4.count > 0 ? 'inline' : 'none';
+      });
+    }
+
+    /**
+     * Show error message
+     */
+  }, {
+    key: "showError",
+    value: function showError(message) {
+      // Could integrate with your existing notification system
+      alert(message);
+    }
+  }]);
+}(); // Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', function () {
+  // Verify required data is available
+  if (typeof favouritesData === 'undefined') {
+    console.error('❌ [Favourites] favouritesData not found');
     return;
   }
 
-  // ====================== UTILITY FUNCTIONS ======================
-
-  /**
-   * Debounce function to prevent rapid successive AJAX calls
-   * Improves performance and prevents server overload from rapid clicking
-   *
-   * @param {Function} func - Function to debounce
-   * @param {number} wait - Delay in milliseconds
-   * @returns {Function} Debounced function
-   *
-   * @example
-   * const debouncedHandler = debounce(myFunction, 300);
-   */
-  function debounce(func, wait) {
-    var timeout;
-    return function executedFunction() {
-      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
-      }
-      var later = function later() {
-        clearTimeout(timeout);
-        func.apply(void 0, args);
-      };
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-    };
+  // Prevent double initialization
+  if (window.favouritesManagerInstance) {
+    console.warn('⚠️ [Favourites] Already initialized, skipping');
+    return;
   }
-
-  /**
-   * Extract and validate configuration code from button element
-   * Supports multiple fallback methods for configuration code retrieval
-   *
-   * @param {jQuery} button - jQuery button element containing config data
-   * @returns {string|null} Valid 6-character config code or null
-   *
-   * @example
-   * const configCode = getConfigCode($('.btn-favourite'));
-   * // Returns: "ABC123" or null
-   */
-  function getConfigCode(button) {
-    var configCode = button.data("config-code") || button.attr("data-config-code");
-
-    // 1. Primary validation and sanitization
-    if (configCode === undefined || configCode === null || configCode === "" || configCode === "undefined") {
-      configCode = null;
-    } else if (typeof configCode === "string") {
-      configCode = configCode.trim();
-      if (configCode === "" || configCode === "undefined" || configCode === "null") {
-        configCode = null;
-      }
-    }
-
-    // 2. Validate format (6-character alphanumeric code)
-    if (configCode && typeof configCode === "string" && /^[A-Z0-9]{6}$/.test(configCode)) {
-      return configCode;
-    }
-
-    // 3. Fallback methods for configuration code retrieval
-    if (!configCode) {
-      // 3a. Global configurator function fallback
-      if (typeof window.getConfiguratorCode === "function") {
-        try {
-          var globalConfig = window.getConfiguratorCode();
-          if (globalConfig && typeof globalConfig === "string" && globalConfig.trim() !== "") {
-            configCode = globalConfig.trim();
-          }
-        } catch (e) {
-          // Silent error handling for production stability
-        }
-      }
-
-      // 3b. URL parameter fallback
-      if (!configCode) {
-        var urlParams = new URLSearchParams(window.location.search);
-        var urlConfig = urlParams.get("load_config") || urlParams.get("config_code");
-        if (urlConfig && typeof urlConfig === "string" && urlConfig.trim() !== "") {
-          configCode = urlConfig.trim();
-        }
-      }
-    }
-
-    // 4. Final validation of retrieved configuration code
-    return configCode && /^[A-Z0-9]{6}$/.test(configCode) ? configCode : null;
-  }
-
-  /**
-   * Create unique favourite identifier combining product ID and config code
-   * Used for tracking specific product configurations as separate favourites
-   *
-   * @param {number|string} productId - WooCommerce product ID
-   * @param {string|null} configCode - Optional configuration code
-   * @returns {string} Unique favourite identifier
-   *
-   * @example
-   * createFavouriteId(123, "ABC123") // Returns: "123_ABC123"
-   * createFavouriteId(123, null)     // Returns: "123"
-   */
-  function createFavouriteId(productId, configCode) {
-    return configCode ? "".concat(productId, "_").concat(configCode) : "".concat(productId);
-  }
-
-  // ====================== VISUAL FEEDBACK SYSTEM ======================
-
-  /**
-   * Update favourites badge display with count and animations
-   * Handles both numeric badge and icon-only displays with smooth transitions
-   *
-   * @param {number} count - Current favourites count
-   *
-   * @example
-   * updateFavouritesBadgeDisplay(5); // Shows badge with "5"
-   * updateFavouritesBadgeDisplay(0); // Hides badge
-   */
-  function updateFavouritesBadgeDisplay(count) {
-    var badge = $("#favourites-badge");
-    var heartIcon = $("#favourites-header-link i");
-    count = parseInt(count) || 0;
-
-    // Badge-based display (primary method)
-    if (badge.length > 0) {
-      if (count > 0) {
-        badge.text(count).show();
-
-        // Animate badge when count increases
-        var lastCount = badge.data("last-count") || 0;
-        if (count > lastCount) {
-          badge.addClass("animate__animated animate__pulse");
-          setTimeout(function () {
-            badge.removeClass("animate__animated animate__pulse");
-          }, 600);
-        }
-        badge.data("last-count", count);
-      } else {
-        badge.hide();
-      }
-    } else {
-      // Icon-only display (fallback method)
-      if (heartIcon.length > 0) {
-        if (count > 0) {
-          heartIcon.removeClass("fa-thin").addClass("fa-solid text-warning");
-        } else {
-          heartIcon.removeClass("fa-solid text-warning").addClass("fa-thin");
-        }
-      }
-    }
-  }
-
-  // Expose badge update function globally for external use
-  window.updateFavouritesBadgeDisplay = updateFavouritesBadgeDisplay;
-
-  // ====================== FAVOURITE BUTTON HANDLER ======================
-
-  /**
-   * Main favourite button click handler with debouncing and comprehensive error handling
-   * Manages the complete favourite toggle workflow including visual feedback,
-   * AJAX communication, state management, and error recovery
-   *
-   * @param {jQuery} button - The favourite button element
-   */
-  var favouriteButtonHandler = debounce(function (button) {
-    var heartIcon = button.find("i");
-
-    // 1. Prevent concurrent requests
-    if (button.data("processing")) {
-      return;
-    }
-    button.data("processing", true);
-
-    // 2. Determine current and target states
-    var isCurrentlyFavourite = heartIcon.hasClass("text-warning");
-    var willBeFavourite = !isCurrentlyFavourite;
-
-    // 3. Apply immediate visual feedback for responsiveness
-    if (willBeFavourite) {
-      heartIcon.removeClass("fa-light").addClass("fa-solid fa-heart text-warning");
-      button.attr("title", "Aus Favoriten entfernen");
-      button.attr("aria-pressed", "true");
-    } else {
-      heartIcon.removeClass("fa-solid text-warning").addClass("fa-light fa-heart");
-      button.attr("title", "Zu Favoriten hinzufügen");
-      button.attr("aria-pressed", "false");
-    }
-
-    // 4. Extract and validate required data
-    var productId = button.data("product-id");
-    var configCode = getConfigCode(button);
-
-    // 4a. Validate product ID
-    if (!productId || productId <= 0 || isNaN(productId)) {
-      rollbackToOriginalState();
-      button.removeData("processing");
-      return;
-    }
-
-    // 4b. Sanitize configuration code
-    if (configCode === undefined || configCode === "undefined" || configCode === "") {
-      configCode = null;
-    }
-
-    // 5. Provide haptic feedback for mobile devices
-    if ("vibrate" in navigator && /Mobi|Android/i.test(navigator.userAgent)) {
-      navigator.vibrate(willBeFavourite ? [50] : [30, 30, 30]);
-    }
-
-    // 6. Prepare AJAX request data
-    var ajaxData = {
-      action: "toggle_favourite",
-      product_id: productId,
-      nonce: myAjaxData.favouriteNonce
-    };
-
-    // 6a. Include configuration code if available
-    if (configCode !== null && configCode !== undefined && configCode !== "") {
-      ajaxData.config_code = configCode;
-    }
-
-    // 7. Execute AJAX request with comprehensive error handling
-    $.ajax({
-      url: myAjaxData.ajaxUrl,
-      type: "POST",
-      data: ajaxData,
-      success: function success(response) {
-        if (response.success) {
-          // 7a. Update favourite ID tracking
-          if (response.data.action === "added") {
-            var favId = createFavouriteId(productId, configCode);
-            button.attr("data-favourite-id", favId);
-          } else if (response.data.action === "removed") {
-            button.removeAttr("data-favourite-id");
-          }
-
-          // 7b. Update global badge counter
-          if (typeof response.data.count !== "undefined") {
-            updateFavouritesBadgeDisplay(response.data.count);
-          }
-        } else {
-          var _response$data;
-          // 7c. Handle server-side errors
-          rollbackToOriginalState();
-          alert(((_response$data = response.data) === null || _response$data === void 0 ? void 0 : _response$data.message) || "Ein Fehler ist aufgetreten.");
-        }
-      },
-      error: function error(xhr, status, _error) {
-        // 7d. Handle network and HTTP errors
-        rollbackToOriginalState();
-        var errorMessage = "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.";
-        if (xhr.status === 0) {
-          errorMessage = "Keine Verbindung zum Server.";
-        } else if (xhr.status >= 500) {
-          errorMessage = "Server-Fehler. Bitte versuchen Sie es später erneut.";
-        } else if (xhr.status === 403) {
-          errorMessage = "Sitzung abgelaufen. Bitte laden Sie die Seite neu.";
-        }
-        alert(errorMessage);
-      },
-      complete: function complete() {
-        // 7e. Always clean up processing state
-        button.removeData("processing");
-      }
-    });
-
-    /**
-     * Rollback visual state to original condition on error
-     * Ensures UI consistency when AJAX requests fail
-     */
-    function rollbackToOriginalState() {
-      if (isCurrentlyFavourite) {
-        heartIcon.removeClass("fa-light").addClass("fa-solid fa-heart text-warning");
-        button.attr("title", "Aus Favoriten entfernen");
-        button.attr("aria-pressed", "true");
-        var favId = createFavouriteId(productId, configCode);
-        button.attr("data-favourite-id", favId);
-      } else {
-        heartIcon.removeClass("fa-solid text-warning").addClass("fa-light fa-heart");
-        button.attr("title", "Zu Favoriten hinzufügen");
-        button.attr("aria-pressed", "false");
-        button.removeAttr("data-favourite-id");
-      }
-    }
-  }, 300);
-
-  // ====================== EVENT LISTENERS ======================
-
-  /**
-   * Primary favourite button click event handler
-   * Uses event delegation for dynamically added buttons
-   */
-  $(document).on("click", ".btn-favourite-loop", function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-    var button = $(this);
-
-    // Prevent processing if already handling a request
-    if (button.data("processing")) {
-      return false;
-    }
-    favouriteButtonHandler(button);
-  });
-
-  /**
-   * BULK OPERATIONS
-   * ===============
-   */
-
-  /**
-   * Clear all favourites handler with confirmation dialog
-   * Provides bulk deletion functionality with user confirmation
-   */
-  $(document).on("click", "#clear-all-favourites", function (e) {
-    e.preventDefault();
-
-    // User confirmation for destructive action
-    if (!confirm("Möchten Sie wirklich alle Favoriten löschen? Diese Aktion kann nicht rückgängig gemacht werden.")) {
-      return;
-    }
-    var button = $(this);
-    var originalText = button.html();
-
-    // Visual loading state
-    button.prop("disabled", true).html('<i class="fa-light fa-sharp fa-spinner fa-spin me-1"></i>Lösche...');
-    $.ajax({
-      url: myAjaxData.ajaxUrl,
-      type: "POST",
-      data: {
-        action: "clear_all_favourites",
-        nonce: myAjaxData.favouriteNonce
-      },
-      success: function success(response) {
-        if (response.success) {
-          updateFavouritesBadgeDisplay(0);
-          // Delay reload for smooth user experience
-          setTimeout(function () {
-            location.reload();
-          }, 500);
-        } else {
-          var _response$data2;
-          alert(((_response$data2 = response.data) === null || _response$data2 === void 0 ? void 0 : _response$data2.message) || "Fehler beim Löschen der Favoriten.");
-          button.prop("disabled", false).html(originalText);
-        }
-      },
-      error: function error(xhr, status, _error2) {
-        alert("Fehler beim Löschen der Favoriten.");
-        button.prop("disabled", false).html(originalText);
-      }
-    });
-  });
-
-  /**
-   * FAVOURITES PAGE SPECIFIC HANDLING
-   * =================================
-   */
-
-  /**
-   * Remove favourite from favourites page with smooth animations
-   * Handles context-specific removal with card animations
-   */
-  $(document).on("click", ".favourite-context", function (e) {
-    var button = $(this);
-    var productCard = button.closest(".card, .favourite-product-card, .wc-block-grid__product, .product");
-
-    // Only process on favourites page
-    if ($(".favourites-container").length === 0) {
-      return;
-    }
-
-    // Set up one-time success handler for smooth removal animation
-    button.one("ajaxSuccess", function () {
-      setTimeout(function () {
-        // Verify favourite was actually removed
-        if (!button.find("i").hasClass("text-warning")) {
-          productCard.addClass("removing");
-          setTimeout(function () {
-            productCard.fadeOut(300, function () {
-              productCard.remove();
-
-              // Check if any products remain
-              var remainingProducts = $(".card, .favourite-product-card, .wc-block-grid__product, .product").filter(":visible");
-              if (remainingProducts.length === 0) {
-                // Reload page when no favourites remain
-                setTimeout(function () {
-                  location.reload();
-                }, 1000);
-              }
-            });
-          }, 500);
-        }
-      }, 1500);
-    });
-  });
-
-  // ====================== STATE INITIALIZATION ======================
-
-  /**
-   * Initialize favourite button states based on current user favourites
-   * Queries server for current favourite state and updates UI accordingly
-   */
-  function initializeFavouriteStates() {
-    $(".btn-favourite-loop").each(function () {
-      var button = $(this);
-      var productId = button.data("product-id");
-      var configCode = getConfigCode(button);
-      var heartIcon = button.find("i");
-
-      // Skip invalid product IDs
-      if (!productId || productId <= 0) {
-        return;
-      }
-
-      // Special handling for favourites page (all items are favourites)
-      if ($(".favourites-container").length > 0) {
-        heartIcon.removeClass("fa-light").addClass("fa-solid text-warning");
-        button.attr("title", "Aus Favoriten entfernen");
-        button.attr("aria-pressed", "true");
-        var favId = createFavouriteId(productId, configCode);
-        button.attr("data-favourite-id", favId);
-        return;
-      }
-
-      // AJAX state check for other pages
-      var ajaxData = {
-        action: "check_config_favourite_state",
-        product_id: productId,
-        nonce: myAjaxData.favouriteNonce
-      };
-
-      // Include configuration code if available
-      if (configCode !== null && configCode !== "") {
-        ajaxData.config_code = configCode;
-      }
-      $.ajax({
-        url: myAjaxData.ajaxUrl,
-        type: "POST",
-        data: ajaxData,
-        success: function success(response) {
-          if (response.success && response.data.is_favourite) {
-            heartIcon.removeClass("fa-light").addClass("fa-solid text-warning");
-            button.attr("title", "Aus Favoriten entfernen");
-            button.attr("aria-pressed", "true");
-            var _favId = createFavouriteId(productId, configCode);
-            button.attr("data-favourite-id", _favId);
-          }
-        },
-        error: function error(xhr, status, _error3) {
-          // Silent error handling in production
-        }
-      });
-    });
-  }
-
-  // ====================== CONFIGURATOR INTEGRATION ======================
-
-  /**
-   * Global function for configurator integration
-   * Allows configurator system to add current configuration to favourites
-   *
-   * @param {number} productId - WooCommerce product ID
-   * @param {string} configCode - Configuration code to save
-   * @returns {Promise} Promise that resolves with server response
-   *
-   * @example
-   * window.addCurrentConfigToFavourites(123, "ABC123")
-   *   .then(data => console.log('Added to favourites'))
-   *   .catch(error => console.error('Failed to add'));
-   */
-  window.addCurrentConfigToFavourites = function (productId, configCode) {
-    if (!productId || !configCode) {
-      return Promise.reject("Missing parameters");
-    }
-    return new Promise(function (resolve, reject) {
-      $.ajax({
-        url: myAjaxData.ajaxUrl,
-        type: "POST",
-        data: {
-          action: "add_favourite_with_config",
-          product_id: productId,
-          config_code: configCode,
-          nonce: myAjaxData.favouriteNonce
-        },
-        success: function success(response) {
-          if (response.success) {
-            // Update global badge counter
-            updateFavouritesBadgeDisplay(response.data.count);
-
-            // Update all matching buttons on page
-            $(".btn-favourite-loop[data-product-id=\"".concat(productId, "\"]")).each(function () {
-              var button = $(this);
-              var buttonConfigCode = getConfigCode(button);
-              if (buttonConfigCode === configCode) {
-                var heartIcon = button.find("i");
-                heartIcon.removeClass("fa-light").addClass("fa-solid text-warning");
-                button.attr("title", "Aus Favoriten entfernen");
-                button.attr("aria-pressed", "true");
-              }
-            });
-            resolve(response.data);
-          } else {
-            var _response$data3;
-            reject(((_response$data3 = response.data) === null || _response$data3 === void 0 ? void 0 : _response$data3.message) || "Failed to add to favourites");
-          }
-        },
-        error: function error(xhr, status, _error4) {
-          reject(_error4);
-        }
-      });
-    });
-  };
-
-  // ====================== MODULE INITIALIZATION ======================
-
-  /**
-   * Initialize favourites badge count on page load
-   * Fetches current count from server and updates display
-   */
-  $.ajax({
-    url: myAjaxData.ajaxUrl,
-    type: "POST",
-    data: {
-      action: "get_favourites_count",
-      nonce: myAjaxData.favouriteNonce
-    },
-    success: function success(response) {
-      if (response.success) {
-        updateFavouritesBadgeDisplay(response.data.count);
-      }
-    }
-  });
-
-  /**
-   * Initialize favourite states after short delay
-   * Ensures DOM is fully rendered before state initialization
-   */
-  setTimeout(function () {
-    initializeFavouriteStates();
-  }, 100);
-
-  /**
-   * Re-initialize states on configurator events
-   * Handles dynamic content loading and state changes
-   */
-  $(document).on("configurator-ready configurator-loaded page-ready", function () {
-    setTimeout(function () {
-      initializeFavouriteStates();
-    }, 500);
-  });
-});
-
-// ====================== AUTHENTICATION FORM HANDLING ======================
-
-/**
- * Handle authentication form toggles and smooth transitions
- * Provides seamless switching between login and registration forms
- */
-$(document).ready(function () {
-  // Handle toggle between login and register forms
-  $('[data-bs-toggle="collapse"][data-bs-target="#favourites-login-form"]').on("click", function (e) {
-    e.preventDefault();
-    var $loginBtn = $(this);
-    var $registerBtn = $('[data-bs-toggle="collapse"][data-bs-target="#favourites-register-form"]');
-    var $loginForm = $("#favourites-login-form");
-    var $registerForm = $("#favourites-register-form");
-
-    // Update button states
-    $loginBtn.removeClass("btn-outline-primary").addClass("btn-primary");
-    $registerBtn.removeClass("btn-primary").addClass("btn-outline-primary");
-
-    // Show login form, hide register form
-    $registerForm.collapse("hide");
-    setTimeout(function () {
-      $loginForm.collapse("show");
-    }, 150);
-  });
-  $('[data-bs-toggle="collapse"][data-bs-target="#favourites-register-form"]').on("click", function (e) {
-    e.preventDefault();
-    var $registerBtn = $(this);
-    var $loginBtn = $('[data-bs-toggle="collapse"][data-bs-target="#favourites-login-form"]');
-    var $loginForm = $("#favourites-login-form");
-    var $registerForm = $("#favourites-register-form");
-
-    // Update button states
-    $registerBtn.removeClass("btn-outline-primary").addClass("btn-primary");
-    $loginBtn.removeClass("btn-primary").addClass("btn-outline-primary");
-
-    // Show register form, hide login form
-    $loginForm.collapse("hide");
-    setTimeout(function () {
-      $registerForm.collapse("show");
-    }, 150);
-  });
-
-  // ====================== GUEST ACCOUNT COLLAPSE HANDLING ======================
-
-  /**
-   * Enhanced guest account collapse toggle behavior
-   * Fades out and disables toggle button when account section is opened
-   */
-
-  // Handle guest account section toggle button
-  $(".guest-account-toggle").on("click", function (e) {
-    var $toggleButton = $(this);
-    var $guestAccountSection = $("#guest-account-section");
-
-    // Prevent default Bootstrap collapse behavior temporarily
-    e.preventDefault();
-    e.stopPropagation();
-
-    // Check if section is currently collapsed
-    if (!$guestAccountSection.hasClass("show")) {
-      // About to show - disable button and show section
-      $toggleButton.prop("disabled", true).addClass("pe-none");
-      $guestAccountSection.collapse("show");
-    }
-  });
-
-  // Handle collapse events for guest account section
-  var $guestAccountSection = $("#guest-account-section");
-  var $guestToggleButton = $(".guest-account-toggle");
-  if ($guestAccountSection.length && $guestToggleButton.length) {
-    // When collapse is fully shown
-    $guestAccountSection.on("shown.bs.collapse", function () {
-      // Auto-focus first input field
-      var $firstInput = $(this).find('input[type="text"], input[type="email"]').first();
-      if ($firstInput.length) {
-        setTimeout(function () {
-          return $firstInput.focus();
-        }, 100);
-      }
-    });
-
-    // When collapse starts to hide
-    $guestAccountSection.on("hide.bs.collapse", function () {
-      // Re-enable the toggle button
-      $guestToggleButton.removeClass("pe-none").prop("disabled", false);
-    });
-
-    // Optional: Handle programmatic closing (e.g., successful login)
-    $guestAccountSection.on("hidden.bs.collapse", function () {
-      // Ensure button is enabled
-      if ($guestToggleButton.prop("disabled")) {
-        $guestToggleButton.removeClass("pe-none").prop("disabled", false);
-      }
-    });
-  }
-
-  // ====================== FORM SUBMISSION HANDLING ======================
-
-  // Handle form submission with loading states
-  $(".woocommerce-form-login").on("submit", function () {
-    var $form = $(this);
-    var $submitBtn = $form.find('button[type="submit"]');
-    var originalText = $submitBtn.html();
-    $submitBtn.prop("disabled", true).html('<i class="fa-light fa-sharp fa-spinner fa-spin me-2"></i>Anmelden...');
-
-    // Store action for potential page reload handling
-    localStorage.setItem("favourites_login_attempt", "true");
-
-    // Reset button after 10 seconds (fallback)
-    setTimeout(function () {
-      $submitBtn.prop("disabled", false).html(originalText);
-    }, 10000);
-  });
-  $(".woocommerce-form-register").on("submit", function () {
-    var $form = $(this);
-    var $submitBtn = $form.find('button[type="submit"]');
-    var originalText = $submitBtn.html();
-    $submitBtn.prop("disabled", true).html('<i class="fa-light fa-sharp fa-spinner fa-spin me-2"></i>Registrieren...');
-
-    // Store action for potential page reload handling
-    localStorage.setItem("favourites_register_attempt", "true");
-
-    // Reset button after 10 seconds (fallback)
-    setTimeout(function () {
-      $submitBtn.prop("disabled", false).html(originalText);
-    }, 10000);
-  });
-
-  // ====================== POST-AUTHENTICATION HANDLING ======================
-
-  /**
-   * Handle successful login/registration scenarios
-   * Automatically reload page if authentication was successful
-   */
-  $(document).ready(function () {
-    // Check if we returned from a login/register attempt
-    var loginAttempt = localStorage.getItem("favourites_login_attempt");
-    var registerAttempt = localStorage.getItem("favourites_register_attempt");
-    if (loginAttempt === "true" || registerAttempt === "true") {
-      // Clear the flags
-      localStorage.removeItem("favourites_login_attempt");
-      localStorage.removeItem("favourites_register_attempt");
-
-      // Check if user is now logged in (basic check)
-      if ($("body").hasClass("logged-in") || $(".woocommerce-MyAccount-navigation").length > 0) {
-        // User successfully logged in, reload to show authenticated view
-        setTimeout(function () {
-          window.location.reload();
-        }, 1000);
-      }
-    }
-  });
-
-  // Auto-focus first input when forms are shown (original functionality preserved)
-  $("#favourites-login-form").on("shown.bs.collapse", function () {
-    $(this).find('input[name="username"]').focus();
-  });
-  $("#favourites-register-form").on("shown.bs.collapse", function () {
-    $(this).find('input[name="username"], input[name="email"]').first().focus();
-  });
-
-  // ====================== UTILITY FUNCTIONS FOR GUEST HANDLING ======================
-
-  /**
-   * Programmatically close guest account section
-   * Useful for external triggers (e.g., successful authentication)
-   */
-  window.closeGuestAccountSection = function () {
-    var $guestAccountSection = $("#guest-account-section");
-    if ($guestAccountSection.hasClass("show")) {
-      $guestAccountSection.collapse("hide");
-    }
-  };
-
-  /**
-   * Programmatically open guest account section
-   * Useful for external triggers or deep linking
-   */
-  window.openGuestAccountSection = function () {
-    var $guestAccountSection = $("#guest-account-section");
-    var $toggleButton = $(".guest-account-toggle");
-    if (!$guestAccountSection.hasClass("show")) {
-      // Trigger the same behavior as clicking the button
-      $toggleButton.prop("disabled", true).addClass("pe-none");
-      $guestAccountSection.collapse("show");
-    }
-  };
-});
-
-// ====================== SMART NAVIGATION UTILITIES ======================
-
-/**
- * Intelligent back navigation handler with history detection
- * Handles cases where no browser history exists (direct URL entry, incognito mode)
- */
-window.handleBackNavigation = function () {
-  if (window.history.length > 1) {
-    window.history.back();
-  } else {
-    // Fallback to home page when no history available
-    window.location.href = "/";
-  }
-};
-
-/**
- * Initialize smart back button display
- * Only shows back button if browser history is available
- */
-function initializeSmartBackButton() {
-  var backButton = document.getElementById("back-button");
-  if (backButton && window.history.length > 1) {
-    backButton.style.display = "inline-block";
-  }
-}
-
-// Initialize back button on DOM ready
-$(document).ready(function () {
-  initializeSmartBackButton();
+  window.favouritesManagerInstance = new FavouritesManager();
 });
 
 /***/ }),
@@ -12278,6 +11996,40 @@ if (NOT_GENERIC || INCORRECT_NAME) {
     return '/' + pattern + '/' + flags;
   }, { unsafe: true });
 }
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/modules/es.set.constructor.js":
+/*!************************************************************!*\
+  !*** ./node_modules/core-js/modules/es.set.constructor.js ***!
+  \************************************************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+var collection = __webpack_require__(/*! ../internals/collection */ "./node_modules/core-js/internals/collection.js");
+var collectionStrong = __webpack_require__(/*! ../internals/collection-strong */ "./node_modules/core-js/internals/collection-strong.js");
+
+// `Set` constructor
+// https://tc39.es/ecma262/#sec-set-objects
+collection('Set', function (init) {
+  return function Set() { return init(this, arguments.length ? arguments[0] : undefined); };
+}, collectionStrong);
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/modules/es.set.js":
+/*!************************************************!*\
+  !*** ./node_modules/core-js/modules/es.set.js ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+// TODO: Remove this module from `core-js@4` since it's replaced to module below
+__webpack_require__(/*! ../modules/es.set.constructor */ "./node_modules/core-js/modules/es.set.constructor.js");
 
 
 /***/ }),

@@ -50,7 +50,7 @@ select {
 // Check and Radio
 //
 
-input[type="checkbox"]:not([id*="createaccount"]),
+input[type="checkbox"]:not([id*="createaccount"]), // "createaccount" automatic validation makes it green without user interaction
 input[type="radio"] {
   // Validation
   .woocommerce-invalid & {

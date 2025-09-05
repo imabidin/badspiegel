@@ -1,17 +1,21 @@
 # WordPress mit Xdebug für Development
 FROM wordpress:6.6-php8.2-fpm
 
-# Xdebug und Redis installieren, OPcache aktivieren
-RUN pecl install xdebug redis && \
-    docker-php-ext-enable xdebug redis opcache
+# Xdebug, Redis und XHProf installieren, OPcache aktivieren
+RUN pecl install xdebug redis xhprof && \
+    docker-php-ext-enable xdebug redis opcache xhprof
 
-# Zusätzliche Tools für WordPress Development
+# Zusätzliche Tools für WordPress Development und SOAP extension dependencies
 RUN apt-get update && apt-get install -y \
     zip unzip \
     wget \
     less \
     procps \
+    libxml2-dev \
     && rm -rf /var/lib/apt/lists/*
+
+# SOAP extension installieren
+RUN docker-php-ext-install soap
 
 # User für Berechtigungen erstellen
 RUN groupadd -g 1000 devuser && \

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Template for embedding legal page content within email footer.
  *
@@ -18,16 +19,16 @@
  * @var string $post_content
  * @var boolean $print_title
  */
-if ( ! defined( 'ABSPATH' ) ) {
+if (! defined('ABSPATH')) {
 	exit;
 } // Exit if accessed directly
 ?>
-<div class="wc-gzd-email-attach-post smaller" id="wc-gzd-email-attach-post-<?php echo esc_attr( get_the_ID() ); ?>">
-	<?php if ( $print_title ) : ?>
+<div class="wc-gzd-email-attach-post smaller" id="wc-gzd-email-attach-post-<?php echo esc_attr(get_the_ID()); ?>">
+	<?php if ($print_title) : ?>
 		<h4 class="wc-gzd-mail-main-title"><?php the_title(); ?></h4>
 	<?php endif; ?>
 
 	<div class="wc-gzd-email-attached-content">
-		<?php echo wp_kses_post( $post_content ); ?>
+		<?php echo wp_kses_post($post_content); ?>
 	</div>
 </div>

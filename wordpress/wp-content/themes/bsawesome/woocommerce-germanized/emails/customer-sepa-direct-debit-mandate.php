@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Customer SEPA direct debit mandate.
  *
@@ -14,22 +15,22 @@
  * @package Germanized/Templates
  * @version 1.0.1
  */
-if ( ! defined( 'ABSPATH' ) ) {
+if (! defined('ABSPATH')) {
 	exit; // Exit if accessed directly
 }
 ?>
-<?php do_action( 'woocommerce_email_header', $email_heading, $email ); ?>
+<?php do_action('woocommerce_email_header', $email_heading, $email); ?>
 
-<p><?php printf( esc_html__( 'Please see the SEPA direct debit mandate for order %s attached to this email.', 'woocommerce-germanized' ), esc_html( $order->get_order_number() ) ); ?></p>
-<?php echo wp_kses_post( wptexturize( $gateway->generate_mandate_by_order( $order ) ) ); ?>
+<p><?php printf(esc_html__('Please see the SEPA direct debit mandate for order %s attached to this email.', 'woocommerce-germanized'), esc_html($order->get_order_number())); ?></p>
+<?php echo wp_kses_post(wptexturize($gateway->generate_mandate_by_order($order))); ?>
 
 <?php
 /**
  * Show user-defined additional content - this is set in each email's settings.
  */
-if ( $additional_content ) {
-	echo wp_kses_post( wpautop( wptexturize( $additional_content ) ) );
+if ($additional_content) {
+	echo wp_kses_post(wpautop(wptexturize($additional_content)));
 }
 ?>
 
-<?php do_action( 'woocommerce_email_footer', $email ); ?>
+<?php do_action('woocommerce_email_footer', $email); ?>

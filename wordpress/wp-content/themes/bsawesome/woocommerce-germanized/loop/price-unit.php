@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The Template for displaying unit price for a certain product.
  *
@@ -14,13 +15,13 @@
  * @package Germanized/Templates
  * @version 3.9.0
  */
-if ( ! defined( 'ABSPATH' ) ) {
+if (! defined('ABSPATH')) {
 	exit;
 } // Exit if accessed directly
 
 global $product;
 ?>
 
-<?php if ( wc_gzd_get_product( $product )->has_unit() ) : ?>
-	<p class="price price-unit smaller wc-gzd-additional-info wc-gzd-additional-info-loop"><?php echo wp_kses_post( wc_gzd_get_product( $product )->get_unit_price_html() ); ?></p>
+<?php if (wc_gzd_get_product($product)->has_unit()) : ?>
+	<p class="price price-unit smaller wc-gzd-additional-info wc-gzd-additional-info-loop"><?php echo wp_kses_post(wc_gzd_get_product($product)->get_unit_price_html()); ?></p>
 <?php endif; ?>

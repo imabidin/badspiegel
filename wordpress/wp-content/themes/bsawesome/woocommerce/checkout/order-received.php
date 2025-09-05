@@ -1,4 +1,5 @@
 <?php
+
 /**
  * "Order received" message.
  *
@@ -17,7 +18,7 @@
  * @var WC_Order|false $order
  */
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 ?>
 
 <p class="woocommerce-notice woocommerce-notice--success woocommerce-thankyou-order-received">
@@ -32,7 +33,7 @@ defined( 'ABSPATH' ) || exit;
 	 */
 	$message = apply_filters(
 		'woocommerce_thankyou_order_received_text',
-		esc_html( __( 'Thank you. Your order has been received.', 'woocommerce' ) ),
+		esc_html(__('Thank you. Your order has been received.', 'woocommerce')),
 		$order
 	);
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The Template for displaying the manufacturer for a certain product.
  *
@@ -14,23 +15,23 @@
  * @package Germanized/Templates
  * @version 3.18.8
  */
-if ( ! defined( 'ABSPATH' ) ) {
+if (! defined('ABSPATH')) {
 	exit;
 } // Exit if accessed directly
 
 global $product;
 ?>
 
-<?php if ( wc_gzd_get_product( $product )->get_manufacturer_html() ) : ?>
-	<?php if ( isset( $print_title ) && $print_title ) : ?>
-		<h3 class="wc-gzd-product-manufacturer-heading"><?php echo esc_html( apply_filters( 'woocommerce_gzd_product_manufacturer_heading', __( 'Manufacturer information', 'woocommerce-germanized' ) ) ); ?></h3>
+<?php if (wc_gzd_get_product($product)->get_manufacturer_html()) : ?>
+	<?php if (isset($print_title) && $print_title) : ?>
+		<h3 class="wc-gzd-product-manufacturer-heading"><?php echo esc_html(apply_filters('woocommerce_gzd_product_manufacturer_heading', __('Manufacturer information', 'woocommerce-germanized'))); ?></h3>
 	<?php endif; ?>
 
 	<div class="manufacturer wc-gzd-additional-info">
-		<?php echo wp_kses_post( wc_gzd_get_product( $product )->get_manufacturer_html() ); ?>
+		<?php echo wp_kses_post(wc_gzd_get_product($product)->get_manufacturer_html()); ?>
 	</div>
-<?php elseif ( $product->is_type( 'variable' ) ) : ?>
-	<?php if ( isset( $print_title ) && $print_title ) : ?>
+<?php elseif ($product->is_type('variable')) : ?>
+	<?php if (isset($print_title) && $print_title) : ?>
 		<h3 class="wc-gzd-product-manufacturer-heading wc-gzd-additional-info-placeholder" aria-hidden="true"></h3>
 	<?php endif; ?>
 

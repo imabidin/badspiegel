@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Customer revocation email (plain-text).
  *
@@ -14,24 +15,24 @@
  * @package Germanized/Templates
  * @version 1.0.1
  */
-if ( ! defined( 'ABSPATH' ) ) {
+if (! defined('ABSPATH')) {
 	exit;
 } // Exit if accessed directly
 
 $fields = WC_GZD_Revocation::get_fields();
 
 echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n";
-echo esc_html( wp_strip_all_tags( $email_heading ) );
+echo esc_html(wp_strip_all_tags($email_heading));
 echo "\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n";
 
-echo esc_html_x( 'By sending you this email we confirm your Revocation. Please review your data.', 'revocation-form', 'woocommerce-germanized' ) . "\n\n";
+echo esc_html_x('By sending you this email we confirm your Revocation. Please review your data.', 'revocation-form', 'woocommerce-germanized') . "\n\n";
 
 echo "\n----------------------------------------\n\n";
 
-if ( ! empty( $fields ) ) {
-	foreach ( $fields as $name => $field ) {
-		if ( ! empty( $user[ $name ] ) ) {
-			echo esc_html( $field['label'] ) . ': ' . esc_html( $user[ $name ] ) . "\n";
+if (! empty($fields)) {
+	foreach ($fields as $name => $field) {
+		if (! empty($user[$name])) {
+			echo esc_html($field['label']) . ': ' . esc_html($user[$name]) . "\n";
 		}
 	}
 }
@@ -41,9 +42,9 @@ echo "\n\n----------------------------------------\n\n";
 /**
  * Show user-defined additional content - this is set in each email's settings.
  */
-if ( $additional_content ) {
-	echo esc_html( wp_strip_all_tags( wptexturize( $additional_content ) ) );
+if ($additional_content) {
+	echo esc_html(wp_strip_all_tags(wptexturize($additional_content)));
 	echo "\n\n----------------------------------------\n\n";
 }
 
-echo wp_kses_post( apply_filters( 'woocommerce_email_footer_text', get_option( 'woocommerce_email_footer_text' ) ) );
+echo wp_kses_post(apply_filters('woocommerce_email_footer_text', get_option('woocommerce_email_footer_text')));

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The Template for displaying shipping costs information.
  *
@@ -14,15 +15,15 @@
  * @package Germanized/Templates
  * @version 1.0.2
  */
-if ( ! defined( 'ABSPATH' ) ) {
+if (! defined('ABSPATH')) {
 	exit;
 } // Exit if accessed directly
 
 ?>
-<?php if ( $available_shipping = WC()->shipping->load_shipping_methods() ) : ?>
-	<?php foreach ( $available_shipping as $method ) : ?>
-		<?php if ( 'yes' === $method->enabled ) : ?>
-			<?php echo ( method_exists( $method, 'get_html_table_costs' ) ) ? wp_kses_post( $method->get_html_table_costs() ) : ''; ?>
+<?php if ($available_shipping = WC()->shipping->load_shipping_methods()) : ?>
+	<?php foreach ($available_shipping as $method) : ?>
+		<?php if ('yes' === $method->enabled) : ?>
+			<?php echo (method_exists($method, 'get_html_table_costs')) ? wp_kses_post($method->get_html_table_costs()) : ''; ?>
 		<?php endif; ?>
 	<?php endforeach; ?>
 	<?php

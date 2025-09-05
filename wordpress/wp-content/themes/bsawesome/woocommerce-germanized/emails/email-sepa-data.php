@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Template for inserting SEPA data within emails.
  *
@@ -14,7 +15,7 @@
  * @package Germanized/Templates
  * @version 2.4.1
  */
-if ( ! defined( 'ABSPATH' ) ) {
+if (! defined('ABSPATH')) {
 	exit; // Exit if accessed directly
 }
 ?>
@@ -23,18 +24,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<td class="td" style="text-align:left; font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif;"
 			valign="top" width="50%">
 
-			<h2><?php esc_html_e( 'SEPA Data', 'woocommerce-germanized' ); ?></h2>
+			<h2><?php esc_html_e('SEPA Data', 'woocommerce-germanized'); ?></h2>
 
 			<p class="text">
-				<?php foreach ( $fields as $label => $data ) : ?>
-					<span class="text-label"><?php echo esc_html( wptexturize( $label ) ); ?>: </span>
-					<span class="text-data"><?php echo esc_html( wptexturize( $data ) ); ?></span><br/>
+				<?php foreach ($fields as $label => $data) : ?>
+					<span class="text-label"><?php echo esc_html(wptexturize($label)); ?>: </span>
+					<span class="text-data"><?php echo esc_html(wptexturize($data)); ?></span><br />
 				<?php endforeach; ?>
 			</p>
 
-			<?php if ( $send_pre_notification ) : ?>
+			<?php if ($send_pre_notification) : ?>
 				<p class="pre-notification text">
-					<?php echo wp_kses_post( $pre_notification_text ); ?>
+					<?php echo wp_kses_post($pre_notification_text); ?>
 				</p>
 			<?php endif; ?>
 		</td>

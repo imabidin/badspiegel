@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The Template for displaying shipping costs notice for a certain product.
  *
@@ -14,13 +15,13 @@
  * @package Germanized/Templates
  * @version 3.9.1
  */
-if ( ! defined( 'ABSPATH' ) ) {
+if (! defined('ABSPATH')) {
 	exit;
 } // Exit if accessed directly
 
 global $product;
 ?>
 
-<?php if ( wc_gzd_get_product( $product )->get_shipping_costs_html() ) : ?>
-	<p class="wc-gzd-additional-info wc-gzd-additional-info-loop shipping-costs-info"><?php echo wp_kses_post( wc_gzd_get_product( $product )->get_shipping_costs_html() ); ?></p>
+<?php if (wc_gzd_get_product($product)->get_shipping_costs_html()) : ?>
+	<p class="wc-gzd-additional-info wc-gzd-additional-info-loop shipping-costs-info"><?php echo wp_kses_post(wc_gzd_get_product($product)->get_shipping_costs_html()); ?></p>
 <?php endif; ?>

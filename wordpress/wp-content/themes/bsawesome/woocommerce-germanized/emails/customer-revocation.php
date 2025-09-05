@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Customer revocation email.
  *
@@ -14,28 +15,28 @@
  * @package Germanized/Templates
  * @version 1.0.2
  */
-if ( ! defined( 'ABSPATH' ) ) {
+if (! defined('ABSPATH')) {
 	exit;
 } // Exit if accessed directly
 
 $fields = WC_GZD_Revocation::get_fields();
 ?>
 
-<?php do_action( 'woocommerce_email_header', $email_heading, $email ); ?>
+<?php do_action('woocommerce_email_header', $email_heading, $email); ?>
 
-<p><?php echo esc_html_x( 'By sending you this email we confirm receiving your withdrawal. Please review your data.', 'revocation-form', 'woocommerce-germanized' ); ?></p>
+<p><?php echo esc_html_x('By sending you this email we confirm receiving your withdrawal. Please review your data.', 'revocation-form', 'woocommerce-germanized'); ?></p>
 
 <table cellspacing="0" cellpadding="0" style="width: 100%; vertical-align: top;" border="0">
-	<?php if ( ! empty( $fields ) ) : ?>
-		<?php foreach ( $fields as $name => $field ) : ?>
-			<?php if ( isset( $user ) && is_array( $user ) && ! empty( $user[ $name ] ) ) : ?>
+	<?php if (! empty($fields)) : ?>
+		<?php foreach ($fields as $name => $field) : ?>
+			<?php if (isset($user) && is_array($user) && ! empty($user[$name])) : ?>
 				<tr>
 					<td valign="top" width="50%">
-						<p><strong><?php echo esc_html( $field['label'] ); ?></strong></p>
+						<p><strong><?php echo esc_html($field['label']); ?></strong></p>
 					</td>
 
 					<td valign="top" width="50%">
-						<p><?php echo esc_html( $user[ $name ] ); ?></p>
+						<p><?php echo esc_html($user[$name]); ?></p>
 					</td>
 				</tr>
 			<?php endif; ?>
@@ -47,9 +48,9 @@ $fields = WC_GZD_Revocation::get_fields();
 /**
  * Show user-defined additional content - this is set in each email's settings.
  */
-if ( $additional_content ) {
-	echo wp_kses_post( wpautop( wptexturize( $additional_content ) ) );
+if ($additional_content) {
+	echo wp_kses_post(wpautop(wptexturize($additional_content)));
 }
 ?>
 
-<?php do_action( 'woocommerce_email_footer', $email ); ?>
+<?php do_action('woocommerce_email_footer', $email); ?>

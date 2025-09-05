@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Product taxonomy archive header
  *
@@ -15,7 +16,7 @@
  * @version 8.6.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
+if (! defined('ABSPATH')) {
 	exit;
 }
 
@@ -29,8 +30,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	 *
 	 * @since 2.0.6.
 	 */
-	if ( apply_filters( 'woocommerce_show_page_title', true ) ) :
-		?>
+	if (apply_filters('woocommerce_show_page_title', true)) :
+	?>
 		<h1 class="woocommerce-products-header__title page-title fw-semibold mb-3"><?php woocommerce_page_title(); ?></h1>
 	<?php endif; ?>
 
@@ -42,7 +43,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	 * @hooked woocommerce_taxonomy_archive_description - 10
 	 * @hooked woocommerce_product_archive_description - 10
 	 */
-	do_action( 'woocommerce_archive_description' );
+	do_action('woocommerce_archive_description');
 	?>
 </header>
 <?php

@@ -1,26 +1,26 @@
 <?php
-	$item_classes = array();
+$item_classes = array();
 
-if ( $item['option_is_set'] ) {
+if ($item['option_is_set']) {
 	$item_classes[] = 'selected';
 }
 
-if ( $item['disabled'] ) {
+if ($item['disabled']) {
 	$item_classes[] = 'disabled';
 }
 ?>
-<button type="button" class="wcpf-box-item <?php echo esc_attr( implode( ' ', $item_classes ) ); ?>"
-	data-value="<?php echo esc_attr( $item['key'] ); ?>"
-	style="<?php echo esc_attr( $box_style ); ?>">
+<button type="button" class="wcpf-box-item <?php echo esc_attr(implode(' ', $item_classes)); ?>"
+	data-value="<?php echo esc_attr($item['key']); ?>"
+	style="<?php echo esc_attr($box_style); ?>">
 	<div class="wcpf-box-item-inner">
 		<div class="wcpf-title-container">
-			<span class="wcpf-title"><?php echo esc_html( $item['title'] ); ?></span>
+			<span class="wcpf-title"><?php echo esc_html($item['title']); ?></span>
 		</div>
 	</div>
 </button>
 <?php
-if ( isset( $item['children'] ) && is_array( $item['children'] ) ) {
-	foreach ( $item['children'] as $child_item ) {
+if (isset($item['children']) && is_array($item['children'])) {
+	foreach ($item['children'] as $child_item) {
 		$template_loader->render_template(
 			'field/box-item.php',
 			array(

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Show options for ordering
  *
@@ -12,21 +13,26 @@
  *
  * @see         https://woocommerce.com/document/template-structure/
  * @package     WooCommerce\Templates
- * @version     3.6.0
+ * @version     9.7.0
+ *
+ * @todo		This modified version needs to be compared with the original, after impementing a custom product filter feature, since the newer template version contains multiple optimizations.
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
+if (! defined('ABSPATH')) {
 	exit;
 }
 
 ?>
 <form class="woocommerce-ordering" method="get">
-	<select id="wc-orderby" name="orderby" class="orderby form-select w-auto" aria-label="<?php esc_attr_e( 'Shop order', 'woocommerce' ); ?>">
-		<?php foreach ( $catalog_orderby_options as $id => $name ) : ?>
-			<option value="<?php echo esc_attr( $id ); ?>" <?php selected( $orderby, $id ); ?>><?php echo esc_html( $name ); ?></option>
+	<select id="wc-orderby"
+	name="orderby"
+	class="orderby form-select w-auto"
+	aria-label="<?php esc_attr_e('Shop order', 'woocommerce'); ?>">
+		<?php foreach ($catalog_orderby_options as $id => $name) : ?>
+			<option value="<?php echo esc_attr($id); ?>" <?php selected($orderby, $id); ?>><?php echo esc_html($name); ?></option>
 		<?php endforeach; ?>
 	</select>
 	<input type="hidden" name="paged" value="1" />
-	<?php wc_query_string_form_fields( null, array( 'orderby', 'submit', 'paged', 'product-page' ) ); ?>
+	<?php wc_query_string_form_fields(null, array('orderby', 'submit', 'paged', 'product-page')); ?>
 </form>
 <?php

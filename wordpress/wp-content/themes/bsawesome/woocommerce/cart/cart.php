@@ -127,6 +127,9 @@ do_action('woocommerce_before_cart'); ?>
 									/**
 									 * Filter and display product quantity in one line
 									 */
+									?>
+									<div class="mb-3">
+									<?php
 									if ($_product->is_sold_individually()) {
 										$min_quantity = 1;
 										$max_quantity = 1;
@@ -149,13 +152,14 @@ do_action('woocommerce_before_cart'); ?>
 
 									echo apply_filters('woocommerce_cart_item_quantity', $product_quantity, $cart_item_key, $cart_item); // PHPCS: XSS ok.
 									?>
+									</div>
 
-									<div class="mt-3">
+									<div class="d-none mt-3">
 										<?php
 										echo apply_filters( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 											'woocommerce_cart_item_remove_link',
 											sprintf(
-												'<a role="button" href="%s" class="btn btn-sm btn-link link-danger remove" aria-label="%s" data-product_id="%s" data-product_sku="%s"><i class="fa-sharp fa-light fa-xmark me-1" aria-hidden="true"></i>Artikel entfernen</a>',
+												'<a role="button" href="%s" class="btn btn-sm btn-link link-danger border-0 p-0 text-hind remove" aria-label="%s" data-product_id="%s" data-product_sku="%s"><small><i class="fa-sharp fa-light fa-xmark me-1" aria-hidden="true"></i>Artikel entfernen</small></a>',
 												esc_url(wc_get_cart_remove_url($cart_item_key)),
 												/* translators: %s is the product name */
 												esc_attr(sprintf(__('Remove %s from cart', 'woocommerce'), wp_strip_all_tags($product_name))),

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The Template for displaying cart totals in the mini cart dropdown.
  *
@@ -15,19 +16,20 @@
  * @version 1.1.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
+if (! defined('ABSPATH')) {
 	exit;
 } // Exit if accessed directly
 ?>
 
-<?php if ( ! empty( $differential_taxation_info ) ) : ?>
-	<p class="total differential-taxation-notice wc-gzd-total-mini-cart"><?php echo wp_kses_post( $differential_taxation_info ); ?></p>
+<?php if (! empty($differential_taxation_info)) : ?>
+	<p class="total differential-taxation-notice wc-gzd-total-mini-cart"><?php echo wp_kses_post($differential_taxation_info); ?></p>
 <?php endif; ?>
 
-<?php foreach ( $taxes as $tax_rate ) : ?>
-	<p class="total total-cart-tax wc-gzd-total-mini-cart"><?php echo wp_kses_post( wc_gzd_get_tax_rate_label( $tax_rate['tax']->rate ) ); ?>: <?php echo wc_price( $tax_rate['amount'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
+<?php foreach ($taxes as $tax_rate) : ?>
+	<p class="total total-cart-tax wc-gzd-total-mini-cart"><?php echo wp_kses_post(wc_gzd_get_tax_rate_label($tax_rate['tax']->rate)); ?>: <?php echo wc_price($tax_rate['amount']); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+																																				?></p>
 <?php endforeach; ?>
 
-<?php if ( ! empty( $shipping_costs_info ) ) : ?>
-	<p class="total shipping-costs-cart-info wc-gzd-total-mini-cart"><?php echo wp_kses_post( $shipping_costs_info ); ?></p>
+<?php if (! empty($shipping_costs_info)) : ?>
+	<p class="total shipping-costs-cart-info wc-gzd-total-mini-cart"><?php echo wp_kses_post($shipping_costs_info); ?></p>
 <?php endif; ?>

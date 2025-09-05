@@ -1,7 +1,7 @@
-<script id="wcpf-load-project-<?php echo esc_attr( $project_id ); ?>-script">
-	(function () {
-		var projectStructure = <?php echo wp_json_encode( $project_structure ); ?>,
-			loadProject = function () {
+<script id="wcpf-load-project-<?php echo esc_attr($project_id); ?>-script">
+	(function() {
+		var projectStructure = <?php echo wp_json_encode($project_structure); ?>,
+			loadProject = function() {
 				if (!window.hasOwnProperty('wcpfFrontApp')) {
 					return;
 				}

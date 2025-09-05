@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The default Template for displaying legal checkboxes.
  *
@@ -14,7 +15,7 @@
  * @package Germanized/Templates
  * @version 1.1.2
  */
-if ( ! defined( 'ABSPATH' ) ) {
+if (! defined('ABSPATH')) {
 	exit;
 }
 
@@ -30,23 +31,22 @@ $checkbox_id = $checkbox->get_id();
  * @since 2.0.0
  *
  */
-do_action( "woocommerce_gzd_before_legal_checkbox_{$checkbox_id}", $checkbox );
+do_action("woocommerce_gzd_before_legal_checkbox_{$checkbox_id}", $checkbox);
 ?>
 
-<p class="<?php echo esc_attr( wc_gzd_get_html_classes( $checkbox->get_html_wrapper_classes() ) ); ?>" data-checkbox="<?php echo esc_attr( $checkbox->get_id() ); ?>" style="<?php echo esc_attr( $checkbox->get_html_style() ); ?>">
-	<label for="<?php echo esc_attr( $checkbox->get_html_id() ); ?>" class="woocommerce-form__label <?php echo ( ! $checkbox->hide_input() ? 'woocommerce-form__label-for-checkbox checkbox' : '' ); ?>">
-		<?php if ( ! $checkbox->hide_input() ) : ?>
+<p class="<?php echo esc_attr(wc_gzd_get_html_classes($checkbox->get_html_wrapper_classes())); ?>" data-checkbox="<?php echo esc_attr($checkbox->get_id()); ?>" style="<?php echo esc_attr($checkbox->get_html_style()); ?>">
+	<label for="<?php echo esc_attr($checkbox->get_html_id()); ?>" class="woocommerce-form__label <?php echo (! $checkbox->hide_input() ? 'woocommerce-form__label-for-checkbox checkbox' : ''); ?>">
+		<?php if (! $checkbox->hide_input()) : ?>
 			<input
 				type="checkbox"
-				class="<?php echo esc_attr( wc_gzd_get_html_classes( $checkbox->get_html_classes() ) ); ?>"
-				name="<?php echo esc_attr( $checkbox->get_html_name() ); ?>"
-				id="<?php echo esc_attr( $checkbox->get_html_id() ); ?>"
-			/>
+				class="<?php echo esc_attr(wc_gzd_get_html_classes($checkbox->get_html_classes())); ?>"
+				name="<?php echo esc_attr($checkbox->get_html_name()); ?>"
+				id="<?php echo esc_attr($checkbox->get_html_id()); ?>" />
 		<?php endif; ?>
-		<span class="woocommerce-gzd-<?php echo esc_attr( $checkbox->get_html_id() ); ?>-checkbox-text"><?php echo wp_kses_post( $checkbox->get_label() ); ?></span>
-		<?php if ( $checkbox->is_mandatory() ) : ?>
-			&nbsp;<abbr class="required" title="<?php echo esc_attr__( 'required', 'woocommerce-germanized' ); ?>">*</abbr>
+		<span class="woocommerce-gzd-<?php echo esc_attr($checkbox->get_html_id()); ?>-checkbox-text"><?php echo wp_kses_post($checkbox->get_label()); ?></span>
+		<?php if ($checkbox->is_mandatory()) : ?>
+			&nbsp;<abbr class="required" title="<?php echo esc_attr__('required', 'woocommerce-germanized'); ?>">*</abbr>
 		<?php endif; ?>
-		<input type="hidden" name="<?php echo esc_attr( $checkbox->get_html_name() ); ?>-field" value="1" />
+		<input type="hidden" name="<?php echo esc_attr($checkbox->get_html_name()); ?>-field" value="1" />
 	</label>
 </p>

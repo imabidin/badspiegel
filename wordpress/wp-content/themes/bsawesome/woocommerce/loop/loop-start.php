@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Product Loop Start
  *
@@ -15,15 +16,15 @@
  * @version     3.3.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+if (! defined('ABSPATH')) {
+    exit;
 }
 
 /**
  * Gesamtanzahl der Produkte im Loop abfragen
  * (WooCommerce setzt per wc_set_loop_prop('total', $total_products) die Gesamtanzahl)
  */
-$total_products = wc_get_loop_prop( 'total' );
+$total_products = wc_get_loop_prop('total');
 
 /**
  * Standard-Klassen
@@ -33,23 +34,23 @@ $classes = 'row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3';
 /**
  * Klassen je nach Produktanzahl anpassen
  */
-if ( $total_products == 1 ) {
+if ($total_products == 1) {
     // Nur 3 Produkte => z.B. in 1 Reihe je 3 Spalten
     $classes = 'row row-cols-2 g-3';
-} elseif ( $total_products == 2 ) {
+} elseif ($total_products == 2) {
     // Nur 4 Produkte => z.B. in 2 Reihen je 2 Spalten oder 1 Reihe je 4 Spalten
     // je nach Wunsch anpassen:
     $classes = 'row row-cols-2 g-3';
-} elseif ( $total_products == 3 ) {
+} elseif ($total_products == 3) {
     // Nur 4 Produkte => z.B. in 2 Reihen je 2 Spalten oder 1 Reihe je 4 Spalten
     // je nach Wunsch anpassen:
     $classes = 'row row-cols-3 g-3';
-} elseif ( $total_products == 4 ) {
+} elseif ($total_products == 4) {
     // Nur 4 Produkte => z.B. in 2 Reihen je 2 Spalten oder 1 Reihe je 4 Spalten
     // je nach Wunsch anpassen:
     $classes = 'row row-cols-2 g-3';
 }
 
 ?>
-<ul class="products list-unstyled mb mx-n2 <?php echo esc_attr( $classes ); ?>">
-<?php
+<ul class="products list-unstyled mb mx-n2 <?php echo esc_attr($classes); ?>">
+    <?php

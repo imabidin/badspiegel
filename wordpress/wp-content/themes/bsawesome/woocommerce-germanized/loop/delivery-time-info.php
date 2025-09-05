@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The Template for displaying delivery time notice for a certain product.
  *
@@ -14,13 +15,13 @@
  * @package Germanized/Templates
  * @version 3.17.8
  */
-if ( ! defined( 'ABSPATH' ) ) {
+if (! defined('ABSPATH')) {
 	exit;
 } // Exit if accessed directly
 
 global $product;
 ?>
 
-<?php if ( wc_gzd_get_gzd_product( $product )->get_delivery_time_html() ) : ?>
-	<p class="wc-gzd-additional-info delivery-time-info wc-gzd-additional-info-loop"><?php echo wp_kses_post( wc_gzd_get_product( $product )->get_delivery_time_html() ); ?></p>
+<?php if (wc_gzd_get_gzd_product($product)->get_delivery_time_html()) : ?>
+	<p class="wc-gzd-additional-info delivery-time-info wc-gzd-additional-info-loop"><?php echo wp_kses_post(wc_gzd_get_product($product)->get_delivery_time_html()); ?></p>
 <?php endif; ?>

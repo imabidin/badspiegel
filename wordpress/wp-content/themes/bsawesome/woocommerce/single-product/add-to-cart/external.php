@@ -1,4 +1,5 @@
 <?php
+
 /**
  * External product add to cart
  *
@@ -15,18 +16,18 @@
  * @version 7.0.1
  */
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
-do_action( 'woocommerce_before_add_to_cart_form' ); ?>
+do_action('woocommerce_before_add_to_cart_form'); ?>
 
-<form class="cart" action="<?php echo esc_url( $product_url ); ?>" method="get">
-	<?php do_action( 'woocommerce_before_add_to_cart_button' ); ?>
+<form class="cart" action="<?php echo esc_url($product_url); ?>" method="get">
+	<?php do_action('woocommerce_before_add_to_cart_button'); ?>
 
-	<button type="submit" class="<?php echo esc_attr(get_add_to_cart_button_classes($product)); ?>"><?php echo esc_html( $button_text ); ?></button>
+	<button type="submit" class="<?php echo esc_attr(get_add_to_cart_button_classes($product)); ?>"><?php echo esc_html($button_text); ?></button>
 
-	<?php wc_query_string_form_fields( $product_url ); ?>
+	<?php wc_query_string_form_fields($product_url); ?>
 
-	<?php do_action( 'woocommerce_after_add_to_cart_button' ); ?>
+	<?php do_action('woocommerce_after_add_to_cart_button'); ?>
 </form>
 
-<?php do_action( 'woocommerce_after_add_to_cart_form' );
+<?php do_action('woocommerce_after_add_to_cart_form');

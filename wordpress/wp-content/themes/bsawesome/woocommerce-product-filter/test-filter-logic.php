@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Test file for the filter enhancement functionality
  * This file can be used to test the wcpf_should_hide_filter function

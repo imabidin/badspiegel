@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The Template for displaying tax notice for a certain product.
  *
@@ -14,17 +15,17 @@
  * @package Germanized/Templates
  * @version 3.18.8
  */
-if ( ! defined( 'ABSPATH' ) ) {
+if (! defined('ABSPATH')) {
 	exit;
 } // Exit if accessed directly
 
 global $product;
 ?>
 
-<?php if ( wc_gzd_get_product( $product )->get_tax_info() ) : ?>
-	<p class="wc-gzd-additional-info tax-info"><?php echo wp_kses_post( wc_gzd_get_product( $product )->get_tax_info() ); ?></p>
-<?php elseif ( wc_gzd_is_small_business() ) : ?>
-	<p class="wc-gzd-additional-info small-business-info"><?php echo wp_kses_post( wc_gzd_get_small_business_product_notice() ); ?></p>
-<?php elseif ( $product->is_type( 'variable' ) ) : ?>
+<?php if (wc_gzd_get_product($product)->get_tax_info()) : ?>
+	<p class="wc-gzd-additional-info tax-info"><?php echo wp_kses_post(wc_gzd_get_product($product)->get_tax_info()); ?></p>
+<?php elseif (wc_gzd_is_small_business()) : ?>
+	<p class="wc-gzd-additional-info small-business-info"><?php echo wp_kses_post(wc_gzd_get_small_business_product_notice()); ?></p>
+<?php elseif ($product->is_type('variable')) : ?>
 	<p class="wc-gzd-additional-info tax-info wc-gzd-additional-info-placeholder" aria-hidden="true"></p>
 <?php endif; ?>

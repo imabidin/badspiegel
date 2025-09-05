@@ -35,7 +35,7 @@ $customer_orders = get_posts(
 
 if ($customer_orders) : ?>
 
-	<h2><?php echo apply_filters('woocommerce_my_account_my_orders_title', esc_html__('Recent orders', 'woocommerce')); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
+	<h2><?php echo apply_filters('woocommerce_my_account_my_orders_title', esc_html__('Recent orders', 'woocommerce')); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		?></h2>
 
 	<table class="table table-light shop_table table shop_table_responsive my_account_orders">
@@ -62,7 +62,7 @@ if ($customer_orders) : ?>
 
 							<?php elseif ('order-number' === $column_id) : ?>
 								<a href="<?php echo esc_url($order->get_view_order_url()); ?>">
-									<?php echo _x('#', 'hash before order number', 'woocommerce') . $order->get_order_number(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
+									<?php echo _x('#', 'hash before order number', 'woocommerce') . $order->get_order_number(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 									?>
 								</a>
 

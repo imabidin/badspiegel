@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Customer new account activation email (plain-text).
  *
@@ -14,30 +15,30 @@
  * @package Germanized/Templates
  * @version 2.0.1
  */
-if ( ! defined( 'ABSPATH' ) ) {
+if (! defined('ABSPATH')) {
 	exit; // Exit if accessed directly
 }
 
 echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n";
-echo esc_html( wp_strip_all_tags( $email_heading ) );
+echo esc_html(wp_strip_all_tags($email_heading));
 echo "\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n";
 
-echo sprintf( esc_html__( 'Thanks for creating an account on %s. Please follow the activation link to activate your account:', 'woocommerce-germanized' ), esc_html( $blogname ) ) . "\n\n";
+echo sprintf(esc_html__('Thanks for creating an account on %s. Please follow the activation link to activate your account:', 'woocommerce-germanized'), esc_html($blogname)) . "\n\n";
 
 echo "\n----------------------------------------\n\n";
 
-echo esc_url( $user_activation_url ) . "\n\n";
+echo esc_url($user_activation_url) . "\n\n";
 
 echo "\n----------------------------------------\n\n";
 
 // Only send the set new password link if the user hasn't set their password during sign-up.
-if ( 'yes' === get_option( 'woocommerce_registration_generate_password' ) && $password_generated && $set_password_url ) {
+if ('yes' === get_option('woocommerce_registration_generate_password') && $password_generated && $set_password_url) {
 	/* translators: URL follows */
-	echo esc_html__( 'To set your password, visit the following address: ', 'woocommerce-germanized' ) . "\n\n";
-	echo esc_html( $set_password_url ) . "\n\n";
+	echo esc_html__('To set your password, visit the following address: ', 'woocommerce-germanized') . "\n\n";
+	echo esc_html($set_password_url) . "\n\n";
 }
 
-echo sprintf( esc_html__( "If you haven't created an account on %s please ignore this email.", 'woocommerce-germanized' ), esc_html( $blogname ) ) . "\n\n";
+echo sprintf(esc_html__("If you haven't created an account on %s please ignore this email.", 'woocommerce-germanized'), esc_html($blogname)) . "\n\n";
 
 
 echo "\n\n----------------------------------------\n\n";
@@ -45,9 +46,9 @@ echo "\n\n----------------------------------------\n\n";
 /**
  * Show user-defined additional content - this is set in each email's settings.
  */
-if ( $additional_content ) {
-	echo esc_html( wp_strip_all_tags( wptexturize( $additional_content ) ) );
+if ($additional_content) {
+	echo esc_html(wp_strip_all_tags(wptexturize($additional_content)));
 	echo "\n\n----------------------------------------\n\n";
 }
 
-echo wp_kses_post( apply_filters( 'woocommerce_email_footer_text', get_option( 'woocommerce_email_footer_text' ) ) );
+echo wp_kses_post(apply_filters('woocommerce_email_footer_text', get_option('woocommerce_email_footer_text')));

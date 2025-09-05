@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Additional Information tab
  *
@@ -20,12 +21,12 @@
 
  */
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
 global $product;
 
-$heading = apply_filters( 'woocommerce_product_additional_information_heading', __( 'Additional information', 'woocommerce' ) );
+$heading = apply_filters('woocommerce_product_additional_information_heading', __('Additional information', 'woocommerce'));
 
 ?>
 
-<?php do_action( 'woocommerce_product_additional_information', $product );
+<?php do_action('woocommerce_product_additional_information', $product);

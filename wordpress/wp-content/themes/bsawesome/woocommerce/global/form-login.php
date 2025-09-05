@@ -29,7 +29,7 @@ if (is_user_logged_in()) {
 
 	<?php do_action('woocommerce_login_form_start'); ?>
 
-	<?php echo ($message) ? wpautop(wptexturize($message)) : ''; // @codingStandardsIgnoreLine 
+	<?php echo ($message) ? wpautop(wptexturize($message)) : ''; // @codingStandardsIgnoreLine
 	?>
 
 	<p class="form-row form-row-first">
@@ -46,7 +46,7 @@ if (is_user_logged_in()) {
 
 	<p class="form-row">
 		<span class="form-check">
-			<input class="woocommerce-form__input woocommerce-form__input-checkbox form-check-input" name="rememberme" type="checkbox" id="rememberme" value="forever" /> 
+			<input class="woocommerce-form__input woocommerce-form__input-checkbox form-check-input" name="rememberme" type="checkbox" id="rememberme" value="forever" />
 			<label class="woocommerce-form__label woocommerce-form__label-for-checkbox woocommerce-form-login__rememberme form-check-label" for="rememberme"><?php esc_html_e('Remember me', 'woocommerce'); ?></label>
 		</span>
 		<?php wp_nonce_field('woocommerce-login', 'woocommerce-login-nonce'); ?>

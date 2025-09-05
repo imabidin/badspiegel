@@ -57,5 +57,30 @@
   },
 
   // Port forwarding settings - disable all notifications
-  "remote.autoForwardPorts": false
+  "remote.autoForwardPorts": false,
+
+  // Copilot
+  "chat.tools.terminal.autoApprove": {
+    "rmdir": false,
+    "del": false,
+    "kill": false,
+    "curl": false,
+    "wget": false,
+    "eval": false,
+    "chmod": false,
+    "chown": false,
+    "/^Remove-Item\\b/i": false,
+    "ls": true,
+    "rm": true,
+    "cd": true,
+    "find": true,
+    "grep": true,
+    "head": true,
+    "tail": true,
+    "xargs": true,
+    "sed": true,
+    "mv": true,
+    "docker": true,
+    "docker-compose": true
+  }
 }

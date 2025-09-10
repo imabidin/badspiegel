@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
  * - Option grouping and sorting functionality
  * - Single-step interface fallback for simple configurations
  *
- * @version 2.4.0
+ * @version 2.5.0
  * @package configurator
  */
 
@@ -72,8 +72,7 @@ add_action('woocommerce_before_add_to_cart_button', 'render_product_configurator
  * @see get_all_product_option_groups() For option group definitions
  * @see render_options_group() For individual option group rendering
  */
-function render_product_configurator()
-{
+function render_product_configurator() {
     global $product;
 
     // Validate product object exists and is valid WooCommerce product
@@ -314,7 +313,7 @@ function render_product_configurator()
                     <span class="visually-hidden">Schrittcontainer nach links scrollen</span>
                 </button>
 
-                <div class="row row-cols-auto flex-nowrap g-0 mb-4 overflow-auto no-scrollbar">
+                <div class="row row-cols-auto flex-nowrap g-0 mb-4 overflow-auto scrollbar-none">
                     <?php
                     $current_step_index = 0;
                     foreach ($used_groups as $group_key => $group):
@@ -462,8 +461,7 @@ function render_product_configurator()
  * @param array $b Second element containing an 'order' key for comparison
  * @return int Returns -1 if $a comes before $b, 1 if $a comes after $b, 0 if equal
  */
-function compare_order($a, $b)
-{
+function compare_order($a, $b) {
     // Convert order values to integers with safe defaults
     $order_a = isset($a['order']) ? intval($a['order']) : 0;
     $order_b = isset($b['order']) ? intval($b['order']) : 0;
@@ -499,8 +497,7 @@ function compare_order($a, $b)
  * @param array|null  $auto_load_config Auto-load configuration data from database
  * @return string The processed value (auto-loaded or original posted value)
  */
-function process_auto_load_for_option($option, $posted_value, $auto_load_config)
-{
+function process_auto_load_for_option($option, $posted_value, $auto_load_config) {
     // Validate auto-load configuration exists and is properly formatted
     if (!$auto_load_config || !is_array($auto_load_config)) {
         return $posted_value;
@@ -551,8 +548,7 @@ function process_auto_load_for_option($option, $posted_value, $auto_load_config)
  * @param int        $option_order_start   Starting order number for sequential numbering
  * @return int Final option order number for continued sequential numbering
  */
-function render_options_group($options, $product_id, $template_path, $auto_load_config, $option_order_start = 1)
-{
+function render_options_group($options, $product_id, $template_path, $auto_load_config, $option_order_start = 1) {
     $option_order = $option_order_start;
 
     foreach ($options as $option) {

@@ -7,7 +7,7 @@
  * like lazy loading, responsive sizing, and security validation. Enables shortcode processing
  * in category descriptions.
  *
- * @version 2.4.0
+ * @version 2.5.0
  *
  * @todo Optimize img shortcode for better src and sizes generation
  *
@@ -29,7 +29,6 @@
  *
  * @package BSAwesome
  * @subpackage Shortcodes
- * @since 1.0.0
  * @author BSAwesome Team
  */
 
@@ -43,7 +42,6 @@
  * Main entry point for shortcode functionality. Registers all custom shortcodes
  * and enables shortcode processing in category descriptions.
  *
- * @since 1.0.0
  * @return void
  */
 function initialize_custom_shortcodes() {
@@ -60,7 +58,6 @@ function initialize_custom_shortcodes() {
      * Validates filename patterns and prevents path traversal attacks.
      * Features intelligent caching with automatic invalidation on file changes.
      *
-     * @since 1.0.0
      * @param array $atts Shortcode attributes
      * @return string The content of the included HTML file or error message
      */
@@ -137,7 +134,6 @@ function initialize_custom_shortcodes() {
      * Displays images with advanced features including srcset, lazy loading, responsive sizing,
      * and container options. Supports Bootstrap grid system and automatic responsive sizing.
      *
-     * @since 1.0.0
      * @param array $atts Shortcode attributes
      * @return string The rendered image HTML
      */

@@ -18,7 +18,7 @@
  * - Dynamic min/max attribute updates
  * - Modular validation rules via callback system
  *
- * @version 2.3.0
+ * @version 2.5.0
  * @package Configurator
  */
 
@@ -44,6 +44,148 @@ document.addEventListener("DOMContentLoaded", function () {
   /**
    * Special field references for relational validation
    */
+  const durchmesserInput = document.querySelector('.option-input[name="durchmesser"]');
+  const schnittkanteInput = document.querySelector('.option-input[name="schnittkante"]');
+  const hoeheInput = document.querySelector('.option-input[name="hoehe_schnittkante"]') ||
+                    document.querySelector('.option-input[name="breite_schnittkante"]');
+
+  /**
+   * SK1 geometric calculation functions
+   * Based on circular segment formulas
+   */
+
+  /**
+   * Calculates segment height from diameter and cut width
+   * @param {number} diameter - Circle diameter
+   * @param {number} cutWidth - Cut width (chord length)
+   * @returns {number|null} Calculated height or null if invalid
+   */
+  function calculateHeightFromDiameterAndCut(diameter, cutWidth) {
+    if (diameter <= 0 || cutWidth <= 0 || cutWidth > diameter) return null;
+
+    const r = diameter / 2;
+    const discriminant = r * r - (cutWidth * cutWidth) / 4;
+
+    if (discriminant < 0) return null;
+
+    const distanceToChord = r - Math.sqrt(discriminant);
+    const segmentHeight = 2 * r - distanceToChord;
+
+    return Math.round(segmentHeight); // Round to whole numbers
+  }
+
+  /**
+   * Calculates cut width from diameter and height
+   * @param {number} diameter - Circle diameter
+   * @param {number} height - Segment height
+   * @returns {number|null} Calculated cut width or null if invalid
+   */
+  function calculateCutFromDiameterAndHeight(diameter, height) {
+    if (diameter <= 0 || height <= 0 || height > diameter) return null;
+
+    const r = diameter / 2;
+    const distanceToChord = 2 * r - height;
+    const discriminant = r * r - distanceToChord * distanceToChord;
+
+    if (discriminant < 0) return null;
+
+    const cutWidth = 2 * Math.sqrt(discriminant);
+
+    return Math.round(cutWidth); // Round to whole numbers
+  }
+
+  /**
+   * Updates calculated field without triggering recursive calculations
+   * @param {HTMLElement} field - Target field to update
+   * @param {number} value - New calculated value
+   */
+  function updateCalculatedField(field, value) {
+    if (!field || value === null || value <= 0) return;
+
+    // Temporarily mark field as "calculating" to prevent recursive updates
+    field.dataset.calculating = 'true';
+    field.value = value;
+
+    // Trigger validation after update
+    if (window.validateField) {
+      validateField(field);
+    }
+
+    // Remove calculating flag after a short delay
+    setTimeout(() => {
+      delete field.dataset.calculating;
+    }, 100);
+  }
+
+  /**
+   * Performs SK1 calculations based on field changes
+   * @param {HTMLElement} changedField - The field that was changed
+   */
+  function performSK1Calculations(changedField) {
+    if (!changedField || changedField.dataset.calculating === 'true') return;
+
+    const diameter = parseFloat(durchmesserInput?.value) || 0;
+    const cutWidth = parseFloat(schnittkanteInput?.value) || 0;
+    const height = parseFloat(hoeheInput?.value) || 0;
+
+    console.log(`[SK1 Calc] ${changedField.name} changed: D=${diameter}, C=${cutWidth}, H=${height}`);
+
+    switch (changedField.name) {
+      case "durchmesser":
+        // Priority 1: Durchmesser changed -> calculate height based on schnittkante
+        if (diameter > 0 && cutWidth > 0) {
+          const calculatedHeight = calculateHeightFromDiameterAndCut(diameter, cutWidth);
+          if (calculatedHeight !== null && hoeheInput) {
+            console.log(`[SK1 Calc] Diameter change: calculating height = ${calculatedHeight}`);
+            updateCalculatedField(hoeheInput, calculatedHeight);
+          }
+        }
+        break;
+
+      case "hoehe_schnittkante":
+      case "breite_schnittkante":
+        // Priority 2: Height changed -> calculate schnittkante based on durchmesser
+        if (diameter > 0 && height > 0) {
+          const calculatedCut = calculateCutFromDiameterAndHeight(diameter, height);
+          if (calculatedCut !== null && schnittkanteInput) {
+            console.log(`[SK1 Calc] Height change: calculating cut width = ${calculatedCut}`);
+            updateCalculatedField(schnittkanteInput, calculatedCut);
+          }
+        }
+        break;
+
+      case "schnittkante":
+        // Priority 3: Schnittkante changed -> calculate height based on durchmesser
+        if (diameter > 0 && cutWidth > 0) {
+          const calculatedHeight = calculateHeightFromDiameterAndCut(diameter, cutWidth);
+          if (calculatedHeight !== null && hoeheInput) {
+            console.log(`[SK1 Calc] Cut width change: calculating height = ${calculatedHeight}`);
+            updateCalculatedField(hoeheInput, calculatedHeight);
+          }
+        }
+        break;
+    }
+  }
+
+  /**
+   * Updates the max attribute of schnittkante field based on durchmesser value
+   * Ensures schnittkante cannot exceed durchmesser and corrects values if needed
+   */
+  function updateSchnittkanteMax() {
+    if (!durchmesserInput || !schnittkanteInput) return;
+
+    const durchmesserValue = parseFloat(durchmesserInput.value) || 0;
+
+    if (durchmesserValue > 0) {
+      // Set max attribute to durchmesser value
+      schnittkanteInput.setAttribute("max", durchmesserValue);
+
+      // No auto-correction - let validation handle it
+    } else {
+      // Remove max constraint if no durchmesser value
+      schnittkanteInput.removeAttribute("max");
+    }
+  }
 
   /**
    * Ensures that an invalid feedback container exists for the given field
@@ -241,6 +383,19 @@ document.addEventListener("DOMContentLoaded", function () {
         updateAblageBreiteMax();
       }
 
+      // Handle durchmesser field changes for schnittkante max validation
+      if (field.name === "durchmesser") {
+        updateSchnittkanteMax();
+      }
+
+      // Handle SK1 geometric calculations
+      if (field.name === "durchmesser" ||
+          field.name === "schnittkante" ||
+          field.name === "hoehe_schnittkante" ||
+          field.name === "breite_schnittkante") {
+        performSK1Calculations(field);
+      }
+
       // Handle Dachschräge field dependencies using centralized logic
       if (isDachschraegeField(field)) {
         onDachschraegeFieldInput(field);
@@ -263,6 +418,14 @@ document.addEventListener("DOMContentLoaded", function () {
       // Handle Dachschräge field dependencies and position suggestions
       if (isDachschraegeField(field)) {
         onDachschraegeFieldChange(field);
+      }
+
+      // Handle SK1 geometric calculations on field completion
+      if (field.name === "durchmesser" ||
+          field.name === "schnittkante" ||
+          field.name === "hoehe_schnittkante" ||
+          field.name === "breite_schnittkante") {
+        performSK1Calculations(field);
       }
     });
 
@@ -288,6 +451,12 @@ document.addEventListener("DOMContentLoaded", function () {
    * Sets up initial max attribute if main width field has a value
    */
   updateAblageBreiteMax();
+
+  /**
+   * Initialize schnittkante constraints on page load
+   * Sets up initial max attribute if durchmesser field has a value
+   */
+  updateSchnittkanteMax();
 });
 
 /**

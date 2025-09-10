@@ -28,8 +28,7 @@
  * - $posted_value: Current/submitted value
  * - $modal_link: Link for description modal
  *
- * @version 2.4.0
- * @package configurator
+ * @version 2.5.0
  */
 ?>
 

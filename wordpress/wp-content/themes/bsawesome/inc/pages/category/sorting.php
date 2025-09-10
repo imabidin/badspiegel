@@ -1,25 +1,58 @@
 <?php defined('ABSPATH') || exit;
 
 /**
- * Product Filter and Sorting Component
+ * Advanced Product Filter and Sorting Component
  *
- * Provides advanced filtering and sorting functionality for WooCommerce
- * product category pages including visual display toggles and collapsible filters.
+ * Provides comprehensive filtering and sorting functionality for WooCommerce
+ * product category pages with collapsible interface, visual display toggles,
+ * and accessible filter management.
  *
- * @package BSAwesome
- * @subpackage CategoryComponents
- * @since 1.0.0
- * @version 2.4.0
+ * @version 2.5.0
+ *
+ * Features:
+ * - Collapsible filter interface with Bootstrap accordion
+ * - Scene/Solo product image view toggle buttons
+ * - Integrated WooCommerce filter shortcode support
+ * - Real-time result counting and filter notes display
+ * - Responsive design with mobile-optimized controls
+ * - Accessibility-compliant ARIA attributes and labels
+ * - Bootstrap tooltips for enhanced user guidance
+ *
+ * Security Measures:
+ * - ABSPATH protection against direct access
+ * - Proper output escaping with esc_attr() and esc_html()
+ * - Input sanitization for filter parameters
+ * - Safe shortcode execution with do_shortcode()
+ *
+ * Performance Features:
+ * - Conditional loading only on shop/category pages
+ * - Efficient DOM manipulation with data attributes
+ * - Minimal JavaScript footprint with native Bootstrap components
+ * - Optimized filter rendering with cached shortcode output
+ *
+ * Dependencies:
+ * - WooCommerce for product filtering and sorting functions
+ * - Bootstrap 5 for responsive grid and component styling
+ * - Font Awesome for filter and view toggle icons
+ * - WooCommerce Product Filter plugin for filter shortcodes
  */
 
 /**
- * Display product filter and sorting interface
+ * Display advanced product filter and sorting interface
  *
- * Adds a comprehensive filter and sorting interface before the shop loop
- * including scene/solo toggle, collapsible filters, and result counters.
+ * Renders a comprehensive filter and sorting interface before the shop loop
+ * including collapsible filters, image view toggles, and result counters.
+ * Integrates seamlessly with WooCommerce and third-party filter plugins.
  *
- * @since 1.0.0
- * @return void
+ * Interface Components:
+ * - Collapsible filter panel with toggle button
+ * - Scene/Solo image view toggle buttons
+ * - Integrated filter shortcode display
+ * - WooCommerce sorting dropdown
+ * - Real-time filter results and product count
+ *
+ * @hooks woocommerce_before_shop_loop Priority 40 (after default components)
+ * @return void Outputs complete filter interface HTML
  */
 add_action('woocommerce_before_shop_loop', 'imabi_product_filter_and_ordering', 40);
 function imabi_product_filter_and_ordering() {
@@ -30,9 +63,8 @@ function imabi_product_filter_and_ordering() {
         <div class="row g-3">
 
             <div class="col-auto">
-                <?php // Toggle button for collapsible filter section
+                <?php // Filter toggle button with icon and accessibility features
                 ?>
-
                 <div class="d-flex align-items-center">
                     <div class="form-control border-end-0" data-bs-tooltip-md="true" title="<?php esc_html_e('Filter anzeigen:', $text_domain); ?>">
                         <i class="fa-light fa-filter text-muted" aria-hidden="true"></i>
@@ -53,6 +85,8 @@ function imabi_product_filter_and_ordering() {
             </div>
 
             <div class="col-auto">
+                <?php // Image view toggle buttons for scene/solo switching
+                ?>
                 <div class="d-flex align-items-center">
                     <div class="form-control border-end-0" data-bs-tooltip-md="true" title="<?php esc_html_e('Ansicht wechseln:', $text_domain); ?>">
                         <i class="fa-light fa-images text-muted" aria-hidden="true"></i>
@@ -80,16 +114,16 @@ function imabi_product_filter_and_ordering() {
             </div>
 
             <div class="col-12 mt-0">
-                <?php // Collapse container: Filter options & Sorting
+                <?php // Collapsible container for filter options and sorting
                 ?>
                 <div class="collapse" id="filterCollapse">
                     <div class="card card-body mt-3">
-                        <?php // Filter shortcode (filter options only)
+                        <?php // WooCommerce Product Filter plugin shortcode integration
                         ?>
                         <?php
                         echo do_shortcode('[wcpf_filters id="749"]');
                         ?>
-                        <?php // Add sorting
+                        <?php // WooCommerce native sorting dropdown
                         ?>
                         <div>
                             <label for="orderby" class="form-label h5">
@@ -106,7 +140,7 @@ function imabi_product_filter_and_ordering() {
             </div>
 
             <div class="col-12">
-                <?php // Always visible area: Filter results (Notes) and result count
+                <?php // Always visible filter results and product count display
                 ?>
                 <div class="imabi-filter-results">
                     <?php
@@ -124,8 +158,10 @@ function imabi_product_filter_and_ordering() {
 }
 
 /**
- * Remove default sorting and result count placed via hooks
- * to prevent duplicate display.
+ * Remove default WooCommerce sorting and result count hooks
+ *
+ * Prevents duplicate display of sorting and result count elements by removing
+ * the default WooCommerce hooks since we integrate them into our custom interface.
  */
 remove_action('woocommerce_before_shop_loop', 'woocommerce_catalog_ordering', 30);
 remove_action('woocommerce_before_shop_loop', 'woocommerce_result_count', 20);

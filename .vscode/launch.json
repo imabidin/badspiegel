@@ -18,7 +18,7 @@
         },
         {
             "name": "Launch currently open script",
-            "type": "php", 
+            "type": "php",
             "request": "launch",
             "program": "${file}",
             "cwd": "${fileDirname}",

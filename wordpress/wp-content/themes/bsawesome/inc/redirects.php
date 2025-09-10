@@ -7,7 +7,7 @@
  * Focuses on pagination handling for WooCommerce shop and category pages to optimize
  * SEO and prevent duplicate content from paginated archives.
  *
- * @version 2.4.0
+ * @version 2.5.0
  *
  * Features:
  * - Pagination parameter removal for WooCommerce category pages
@@ -21,7 +21,6 @@
  *
  * @package BSAwesome
  * @subpackage SEO
- * @since 1.0.0
  * @author BSAwesome Team
  *
  * @param string $redirect_url The redirect URL suggested by WordPress

@@ -1,18 +1,238 @@
 //
 // Scrollbar
 //
+// @version 2.5.0
+//
+
+//
+// Custom scrollbar styles
+//
+
+:root {
+  // --- GENERAL SETTINGS ---
+  // Scrollbar sizing
+  --scrollbar-width: 8px;
+  --scrollbar-width-hover: 8px;
+
+  // Transition timing
+  --scrollbar-transition: all 0.2s ease-in-out;
+
+  // Border
+  --scrollbar-border-radius: 0px;
+
+  // --- TRACK ---
+  // The rail on which the thumb moves
+  --scrollbar-track-bg: var(--bs-gray-100);
+  --scrollbar-track-bg-dark: var(--bs-gray-800);
+
+  // --- THUMB ---
+  // The draggable part of the scrollbar
+  --scrollbar-thumb-bg: var(--bs-gray-400);
+  --scrollbar-thumb-hover-bg: var(--bs-primary);
+  --scrollbar-thumb-active-bg: var(--bs-primary);
+  --scrollbar-thumb-bg-dark: var(--bs-gray-600);
+  --scrollbar-thumb-hover-bg-dark: var(--bs-primary);
+  --scrollbar-thumb-active-bg-dark: var(--bs-primary);
+
+  // --- BUTTONS ---
+  // The up/down/left/right arrow buttons
+  --scrollbar-button-bg: var(--bs-gray-100);
+  --scrollbar-button-hover-bg: var(--bs-gray-200);
+  --scrollbar-button-active-bg: var(--bs-gray-300);
+  --scrollbar-button-icon-color: var(--bs-gray-600);
+  --scrollbar-button-bg-dark: var(--bs-gray-800);
+  --scrollbar-button-hover-bg-dark: var(--bs-gray-700);
+  --scrollbar-button-active-bg-dark: var(--bs-gray-600);
+  --scrollbar-button-icon-color-dark: var(--bs-gray-400);
+
+  // --- CORNER & RESIZER ---
+  --scrollbar-corner-bg: var(--scrollbar-track-bg);
+  --scrollbar-resizer-bg: var(--scrollbar-track-bg);
+  --scrollbar-corner-bg-dark: var(--scrollbar-track-bg-dark);
+  --scrollbar-resizer-bg-dark: var(--scrollbar-track-bg-dark);
+}
+
+//
+// Webkit custom scrollbar (Chrome, Safari, Edge)
+//
+
+// Defines the width/height of the entire scrollbar
+*::-webkit-scrollbar {
+  width: var(--scrollbar-width);
+  height: var(--scrollbar-width);
+}
+
+// The track (the rail on which the thumb moves)
+*::-webkit-scrollbar-track {
+  background: var(--scrollbar-track-bg);
+  border-radius: var(--scrollbar-border-radius);
+}
+
+// The thumb (the draggable scrolling handle)
+*::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb-bg);
+  border-radius: var(--scrollbar-border-radius);
+  transition: var(--scrollbar-transition);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover-bg);
+}
+
+*::-webkit-scrollbar-thumb:active {
+  background: var(--scrollbar-thumb-active-bg);
+}
+
+// The buttons (arrows pointing upwards and downwards)
+*::-webkit-scrollbar-button {
+  background-color: var(--scrollbar-button-bg);
+  background-repeat: no-repeat;
+  background-position: center;
+  transition: var(--scrollbar-transition);
+  // Hide by default if not desired by setting height/width to 0
+  height: 0;
+  width: 0;
+}
+
+// Icons for the buttons (arrows as SVG)
+// Down arrow
+*::-webkit-scrollbar-button:vertical:increment {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='var(--scrollbar-button-icon-color)' class='bi bi-chevron-down' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+}
+
+// Up arrow
+*::-webkit-scrollbar-button:vertical:decrement {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='var(--scrollbar-button-icon-color)' class='bi bi-chevron-up' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z'/%3E%3C/svg%3E");
+}
+
+// Right arrow
+*::-webkit-scrollbar-button:horizontal:increment {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='var(--scrollbar-button-icon-color)' class='bi bi-chevron-right' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+}
+
+// Left arrow
+*::-webkit-scrollbar-button:horizontal:decrement {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='var(--scrollbar-button-icon-color)' class='bi bi-chevron-left' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z'/%3E%3C/svg%3E");
+}
+
+*::-webkit-scrollbar-button:hover {
+  background-color: var(--scrollbar-button-hover-bg);
+}
+
+*::-webkit-scrollbar-button:active {
+  background-color: var(--scrollbar-button-active-bg);
+}
+
+// The corner where vertical and horizontal scrollbars meet
+*::-webkit-scrollbar-corner {
+  background: var(--scrollbar-corner-bg);
+}
+
+// The resizer (bottom-right corner of elements like <textarea>)
+*::-webkit-resizer {
+  background-color: var(--scrollbar-resizer-bg);
+  // Optional: Add a grip icon for the resizer
+  // background-image: url("data:image/svg+xml,...");
+}
+
+//
+// Firefox custom scrollbar
+//
+
+@-moz-document url-prefix() {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb-bg) var(--scrollbar-track-bg);
+  }
+}
+
+//
+// --- DARK MODE ---
+//
+
+[data-bs-theme="dark"] {
+  // Webkit dark mode
+  *::-webkit-scrollbar-track {
+    background: var(--scrollbar-track-bg-dark);
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb-bg-dark);
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-thumb-hover-bg-dark);
+  }
+
+  *::-webkit-scrollbar-thumb:active {
+    background: var(--scrollbar-thumb-active-bg-dark);
+  }
+
+  *::-webkit-scrollbar-button {
+    background-color: var(--scrollbar-button-bg-dark);
+  }
+
+  // Adjust arrow colors for dark mode by replacing the SVG's fill color
+  *::-webkit-scrollbar-button:vertical:increment {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='var(--scrollbar-button-icon-color-dark)' class='bi bi-chevron-down' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+  }
+  *::-webkit-scrollbar-button:vertical:decrement {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='var(--scrollbar-button-icon-color-dark)' class='bi bi-chevron-up' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z'/%3E%3C/svg%3E");
+  }
+  *::-webkit-scrollbar-button:horizontal:increment {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='var(--scrollbar-button-icon-color-dark)' class='bi bi-chevron-right' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+  }
+  *::-webkit-scrollbar-button:horizontal:decrement {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='var(--scrollbar-button-icon-color-dark)' class='bi bi-chevron-left' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z'/%3E%3C/svg%3E");
+  }
+
+  *::-webkit-scrollbar-button:hover {
+    background-color: var(--scrollbar-button-hover-bg-dark);
+  }
+
+  *::-webkit-scrollbar-button:active {
+    background-color: var(--scrollbar-button-active-bg-dark);
+  }
+
+  *::-webkit-scrollbar-corner {
+    background: var(--scrollbar-corner-bg-dark);
+  }
+
+  *::-webkit-resizer {
+    background-color: var(--scrollbar-resizer-bg-dark);
+  }
+
+  // Firefox dark mode
+  @-moz-document url-prefix() {
+    [data-bs-theme="dark"] * {
+      scrollbar-color: var(--scrollbar-thumb-bg-dark) var(--scrollbar-track-bg-dark);
+    }
+  }
+}
+
+//
+// Smooth scrolling enhancement (respects user preferences)
+//
+
+@media (prefers-reduced-motion: no-preference) {
+  :root {
+    scroll-behavior: smooth;
+  }
+}
 
 //
 // No scrollbar utility
 //
 
-// Chrome, Edge and Safari
-.scollbar-none::-webkit-scrollbar {
-  display: none;
-}
+.scrollbar-none {
+  // Chrome, Edge and Safari
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
-// Firefox, IE, and Edge
-.scollbar-none {
-  -ms-overflow-style: none;
+  // Firefox
   scrollbar-width: none;
+
+  // IE and legacy Edge
+  -ms-overflow-style: none;
 }

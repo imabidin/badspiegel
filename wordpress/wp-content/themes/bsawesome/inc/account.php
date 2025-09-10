@@ -20,8 +20,7 @@
  *
  * @package BSAwesome
  * @subpackage Authentication
- * @since 1.0.0
- * @version 2.4.0
+ * @version 2.5.0
  */
 
 // =============================================================================
@@ -31,7 +30,6 @@
 /**
  * Add security headers for AJAX endpoints
  *
- * @since 1.0.0
  * @return void
  */
 add_action('wp_ajax_check_user_exists', 'add_ajax_security_headers', 1);
@@ -57,7 +55,6 @@ function add_ajax_security_headers()
 /**
  * Monitor failed login attempts globally
  *
- * @since 1.0.0
  * @param string $username Failed username
  * @return void
  */
@@ -88,7 +85,6 @@ function monitor_failed_logins($username)
 /**
  * AJAX handler to check if user exists
  *
- * @since 1.0.0
  * @return void
  */
 add_action('wp_ajax_check_user_exists', 'ajax_check_user_exists');
@@ -133,7 +129,6 @@ function ajax_check_user_exists()
 /**
  * Validate email address with comprehensive checks
  *
- * @since 1.0.0
  * @param string $email Email address to validate
  * @return bool True if valid, false otherwise
  */
@@ -208,7 +203,6 @@ function validate_email_address($email)
 /**
  * Enqueue user account validation script
  *
- * @since 1.0.0
  * @return void
  */
 add_action('wp_enqueue_scripts', 'enqueue_user_check_script');
@@ -239,7 +233,6 @@ function enqueue_user_check_script()
 /**
  * AJAX handler for user login validation
  *
- * @since 1.0.0
  * @return void
  */
 add_action('wp_ajax_validate_user_login', 'ajax_validate_user_login');
@@ -365,7 +358,6 @@ function ajax_validate_user_login()
 /**
  * Get client IP address with proxy support
  *
- * @since 1.0.0
  * @return string Client IP address
  */
 function get_client_ip()
@@ -389,7 +381,6 @@ function get_client_ip()
 /**
  * Check login attempts and lockout status
  *
- * @since 1.0.0
  * @param string $ip_address Client IP address
  * @param string $username Username being checked
  * @return array Lockout status and information
@@ -428,7 +419,6 @@ function check_login_attempts($ip_address, $username)
 /**
  * Log failed login attempt with rate limiting
  *
- * @since 1.0.0
  * @param string $ip_address Client IP address
  * @param string $username Username attempted
  * @param array $additional_data Additional logging data
@@ -474,7 +464,6 @@ function log_failed_login_attempt($ip_address, $username, $additional_data = arr
 /**
  * Get failed attempts information
  *
- * @since 1.0.0
  * @param string $ip_address Client IP address
  * @param string $username Username being checked
  * @return array Attempts information
@@ -499,7 +488,6 @@ function get_failed_attempts_info($ip_address, $username)
 /**
  * Clear failed login attempts
  *
- * @since 1.0.0
  * @param string $ip_address Client IP address
  * @param string $username Username to clear
  * @return void
@@ -519,7 +507,6 @@ function clear_failed_login_attempts($ip_address, $username)
 /**
  * AJAX handler for user registration
  *
- * @since 1.0.0
  * @return void
  */
 add_action('wp_ajax_register_new_user', 'ajax_register_new_user');
@@ -625,7 +612,6 @@ function ajax_register_new_user()
 /**
  * Log security events for monitoring
  *
- * @since 1.0.0
  * @param string $event_type Type of security event
  * @param array $details Additional event details
  * @return void

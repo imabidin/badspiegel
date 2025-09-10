@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
  * - CSV import/export support for price matrix assignments
  * - Comprehensive caching system for performance optimization
  *
- * @version 2.4.0
+ * @version 2.5.0
  * @package configurator
  */
 
@@ -43,8 +43,7 @@ if (!defined('ABSPATH')) {
  * @param string $requested_filename Filename from database or user input
  * @return string|null Full file path if found, null if no match
  */
-function find_pricematrix_file($requested_filename)
-{
+function find_pricematrix_file($requested_filename) {
     $base_dir = get_stylesheet_directory() . '/inc/configurator/pricematrices/php/';
 
     // Strategy 1: Exact filename match
@@ -118,8 +117,7 @@ function find_pricematrix_file($requested_filename)
  * @param string $filename Original filename
  * @return string Normalized filename for comparison
  */
-function normalize_filename_for_matching($filename)
-{
+function normalize_filename_for_matching($filename) {
     // Remove .php extension
     $name = str_replace('.php', '', $filename);
 
@@ -156,8 +154,7 @@ function normalize_filename_for_matching($filename)
  * @param WC_Product $product The WooCommerce product object to get options for
  * @return array Array of applicable product options with filtered sub-options
  */
-function get_product_options($product)
-{
+function get_product_options($product) {
     // Static caches for performance optimization
     static $options_cache = array();        // Cache for final option results per product
     static $pricematrix_cache = array();    // Cache for loaded price matrix files
@@ -562,7 +559,7 @@ function get_product_options($product)
 
     // Sort all options by their order property to ensure correct display order
     // This is crucial for automatic/dynamic options that are added after regular options
-    uasort($applicable_options, function($a, $b) {
+    uasort($applicable_options, function ($a, $b) {
         $order_a = isset($a['order']) ? intval($a['order']) : 0;
         $order_b = isset($b['order']) ? intval($b['order']) : 0;
 
@@ -593,8 +590,7 @@ function get_product_options($product)
  * @return string Modified price HTML with "ab" prefix if configurator options exist
  */
 add_filter('woocommerce_get_price_html', 'prefix_ab_for_products_with_options', 10, 2);
-function prefix_ab_for_products_with_options($price, $product)
-{
+function prefix_ab_for_products_with_options($price, $product) {
     // Only add prefix if configurator options are available for this product
     if (function_exists('get_product_options')) {
         $options = get_product_options($product);
@@ -669,8 +665,7 @@ add_filter('woocommerce_checkout_cart_item_name', 'replace_cart_product_links_wi
  * @param int $product_id The product ID for namespacing the generated ID
  * @return string Unique option ID in format 'opt-{product_id}-{counter}'
  */
-function get_next_option_id($product_id)
-{
+function get_next_option_id($product_id) {
     static $counter = 0;
     return 'opt-' . $product_id . '-' . ++$counter;
 }
@@ -694,8 +689,7 @@ function get_next_option_id($product_id)
  * @param int    $product_id   Optional product ID for better ID generation (default: null)
  * @return array Normalized option data structure ready for rendering
  */
-function prepare_option_data(array $option, $posted_value, $product_id = null)
-{
+function prepare_option_data(array $option, $posted_value, $product_id = null) {
     // Generate option key with fallbacks
     $option_key = '';
     if (!empty($option['key'])) {
@@ -876,8 +870,12 @@ function parse_pricematrix_input_ranges($matrix_file) {
     }
 
     // Only return ranges if we have all required values
-    if (isset($ranges['input_width_start'], $ranges['input_width_end'],
-              $ranges['input_height_start'], $ranges['input_height_end'])) {
+    if (isset(
+        $ranges['input_width_start'],
+        $ranges['input_width_end'],
+        $ranges['input_height_start'],
+        $ranges['input_height_end']
+    )) {
         $range_cache[$matrix_file] = $ranges;
         return $ranges;
     }
@@ -969,9 +967,11 @@ function apply_dynamic_ranges_to_option($option, $ranges) {
 
     // Check if this is a width-related field
     foreach ($width_fields as $field) {
-        if (strpos($option_key, $field) !== false ||
+        if (
+            strpos($option_key, $field) !== false ||
             strpos($option_name, $field) !== false ||
-            strpos($option_label, $field) !== false) {
+            strpos($option_label, $field) !== false
+        ) {
 
             $option['min'] = (string)$ranges['input_width_start'];
             $option['max'] = (string)$ranges['input_width_end'];
@@ -980,8 +980,10 @@ function apply_dynamic_ranges_to_option($option, $ranges) {
             if (isset($option['placeholder']) && is_numeric($option['placeholder'])) {
                 // Set placeholder to minimum value if current placeholder is outside range
                 $current_placeholder = (int)$option['placeholder'];
-                if ($current_placeholder < $ranges['input_width_start'] ||
-                    $current_placeholder > $ranges['input_width_end']) {
+                if (
+                    $current_placeholder < $ranges['input_width_start'] ||
+                    $current_placeholder > $ranges['input_width_end']
+                ) {
                     $option['placeholder'] = (string)$ranges['input_width_start'];
                 }
             }
@@ -992,9 +994,11 @@ function apply_dynamic_ranges_to_option($option, $ranges) {
 
     // Check if this is a height-related field
     foreach ($height_fields as $field) {
-        if (strpos($option_key, $field) !== false ||
+        if (
+            strpos($option_key, $field) !== false ||
             strpos($option_name, $field) !== false ||
-            strpos($option_label, $field) !== false) {
+            strpos($option_label, $field) !== false
+        ) {
 
             $option['min'] = (string)$ranges['input_height_start'];
             $option['max'] = (string)$ranges['input_height_end'];
@@ -1003,8 +1007,10 @@ function apply_dynamic_ranges_to_option($option, $ranges) {
             if (isset($option['placeholder']) && is_numeric($option['placeholder'])) {
                 // Set placeholder to minimum value if current placeholder is outside range
                 $current_placeholder = (int)$option['placeholder'];
-                if ($current_placeholder < $ranges['input_height_start'] ||
-                    $current_placeholder > $ranges['input_height_end']) {
+                if (
+                    $current_placeholder < $ranges['input_height_start'] ||
+                    $current_placeholder > $ranges['input_height_end']
+                ) {
                     $option['placeholder'] = (string)$ranges['input_height_start'];
                 }
             }
@@ -1578,8 +1584,7 @@ function calculate_configured_product_price($product, $config_code = null, $post
  * @return array Modified cart item data with configurator options and pricing
  */
 add_filter('woocommerce_add_cart_item_data', 'product_configurator_add_cart_item_data', 10, 2);
-function product_configurator_add_cart_item_data($cart_item_data, $product_id)
-{
+function product_configurator_add_cart_item_data($cart_item_data, $product_id) {
     $product = wc_get_product($product_id);
 
     // Use central pricing calculation function
@@ -1672,8 +1677,7 @@ function product_configurator_add_cart_item_data($cart_item_data, $product_id)
  * @return array Modified item data with visible configurator options
  */
 add_filter('woocommerce_get_item_data', 'product_configurator_get_item_data', 10, 2);
-function product_configurator_get_item_data($item_data, $cart_item)
-{
+function product_configurator_get_item_data($item_data, $cart_item) {
     if (!isset($cart_item['custom_configurator']) || !is_array($cart_item['custom_configurator'])) {
         return $item_data;
     }
@@ -1762,8 +1766,7 @@ function product_configurator_get_item_data($item_data, $cart_item)
  * @return void
  */
 add_action('woocommerce_before_calculate_totals', 'product_configurator_adjust_cart_item_prices', 10, 1);
-function product_configurator_adjust_cart_item_prices($cart)
-{
+function product_configurator_adjust_cart_item_prices($cart) {
     // Prevent execution in admin area unless it's an AJAX request
     if (is_admin() && !defined('DOING_AJAX')) {
         return;
@@ -1797,8 +1800,7 @@ function product_configurator_adjust_cart_item_prices($cart)
  * @return void
  */
 add_action('woocommerce_checkout_create_order_line_item', 'product_configurator_add_order_item_meta_data', 10, 4);
-function product_configurator_add_order_item_meta_data($item, $cart_item_key, $values, $order)
-{
+function product_configurator_add_order_item_meta_data($item, $cart_item_key, $values, $order) {
     // Ensure configurator data exists in cart item
     if (isset($values['custom_configurator']) && is_array($values['custom_configurator'])) {
 
@@ -1865,8 +1867,7 @@ function product_configurator_add_order_item_meta_data($item, $cart_item_key, $v
  * enabling efficient bulk management through CSV operations while providing
  * a user-friendly interface for individual product configuration.
  */
-class ProductPricematrixField
-{
+class ProductPricematrixField {
 
     /**
      * Directory path for price matrix PHP files
@@ -1899,8 +1900,7 @@ class ProductPricematrixField
      * Sets up all necessary hooks for admin interface, CSV import/export,
      * and meta field registration with WordPress and WooCommerce.
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->pricematrix_dir = get_stylesheet_directory() . '/inc/configurator/pricematrices/php/';
 
         // Product admin interface hooks
@@ -1928,8 +1928,7 @@ class ProductPricematrixField
      * Properly registers the price matrix meta field with WordPress REST API
      * and ensures it's available for import/export operations.
      */
-    public function register_meta_field()
-    {
+    public function register_meta_field() {
         register_meta('post', '_pricematrix_file', [
             'object_subtype' => 'product',
             'type' => 'string',
@@ -1961,8 +1960,7 @@ class ProductPricematrixField
      * Registers the price matrix field for CSV import mapping interface,
      * providing multiple field name variations for flexibility.
      */
-    public function add_csv_import_mapping($options, $item)
-    {
+    public function add_csv_import_mapping($options, $item) {
         // Remove debug logging for production
         // error_log('CSV import mapping called');
 
@@ -1998,8 +1996,7 @@ class ProductPricematrixField
      *
      * Provides automatic mapping for common column names found in CSV files.
      */
-    public function add_csv_import_default($columns)
-    {
+    public function add_csv_import_default($columns) {
         // Remove debug logging for production
         // error_log('CSV import defaults called');
 
@@ -2039,8 +2036,7 @@ class ProductPricematrixField
      * Processes price matrix data during CSV import, handling multiple
      * possible field names and ensuring proper file name formatting.
      */
-    public function handle_import_data($product, $data)
-    {
+    public function handle_import_data($product, $data) {
         // Remove debug logging for production - keep only for development
         // error_log('Handle import data called with: ' . print_r($data, true));
 
@@ -2061,8 +2057,7 @@ class ProductPricematrixField
     /**
      * Handle Pricematrix import
      */
-    private function handle_pricematrix_import($product, $data)
-    {
+    private function handle_pricematrix_import($product, $data) {
         $pricematrix_value = '';
 
         // Check multiple possible column names in import data
@@ -2097,8 +2092,7 @@ class ProductPricematrixField
     /**
      * Handle PriceCalc import for a specific type
      */
-    private function handle_pricecalc_import($product, $data, $type, $config)
-    {
+    private function handle_pricecalc_import($product, $data, $type, $config) {
         $pricecalc_value = '';
 
         // Check multiple possible column names for PriceCalc type
@@ -2138,8 +2132,7 @@ class ProductPricematrixField
     /**
      * Handle legacy PriceCalc import with automatic routing
      */
-    private function handle_legacy_pricecalc_import($product, $data)
-    {
+    private function handle_legacy_pricecalc_import($product, $data) {
         $pricecalc_value = '';
 
         // Check multiple possible column names for legacy PriceCalc
@@ -2192,8 +2185,7 @@ class ProductPricematrixField
     /**
      * Add export column definition
      */
-    public function add_export_column($columns)
-    {
+    public function add_export_column($columns) {
         $columns['meta:_pricematrix_file'] = 'Preismatrix';
 
         // Add PriceCalc export columns dynamically
@@ -2208,8 +2200,7 @@ class ProductPricematrixField
     /**
      * Add export default column mapping
      */
-    public function add_export_default($columns)
-    {
+    public function add_export_default($columns) {
         $columns['meta:_pricematrix_file'] = 'meta:_pricematrix_file';
 
         // Add PriceCalc export defaults dynamically
@@ -2223,8 +2214,7 @@ class ProductPricematrixField
     /**
      * Export price matrix data for CSV
      */
-    public function export_data($value, $product)
-    {
+    public function export_data($value, $product) {
         return $product->get_meta('_pricematrix_file', true);
     }
 
@@ -2236,8 +2226,7 @@ class ProductPricematrixField
      *
      * @return array Array of available price matrix files with metadata
      */
-    private function get_available_pricematrix_files()
-    {
+    private function get_available_pricematrix_files() {
         $files = glob($this->pricematrix_dir . '*.php');
         $matrices = [];
 
@@ -2269,8 +2258,7 @@ class ProductPricematrixField
      * @param string $file_path Full path to price matrix file
      * @return array Extracted file metadata
      */
-    private function get_file_info($file_path)
-    {
+    private function get_file_info($file_path) {
         $content = file_get_contents($file_path);
 
         // Add error handling for file reading
@@ -2301,8 +2289,7 @@ class ProductPricematrixField
     /**
      * Add price matrix tab to product data interface
      */
-    public function add_product_data_tab($tabs)
-    {
+    public function add_product_data_tab($tabs) {
         // Base pricematrix tab
         $tabs['pricematrix'] = [
             'label' => 'Preismatrix',
@@ -2329,8 +2316,7 @@ class ProductPricematrixField
      * Creates the complete admin interface for price matrix management
      * including file input, validation status, and available files listing.
      */
-    public function add_product_data_panel()
-    {
+    public function add_product_data_panel() {
         global $post;
 
         $current_matrix = get_post_meta($post->ID, '_pricematrix_file', true);
@@ -2476,8 +2462,7 @@ class ProductPricematrixField
      *
      * Creates a standardized admin interface for any PriceCalc type
      */
-    private function render_pricecalc_data_panel($type, $config)
-    {
+    private function render_pricecalc_data_panel($type, $config) {
         global $post;
 
         $type_upper = strtoupper($type);
@@ -2594,8 +2579,7 @@ class ProductPricematrixField
      * @param string $type The PriceCalc type (pxd, pxt)
      * @return array Array of options suitable for dropdown
      */
-    private function get_available_pricecalc_options_by_type($type)
-    {
+    private function get_available_pricecalc_options_by_type($type) {
         // Validate type exists in configuration
         if (!isset($this->pricecalc_types[$type])) {
             return [];
@@ -2632,8 +2616,7 @@ class ProductPricematrixField
      *
      * @return array Array of all pxd_ and pxt_ options suitable for dropdown
      */
-    private function get_available_pricecalc_options()
-    {
+    private function get_available_pricecalc_options() {
         $all_pricecalc_options = [];
 
         // Dynamically aggregate options from all configured PriceCalc types
@@ -2651,8 +2634,7 @@ class ProductPricematrixField
      * @param string $option_key The option key to get details for
      * @return array Option details including label, type, group, and options
      */
-    private function get_option_details($option_key)
-    {
+    private function get_option_details($option_key) {
         $all_options = get_all_product_options();
 
         if (!isset($all_options[$option_key])) {
@@ -2668,8 +2650,7 @@ class ProductPricematrixField
      * Processes form submission, validates filename, ensures proper extension,
      * and saves to product meta data with file existence validation.
      */
-    public function save_product_data($post_id)
-    {
+    public function save_product_data($post_id) {
         // Save Pricematrix field
         if (isset($_POST['_pricematrix_file'])) {
             $pricematrix_file = sanitize_text_field($_POST['_pricematrix_file']);
@@ -2708,8 +2689,7 @@ class ProductPricematrixField
     /**
      * Save individual PriceCalc option with validation
      */
-    private function save_pricecalc_option($post_id, $type, $config)
-    {
+    private function save_pricecalc_option($post_id, $type, $config) {
         $field_name = "_pricecalc_{$type}_option";
 
         if (isset($_POST[$field_name])) {
@@ -2722,8 +2702,10 @@ class ProductPricematrixField
             } else {
                 // Validate that the option exists in options.php and has correct prefix
                 $all_options = get_all_product_options();
-                if (array_key_exists($pricecalc_option, $all_options) &&
-                    strpos($pricecalc_option, $config['prefix']) === 0) {
+                if (
+                    array_key_exists($pricecalc_option, $all_options) &&
+                    strpos($pricecalc_option, $config['prefix']) === 0
+                ) {
                     update_post_meta($post_id, $field_name, $pricecalc_option);
                 } else {
                     // Log warning for invalid option key
@@ -2741,4 +2723,6 @@ class ProductPricematrixField
 new ProductPricematrixField();
 
 // Include and initialize the admin overview system
-require_once get_stylesheet_directory() . '/inc/configurator/pricematrices/backend.php';
+if (is_admin()) {
+    require_once get_stylesheet_directory() . '/inc/configurator/pricematrices/backend.php';
+}

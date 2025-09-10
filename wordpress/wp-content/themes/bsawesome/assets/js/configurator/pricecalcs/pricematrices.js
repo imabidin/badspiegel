@@ -17,7 +17,7 @@
  * - Data attribute synchronization for price display
  * - Prevention of redundant calculations through value caching
  *
- * @version 2.3.0
+ * @version 2.4.0
  * @package Configurator
  * @subpackage PriceCalculations
  */
@@ -52,6 +52,63 @@ function findOption(pricematrixCache, pricematrixSelect, key, domFallbackFn) {
   }
 
   return optionToSelect;
+}
+
+/**
+ * DOM fallback function for finding options by data-label attribute
+ * This is the standard fallback used by single-dimension price calculations
+ * when the cache doesn't contain the required option
+ *
+ * @param {HTMLSelectElement} pricematrixSelect - The select element containing price options
+ * @param {string} key - The key to search for (numeric value as string)
+ * @returns {HTMLOptionElement|null} The matching option element or null if not found
+ */
+function findOptionByDataLabel(pricematrixSelect, key) {
+  return Array.from(pricematrixSelect.options).find(currentOption => {
+    const labelValue = parseInt(currentOption.dataset.label, 10);
+    return !isNaN(labelValue) && labelValue === parseInt(key, 10);
+  });
+}
+
+/**
+ * Calculates proportional price distribution for dual dimension inputs
+ * Distributes the total price proportionally based on the ratio of input dimensions
+ * to ensure both prices sum to the exact total while avoiding decimal values
+ *
+ * @param {number} inputValue1 - First dimension value (e.g., width)
+ * @param {number} inputValue2 - Second dimension value (e.g., height)
+ * @param {number} totalPrice - Total price to distribute
+ * @returns {Object} Object with price1 and price2 properties
+ *
+ * @example
+ * // Input: width=400, height=600, totalPrice=1000
+ * // Output: { price1: 400, price2: 600 }
+ * calculateProportionalPrices(400, 600, 1000);
+ */
+function calculateProportionalPrices(inputValue1, inputValue2, totalPrice) {
+  const dimensionSum = inputValue1 + inputValue2;
+
+  // Calculate exact proportions
+  const proportion1 = inputValue1 / dimensionSum;
+  const proportion2 = inputValue2 / dimensionSum;
+
+  // Calculate proportional prices and round to avoid decimals
+  const price1 = Math.round(totalPrice * proportion1);
+  const price2 = Math.round(totalPrice * proportion2);
+
+  // Ensure exact sum by adjusting the larger price if needed
+  const currentSum = price1 + price2;
+  if (currentSum !== totalPrice) {
+    const difference = totalPrice - currentSum;
+    // Adjust the price with larger proportion
+    if (proportion1 >= proportion2) {
+      return { price1: price1 + difference, price2: price2 };
+    } else {
+      return { price1: price1, price2: price2 + difference };
+    }
+  }
+
+  return { price1, price2 };
 }
 
 // ====================== SINGLE DIMENSION CALCULATIONS ======================
@@ -118,13 +175,7 @@ export function calcPrice1x100(inputElement, pricematrixSelect, pricematrixCache
     pricematrixCache,
     pricematrixSelect,
     String(valueToUse),
-    (pricematrixSelect, key) => {
-      // DOM fallback: Search by data-label attribute
-      return Array.from(pricematrixSelect.options).find(currentOption => {
-        const labelValue = parseInt(currentOption.dataset.label, 10);
-        return !isNaN(labelValue) && labelValue === parseInt(key, 10);
-      });
-    }
+    findOptionByDataLabel
   );
 
   // Exit if no matching option found
@@ -134,11 +185,11 @@ export function calcPrice1x100(inputElement, pricematrixSelect, pricematrixCache
   updateSelectAndTrigger(pricematrixSelect, optionToSelect);
 
   // Synchronize price data attribute for display systems
-  inputElement.dataset.price = optionToSelect.dataset.price || "0";
+  inputElement.dataset.price = optionToSelect.dataset.price || "0"; // important for summary.js
 }
 
 /**
- * Calculates price for single dimension inputs with 50-unit rounding
+ * Calculates price for single dimension inputs with 50-unit rounding (e.g., Klappelemente, Tiefe, etc.)
  * Similar to calcPrice1x100 but rounds to the next multiple of 50 instead of 100
  * Ideal for configurations with smaller step sizes (e.g., 150, 200, 250, 300, 350, 400)
  *
@@ -200,13 +251,7 @@ export function calcPrice1x50(inputElement, pricematrixSelect, pricematrixCache,
     pricematrixCache,
     pricematrixSelect,
     String(valueToUse),
-    (pricematrixSelect, key) => {
-      // DOM fallback: Search by data-label attribute
-      return Array.from(pricematrixSelect.options).find(currentOption => {
-        const labelValue = parseInt(currentOption.dataset.label, 10);
-        return !isNaN(labelValue) && labelValue === parseInt(key, 10);
-      });
-    }
+    findOptionByDataLabel
   );
 
   // Exit if no matching option found
@@ -282,13 +327,7 @@ export function calcPrice1x10(inputElement, pricematrixSelect, pricematrixCache,
     pricematrixCache,
     pricematrixSelect,
     String(valueToUse),
-    (pricematrixSelect, key) => {
-      // DOM fallback: Search by data-label attribute
-      return Array.from(pricematrixSelect.options).find(currentOption => {
-        const labelValue = parseInt(currentOption.dataset.label, 10);
-        return !isNaN(labelValue) && labelValue === parseInt(key, 10);
-      });
-    }
+    findOptionByDataLabel
   );
 
   // Exit if no matching option found
@@ -412,10 +451,13 @@ export function calcPrice2x100(inputElement1, inputElement2, pricematrixSelect, 
   // Use the same updateSelectAndTrigger function as calcPrice1x100 for consistency
   updateSelectAndTrigger(pricematrixSelect, optionToSelect);
 
-  // Synchronize data-price attributes for both input elements (same as calcPrice1x100)
-  const price = optionToSelect.dataset.price || "0";
-  inputElement1.dataset.price = price;
-  inputElement2.dataset.price = price;
+  // Intelligent proportional price distribution based on input dimensions
+  const totalPrice = parseInt(optionToSelect.dataset.price || "0", 10);
+  const proportionalPrices = calculateProportionalPrices(inputValue1, inputValue2, totalPrice);
+
+  // Synchronize proportional data-price attributes for both input elements
+  inputElement1.dataset.price = String(proportionalPrices.price1);
+  inputElement2.dataset.price = String(proportionalPrices.price2);
 }
 
 /**

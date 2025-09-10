@@ -1,5 +1,13 @@
-<!-- V2.3.0 -->
-<!-- HERO -->
+<?php
+
+/**
+ * @version 2.5.0
+ */
+
+?>
+
+<?php // HERO
+?>
 <div class="hero-container bg-dark overflow-hidden">
     <div class="hero-img-container position-relative">
         <?php echo do_shortcode('[img id="1112" size="full" class="hero-img hero-img-night w-100 opacity-0"]'); ?>
@@ -44,7 +52,7 @@
                     </div>
                     <div class="col-auto">
                         <a href="/shop/badmoebel/" class="btn btn-lg btn-dark link-light text-wrap" role="button" aria-label="Entdecken Sie unsere maßgeschneiderten Badmöbel">Badmöbel entdecken</a>
-                   </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -52,7 +60,8 @@
     </div>
 </div>
 
-<!-- USP -->
+<?php // USP
+?>
 <div class="bg-light">
     <div class="container-md py">
         <div class="row g-3 justify-content-center justify-content-lg-evenly">
@@ -87,7 +96,8 @@
     </div>
 </div>
 
-<!-- CATEGORIES -->
+<?php // CATEGORIES
+?>
 <div class="container-md mt">
     <p class="h2 text-center mb">Unsere Kategorien</p>
     <div class="row row-cols-2 row-cols-md-3 row-cols-xl-4 g-3 justify-content-center">
@@ -122,36 +132,38 @@
                 $is_png = false;
             }
         ?>
-        <div class="col">
-            <div class="card h-100 border-0 bg-light">
-                <!-- Accessible image link -->
-                <a class="opacity-75-hover transition mb-3" href="<?php echo esc_url($category_link); ?>" aria-label="Mehr über <?php echo esc_attr($category_name); ?> erfahren">
-                    <img src="<?php echo esc_url($image_url); ?>" alt="Produktkategorie: <?php echo esc_attr($category_name); ?>" <?php if ($is_png) : ?>style="filter: drop-shadow(0.5rem 0.25rem 0.5rem rgba(0,0,0,.25));"
-                    <?php endif; ?>>
-                </a>
-                <!-- Accessible text link -->
-                <a href="<?php echo esc_url($category_link); ?>" class="text-center text-montserrat link-body-emphasis mb-3" role="link">
-                    <?php echo esc_html($category_name); ?>
-                </a>
+            <div class="col">
+                <div class="card h-100 border-0 bg-light">
+                    <!-- Accessible image link -->
+                    <a class="opacity-75-hover transition mb-3" href="<?php echo esc_url($category_link); ?>" aria-label="Mehr über <?php echo esc_attr($category_name); ?> erfahren">
+                        <img src="<?php echo esc_url($image_url); ?>" alt="Produktkategorie: <?php echo esc_attr($category_name); ?>" <?php if ($is_png) : ?>style="filter: drop-shadow(0.5rem 0.25rem 0.5rem rgba(0,0,0,.25));"
+                            <?php endif; ?>>
+                    </a>
+                    <!-- Accessible text link -->
+                    <a href="<?php echo esc_url($category_link); ?>" class="text-center text-montserrat link-body-emphasis mb-3" role="link">
+                        <?php echo esc_html($category_name); ?>
+                    </a>
+                </div>
             </div>
-        </div>
         <?php endforeach; ?>
     </div>
 </div>
 
-<!-- BESTSELLER -->
+<?php // BESTSELLER
+?>
 <div class="container-md mt">
     <p class="h2 mb text-center">Unsere neuesten Produkte</p>
     <?php echo do_shortcode('[products limit="8" columns="0" orderby="popularity" class="simplebar"]'); ?>
 </div>
 
-<!-- CONFIGURATOR CODE-->
+<?php // CONFIGURATOR CODE
+?>
 <div class="container-md px-0 px-md-3 mt">
     <div class="row g-0 text-bg-dark py-4 py-md-3 px-4">
         <h2 class="mb-3">Konfiguration als Code</h2>
         <label class="form-label mb-3" for="homepage-configcode-input">Code hier eingeben und mit der Konfiguration fortsetzen:</label>
         <div class="input-group">
-            <input style="max-width:24ch" type="text" class="form-control focus-ring focus-ring-secondary"  style="border-color:var(--bs-secondary)" id="homepage-configcode-input" placeholder="z.B. ABC123" maxlength="6" autocomplete="off">
+            <input style="max-width:24ch" type="text" class="form-control focus-ring focus-ring-secondary" style="border-color:var(--bs-secondary)" id="homepage-configcode-input" placeholder="z.B. ABC123" maxlength="6" autocomplete="off">
             <button class="btn btn-secondary" type="button" id="homepage-configcode-load">
                 Code laden
             </button>
@@ -160,7 +172,8 @@
     </div>
 </div>
 
-<!-- CONFIGURATOR -->
+<?php // CONFIGURATOR
+?>
 <div class="container-md px-0 px-md-3 mt-md-5">
     <div class="row g-0 text-bg-secondary">
         <div class="col-12 col-lg-6 overflow-hidden" style="max-height: 464px">
@@ -181,7 +194,8 @@
     </div>
 </div>
 
-<!-- FAQ -->
+<?php // FAQ
+?>
 <div class="container-md px-0 px-md-3">
     <div class="accordion" id="accordionFAQ">
         <div class="accordion-item">
@@ -223,7 +237,8 @@
     </div>
 </div>
 
-<!-- ABOUT US -->
+<?php // ABOUT US
+?>
 <div class="container-md px-0 px-md-3 mt-md-5">
     <div class="row g-0 bg-light py-4 py-md-3 px-4">
         <div class="col">
@@ -235,7 +250,8 @@
     </div>
 </div>
 
-<!-- NEWSLETTER - export in different file for functional usage in the future -->
+<?php // NEWSLETTER US - export in different file for functional usage in the future
+?>
 <div class="container-md px-0 px-md-3 my-md-5" data-newsletter="form">
     <div class="row g-0 bg-dark text-white">
         <div class="col-12 col-lg-6 overflow-hidden" style="max-height: 464px">
@@ -249,7 +265,8 @@
     </div>
 </div>
 
-<!-- Customer Reviews -->
+<?php // CUSTOMER REVIEWS
+?>
 <!-- <div class="container-md mt-4 mt-md-5">
     <p class="h2 mb text-center">Unsere Kundenstimmen</p>
     <div class="woocommerce simplebar">
@@ -306,13 +323,17 @@
    </div>
 </div> -->
 
-<!-- Call to Action: Categories -->
- <!-- HERO -->
+<?php // HERO FOOTER
+?>
 <div class="hero-container hero-footer bg-dark overflow-hidden">
     <div class="hero-img-container position-relative">
         <?php echo do_shortcode('[img id="1145" size="full" class="hero-img hero-img-night w-100 opacity-0"]'); ?>
         <?php echo do_shortcode('[img id="1147" size="full" class="hero-img hero-img-dawn position-absolute start-0 top-0 w-100 opacity-0"]'); ?>
         <?php echo do_shortcode('[img id="1147" size="full" class="hero-img hero-img-day position-absolute start-0 top-0 w-100 opacity-0"]'); ?>
+
+        <a class="hero-pointer" href="/shop/badspiegel-mit-rahmen/" role="link" aria-label="Spiegel mit Rahmen" title="Spiegel mit Rahmen" data-bs-tooltip="true" style="top: 29%; left: 27.75%"></a>
+        <a class="hero-pointer" href="/shop/sideboards/" role="link" aria-label="Sideboards" title="Sideboards" data-bs-tooltip="true" style="top: 61%; left: 38.675%"></a>
+        <a class="hero-pointer" href="/shop/lowboards/" role="link" aria-label="Lowboards" title="Lowboards" data-bs-tooltip="true" style="top: 70.25%; left: 69.25%"></a>
     </div>
 
     <div class="hero-text-container position-relative">
@@ -333,7 +354,7 @@
                     </div>
                     <div class="col-auto">
                         <a href="/shop/lowboards/" class="btn btn-lg btn-dark link-light text-wrap" role="button" aria-label="Entdecken Sie unsere maßgeschneiderten Lowboards">Lowboards entdecken</a>
-                   </div>
+                    </div>
                 </div>
             </div>
         </div>

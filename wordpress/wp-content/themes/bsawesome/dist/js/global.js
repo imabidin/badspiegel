@@ -198,7 +198,7 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
  * - Auto-redirect functionality for code URLs
  * - Comprehensive debug logging system
  *
- * @version 2.3.0
+ * @version 2.5.0
  * @package Configurator
  */
 
@@ -746,7 +746,7 @@ var ModalSystem = {
 
     // Add optional configuration summary accordion
     if (showSummaryAccordion) {
-      modalBody += "\n        <div class=\"accordion\" id=\"loadedOptionsAccordion\">\n          <div class=\"accordion-item\">\n            <h5 class=\"accordion-header\" id=\"headingOptions\">\n              <button class=\"accordion-button collapsed bg-secondary-subtle\" type=\"button\" \n                  data-bs-toggle=\"collapse\" data-bs-target=\"#collapseOptions\" \n                  aria-expanded=\"false\" aria-controls=\"collapseOptions\">\n                Zusammenfassung anzeigen\n              </button>\n            </h5>\n            <div id=\"collapseOptions\" class=\"accordion-collapse collapse\" \n                aria-labelledby=\"headingOptions\" data-bs-parent=\"#loadedOptionsAccordion\">\n              <div class=\"accordion-body bg-secondary-subtle row g-3 p-3 mx-0\">\n                ".concat(RenderUtils.renderOptionsList(configData, debug), "\n              </div>\n            </div>\n          </div>\n        </div>\n      ");
+      modalBody += "\n        <div class=\"accordion\" id=\"loadedOptionsAccordion\">\n          <div class=\"accordion-item\">\n            <h5 class=\"accordion-header\" id=\"headingOptions\">\n              <button class=\"accordion-button collapsed bg-secondary-subtle\" type=\"button\"\n                  data-bs-toggle=\"collapse\" data-bs-target=\"#collapseOptions\"\n                  aria-expanded=\"false\" aria-controls=\"collapseOptions\">\n                Zusammenfassung anzeigen\n              </button>\n            </h5>\n            <div id=\"collapseOptions\" class=\"accordion-collapse collapse\"\n                aria-labelledby=\"headingOptions\" data-bs-parent=\"#loadedOptionsAccordion\">\n              <div class=\"accordion-body bg-secondary-subtle row g-3 p-3 mx-0\">\n                ".concat(RenderUtils.renderOptionsList(configData, debug), "\n              </div>\n            </div>\n          </div>\n        </div>\n      ");
     }
     this.createBaseModal({
       title: "Konfiguration angewendet",
@@ -1424,60 +1424,161 @@ $(document).ready(function () {
  *    - Sanitize HTML before using .html() method
  *    - Validate fieldName and fieldValue before DOM queries
  *    - Add Content Security Policy headers
+ *    - Implement rate limiting for AJAX requests
+ *    - Add CSRF token validation on client side
+ *    - Sanitize all user inputs before DOM insertion
  *
  * 7. Dependency management:
  *    - Add existence checks for myAjaxData before usage
  *    - Verify createModal function availability
  *    - Implement graceful degradation for missing jQuery
  *    - Add feature detection for required browser APIs
+ *    - Check Bootstrap modal availability
+ *    - Verify FontAwesome icon dependencies
  *
  * 8. Memory management:
  *    - Implement proper modal cleanup/destruction
  *    - Remove all event listeners on component destroy
  *    - Clear timers and intervals properly
  *    - Add WeakMap for DOM element references
+ *    - Implement proper cleanup on page unload
+ *    - Memory leak detection and monitoring
  *
  * 9. Race condition prevention:
  *    - Cancel previous AJAX requests before new ones
  *    - Implement request queuing system
  *    - Add loading state management
  *    - Prevent multiple simultaneous form submissions
+ *    - Add request deduplication for identical requests
+ *    - Implement proper state machine for UI states
  *
  * 10. Error handling robustness:
  *     - Distinguish between network and server errors
  *     - Add try-catch blocks around DOM manipulations
  *     - Implement fallback strategies for failed operations
  *     - Add comprehensive error logging and reporting
+ *     - Create error recovery mechanisms
+ *     - Add user-friendly error recovery options
  *
  * 11. DOM selector reliability:
  *     - Cache frequently used selectors
  *     - Use data attributes instead of complex selectors
  *     - Implement element existence validation
  *     - Add fallback element discovery methods
+ *     - Implement robust element waiting strategies
+ *     - Add DOM mutation observers for dynamic content
  *
  * 12. Input validation enhancement:
  *     - Add strict type checking for configData
  *     - Validate parseInt results against expected ranges
  *     - Implement schema validation for configuration objects
  *     - Add input sanitization before processing
+ *     - Implement real-time validation feedback
+ *     - Add custom validation rules system
  *
  * 13. Performance optimizations:
  *     - Implement DOM query caching
  *     - Add input debouncing for real-time validation
  *     - Use DocumentFragment for bulk DOM updates
  *     - Optimize frequent selector queries
+ *     - Add virtual scrolling for large option lists
+ *     - Implement lazy loading for modal content
  *
  * 14. Code maintainability:
  *     - Break down large functions into smaller units
  *     - Reduce code duplication between handlers
  *     - Make debug mode configurable via data attributes
  *     - Add comprehensive JSDoc type definitions
+ *     - Implement unit testing framework
+ *     - Add code coverage monitoring
  *
  * 15. Accessibility improvements:
  *     - Enhance modal focus management and keyboard navigation
  *     - Add ARIA labels to dynamically created elements
  *     - Implement proper screen reader announcements
  *     - Add high contrast mode support
+ *     - Ensure proper color contrast ratios
+ *     - Add keyboard shortcuts for power users
+ *
+ * 16. Mobile optimization:
+ *     - Touch-friendly modal interfaces
+ *     - Responsive design improvements
+ *     - Mobile-specific input handling
+ *     - Virtual keyboard optimization
+ *     - Improved touch target sizes
+ *     - Mobile-specific loading indicators
+ *
+ * 17. Internationalization (i18n):
+ *     - Extract all German text strings to language files
+ *     - Add multi-language support infrastructure
+ *     - Implement dynamic language switching
+ *     - Add RTL language support
+ *     - Localize date and number formats
+ *     - Add translation validation tools
+ *
+ * 18. Advanced UX features:
+ *     - Add configuration preview before applying
+ *     - Implement undo/redo functionality
+ *     - Add configuration comparison tools
+ *     - Implement drag-and-drop configuration loading
+ *     - Add configuration sharing via QR codes
+ *     - Implement configuration versioning
+ *
+ * 19. Browser compatibility:
+ *     - Add polyfills for older browsers
+ *     - Implement feature detection and graceful degradation
+ *     - Add browser-specific workarounds
+ *     - Test with various browser versions
+ *     - Add support for browser extensions compatibility
+ *     - Implement progressive enhancement strategies
+ *
+ * 20. Testing and quality assurance:
+ *     - Add comprehensive unit test suite
+ *     - Implement integration testing
+ *     - Add end-to-end testing scenarios
+ *     - Create automated accessibility testing
+ *     - Add performance benchmarking
+ *     - Implement visual regression testing
+ *
+ * 21. Monitoring and observability:
+ *     - Add application performance monitoring (APM)
+ *     - Implement real user monitoring (RUM)
+ *     - Add client-side error tracking
+ *     - Create usage analytics dashboard
+ *     - Add A/B testing infrastructure
+ *     - Implement feature flag system
+ *
+ * 22. Data persistence and sync:
+ *     - Add local storage caching strategies
+ *     - Implement offline-first architecture
+ *     - Add cross-device configuration sync
+ *     - Create backup and restore functionality
+ *     - Add configuration export/import features
+ *     - Implement real-time collaboration features
+ *
+ * 23. Advanced security measures:
+ *     - Implement client-side encryption for sensitive data
+ *     - Add integrity checks for configuration data
+ *     - Implement secure communication protocols
+ *     - Add audit logging for security events
+ *     - Create security headers validation
+ *     - Add protection against timing attacks
+ *
+ * 24. Developer experience:
+ *     - Add development mode with enhanced debugging
+ *     - Create configuration schema documentation
+ *     - Add API documentation generation
+ *     - Implement hot reloading for development
+ *     - Create developer tools browser extension
+ *     - Add performance profiling tools
+ *
+ * 25. Business intelligence:
+ *     - Add conversion tracking for configurations
+ *     - Implement funnel analysis for configuration flow
+ *     - Create configuration abandonment tracking
+ *     - Add customer journey mapping
+ *     - Implement configuration recommendation engine
+ *     - Add pricing optimization based on usage patterns
  */
 
 /***/ }),
@@ -1712,7 +1813,7 @@ function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" 
 function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 /**
  * Modern Favourites JavaScript - WordPress Best Practices
- * 
+ *
  * Key improvements:
  * 1. Pre-loaded states (no initialization AJAX)
  * 2. Optimistic UI updates
@@ -1723,16 +1824,77 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
 var FavouritesManager = /*#__PURE__*/function () {
   function FavouritesManager() {
     _classCallCheck(this, FavouritesManager);
-    this.states = favouritesData.states || {};
-    this.count = favouritesData.count || 0;
+    // Debug configuration - set to false to disable console logging
+    this.debug = myAjaxData.favourites.debug !== undefined ? myAjaxData.favourites.debug : false;
+    this.states = myAjaxData.favourites.states || {};
+    this.count = myAjaxData.favourites.count || 0;
     this.isProcessing = new Set(); // Track processing products
+    this.initialized = false; // Track if we're initializing
 
     this.init();
   }
+
+  /**
+   * Debug logging helper - only logs when debug mode is enabled
+   */
   return _createClass(FavouritesManager, [{
+    key: "log",
+    value: function log(message) {
+      if (this.debug) {
+        var _console;
+        for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+          args[_key - 1] = arguments[_key];
+        }
+        (_console = console).log.apply(_console, [message].concat(args));
+      }
+    }
+
+    /**
+     * Debug warning helper - only logs when debug mode is enabled
+     */
+  }, {
+    key: "warn",
+    value: function warn(message) {
+      if (this.debug) {
+        var _console2;
+        for (var _len2 = arguments.length, args = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+          args[_key2 - 1] = arguments[_key2];
+        }
+        (_console2 = console).warn.apply(_console2, [message].concat(args));
+      }
+    }
+
+    /**
+     * Debug error helper - always logs errors regardless of debug mode
+     */
+  }, {
+    key: "error",
+    value: function error(message) {
+      var _console3;
+      for (var _len3 = arguments.length, args = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+        args[_key3 - 1] = arguments[_key3];
+      }
+      (_console3 = console).error.apply(_console3, [message].concat(args));
+    }
+
+    /**
+     * Debug info helper - only logs when debug mode is enabled
+     */
+  }, {
+    key: "info",
+    value: function info(message) {
+      if (this.debug) {
+        var _console4;
+        for (var _len4 = arguments.length, args = new Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
+          args[_key4 - 1] = arguments[_key4];
+        }
+        (_console4 = console).info.apply(_console4, [message].concat(args));
+      }
+    }
+  }, {
     key: "init",
     value: function init() {
-      console.log('🚀 [Favourites] Initializing with pre-loaded states:', this.states);
+      this.log('🚀 [Favourites] Initializing with pre-loaded states:', this.states);
 
       // Initialize button states from server data
       this.initializeButtonStates();
@@ -1740,8 +1902,11 @@ var FavouritesManager = /*#__PURE__*/function () {
       // Single event handler
       this.attachEventHandlers();
 
-      // Update badge
-      this.updateBadge();
+      // Update badge without animation on initial load
+      this.updateBadge(false);
+
+      // Mark as initialized
+      this.initialized = true;
     }
 
     /**
@@ -1756,13 +1921,13 @@ var FavouritesManager = /*#__PURE__*/function () {
         var productId = parseInt(button.dataset.productId);
         var configCode = _this.extractConfigCode(button);
         if (!productId || !_this.states[productId]) {
-          console.warn('⚠️ [Favourites] No state data for product:', productId);
+          _this.warn('⚠️ [Favourites] No state data for product:', productId);
           return;
         }
         var productState = _this.states[productId];
         var isFavourite = _this.isProductFavourite(productId, configCode, productState);
         _this.updateButtonVisualState(button, isFavourite);
-        console.log("\u2705 [Favourites] Initialized button for product ".concat(productId, ":"), {
+        _this.log("\u2705 [Favourites] Initialized button for product ".concat(productId, ":"), {
           configCode: configCode,
           isFavourite: isFavourite,
           availableConfigs: productState.config_codes
@@ -1834,6 +1999,19 @@ var FavouritesManager = /*#__PURE__*/function () {
           _this2.handleRemoveClick(removeButton);
           return;
         }
+
+        // Handle cart action buttons (loading state)
+        var cartButton = e.target.closest('.btn-cart-action');
+        if (cartButton) {
+          // Add loading state immediately
+          var originalContent = cartButton.innerHTML;
+          cartButton.innerHTML = '<i class="fa-sharp fa-light fa-spinner fa-spin"></i>';
+          cartButton.style.pointerEvents = 'none';
+
+          // Note: The actual navigation happens automatically via href
+          // The loading state gives visual feedback until page loads
+          return;
+        }
       });
     }
 
@@ -1844,33 +2022,33 @@ var FavouritesManager = /*#__PURE__*/function () {
     key: "handleButtonClick",
     value: (function () {
       var _handleButtonClick = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(button) {
-        var productId, configCode, action, key, currentState, _newState, response, _response$data, originalState, _t;
+        var productId, configCode, currentState, newState, action, key, response, _response$data, _response$data2, errorType, errorMessage, originalState, _t;
         return _regenerator().w(function (_context) {
           while (1) switch (_context.p = _context.n) {
             case 0:
               productId = parseInt(button.dataset.productId);
-              configCode = this.extractConfigCode(button); // Prevent concurrent requests for same product/action
+              configCode = this.extractConfigCode(button); // Get current state first
+              currentState = this.isProductFavourite(productId, configCode, this.states[productId]);
+              newState = !currentState; // Prevent concurrent requests for same product/action
               action = newState ? 'add' : 'remove';
               key = "".concat(action, "-").concat(productId, "-").concat(configCode || 'null');
               if (!this.isProcessing.has(key)) {
                 _context.n = 1;
                 break;
               }
-              console.log('⏸️ [Favourites] Already processing:', key);
+              this.log('⏸️ [Favourites] Already processing:', key);
               return _context.a(2);
             case 1:
-              console.log('🖱️ [Favourites] Button clicked:', {
+              this.log('🖱️ [Favourites] Button clicked:', {
                 productId: productId,
                 configCode: configCode
               });
               this.isProcessing.add(key);
               _context.p = 2;
-              // Get current state
-              currentState = this.isProductFavourite(productId, configCode, this.states[productId]);
-              _newState = !currentState; // Optimistic update
-              this.updateButtonVisualState(button, _newState);
-              this.updateLocalState(productId, configCode, _newState);
-              console.log("\uD83D\uDD04 [Favourites] Optimistic update: ".concat(currentState, " \u2192 ").concat(_newState));
+              // Optimistic update
+              this.updateButtonVisualState(button, newState);
+              this.updateLocalState(productId, configCode, newState);
+              this.log("\uD83D\uDD04 [Favourites] Optimistic update: ".concat(currentState, " \u2192 ").concat(newState));
 
               // Send AJAX request
               _context.n = 3;
@@ -1881,34 +2059,47 @@ var FavouritesManager = /*#__PURE__*/function () {
                 _context.n = 4;
                 break;
               }
-              console.log('✅ [Favourites] Server confirmed:', response.data);
+              this.log('✅ [Favourites] Server confirmed:', response.data);
 
               // Update global count
               this.count = response.data.count;
               this.updateBadge();
 
               // Cache invalidation hint for next page load
-              if (favouritesData.cacheKey) {
-                sessionStorage.setItem('bsawesome_cache_invalid_' + favouritesData.cacheKey, '1');
+              if (myAjaxData.favourites.cacheKey) {
+                sessionStorage.setItem('bsawesome_cache_invalid_' + myAjaxData.favourites.cacheKey, '1');
               }
 
               // Server state should match our optimistic update
-              if (response.data.is_favourite !== _newState) {
-                console.warn('⚠️ [Favourites] State mismatch, correcting...');
+              if (response.data.is_favourite !== newState) {
+                this.warn('⚠️ [Favourites] State mismatch, correcting...');
                 this.updateButtonVisualState(button, response.data.is_favourite);
                 this.updateLocalState(productId, configCode, response.data.is_favourite);
               }
-              _context.n = 5;
+              _context.n = 6;
               break;
             case 4:
-              throw new Error(((_response$data = response.data) === null || _response$data === void 0 ? void 0 : _response$data.message) || 'Server error');
-            case 5:
-              _context.n = 7;
+              // Check for specific error types
+              errorType = (_response$data = response.data) === null || _response$data === void 0 ? void 0 : _response$data.error_type;
+              errorMessage = ((_response$data2 = response.data) === null || _response$data2 === void 0 ? void 0 : _response$data2.message) || 'Server error';
+              if (!(errorType === 'product_private')) {
+                _context.n = 5;
+                break;
+              }
+              // Special handling for private products - show gentle message
+              this.info('ℹ️ [Favourites] Private product:', errorMessage);
+              this.showInfo(errorMessage);
+              _context.n = 6;
               break;
+            case 5:
+              throw new Error(errorMessage);
             case 6:
-              _context.p = 6;
+              _context.n = 8;
+              break;
+            case 7:
+              _context.p = 7;
               _t = _context.v;
-              console.error('❌ [Favourites] Error:', _t);
+              this.error('❌ [Favourites] Error:', _t);
 
               // Rollback optimistic update
               originalState = !this.isProductFavourite(productId, configCode, this.states[productId]);
@@ -1917,14 +2108,14 @@ var FavouritesManager = /*#__PURE__*/function () {
 
               // Show user-friendly error
               this.showError('Fehler beim Aktualisieren der Favoriten. Bitte versuchen Sie es erneut.');
-            case 7:
-              _context.p = 7;
-              this.isProcessing.delete(key);
-              return _context.f(7);
             case 8:
+              _context.p = 8;
+              this.isProcessing.delete(key);
+              return _context.f(8);
+            case 9:
               return _context.a(2);
           }
-        }, _callee, this, [[2, 6, 7, 8]]);
+        }, _callee, this, [[2, 7, 8, 9]]);
       }));
       function handleButtonClick(_x) {
         return _handleButtonClick.apply(this, arguments);
@@ -1940,7 +2131,7 @@ var FavouritesManager = /*#__PURE__*/function () {
     value: (function () {
       var _handleRemoveClick = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2(button) {
         var _this3 = this;
-        var productId, configCode, key, originalContent, response, productItem, _response$data2, _t2;
+        var productId, configCode, key, originalContent, response, productItem, _response$data3, _t2;
         return _regenerator().w(function (_context2) {
           while (1) switch (_context2.p = _context2.n) {
             case 0:
@@ -1951,10 +2142,10 @@ var FavouritesManager = /*#__PURE__*/function () {
                 _context2.n = 1;
                 break;
               }
-              console.log('⏸️ [Favourites] Already processing remove:', key);
+              this.log('⏸️ [Favourites] Already processing remove:', key);
               return _context2.a(2);
             case 1:
-              console.log('🗑️ [Favourites] Remove button clicked:', {
+              this.log('🗑️ [Favourites] Remove button clicked:', {
                 productId: productId,
                 configCode: configCode
               });
@@ -1973,7 +2164,7 @@ var FavouritesManager = /*#__PURE__*/function () {
                 _context2.n = 4;
                 break;
               }
-              console.log('✅ [Favourites] Remove confirmed:', response.data);
+              this.log('✅ [Favourites] Remove confirmed:', response.data);
 
               // Update global count
               this.count = response.data.count;
@@ -2004,14 +2195,14 @@ var FavouritesManager = /*#__PURE__*/function () {
               _context2.n = 5;
               break;
             case 4:
-              throw new Error(((_response$data2 = response.data) === null || _response$data2 === void 0 ? void 0 : _response$data2.message) || 'Remove failed');
+              throw new Error(((_response$data3 = response.data) === null || _response$data3 === void 0 ? void 0 : _response$data3.message) || 'Remove failed');
             case 5:
               _context2.n = 7;
               break;
             case 6:
               _context2.p = 6;
               _t2 = _context2.v;
-              console.error('❌ [Favourites] Remove error:', _t2);
+              this.error('❌ [Favourites] Remove error:', _t2);
 
               // Restore button state
               button.innerHTML = originalContent;
@@ -2040,7 +2231,7 @@ var FavouritesManager = /*#__PURE__*/function () {
   }, {
     key: "showEmptyFavouritesMessage",
     value: function showEmptyFavouritesMessage(container) {
-      var emptyMessage = "\n            <div class=\"favourites-empty alert alert-light text-center py-5 border-2 border-dashed\">\n                <i class=\"fa-sharp fa-light fa-heart fa-4x text-muted mb-3 d-block\"></i>\n                <h4 class=\"text-muted mb-3\">Keine Favoriten gefunden</h4>\n                <p class=\"text-muted mb-4\">Sie haben alle Favoriten entfernt.</p>\n                <a href=\"".concat(this.getShopUrl(), "\" class=\"btn btn-primary\">\n                    <i class=\"fa-sharp fa-light fa-shopping-bag me-2\"></i>\n                    Jetzt Produkte entdecken\n                </a>\n            </div>\n        ");
+      var emptyMessage = "\n            <div class=\"favourites-empty alert alert-light text-center py-5 border-2 border-dashed\">\n                <i class=\"fa-sharp fa-light fa-heart-broken fa-4x text-muted mb-3 d-block\"></i>\n                <h4 class=\"text-muted mb-3\">Keine Favoriten gefunden</h4>\n                <p class=\"text-muted mb-4\">Sie haben alle Favoriten entfernt.</p>\n                <a href=\"".concat(this.getShopUrl(), "\" class=\"btn btn-primary\">\n                    <i class=\"fa-sharp fa-light fa-shopping-bag me-2\"></i>\n                    Jetzt Produkte entdecken\n                </a>\n            </div>\n        ");
 
       // Replace content but keep container structure
       var productLoop = container.querySelector('.woocommerce ul.products, .products');
@@ -2058,7 +2249,7 @@ var FavouritesManager = /*#__PURE__*/function () {
     key: "getShopUrl",
     value: function getShopUrl() {
       // Try to get shop URL from various sources
-      return favouritesData.shopUrl || '/shop/';
+      return myAjaxData.favourites.shopUrl || '/shop/';
     }
 
     /**
@@ -2073,7 +2264,7 @@ var FavouritesManager = /*#__PURE__*/function () {
       // Clear all states
       icon.className = 'fa-sharp fa-heart';
       if (isFavourite) {
-        icon.classList.add('fa-solid', 'text-warning');
+        icon.classList.add('fa-solid', 'text-danger');
         button.setAttribute('title', 'Aus Favoriten entfernen');
         button.setAttribute('aria-pressed', 'true');
       } else {
@@ -2130,12 +2321,12 @@ var FavouritesManager = /*#__PURE__*/function () {
               formData = new FormData();
               formData.append('action', 'favourite_toggle');
               formData.append('product_id', productId);
-              formData.append('nonce', favouritesData.nonce);
+              formData.append('nonce', myAjaxData.favourites.nonce);
               if (configCode) {
                 formData.append('config_code', configCode);
               }
               _context3.n = 1;
-              return fetch(favouritesData.ajaxUrl, {
+              return fetch(myAjaxData.favourites.ajaxUrl, {
                 method: 'POST',
                 body: formData
               });
@@ -2155,16 +2346,47 @@ var FavouritesManager = /*#__PURE__*/function () {
     }()
     /**
      * Update badge counter
+     * @param {boolean} animate - Whether to animate the badge change
      */
     )
   }, {
     key: "updateBadge",
     value: function updateBadge() {
       var _this4 = this;
-      var badges = document.querySelectorAll('.favourites-count');
-      badges.forEach(function (badge) {
+      var animate = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+      var badges = document.querySelectorAll('#favourites-count-badge, .favourites-count');
+      this.log("\uD83D\uDD22 [Favourites] Updating badge count to: ".concat(this.count, ", found ").concat(badges.length, " badges, animate: ").concat(animate));
+      badges.forEach(function (badge, index) {
+        _this4.log("\uD83C\uDFF7\uFE0F [Favourites] Badge ".concat(index, ": current display = ").concat(badge.style.display, ", computed = ").concat(window.getComputedStyle(badge).display));
         badge.textContent = _this4.count;
-        badge.style.display = _this4.count > 0 ? 'inline' : 'none';
+
+        // Show/hide badge based on count
+        if (_this4.count > 0) {
+          // Force show the badge
+          badge.style.display = 'inline-block';
+          badge.style.visibility = 'visible';
+          _this4.log("\uD83D\uDFE2 [Favourites] Badge ".concat(index, " should be visible now: ").concat(badge.style.display));
+
+          // Add animation only if requested and not during initialization
+          if (animate && _this4.initialized) {
+            badge.style.transition = 'transform 0.2s ease';
+            badge.style.transform = 'scale(1.1)';
+            setTimeout(function () {
+              badge.style.transform = 'scale(1)';
+            }, 200);
+          }
+        } else {
+          badge.style.display = 'none';
+          badge.style.visibility = 'hidden';
+          _this4.log("\uD83D\uDD34 [Favourites] Badge ".concat(index, " hidden"));
+        }
+      });
+
+      // Update heart icon in header - keep it simple since we have a badge
+      var heartIcons = document.querySelectorAll('#site-favourites i');
+      heartIcons.forEach(function (icon) {
+        // Always keep heart icon thin and neutral since badge shows the count
+        icon.className = 'fa-sharp fa-thin fa-heart';
       });
     }
 
@@ -2177,18 +2399,57 @@ var FavouritesManager = /*#__PURE__*/function () {
       // Could integrate with your existing notification system
       alert(message);
     }
+
+    /**
+     * Show info message (less intrusive than error)
+     */
+  }, {
+    key: "showInfo",
+    value: function showInfo(message) {
+      // For now, use console and a less aggressive alert
+      this.info('ℹ️ [Favourites] Info:', message);
+
+      // You could replace this with a toast notification or similar
+      // For now, we'll use a less aggressive approach - no alert for info
+
+      // Optional: Show a subtle visual feedback instead of alert
+      // this.showToast(message, 'info');
+    }
   }]);
-}(); // Initialize when DOM is ready
+}(); // Initialize the favourites manager
+if (!window.favouritesManagerInstance) {
+  window.favouritesManagerInstance = new FavouritesManager();
+}
+
+// Global function for backwards compatibility with configurator
+window.updateFavouritesBadgeDisplay = function (count) {
+  if (window.favouritesManagerInstance && window.favouritesManagerInstance.debug) {
+    console.log('🔗 [Favourites] Legacy badge update called with count:', count);
+  }
+  if (window.favouritesManagerInstance) {
+    // Update the count and refresh badge
+    window.favouritesManagerInstance.count = parseInt(count) || 0;
+    window.favouritesManagerInstance.updateBadge(true); // Animate for external updates
+  }
+};
+
+// Make the manager instance globally available for debugging
+window.favouritesManager = window.favouritesManagerInstance;
+
+// Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', function () {
   // Verify required data is available
-  if (typeof favouritesData === 'undefined') {
-    console.error('❌ [Favourites] favouritesData not found');
+  if (typeof myAjaxData === 'undefined' || typeof myAjaxData.favourites === 'undefined') {
+    console.error('❌ [Favourites] myAjaxData.favourites not found');
     return;
   }
 
   // Prevent double initialization
   if (window.favouritesManagerInstance) {
-    console.warn('⚠️ [Favourites] Already initialized, skipping');
+    // Only log warning if debug is enabled
+    if (myAjaxData.favourites.debug === true) {
+      console.warn('⚠️ [Favourites] Already initialized, skipping');
+    }
     return;
   }
   window.favouritesManagerInstance = new FavouritesManager();
@@ -4319,10 +4580,48 @@ var CLASSES = {
  * Automatically finds and processes all elements with "simplebar" class
  */
 document.addEventListener("DOMContentLoaded", function () {
+  initAllSimpleBars();
+});
+
+/**
+ * Initialize SimpleBar for all containers (can be called multiple times)
+ * Useful for dynamically loaded content like AJAX-loaded cross-selling sections
+ */
+function initAllSimpleBars() {
   document.querySelectorAll(".simplebar").forEach(function (container) {
     initCustomScroll(container);
   });
+}
+
+/**
+ * Observe for new SimplBar containers added dynamically
+ * Uses MutationObserver to detect new .simplebar elements
+ */
+var observer = new MutationObserver(function (mutations) {
+  mutations.forEach(function (mutation) {
+    mutation.addedNodes.forEach(function (node) {
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        // Check if the added node itself has simplebar class
+        if (node.classList && node.classList.contains('simplebar')) {
+          initCustomScroll(node);
+        }
+        // Check for simplebar elements within the added node
+        node.querySelectorAll && node.querySelectorAll('.simplebar').forEach(function (container) {
+          initCustomScroll(container);
+        });
+      }
+    });
+  });
 });
+
+// Start observing for dynamically added content
+observer.observe(document.body, {
+  childList: true,
+  subtree: true
+});
+
+// Global function for manual initialization (useful for AJAX callbacks)
+window.initSimpleBars = initAllSimpleBars;
 
 // =============================================================================
 // CORE FUNCTIONS
@@ -4585,9 +4884,22 @@ function destroyTooltips() {
   });
   tooltipInstances = [];
 }
-function initTooltips() {
+
+/**
+ * Hide tooltip for a specific element
+ * @param {HTMLElement} element - The element with tooltip to hide
+ */
+function hideTooltip(element) {
   var _window$bootstrap;
-  if (!((_window$bootstrap = window.bootstrap) !== null && _window$bootstrap !== void 0 && _window$bootstrap.Tooltip)) return;
+  if (!element || !((_window$bootstrap = window.bootstrap) !== null && _window$bootstrap !== void 0 && _window$bootstrap.Tooltip)) return;
+  var tooltip = bootstrap.Tooltip.getInstance(element);
+  if (tooltip && typeof tooltip.hide === "function") {
+    tooltip.hide();
+  }
+}
+function initTooltips() {
+  var _window$bootstrap2;
+  if (!((_window$bootstrap2 = window.bootstrap) !== null && _window$bootstrap2 !== void 0 && _window$bootstrap2.Tooltip)) return;
   destroyTooltips();
   var viewportMd = window.matchMedia("(min-width: 768px)").matches;
 
@@ -4610,9 +4922,7 @@ function initTooltips() {
         return attr.name.startsWith("data-modal");
       })) {
         el.addEventListener("click", function () {
-          if (tooltip && typeof tooltip.hide === "function") {
-            tooltip.hide();
-          }
+          hideTooltip(el);
         });
       }
     } catch (error) {
@@ -4623,6 +4933,7 @@ function initTooltips() {
 
 // Global verfügbar machen
 window.initTooltips = initTooltips;
+window.hideTooltip = hideTooltip;
 document.addEventListener("DOMContentLoaded", initTooltips);
 
 // Reagiert performant auf Breakpoint-Wechsel
@@ -15633,21 +15944,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _js_filter__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_js_filter__WEBPACK_IMPORTED_MODULE_8__);
 /* harmony import */ var _js_loop__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./js/loop */ "./assets/js/loop.js");
 /* harmony import */ var _js_configurator_configcode_load__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./js/configurator/configcode/load */ "./assets/js/configurator/configcode/load.js");
-// global.js
-
-// PRODUCTION MODE: Debug logging disabled
-if (typeof window !== 'undefined') {
-  window.addEventListener('DOMContentLoaded', function () {
-    // Check if myAjaxData is loaded (silent in production)
-    if (typeof myAjaxData === 'undefined') {
-      // AJAX functionality may fail - debug in development only
-      return;
-    }
-
-    // PRODUCTION: AJAX monitoring disabled for performance
-    // Debug code removed for production deployment
-  });
-}
+/**
+ * Global
+ *
+ * @version 2.5.0
+ */
 
 // Import Scss
 

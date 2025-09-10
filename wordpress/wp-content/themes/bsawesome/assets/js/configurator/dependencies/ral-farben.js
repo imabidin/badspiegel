@@ -1,5 +1,5 @@
 /**
- * @version 2.3.0
+ * @version 2.5.0
  *
  * @todo Its not inside build, add to configurator.js and do feature checks, if everything works fine
  */

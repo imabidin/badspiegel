@@ -1,4 +1,9 @@
-// style.scss
+//
+// Style
+//
+// @version 2.5.0
+//
+
 
 .edit-link {
   display: none;
@@ -52,6 +57,7 @@
 // Base
 //
 
+@import "base/spacing";
 @import "base/typography";
 @import "base/media";
 @import "base/forms";
@@ -106,12 +112,6 @@
 //
 
 @import "mailpoet";
-
-//
-// Zendesk
-//
-
-@import "zendesk";
 
 //
 // Borlabs

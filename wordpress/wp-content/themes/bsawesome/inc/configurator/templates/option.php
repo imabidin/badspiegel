@@ -9,7 +9,7 @@
  * their type. Handles auto-loading of saved configurations and delegates to
  * specific template files for different option types.
  *
- * @version 2.4.0
+ * @version 2.5.0
  * @package configurator
  */
 
@@ -122,7 +122,7 @@ function render_option(array $option, $posted_value, $product_id, &$option_order
             // Handle unknown option types with error message
             echo '<div class="alert alert-warning mb-3" role="alert">' .
                  esc_html($option_label) . ': ' .
-                 esc_html__('Option type is missing.', 'my-product-configurator') .
+                 esc_html__('Option type is missing.', 'bsawesome') .
                  '</div>';
             break;
     }

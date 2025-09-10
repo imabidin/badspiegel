@@ -1,10 +1,10 @@
 /**
- * @version 2.3.0
+ * @version 2.5.0
+ *
+ * @note Seems to be final, no further changes if not needed
  */
 
 import { dependenciesValuesXvalues, dependenciesValuesXcontainer } from "./../dependencies.js";
-
-import {} from "./../variables.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   /**

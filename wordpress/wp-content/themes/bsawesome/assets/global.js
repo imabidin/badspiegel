@@ -1,4 +1,8 @@
-// global.js
+/**
+ * Global
+ *
+ * @version 2.5.0
+ */
 
 // Import Scss
 import "./scss/style.scss";

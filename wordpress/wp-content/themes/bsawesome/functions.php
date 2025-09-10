@@ -25,7 +25,7 @@
  * @package BSAwesome
  * @subpackage Core
  * @since 1.0.0
- * @version 2.4.0
+ * @version 2.5.0
  */
 
 // =============================================================================
@@ -36,18 +36,19 @@ $stylesheet_directory = get_stylesheet_directory();
 $inc_dir = $stylesheet_directory . '/inc/';
 
 require_once $inc_dir . 'setup.php';         // Theme setup and configuration management
+require_once $inc_dir . 'redirects.php';     // Custom redirect management
+require_once $inc_dir . 'session.php';       // Session management (i.e. for favourites)
 require_once $inc_dir . 'assets.php';        // Asset management (CSS/JS) with versioning and conditional loading
-require_once $inc_dir . 'shortcodes.php';    // Custom shortcodes functionality
 require_once $inc_dir . 'woocommerce.php';   // WooCommerce integration with custom hooks and filters
-require_once $inc_dir . 'account.php';       // User account functionality with AJAX authentication
-require_once $inc_dir . 'loop.php';          // Product loop customizations
-require_once $inc_dir . 'favourites.php';    // Favourites system with session and database storage
-require_once $inc_dir . 'forms.php';         // Form handling and validation
 require_once $inc_dir . 'germanized.php';    // German market compliance features
 require_once $inc_dir . 'yoast.php';         // SEO optimization through Yoast integration
-require_once $inc_dir . 'zendesk.php';       // Customer support integration
+require_once $inc_dir . 'forms.php';         // Form handling and validation
 require_once $inc_dir . 'modal.php';         // Modal system for product details and configurations
-require_once $inc_dir . 'redirects.php';     // Custom redirect management
+require_once $inc_dir . 'shortcodes.php';    // Custom shortcodes functionality
+require_once $inc_dir . 'account.php';       // User account functionality with AJAX authentication
+require_once $inc_dir . 'favourites.php';    // Favourites system with session and database storage
+require_once $inc_dir . 'loop.php';          // Product loop customizations
+require_once $inc_dir . 'zendesk.php';       // Customer support integration
 
 if (is_admin()) {
     require_once $inc_dir . 'plugins/media-duplicate-admin.php';  // Media duplicate manager (admin only)
@@ -105,5 +106,8 @@ require_once $inc_dir . 'configurator/templates/option.php';              // Opt
 // HELPER FUNCTIONS
 // =============================================================================
 
-require_once $inc_dir . 'helpers/display-imgsizes.php';                   // Image size helper functions
 require_once $inc_dir . 'helpers/addtocart-classes.php';                  // Add to cart CSS classes helper
+
+if (is_admin()) {
+    require_once $inc_dir . 'helpers/display-imgsizes.php';                   // Image size helper functions (admin only)
+}

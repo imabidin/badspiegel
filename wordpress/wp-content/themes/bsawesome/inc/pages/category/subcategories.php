@@ -1,26 +1,63 @@
-<?php
+<?php defined('ABSPATH') || exit;
 
 /**
- * WooCommerce Subcategories Display Module
+ * WooCommerce Subcategories Display and URL Optimization Module
  *
- * Handles the display of product subcategories with image filtering
- * and URL optimization for better SEO and user experience.
+ * Provides advanced subcategory display functionality with SEO-optimized URLs,
+ * image filtering, and responsive grid layout for enhanced category navigation.
  *
- * @package BSAwesome
- * @version 2.4.0
- * @author BadSpiegel Team
+ * @version 2.5.0
+ *
+ * Features:
+ * - SEO-friendly URL structure (removes parent category slugs)
+ * - Image-filtered subcategory display (only categories with thumbnails)
+ * - Responsive horizontal scrolling grid layout
+ * - Bootstrap styling with drop shadow effects
+ * - Hover effects and accessibility enhancements
+ * - Smart content positioning and spacing
+ * - Performance-optimized with conditional loading
+ *
+ * Security Measures:
+ * - ABSPATH protection against direct access
+ * - Comprehensive output escaping with esc_url(), esc_attr(), esc_html()
+ * - Safe term link generation with error handling
+ * - Input validation for term objects and taxonomy
+ * - Secure image URL processing with fallback handling
+ *
+ * Performance Features:
+ * - Conditional execution only on product category pages
+ * - Efficient term filtering with array_filter()
+ * - Minimal database queries with get_terms() optimization
+ * - Lazy loading and decoding attributes for images
+ * - Cached term meta retrieval for thumbnails
+ * - Early exit strategies for empty result sets
+ *
+ * Dependencies:
+ * - WooCommerce for product category taxonomy and functions
+ * - WordPress term and attachment functions
+ * - Bootstrap 5 for responsive grid and card components
+ * - SimpleBar for enhanced horizontal scrolling
  */
 
+// =============================================================================
+// URL OPTIMIZATION
+// =============================================================================
+
 /**
- * Remove parent category slug from subcategory URLs for cleaner SEO-friendly URLs
+ * Remove parent category slug from subcategory URLs for SEO optimization
  *
- * Transforms URLs from /parent-category/subcategory/ to /subcategory/
- * to avoid deep nested URL structures and improve SEO ranking.
+ * Transforms nested category URLs from /parent-category/subcategory/ to /subcategory/
+ * for cleaner URL structure, improved SEO ranking, and better user experience.
+ * Only affects WooCommerce product categories with parent relationships.
  *
- * @param string $url      The term URL
- * @param object $term     The term object
- * @param string $taxonomy The taxonomy name
- * @return string Modified URL without parent slug
+ * URL Transformation Examples:
+ * - Before: /mirrors/bathroom-mirrors/
+ * - After: /bathroom-mirrors/
+ *
+ * @param string $url      The original term URL
+ * @param object $term     The term object containing category data
+ * @param string $taxonomy The taxonomy name being processed
+ * @return string Modified URL with parent slug removed or original URL if unchanged
  */
 add_filter('term_link', 'remove_product_cat_parent_from_link', 10, 3);
 function remove_product_cat_parent_from_link($url, $term, $taxonomy)
@@ -38,22 +75,34 @@ function remove_product_cat_parent_from_link($url, $term, $taxonomy)
     return $url;
 }
 
+// =============================================================================
+// SUBCATEGORY DISPLAY
+// =============================================================================
+
 /**
- * Display subcategories with thumbnails in product category pages
+ * Display subcategories with responsive thumbnail grid layout
  *
- * Renders a horizontal scrollable grid of subcategories that have thumbnail images.
- * Only shows subcategories with actual images (no placeholders) for better visual appeal.
- * Integrates seamlessly with WooCommerce shop layout using Bootstrap components.
+ * Renders a horizontal scrollable grid of subcategories with thumbnail images
+ * for enhanced category navigation. Only displays subcategories that have
+ * actual thumbnail images (excludes placeholders) for optimal visual appeal.
  *
- * Features:
- * - Responsive grid layout (4 cols on medium, 5 cols on large screens)
- * - Horizontal scrolling with custom styling
- * - Image filtering (only categories with thumbnails)
- * - Drop shadow effects for visual depth
- * - Hover effects for better interactivity
+ * Layout Features:
+ * - Responsive grid (2 cols mobile, 4 cols medium, 5 cols large screens)
+ * - Horizontal scrolling with SimpleBar integration
+ * - Bootstrap card components with hover effects
+ * - Drop shadow styling for visual depth
+ * - Optimized image loading with lazy loading attributes
+ * - Accessibility-compliant link labels and alt text
+ *
+ * Performance Optimizations:
+ * - Early exit for non-category pages
+ * - Efficient subcategory filtering with hide_empty parameter
+ * - Image existence validation before rendering
+ * - Conditional execution based on taxonomy context
+ * - Minimal DOM manipulation with clean HTML structure
  *
  * @hooks woocommerce_before_shop_loop Priority 15 (after description, before products)
- * @return void Outputs HTML directly
+ * @return void Outputs responsive subcategory grid HTML
  */
 add_action('woocommerce_before_shop_loop', 'custom_list_product_subcategories_row', 15);
 function custom_list_product_subcategories_row()
@@ -97,14 +146,6 @@ function custom_list_product_subcategories_row()
     echo '<ul class="woocommerce list-unstyled flex-nowrap row row-cols-2 row-cols-md-4 row-cols-lg-5 g-3 mx-0">';
 
     foreach ($subcats_with_images as $index => $subcat) {
-        // Apply special spacing to first and last items for edge alignment
-        $col_classes = '';
-        // if ($index === 0) {
-        //     $col_classes .= ' ps0'; // Remove left padding from first item
-        // } elseif ($index === $count - 1) {
-        //     $col_classes .= ' pe0'; // Remove right padding from last item
-        // }
-
         // Get thumbnail image (guaranteed to exist due to filtering above)
         $thumb_id = get_term_meta($subcat->term_id, 'thumbnail_id', true);
         $image_url = wp_get_attachment_url($thumb_id);
@@ -132,9 +173,9 @@ function custom_list_product_subcategories_row()
         );
 
 ?>
-        <li class="<?php echo esc_attr(trim($col_classes)); ?>">
+        <li>
             <div class="card h-100 border-0 position-relative">
-                <?php // Category Image Link
+                <?php // Category image link with hover effects
                 ?>
                 <a href="<?php echo $term_link; ?>"
                     class="opacity-75-hover transition"
@@ -149,7 +190,7 @@ function custom_list_product_subcategories_row()
                         width="300"
                         height="300">
                 </a>
-                <?php // Category Title Link positioned at bottom
+                <?php // Category title link positioned at bottom with spacing
                 ?>
                 <div class="card-body p-0 text-center mt-n3">
                     <a href="<?php echo $term_link; ?>"

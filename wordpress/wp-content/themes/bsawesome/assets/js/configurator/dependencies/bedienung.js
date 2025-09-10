@@ -1,5 +1,9 @@
 /**
- * @version 2.3.0
+ * @version 2.5.0
+ *
+ * @todo Intensive testing in various scenarios
+ * @todo Check different mirror shapes (e.g. round, oval)
+ * @todo Check different product types
  */
 
 import { dependenciesValuesXvalues, dependenciesValuesXcontainer } from "./../dependencies.js";

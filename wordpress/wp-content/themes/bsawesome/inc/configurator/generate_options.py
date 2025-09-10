@@ -11,7 +11,7 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 CONFIG_XLSX_PATH = os.path.join(script_dir, 'options.xlsx')
 MAIN_OPTIONS_PHP = os.path.join(script_dir, 'options.php')
 
-PRICE_MULTIPLIER = 1.0
+PRICE_MULTIPLIER = 1.1
 
 # ------------------------------------------------------------------------
 # 2) Mapping
@@ -84,9 +84,9 @@ def parse_cell_value(raw_value, field_type: str):
         raw_value = ""
     elif not isinstance(raw_value, str):
         raw_value = str(raw_value)
-    
+
     raw_value = raw_value.strip()
-    
+
     # Default values
     if not raw_value:
         if field_type == "array":
@@ -102,30 +102,30 @@ def parse_cell_value(raw_value, field_type: str):
         else:
             # Fallback for unknown types
             return ""
-    
+
     # Conversion
     if field_type == "string":
         return raw_value
-    
+
     elif field_type == "bool":
         # Handle various boolean representations
         upper_value = raw_value.upper()
         return upper_value in ["TRUE", "1", "1.0", "YES", "Y", "JA", "J"]
-    
+
     elif field_type == "int":
         try:
             return int(float(raw_value.replace(",", ".")))
         except ValueError:
             return 0
-    
+
     elif field_type == "float":
         try:
             return float(raw_value.replace(",", "."))
         except ValueError:
             return 0.0
-    
+
     elif field_type == "array":  # "123,abc,  45" -> [123, "abc", 45]
-        results = [] 
+        results = []
         for item in raw_value.split(","):
             item = item.strip()
             if not item:
@@ -137,11 +137,11 @@ def parse_cell_value(raw_value, field_type: str):
                 continue
             except ValueError:
                 pass
-            
+
             # String fallback
             results.append(item)
         return results
-    
+
     else:
         # Fallback for unknown types
         return raw_value
@@ -211,31 +211,31 @@ def check_description_file_exists(filename: str) -> str:
     Gibt den korrekten Dateinamen zurück oder leeren String falls nicht gefunden.
     """
     global missing_files
-    
+
     if not filename or not filename.strip():
         return ""
-    
+
     original_filename = filename
-    
+
     # .html anhängen falls keine Erweiterung vorhanden
     if not filename.endswith('.html'):
         filename = filename + '.html'
-    
+
     # Basis-Pfad für HTML-Dateien
     html_base_dir = os.path.join(script_dir, '..', '..', 'html')
-    
+
     # Verschiedene mögliche Pfade durchsuchen
     # WICHTIG: filename kann bereits Unterordner enthalten (z.B. "leuchte/pandora-31.html")
     search_paths = [
         # os.path.join(html_base_dir, 'configurator', 'newers', filename),
         os.path.join(html_base_dir, 'configurator', filename),  # Unterstützt jetzt Unterordner
     ]
-    
+
     # Prüfen ob Datei in einem der Pfade existiert
     for full_path in search_paths:
         if os.path.exists(full_path):
             return filename
-    
+
     # Datei nicht gefunden - zu Set hinzufügen
     missing_files.add(original_filename)
     return ""
@@ -248,31 +248,31 @@ def process_dekor_values(df_dekor):
     """
     if df_dekor is None or df_dekor.empty:
         return []
-    
+
     dekor_values = []
     order_counter = 1
-    
+
     for _, row in df_dekor.iterrows():
         val_dict = {}
         for xlsx_col, (internal_key, field_type) in DEKOR_COLUMNS.items():
             raw_value = row.get(xlsx_col, '')
             val_dict[internal_key] = parse_cell_value(raw_value, field_type)
-        
+
         # Nur Zeilen mit einem value verarbeiten
         if not val_dict.get('value'):
             continue
-        
+
         # Prüfen ob visible = True (oder 1) ist
         is_visible = val_dict.get('visible', False)
         if not is_visible:
             continue  # Nicht sichtbare Dekore überspringen
-        
+
         # Automatische Reihenfolge vergeben (basierend auf Position in Excel)
         val_dict['order'] = order_counter
         order_counter += 1
-        
+
         dekor_values.append(val_dict)
-    
+
     return dekor_values
 
 # ------------------------------------------------------------------------
@@ -299,7 +299,7 @@ function get_all_product_options()
     for opt in options_list:
         raw_option = opt.get('option', '')
         option_type = opt.get('type', '')
-        
+
         if not raw_option or not option_type:
             # Keine Option oder kein Type => Überspringen
             continue
@@ -445,7 +445,7 @@ function get_all_product_options()
 def main():
     global missing_files
     missing_files = set()  # Reset für jeden Durchlauf
-    
+
     if not os.path.exists(CONFIG_XLSX_PATH):
         print(f"Fehler: {CONFIG_XLSX_PATH} nicht gefunden.")
         return
@@ -456,7 +456,7 @@ def main():
         df_values = pd.read_excel(CONFIG_XLSX_PATH, sheet_name='values', dtype=str).fillna('')
         df_pxd = pd.read_excel(CONFIG_XLSX_PATH, sheet_name='pxd', dtype=str).fillna('')
         df_pxt = pd.read_excel(CONFIG_XLSX_PATH, sheet_name='pxt', dtype=str).fillna('')
-        
+
         # Dekor-Sheet laden (falls vorhanden und nicht leer)
         df_dekor = None
         try:
@@ -466,7 +466,7 @@ def main():
                 df_dekor = None
         except Exception:
             df_dekor = None
-            
+
     except Exception as e:
         print(f"Fehler beim Laden von {CONFIG_XLSX_PATH}: {e}")
         return
@@ -482,17 +482,17 @@ def main():
 
     # 5b) values_dict (typkonvertiert)
     values_dict = {}
-    
+
     # Dekor-Values verarbeiten (falls Dekor-Sheet vorhanden)
     dekor_values = process_dekor_values(df_dekor) if df_dekor is not None else []
-    
+
     # Dynamisch alle Optionen finden, die mit "Dekor" anfangen (case-insensitive)
     dekor_option_names = []
     for opt in options_list:
         option_name = opt.get('option', '').strip()
         if option_name and option_name.lower().startswith('dekor'):
             dekor_option_names.append(option_name)
-    
+
     # Erst normale values verarbeiten
     for _, row in df_values.iterrows():
         val_dict = {}
@@ -507,7 +507,7 @@ def main():
         if apply_option not in values_dict:
             values_dict[apply_option] = []
         values_dict[apply_option].append(val_dict)
-    
+
     # Dann PXD values verarbeiten (überschreibt normale values für PXD Optionen)
     for _, row in df_pxd.iterrows():
         val_dict = {}
@@ -524,7 +524,7 @@ def main():
             if apply_option not in values_dict:
                 values_dict[apply_option] = []
             values_dict[apply_option].append(val_dict)
-    
+
     # Dann PXT values verarbeiten (überschreibt normale values für PXT Optionen)
     for _, row in df_pxt.iterrows():
         val_dict = {}
@@ -541,7 +541,7 @@ def main():
             if apply_option not in values_dict:
                 values_dict[apply_option] = []
             values_dict[apply_option].append(val_dict)
-    
+
     # Dekor-Values zu allen Dekor-Optionen hinzufügen (überschreibt existierende values)
     if dekor_values and dekor_option_names:
         for dekor_option in dekor_option_names:
@@ -550,14 +550,14 @@ def main():
 
     # 5c) Erzeuge die PHP-Datei
     generate_main_options_php(options_list, values_dict)
-    
+
     # Log fehlende Dateien (falls vorhanden)
     if missing_files:
         print(f"⚠️  {len(missing_files)} description file(s) not found:")
         for filename in sorted(missing_files):
             print(f"   • {filename}")
         print()
-    
+
     print(f"✅ Optionen erfolgreich generiert: {MAIN_OPTIONS_PHP}")
 
 if __name__ == "__main__":

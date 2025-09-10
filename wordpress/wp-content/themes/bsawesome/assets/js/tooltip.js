@@ -27,6 +27,19 @@ function destroyTooltips() {
   tooltipInstances = [];
 }
 
+/**
+ * Hide tooltip for a specific element
+ * @param {HTMLElement} element - The element with tooltip to hide
+ */
+function hideTooltip(element) {
+  if (!element || !window.bootstrap?.Tooltip) return;
+
+  const tooltip = bootstrap.Tooltip.getInstance(element);
+  if (tooltip && typeof tooltip.hide === "function") {
+    tooltip.hide();
+  }
+}
+
 function initTooltips() {
   if (!window.bootstrap?.Tooltip) return;
 
@@ -59,9 +72,7 @@ function initTooltips() {
         [...el.attributes].some((attr) => attr.name.startsWith("data-modal"))
       ) {
         el.addEventListener("click", () => {
-          if (tooltip && typeof tooltip.hide === "function") {
-            tooltip.hide();
-          }
+          hideTooltip(el);
         });
       }
     } catch (error) {
@@ -72,6 +83,7 @@ function initTooltips() {
 
 // Global verfügbar machen
 window.initTooltips = initTooltips;
+window.hideTooltip = hideTooltip;
 
 document.addEventListener("DOMContentLoaded", initTooltips);
 

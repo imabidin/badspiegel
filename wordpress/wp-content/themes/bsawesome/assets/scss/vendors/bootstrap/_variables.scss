@@ -19,29 +19,29 @@
 // $gray-900: #212529 !default;
 // $black:    #000 !default;
 // New values:
-// $white:    #fff !default;
-// $gray-100: #f8f9fa !default;
-// $gray-200: #efefee !default;
-// $gray-300: #e1e0df !default;
-// $gray-400: #d2d2d0 !default;
-// $gray-500: #999793 !default;
-// $gray-600: #7c7974 !default;
-// $gray-700: #4c4a45 !default;
-// $gray-800: #393734 !default;
-// $gray-900: #262522 !default;
-// $black:    #000 !default;
-// Newer values:
-$black:    #000 !default;
-$gray-900: #262522 !default;
-$gray-800: #403f3d !default;
-$gray-700: #5a5a57 !default;
-$gray-600: #747472 !default;
-$gray-500: #8f8e8c !default;
-$gray-400: #a9a8a7 !default;
-$gray-300: #c3c3c1 !default;
-$gray-200: #dddddc !default;
-$gray-100: #f7f7f6 !default;
 $white:    #fff !default;
+$gray-100: #f8f9fa !default;
+$gray-200: #efefee !default;
+$gray-300: #e1e0df !default;
+$gray-400: #d2d2d0 !default;
+$gray-500: #999793 !default;
+$gray-600: #7c7974 !default;
+$gray-700: #4c4a45 !default;
+$gray-800: #393734 !default;
+$gray-900: #262522 !default;
+$black:    #000 !default;
+// Newer values:
+// $black:    #000 !default;
+// $gray-900: #262522 !default;
+// $gray-800: #403f3d !default;
+// $gray-700: #5a5a57 !default;
+// $gray-600: #747472 !default;
+// $gray-500: #8f8e8c !default;
+// $gray-400: #a9a8a7 !default;
+// $gray-300: #c3c3c1 !default;
+// $gray-200: #dddddc !default;
+// $gray-100: #f7f7f6 !default;
+// $white:    #fff !default;
 // scss-docs-end gray-color-variables
 
 // fusv-disable
@@ -324,11 +324,11 @@ $cyans: (
 
 // scss-docs-start theme-color-variables
 $primary:         #4db1b7 !default;
-$primary-light:   #dbeff1; // not in use yet // userlutions #d7ecee
-$primary-dark:    #1f4749; // not in use yet // userlutions #006d74
+// $primary-light:   #dbeff1; // not in use yet // userlutions #d7ecee
+// $primary-dark:    #1f4749; // not in use yet // userlutions #006d74
 $secondary:       #d4bfa0 !default;
-$secondary-light: #f6f2ec; // not in use yet // userlutions #f6f2ec
-$secondary-dark:  #554c40; // not in use yet // userlutions #71695c
+// $secondary-light: #f6f2ec; // not in use yet // userlutions #f6f2ec
+// $secondary-dark:  #554c40; // not in use yet // userlutions #71695c
 $success:         #28a785 !default;
 $info:            #bd80db !default;
 $warning:         #ffc107 !default;

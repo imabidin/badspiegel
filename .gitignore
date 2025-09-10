@@ -14,11 +14,7 @@ wordpress/wp-content/themes/*
 # =============================================================================
 # BSAwesome Theme spezifische Dateien
 # =============================================================================
-# Build-Ausgaben
-wordpress/wp-content/themes/bsawesome/dist/*
 
-# Dependencies
-wordpress/wp-content/themes/bsawesome/node_modules/
 
 # Excel-Konfigurationsdateien
 wordpress/wp-content/themes/bsawesome/inc/configurator/*.xlsx

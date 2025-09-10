@@ -3226,7 +3226,11 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _scss_home_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./scss/home.scss */ "./assets/scss/home.scss");
 /* harmony import */ var _js_home_hero_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./js/home/hero.js */ "./assets/js/home/hero.js");
-// home.js
+/**
+ * Home
+ *
+ * @version 2.5.0
+ */
 
 // Import Scss
 

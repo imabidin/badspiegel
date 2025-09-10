@@ -1,10 +1,13 @@
 <?php
+
 /**
  * Template for price option type
  *
  * Handles dropdown selection for pricing options with dynamically managed values#
  *
- * @version 2.4.0
+ * @version 2.5.0
+ *
+ * @note This template can be deleted if not needed
  *
  */
 
@@ -86,7 +89,7 @@ if (current_user_can('manage_options') && defined('WP_DEBUG') && WP_DEBUG) {
             // Sort options by order if available
             $sorted_options = $price_options;
             if (is_array($sorted_options)) {
-                uasort($sorted_options, function($a, $b) {
+                uasort($sorted_options, function ($a, $b) {
                     $order_a = isset($a['order']) ? (int)$a['order'] : 999;
                     $order_b = isset($b['order']) ? (int)$b['order'] : 999;
                     return $order_a - $order_b;
@@ -107,13 +110,13 @@ if (current_user_can('manage_options') && defined('WP_DEBUG') && WP_DEBUG) {
                 } elseif ($price < 0) {
                     $price_display = ' (' . number_format($price, 2, ',', '.') . ' €)';
                 }
-                ?>
+        ?>
                 <option value="<?= esc_attr($option_value); ?>"
-                        data-price="<?= esc_attr($price); ?>"
-                        <?= $selected; ?>>
+                    data-price="<?= esc_attr($price); ?>"
+                    <?= $selected; ?>>
                     <?= esc_html($label . $price_display); ?>
                 </option>
-                <?php
+        <?php
             endforeach;
         endif;
         ?>
@@ -132,9 +135,9 @@ if (current_user_can('manage_options') && defined('WP_DEBUG') && WP_DEBUG) {
         <div class="form-text">
             <?php if (!empty($option_description_file)): ?>
                 <a href="#" class="text-decoration-none"
-                   data-bs-toggle="modal"
-                   data-bs-target="#productConfiguratorModal"
-                   data-bs-url="<?= esc_attr($modal_link); ?>">
+                    data-bs-toggle="modal"
+                    data-bs-target="#productConfiguratorModal"
+                    data-bs-url="<?= esc_attr($modal_link); ?>">
                     <i class="fa-sharp fa-light fa-circle-info text-primary me-1"></i>
                     Mehr erfahren
                 </a>
@@ -147,12 +150,12 @@ if (current_user_can('manage_options') && defined('WP_DEBUG') && WP_DEBUG) {
 </div>
 
 <?php if ($has_dynamic_pricing && current_user_can('manage_options')): ?>
-<!-- Admin quick edit link for dynamic pricing -->
-<div class="admin-quick-edit" style="margin-top: 5px; font-size: 11px;">
-    <a href="<?= admin_url('edit.php?post_type=product&page=custom-pricing-management#' . ($option_key . '-option')); ?>"
-       target="_blank"
-       style="color: #666; text-decoration: none;">
-        ⚙️ Preise bearbeiten
-    </a>
-</div>
+    <!-- Admin quick edit link for dynamic pricing -->
+    <div class="admin-quick-edit" style="margin-top: 5px; font-size: 11px;">
+        <a href="<?= admin_url('edit.php?post_type=product&page=custom-pricing-management#' . ($option_key . '-option')); ?>"
+            target="_blank"
+            style="color: #666; text-decoration: none;">
+            ⚙️ Preise bearbeiten
+        </a>
+    </div>
 <?php endif; ?>

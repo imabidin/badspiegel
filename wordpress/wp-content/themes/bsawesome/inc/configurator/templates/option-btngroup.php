@@ -30,8 +30,7 @@
  * - $posted_value: Current/submitted value for auto-loading
  * - $modal_link: Link for description modal
  *
- * @version 2.4.0
- * @package configurator
+ * @version 2.5.0
  */
 
 /**
@@ -181,7 +180,7 @@ if (!empty($posted_value)) {
                     id="<?php echo esc_attr($sub_none_id); ?>"
                     value=""
                     data-value=""
-                    data-label="<?= esc_html__('Keine Auswahl', 'my-product-configurator'); ?>"
+                    data-label="<?= esc_html__('Keine Auswahl', 'bsawesome'); ?>"
                     data-price="0"
                     <?php echo $none_is_selected ? 'checked' : ''; ?>
                     >

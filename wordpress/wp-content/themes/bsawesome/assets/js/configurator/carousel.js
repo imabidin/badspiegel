@@ -14,8 +14,7 @@
  * - Modal dialogs for incomplete configurations
  * - Mobile-optimized touch interactions
  *
- * @version 2.3.0
- * @package Configurator
+ * @version 2.5.0
  *
  * @todo Check if the carousel functions need to be refactored for better reusability (carouselheight)
  * @todo Check if it is possible just to scroll to add to cart button after pressing "Fertig", if the button is not properly visible on screen

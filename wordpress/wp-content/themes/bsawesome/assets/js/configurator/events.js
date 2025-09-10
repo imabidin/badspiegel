@@ -12,7 +12,7 @@
  * - Dynamic event binding for configurator elements
  * - Performance optimizations with caching and debouncing
  *
- * @version 2.3.0
+ * @version 2.4.0
  * @package Configurator
  *
  * @todo Use for "dachschraege" calcPrice2x100, whilst using a "prefunction" to get the higher "breite" or "hoehe" value

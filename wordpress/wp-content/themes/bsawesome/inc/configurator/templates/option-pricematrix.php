@@ -20,7 +20,7 @@
  * - $option_placeholder: Placeholder text
  * - $option_values: Array of selectable values with labels and prices
  *
- * @version 2.4.0
+ * @version 2.5.0
  * @package configurator
  */
 
@@ -106,15 +106,4 @@ $price_options = $option_values ?? array();
         endif; ?>
 
     </select>
-
-    <?php
-    /**
-     * Price Display Section
-     * Shows selected option details and additional pricing
-     */
-    ?>
-    <p class="text-end text-secondary-emphasis d-none">
-        Aufpreis <span class="sub_name"></span>:
-        <span class="sub_label"></span> +<span class="sub_price"></span> €
-    </p>
 </div>

@@ -67,8 +67,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
  * - Modal dialogs for incomplete configurations
  * - Mobile-optimized touch interactions
  *
- * @version 2.3.0
- * @package Configurator
+ * @version 2.5.0
  *
  * @todo Check if the carousel functions need to be refactored for better reusability (carouselheight)
  * @todo Check if it is possible just to scroll to add to cart button after pressing "Fertig", if the button is not properly visible on screen
@@ -1242,22 +1241,37 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_array_concat_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_concat_js__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var core_js_modules_es_array_find_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.array.find.js */ "./node_modules/core-js/modules/es.array.find.js");
 /* harmony import */ var core_js_modules_es_array_find_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_find_js__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var core_js_modules_es_object_get_prototype_of_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.object.get-prototype-of.js */ "./node_modules/core-js/modules/es.object.get-prototype-of.js");
-/* harmony import */ var core_js_modules_es_object_get_prototype_of_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_get_prototype_of_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var core_js_modules_es_object_set_prototype_of_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es.object.set-prototype-of.js */ "./node_modules/core-js/modules/es.object.set-prototype-of.js");
-/* harmony import */ var core_js_modules_es_object_set_prototype_of_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_set_prototype_of_js__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "./node_modules/core-js/modules/es.object.to-string.js");
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/es.promise.js */ "./node_modules/core-js/modules/es.promise.js");
-/* harmony import */ var core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es.string.trim.js */ "./node_modules/core-js/modules/es.string.trim.js");
-/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var core_js_modules_es_array_includes_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.array.includes.js */ "./node_modules/core-js/modules/es.array.includes.js");
+/* harmony import */ var core_js_modules_es_array_includes_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_includes_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var core_js_modules_es_object_get_prototype_of_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es.object.get-prototype-of.js */ "./node_modules/core-js/modules/es.object.get-prototype-of.js");
+/* harmony import */ var core_js_modules_es_object_get_prototype_of_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_get_prototype_of_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var core_js_modules_es_object_set_prototype_of_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es.object.set-prototype-of.js */ "./node_modules/core-js/modules/es.object.set-prototype-of.js");
+/* harmony import */ var core_js_modules_es_object_set_prototype_of_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_set_prototype_of_js__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "./node_modules/core-js/modules/es.object.to-string.js");
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es.promise.js */ "./node_modules/core-js/modules/es.promise.js");
+/* harmony import */ var core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core-js/modules/es.regexp.exec.js */ "./node_modules/core-js/modules/es.regexp.exec.js");
+/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var core_js_modules_es_string_includes_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! core-js/modules/es.string.includes.js */ "./node_modules/core-js/modules/es.string.includes.js");
+/* harmony import */ var core_js_modules_es_string_includes_js__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_includes_js__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! core-js/modules/es.string.replace.js */ "./node_modules/core-js/modules/es.string.replace.js");
+/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! core-js/modules/es.string.trim.js */ "./node_modules/core-js/modules/es.string.trim.js");
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_13__);
 /* provided dependency */ var $ = __webpack_require__(/*! jquery */ "jquery");
 /* provided dependency */ var jQuery = __webpack_require__(/*! jquery */ "jquery");
 function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i.return) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
 function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
 function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
 function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+
+
+
+
+
 
 
 
@@ -1283,10 +1297,19 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
  * - Debug logging for development support
  * - Automatic favourites integration
  *
- * @version 2.3.0
+ * @version 2.5.0
  * @package Configurator
  */
 
+// ========================================
+// CONFIGURATION & CONSTANTS
+// ========================================
+
+/**
+ * DEBUG MODE CONFIGURATION
+ * Set to true to enable debug logging, false to disable all debug output
+ */
+var DEBUG_MODE = false;
 document.addEventListener("DOMContentLoaded", function () {
   /**
    * Data Collection Utilities
@@ -1355,7 +1378,7 @@ document.addEventListener("DOMContentLoaded", function () {
       };
     });
     if (debug) {
-      console.log("Configuration data collected:", configData);
+      debugLog("Configuration data collected:", configData);
     }
     return configData;
   }
@@ -1387,9 +1410,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
       try {
         document.execCommand("copy");
-        console.log("Direct link copied to clipboard");
+        debugLog("Direct link copied to clipboard");
       } catch (err) {
-        console.error("Copy operation failed:", err);
+        debugError("Copy operation failed:", err);
       }
     });
   }
@@ -1491,7 +1514,7 @@ document.addEventListener("DOMContentLoaded", function () {
         },
         success: function success(response) {
           if (response.success) {
-            console.log("Configuration added to favourites:", configCode);
+            debugLog("Configuration added to favourites:", configCode);
 
             // Update favourites badge if function exists
             if (window.updateFavouritesBadgeDisplay) {
@@ -1500,7 +1523,7 @@ document.addEventListener("DOMContentLoaded", function () {
             resolve(response.data);
           } else {
             var _response$data2, _response$data3;
-            console.warn("Could not add to favourites:", (_response$data2 = response.data) === null || _response$data2 === void 0 ? void 0 : _response$data2.message);
+            debugWarn("Could not add to favourites:", (_response$data2 = response.data) === null || _response$data2 === void 0 ? void 0 : _response$data2.message);
             // Don't reject - favourites addition is optional
             resolve({
               added: false,
@@ -1509,7 +1532,7 @@ document.addEventListener("DOMContentLoaded", function () {
           }
         },
         error: function error(xhr, status, _error2) {
-          console.warn("Favourites addition failed:", _error2);
+          debugWarn("Favourites addition failed:", _error2);
           // Don't reject - favourites addition is optional
           resolve({
             added: false,
@@ -1543,7 +1566,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var successAlert = addedToFavourites ? "\n      <div class=\"alert alert-success\">\n        <p class=\"mb-0\">\n          <span class=\"row g-4 align-items-center\">\n            <span class=\"col-auto\"><i class=\"fa-sharp fa-light fa-check\"></i></span>\n            <span class=\"col border-start border-success-subtle\">Konfiguration als Code gespeichert und zu Ihren Favoriten hinzugef\xFCgt!</span>\n          </span>\n        </p>\n      </div>\n    " : "\n      <div class=\"alert alert-success\">\n        <p class=\"fw-medium mb-0\">Ihre Konfiguration ist gespeichert!</p>\n        <hr class=\"my-2\">\n        <p class=\"mb-0\">Sichern Sie den Code damit Ihre Konfiguration nicht verloren geht.</p>\n      </div>\n    ";
 
     // Create comprehensive modal body with all sharing options
-    var modalBody = "\n      <!-- Success Alert -->\n      ".concat(successAlert, "\n      \n      <!-- Configuration Code Section -->\n      <div class=\"mb-3\">\n        <label class=\"form-label fw-medium mb-1\">\n          <i class=\"fa-sharp fa-light fa-key me-2\"></i>Code\n        </label>\n        <button type=\"button\"\n                class=\"btn btn-outline-success d-block\"\n                style=\"--bs-btn-hover-bg: var(--bs-success-bg-subtle); --bs-btn-hover-color: var(--bs-success-text-emphasis); --bs-btn-color: var(--bs-success-text-emphasis); --bs-btn-border-color: var(--bs-success-border-subtle); --bs-btn-active-color: var(--bs-white); --bs-btn-active-border-color: var(--bs-success);\"\n                data-copy=\"clipboard\"\n                data-voucher=\"").concat(code, "\"\n                data-bs-tooltip=\"true\"\n                title=\"").concat(tooltip, "\">\n          <code class=\"fs-4\">").concat(code, "</code>\n          <i class=\"fa-sharp fa-light fa-copy fa-fw ms-2\" aria-hidden=\"true\"></i>\n          <span class=\"visually-hidden\">Code kopieren</span>\n        </button>\n      </div>\n      \n      <!-- Direct Link Section -->\n      <div class=\"mb-3\">\n        <label class=\"form-label fw-medium mb-1\">\n          <i class=\"fa-sharp fa-light fa-link me-2\"></i>Link\n        </label>\n        <div class=\"input-group\">\n          <input type=\"text\" \n                 class=\"form-control border-success-subtle focus-ring focus-ring-success\" \n                 value=\"").concat(productInfo.directLink, "\" \n                 readonly \n                 id=\"direct-link-input\">\n            <button type=\"button\"\n                    class=\"btn btn-outline-success\"\n                    style=\"--bs-btn-hover-bg: var(--bs-success-bg-subtle); --bs-btn-hover-color: var(--bs-success-text-emphasis); --bs-btn-color: var(--bs-success-text-emphasis); --bs-btn-border-color: var(--bs-success-border-subtle); --bs-btn-active-color: var(--bs-white); --bs-btn-active-border-color: var(--bs-success);\"\n                    data-copy=\"clipboard\"\n                    data-voucher=\"").concat(productInfo.directLink, "\"\n                    data-bs-tooltip=\"true\"\n                    title=\"").concat(tooltip, "\">\n                <i class=\"fa-sharp fa-light fa-copy fa-fw\" aria-hidden=\"true\"></i>\n                <span class=\"visually-hidden\">Link kopieren</span>\n            </button>\n        </div>\n      </div>\n\n      <!-- Social Sharing Section -->\n      <label class=\"form-label fw-medium mb-1\">\n        <i class=\"fa-sharp fa-light fa-share me-2\"></i>Teilen\n      </label>\n      <div class=\"row g-2 mb-0\" role=\"group\">\n        <div class=\"col col-md-auto\">\n          <button type=\"button\"\n                  class=\"btn btn-outline-success btn-sm py-2 text-md-start w-100\"\n                  id=\"configcode-share-mail\"\n                  style=\"--bs-btn-hover-bg: var(--bs-success-bg-subtle); --bs-btn-hover-color: var(--bs-success-text-emphasis); --bs-btn-color: var(--bs-success-text-emphasis); --bs-btn-border-color: var(--bs-success-border-subtle); --bs-btn-active-color: var(--bs-white); --bs-btn-active-border-color: var(--bs-success);\">\n            <i class=\"fa-sharp fa-light fa-envelope fa-fw me-1\" aria-hidden=\"true\"></i>E-Mail teilen\n          </button>\n        </div>\n        <div class=\"col col-md-auto\">\n          <button type=\"button\"\n                  class=\"btn btn-outline-success btn-sm py-2 text-md-start w-100\"\n                  id=\"configcode-share-whatsapp\"\n                  style=\"--bs-btn-hover-bg: var(--bs-success-bg-subtle); --bs-btn-hover-color: var(--bs-success-text-emphasis); --bs-btn-color: var(--bs-success-text-emphasis); --bs-btn-border-color: var(--bs-success-border-subtle); --bs-btn-active-color: var(--bs-white); --bs-btn-active-border-color: var(--bs-success);\">\n            <i class=\"fab fa-whatsapp fa-fw me-1\"></i>WhatsApp teilen\n          </button>\n        </div>\n      </div>\n    ");
+    var modalBody = "\n      <!-- Success Alert -->\n      ".concat(successAlert, "\n\n      <!-- Configuration Code Section -->\n      <div class=\"mb-3\">\n        <label class=\"form-label fw-medium mb-1\">\n          <i class=\"fa-sharp fa-light fa-key me-2\"></i>Code\n        </label>\n        <button type=\"button\"\n                class=\"btn btn-outline-success d-block\"\n                style=\"--bs-btn-hover-bg: var(--bs-success-bg-subtle); --bs-btn-hover-color: var(--bs-success-text-emphasis); --bs-btn-color: var(--bs-success-text-emphasis); --bs-btn-border-color: var(--bs-success-border-subtle); --bs-btn-active-color: var(--bs-white); --bs-btn-active-border-color: var(--bs-success);\"\n                data-copy=\"clipboard\"\n                data-voucher=\"").concat(code, "\"\n                data-bs-tooltip=\"true\"\n                title=\"").concat(tooltip, "\">\n          <code class=\"fs-4\">").concat(code, "</code>\n          <i class=\"fa-sharp fa-light fa-copy fa-fw ms-2\" aria-hidden=\"true\"></i>\n          <span class=\"visually-hidden\">Code kopieren</span>\n        </button>\n      </div>\n\n      <!-- Direct Link Section -->\n      <div class=\"mb-3\">\n        <label class=\"form-label fw-medium mb-1\">\n          <i class=\"fa-sharp fa-light fa-link me-2\"></i>Link\n        </label>\n        <div class=\"input-group\">\n          <input type=\"text\"\n                 class=\"form-control border-success-subtle focus-ring focus-ring-success\"\n                 value=\"").concat(productInfo.directLink, "\"\n                 readonly\n                 id=\"direct-link-input\">\n            <button type=\"button\"\n                    class=\"btn btn-outline-success\"\n                    style=\"--bs-btn-hover-bg: var(--bs-success-bg-subtle); --bs-btn-hover-color: var(--bs-success-text-emphasis); --bs-btn-color: var(--bs-success-text-emphasis); --bs-btn-border-color: var(--bs-success-border-subtle); --bs-btn-active-color: var(--bs-white); --bs-btn-active-border-color: var(--bs-success);\"\n                    data-copy=\"clipboard\"\n                    data-voucher=\"").concat(productInfo.directLink, "\"\n                    data-bs-tooltip=\"true\"\n                    title=\"").concat(tooltip, "\">\n                <i class=\"fa-sharp fa-light fa-copy fa-fw\" aria-hidden=\"true\"></i>\n                <span class=\"visually-hidden\">Link kopieren</span>\n            </button>\n        </div>\n      </div>\n\n      <!-- Social Sharing Section -->\n      <label class=\"form-label fw-medium mb-1\">\n        <i class=\"fa-sharp fa-light fa-share me-2\"></i>Teilen\n      </label>\n      <div class=\"row g-2 mb-0\" role=\"group\">\n        <div class=\"col col-md-auto\">\n          <button type=\"button\"\n                  class=\"btn btn-outline-success btn-sm py-2 text-md-start w-100\"\n                  id=\"configcode-share-mail\"\n                  style=\"--bs-btn-hover-bg: var(--bs-success-bg-subtle); --bs-btn-hover-color: var(--bs-success-text-emphasis); --bs-btn-color: var(--bs-success-text-emphasis); --bs-btn-border-color: var(--bs-success-border-subtle); --bs-btn-active-color: var(--bs-white); --bs-btn-active-border-color: var(--bs-success);\">\n            <i class=\"fa-sharp fa-light fa-envelope fa-fw me-1\" aria-hidden=\"true\"></i>E-Mail teilen\n          </button>\n        </div>\n        <div class=\"col col-md-auto\">\n          <button type=\"button\"\n                  class=\"btn btn-outline-success btn-sm py-2 text-md-start w-100\"\n                  id=\"configcode-share-whatsapp\"\n                  style=\"--bs-btn-hover-bg: var(--bs-success-bg-subtle); --bs-btn-hover-color: var(--bs-success-text-emphasis); --bs-btn-color: var(--bs-success-text-emphasis); --bs-btn-border-color: var(--bs-success-border-subtle); --bs-btn-active-color: var(--bs-white); --bs-btn-active-border-color: var(--bs-success);\">\n            <i class=\"fab fa-whatsapp fa-fw me-1\"></i>WhatsApp teilen\n          </button>\n        </div>\n      </div>\n    ");
 
     // Initialize modal with success configuration
     createModal({
@@ -1619,7 +1642,141 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   /**
+   * Configuration cache for intelligent code reuse
+   * Stores last saved configuration and prevents duplicate saves
+   */
+  var _lastSavedConfig = {
+    code: null,
+    configHash: null,
+    timestamp: null,
+    addedToFavourites: false
+  };
+
+  /**
+   * Generate hash from configuration data for comparison
+   * @param {Object} configData - Configuration data object
+   * @returns {string} Hash string representing the configuration
+   */
+  function generateConfigHash(configData) {
+    return btoa(JSON.stringify(configData)).replace(/[^a-zA-Z0-9]/g, '').substring(0, 16);
+  }
+
+  /**
+   * Check if current configuration matches the last saved one
+   * @param {Object} configData - Current configuration data
+   * @returns {boolean} True if configuration is unchanged
+   */
+  function isConfigurationUnchanged(configData) {
+    if (!_lastSavedConfig.configHash) return false;
+    var currentHash = generateConfigHash(configData);
+    var isUnchanged = currentHash === _lastSavedConfig.configHash;
+    if (isUnchanged) {
+      debugLog('🔄 Configuration unchanged, reusing last code:', _lastSavedConfig.code);
+    }
+    return isUnchanged;
+  }
+
+  /**
+   * Update summary save buttons to reflect saved state
+   * This ensures all summary save buttons show as "saved" after successful save
+   */
+  function updateSummarySaveButtons() {
+    var summaryButtons = document.querySelectorAll('.btn-favourite-summary');
+    summaryButtons.forEach(function (button) {
+      var heartIcon = button.querySelector('i');
+      if (heartIcon) {
+        // Change icon to solid (saved state)
+        heartIcon.classList.remove('fa-light');
+        heartIcon.classList.add('fa-solid');
+
+        // Update button state
+        button.disabled = true;
+        button.setAttribute('aria-pressed', 'true');
+
+        // Update tooltip text
+        button.setAttribute('title', 'Konfiguration in Favoriten gespeichert');
+        debugLog('✅ Updated summary save button state to saved');
+      }
+    });
+  }
+
+  /**
+   * Update main save buttons to reflect saved state
+   * This ensures main configurator save buttons show correct state
+   */
+  function updateMainSaveButtons() {
+    var mainSaveButton = document.querySelector('#product-configurator-configcode-save');
+    if (mainSaveButton && _lastSavedConfig.code) {
+      // Update button text to indicate saved state
+      var originalText = mainSaveButton.textContent;
+      if (!originalText.includes('✓')) {
+        mainSaveButton.innerHTML = "Code erstellt";
+        mainSaveButton.classList.add('btn-success');
+        mainSaveButton.classList.remove('btn-primary');
+        debugLog('✅ Updated main save button state to saved');
+      }
+    }
+  }
+
+  /**
+   * Reset button states when configuration changes
+   * Enhanced to match btn-favourite-summary responsiveness
+   */
+  function resetButtonStates() {
+    // Reset main save button with immediate visual feedback
+    var mainSaveButton = document.querySelector('#product-configurator-configcode-save');
+    if (mainSaveButton) {
+      // Check if button is currently in "saved" state
+      var wasInSavedState = mainSaveButton.classList.contains('btn-success') || mainSaveButton.innerHTML.includes('Code erstellt') || mainSaveButton.innerHTML.includes('fa-check');
+      if (wasInSavedState) {
+        // Reset to original state
+        mainSaveButton.innerHTML = "Code erstellen";
+        mainSaveButton.classList.remove('btn-success');
+        mainSaveButton.classList.add('btn-primary');
+        mainSaveButton.disabled = false;
+
+        // Add subtle visual feedback to show the reset happened
+        mainSaveButton.style.transition = 'all .2s ease';
+        mainSaveButton.style.opacity = '0.8';
+        setTimeout(function () {
+          mainSaveButton.style.opacity = '';
+          setTimeout(function () {
+            mainSaveButton.style.transition = '';
+          }, 100);
+        }, 200);
+        debugLog('🔄 Reset main save button - configuration changed');
+      }
+    }
+
+    // Reset summary save buttons with same responsive logic
+    var summaryButtons = document.querySelectorAll('.btn-favourite-summary');
+    summaryButtons.forEach(function (button) {
+      var heartIcon = button.querySelector('i');
+      if (heartIcon) {
+        var _wasInSavedState = heartIcon.classList.contains('fa-solid') || button.disabled;
+        if (_wasInSavedState) {
+          // Reset to original state
+          heartIcon.classList.remove('fa-solid');
+          heartIcon.classList.add('fa-light');
+          button.disabled = false;
+          button.setAttribute('aria-pressed', 'false');
+          button.setAttribute('title', 'Konfiguration speichern');
+
+          // Remove any wrapper that might have been added for saved state
+          var wrapper = button.parentNode;
+          if (wrapper && wrapper.tagName === 'SPAN' && wrapper.hasAttribute('title')) {
+            wrapper.parentNode.insertBefore(button, wrapper);
+            wrapper.remove();
+          }
+          debugLog('🔄 Reset summary save button - configuration changed');
+        }
+      }
+    });
+  }
+
+  /**
    * Core save configuration function - reusable for multiple buttons
+   * Enhanced with intelligent code reuse and bidirectional synchronization
    *
    * @param {jQuery} $button - The button element that triggered the save
    * @param {string} loadingType - Type of loading animation ('spinner' or 'icon')
@@ -1629,20 +1786,24 @@ document.addEventListener("DOMContentLoaded", function () {
     return _saveConfiguration.apply(this, arguments);
   }
   /**
-   * Main Configuration Save Handler
-   * Enhanced to automatically add configuration to favourites
+   * Monitor configuration changes to reset button states
+   * This ensures buttons reflect current state when user makes changes
+   * Enhanced for immediate responsiveness like btn-favourite-summary
    */
   function _saveConfiguration() {
     _saveConfiguration = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee($button) {
       var loadingType,
-        cleanupLoading,
         configData,
+        _lastSavedConfig2,
+        code,
+        addedToFavourites,
+        cleanupLoading,
         response,
         _response$data4,
-        code,
+        _code,
         msg,
         tooltip,
-        addedToFavourites,
+        _addedToFavourites,
         favouriteResult,
         _response$data5,
         _response$data6,
@@ -1653,12 +1814,31 @@ document.addEventListener("DOMContentLoaded", function () {
         while (1) switch (_context.p = _context.n) {
           case 0:
             loadingType = _args.length > 1 && _args[1] !== undefined ? _args[1] : "spinner";
-            // Apply appropriate loading state based on type
-            cleanupLoading = loadingType === "icon" ? applyIconAnimationLoading($button) : applySpinnerLoading($button);
             _context.p = 1;
             // Collect all configuration data from form
-            configData = gatherConfigData(false); // Send configuration data to server for processing and storage
-            _context.n = 2;
+            configData = gatherConfigData(false); // Check if configuration is unchanged from last save
+            if (!isConfigurationUnchanged(configData)) {
+              _context.n = 2;
+              break;
+            }
+            // Reuse existing code and show modal immediately
+            _lastSavedConfig2 = _lastSavedConfig, code = _lastSavedConfig2.code, addedToFavourites = _lastSavedConfig2.addedToFavourites;
+            showSuccessModal("Ihre Konfiguration wurde bereits gespeichert!", code, "Code kopieren", addedToFavourites);
+
+            // Ensure both button types are synchronized
+            updateMainSaveButtons();
+            updateSummarySaveButtons();
+            return _context.a(2, {
+              success: true,
+              code: code,
+              addedToFavourites: addedToFavourites,
+              reused: true
+            });
+          case 2:
+            // Apply appropriate loading state based on type
+            cleanupLoading = loadingType === "icon" ? applyIconAnimationLoading($button) : applySpinnerLoading($button);
+            _context.p = 3;
+            _context.n = 4;
             return new Promise(function (resolve, reject) {
               $.ajax({
                 url: myAjaxData.ajaxUrl,
@@ -1673,64 +1853,121 @@ document.addEventListener("DOMContentLoaded", function () {
                 error: reject
               });
             });
-          case 2:
+          case 4:
             response = _context.v;
             if (!response.success) {
-              _context.n = 7;
+              _context.n = 9;
               break;
             }
-            _response$data4 = response.data, code = _response$data4.generated_code, msg = _response$data4.msg, tooltip = _response$data4.tooltip; // Automatically add configuration to favourites
-            addedToFavourites = false;
-            _context.p = 3;
-            _context.n = 4;
-            return addConfigToFavourites(code, myAjaxData.productId);
-          case 4:
-            favouriteResult = _context.v;
-            addedToFavourites = favouriteResult.added !== false;
-            _context.n = 6;
-            break;
-          case 5:
+            _response$data4 = response.data, _code = _response$data4.generated_code, msg = _response$data4.msg, tooltip = _response$data4.tooltip; // Automatically add configuration to favourites
+            _addedToFavourites = false;
             _context.p = 5;
-            _t = _context.v;
-            console.warn("Could not add to favourites:", _t);
+            _context.n = 6;
+            return addConfigToFavourites(_code, myAjaxData.productId);
           case 6:
+            favouriteResult = _context.v;
+            _addedToFavourites = favouriteResult.added !== false;
+            _context.n = 8;
+            break;
+          case 7:
+            _context.p = 7;
+            _t = _context.v;
+            debugWarn("Could not add to favourites:", _t);
+          case 8:
+            // Cache this configuration for future reuse
+            _lastSavedConfig = {
+              code: _code,
+              configHash: generateConfigHash(configData),
+              timestamp: Date.now(),
+              addedToFavourites: _addedToFavourites
+            };
+
             // Display success modal with favourite confirmation
-            showSuccessModal(msg, code, tooltip, addedToFavourites);
+            showSuccessModal(msg, _code, tooltip, _addedToFavourites);
+
+            // Synchronize both button types
+            updateMainSaveButtons();
+            if (_addedToFavourites) {
+              updateSummarySaveButtons();
+            }
             return _context.a(2, {
               success: true,
-              code: code,
-              addedToFavourites: addedToFavourites
+              code: _code,
+              addedToFavourites: _addedToFavourites,
+              reused: false
             });
-          case 7:
-            console.error("Save configuration failed:", ((_response$data5 = response.data) === null || _response$data5 === void 0 ? void 0 : _response$data5.msg) || "Unknown error");
-            throw new Error(((_response$data6 = response.data) === null || _response$data6 === void 0 ? void 0 : _response$data6.msg) || "Unknown error");
-          case 8:
-            _context.n = 10;
-            break;
           case 9:
-            _context.p = 9;
-            _t2 = _context.v;
-            console.error("Save configuration error:", _t2);
-            throw _t2;
+            debugError("Save configuration failed:", ((_response$data5 = response.data) === null || _response$data5 === void 0 ? void 0 : _response$data5.msg) || "Unknown error");
+            throw new Error(((_response$data6 = response.data) === null || _response$data6 === void 0 ? void 0 : _response$data6.msg) || "Unknown error");
           case 10:
             _context.p = 10;
             // Reset button state regardless of success or failure
             cleanupLoading();
             return _context.f(10);
           case 11:
+            _context.n = 13;
+            break;
+          case 12:
+            _context.p = 12;
+            _t2 = _context.v;
+            debugError("Save configuration error:", _t2);
+            throw _t2;
+          case 13:
             return _context.a(2);
         }
-      }, _callee, null, [[3, 5], [1, 9, 10, 11]]);
+      }, _callee, null, [[5, 7], [3,, 10, 11], [1, 12]]);
     }));
     return _saveConfiguration.apply(this, arguments);
   }
+  function initConfigurationChangeDetection() {
+    var configInputs = $('input.option-radio, input.option-check, input.option-input, select.option-select');
+
+    // Use event delegation for better performance and dynamic content support
+    $(document).on('change input', 'input.option-radio, input.option-check, input.option-input, select.option-select', function () {
+      // Immediate reset for better UX (same as btn-favourite-summary)
+      resetButtonStates();
+
+      // Clear cached configuration as it's no longer valid
+      _lastSavedConfig = {
+        code: null,
+        configHash: null,
+        timestamp: null,
+        addedToFavourites: false
+      };
+      debugLog('🔄 Configuration changed - buttons reset immediately via delegation');
+    });
+
+    // Also monitor for specific events that might not trigger change/input
+    $(document).on('keyup paste cut', 'input.option-input', function () {
+      // Small delay for paste/cut operations to allow DOM to update
+      setTimeout(function () {
+        resetButtonStates();
+        _lastSavedConfig = {
+          code: null,
+          configHash: null,
+          timestamp: null,
+          addedToFavourites: false
+        };
+        debugLog('🔄 Configuration changed via keyboard/paste - buttons reset');
+      }, 50);
+    });
+    debugLog('🔧 Enhanced configuration change detection with delegation initialized');
+  }
+
+  /**
+   * Main Configuration Save Handler
+   * Enhanced to automatically add configuration to favourites
+   */
   $("#product-configurator-configcode-save").on("click", function () {
     var $button = $(this);
     saveConfiguration($button, "spinner").catch(function (error) {
-      console.error("Save failed:", error);
+      debugError("Save failed:", error);
       // Optionally show error message to user
     });
   });
+
+  // Initialize configuration change detection
+  initConfigurationChangeDetection();
 
   // Export functions for use in other modules
   window.ConfiguratorSave = {
@@ -1740,12 +1977,65 @@ document.addEventListener("DOMContentLoaded", function () {
     // Export the updated function
     applySpinnerLoading: applySpinnerLoading,
     // Export loading utilities
-    applyIconAnimationLoading: applyIconAnimationLoading
+    applyIconAnimationLoading: applyIconAnimationLoading,
+    updateSummarySaveButtons: updateSummarySaveButtons,
+    // Export for summary module
+    updateMainSaveButtons: updateMainSaveButtons,
+    // Export for bidirectional sync
+    resetButtonStates: resetButtonStates,
+    // Export for manual reset
+    lastSavedConfig: function lastSavedConfig() {
+      return _lastSavedConfig;
+    } // Export for inspection
   };
 
   // Make showSuccessModal globally available for summary module
   window.showSuccessModal = showSuccessModal;
 });
+
+// ========================================
+// DEBUG HELPER FUNCTIONS
+// ========================================
+
+/**
+ * Debug helper functions that respect DEBUG_MODE setting
+ */
+var debugLog = function debugLog() {
+  if (DEBUG_MODE) {
+    var _console;
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+    (_console = console).debug.apply(_console, ["[ConfigSave]"].concat(args));
+  }
+};
+var debugWarn = function debugWarn() {
+  if (DEBUG_MODE) {
+    var _console2;
+    for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+      args[_key2] = arguments[_key2];
+    }
+    (_console2 = console).warn.apply(_console2, ["[ConfigSave]"].concat(args));
+  }
+};
+var debugInfo = function debugInfo() {
+  if (DEBUG_MODE) {
+    var _console3;
+    for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+      args[_key3] = arguments[_key3];
+    }
+    (_console3 = console).info.apply(_console3, ["[ConfigSave]"].concat(args));
+  }
+};
+var debugError = function debugError() {
+  if (DEBUG_MODE) {
+    var _console4;
+    for (var _len4 = arguments.length, args = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+      args[_key4] = arguments[_key4];
+    }
+    (_console4 = console).error.apply(_console4, ["[ConfigSave]"].concat(args));
+  }
+};
 
 /**
  * Future Enhancement Ideas:
@@ -1781,72 +2071,185 @@ document.addEventListener("DOMContentLoaded", function () {
  *    - Validate all form field names and values
  *    - Implement Content Security Policy headers
  *    - Add CSRF protection for save operations
+ *    - Rate limiting for save operations
+ *    - Input sanitization for all form fields
+ *    - Secure clipboard operations validation
  *
  * 7. Modern API adoption (CRITICAL):
  *    - Replace deprecated document.execCommand("copy") with modern Clipboard API
  *    - Add fallback for browsers without Clipboard API support
  *    - Implement proper async/await error handling
  *    - Use AbortController for cancellable requests
+ *    - Adopt modern JavaScript features (nullish coalescing, optional chaining)
+ *    - Replace jQuery with native DOM APIs where possible
  *
  * 8. Dependency management:
  *    - Add existence checks for myAjaxData before usage
  *    - Verify createModal function availability
  *    - Implement graceful degradation for missing jQuery
  *    - Add feature detection for required browser APIs
+ *    - Check Bootstrap components availability
+ *    - Verify FontAwesome icon dependencies
  *
  * 9. Race condition prevention:
  *    - Prevent multiple simultaneous save operations
  *    - Cancel previous requests before new ones
  *    - Implement request queuing system
  *    - Add debouncing for rapid button clicks
+ *    - Mutex locks for critical save operations
+ *    - State machine for save process management
  *
  * 10. Error handling robustness:
  *     - Show user-friendly error messages in modals
  *     - Distinguish between network and server errors
  *     - Add comprehensive error logging
  *     - Implement automatic retry with exponential backoff
+ *     - User-recoverable error states
+ *     - Error reporting to monitoring systems
  *
  * 11. DOM selector reliability:
  *     - Fix typo in selector: #productConfiguroator -> #productConfigurator
  *     - Cache frequently used selectors
  *     - Use data attributes instead of complex class selectors
  *     - Add fallback strategies for missing elements
+ *     - Implement robust element waiting strategies
+ *     - Add DOM mutation observers for dynamic content
  *
  * 12. Input validation enhancement:
  *     - Validate configuration data structure before save
  *     - Add client-side validation for required fields
  *     - Implement schema validation for form data
  *     - Sanitize all user inputs before processing
+ *     - Real-time validation feedback
+ *     - Custom validation rules system
  *
  * 13. Memory management:
  *     - Properly clean up event listeners
  *     - Remove modal elements after closing
  *     - Clear timeouts and intervals
  *     - Implement proper garbage collection for large objects
+ *     - WeakMap usage for DOM element references
+ *     - Memory leak detection and monitoring
  *
  * 14. User experience improvements:
  *     - Add save progress indicators
  *     - Implement auto-save functionality
  *     - Show confirmation before leaving page with unsaved changes
  *     - Add keyboard shortcuts for save operations
+ *     - Undo/redo functionality for configurations
+ *     - Configuration preview before saving
  *
  * 15. Code maintainability:
  *     - Extract modal HTML generation into templates
  *     - Reduce code duplication between similar functions
  *     - Add comprehensive JSDoc type definitions
  *     - Implement unit tests for core functions
+ *     - Add integration tests for save workflows
+ *     - Code coverage monitoring
  *
  * 16. Accessibility improvements:
  *     - Add proper ARIA labels to all interactive elements
  *     - Implement keyboard navigation for modals
  *     - Add screen reader announcements for save status
  *     - Ensure high contrast mode compatibility
+ *     - Focus management for modal workflows
+ *     - Voice control compatibility
  *
  * 17. Network resilience:
  *     - Add request timeout handling
  *     - Implement offline save capability
  *     - Add automatic retry for failed network requests
  *     - Show network status indicators
+ *     - Background sync when connection restored
+ *     - Request deduplication strategies
+ *
+ * 18. Mobile optimization:
+ *     - Touch-friendly modal interfaces
+ *     - Mobile-specific sharing options
+ *     - Responsive modal design
+ *     - Mobile keyboard optimization
+ *     - Touch gesture support for modal interactions
+ *     - Mobile-specific loading indicators
+ *
+ * 19. Internationalization (i18n):
+ *     - Extract all German text strings to language files
+ *     - Multi-language email templates
+ *     - Localized sharing messages
+ *     - Currency and date format localization
+ *     - RTL language support for modals
+ *     - Dynamic language switching
+ *
+ * 20. Advanced caching strategies:
+ *     - IndexedDB for large configuration storage
+ *     - Service Worker integration for offline functionality
+ *     - Configuration versioning with timestamps
+ *     - Cache invalidation strategies
+ *     - Cross-tab synchronization
+ *     - Compression for stored configurations
+ *
+ * 21. Browser compatibility:
+ *     - Progressive enhancement for older browsers
+ *     - Polyfills for modern APIs
+ *     - Feature detection and graceful degradation
+ *     - Cross-browser testing automation
+ *     - Browser-specific workarounds
+ *     - Performance optimization for different engines
+ *
+ * 22. Advanced analytics:
+ *     - Save funnel analysis
+ *     - Configuration abandonment tracking
+ *     - Sharing channel effectiveness metrics
+ *     - User journey mapping for save process
+ *     - A/B testing for save modal variations
+ *     - Performance monitoring for save operations
+ *
+ * 23. Security hardening:
+ *     - Content Security Policy implementation
+ *     - Subresource Integrity for external dependencies
+ *     - Input validation against common attack vectors
+ *     - Secure random code generation validation
+ *     - Protection against timing attacks
+ *     - Security headers validation
+ *
+ * 24. Developer experience:
+ *     - Development mode with enhanced debugging
+ *     - Configuration data visualization tools
+ *     - Save operation profiling
+ *     - Hot reloading for development
+ *     - Mock data generation for testing
+ *     - API documentation generation
+ *
+ * 25. Business intelligence:
+ *     - Configuration popularity tracking
+ *     - Sharing conversion rates
+ *     - Save-to-purchase funnel analysis
+ *     - Customer lifetime value correlation
+ *     - Seasonal configuration trends
+ *     - Revenue attribution for saved configurations
+ *
+ * 26. Advanced sharing features:
+ *     - Calendar integration for save reminders
+ *     - Team collaboration features
+ *     - Configuration galleries for inspiration
+ *     - Social proof for popular configurations
+ *     - Integration with CRM systems
+ *     - Automated follow-up sequences
+ *
+ * 27. Performance monitoring:
+ *     - Real-time performance metrics
+ *     - Save operation latency tracking
+ *     - Error rate monitoring
+ *     - User experience metrics (Core Web Vitals)
+ *     - Database query performance tracking
+ *     - CDN performance optimization
+ *
+ * 28. Data export and portability:
+ *     - Configuration export in multiple formats
+ *     - Backup and restore functionality
+ *     - Data migration tools
+ *     - API endpoints for configuration access
+ *     - Integration with third-party systems
+ *     - Compliance with data portability regulations
  */
 
 /***/ }),
@@ -1916,8 +2319,7 @@ __webpack_require__.r(__webpack_exports__);
  * - Performance-optimized event delegation
  * - Debug logging capabilities
  *
- * @version 2.3.0
- * @package Configurator
+ * @version 2.5.0
  *
  * @todo Check if these functions can be used, for a better DRY concept
  */
@@ -2410,11 +2812,11 @@ function dependenciesValueStartingPriceXcontainer(triggerName, condition, target
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _dependencies_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../dependencies.js */ "./assets/js/configurator/dependencies.js");
-/* harmony import */ var _variables_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../variables.js */ "./assets/js/configurator/variables.js");
 /**
- * @version 2.3.0
+ * @version 2.5.0
+ *
+ * @note Seems to be final, no further changes if not needed
  */
-
 
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -2445,11 +2847,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _dependencies_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../dependencies.js */ "./assets/js/configurator/dependencies.js");
-/* harmony import */ var _variables_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../variables.js */ "./assets/js/configurator/variables.js");
 /**
- * @version 2.3.0
+ * @version 2.5.0
+ *
+ * @note Seems to be final, no further changes if not needed
  */
-
 
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -2484,13 +2886,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_string_includes_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.string.includes.js */ "./node_modules/core-js/modules/es.string.includes.js");
 /* harmony import */ var core_js_modules_es_string_includes_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_includes_js__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _dependencies_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./../dependencies.js */ "./assets/js/configurator/dependencies.js");
-/* harmony import */ var _variables_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../variables.js */ "./assets/js/configurator/variables.js");
 
 
 /**
- * @version 2.3.0
+ * @version 2.5.0
+ *
+ * @todo Intensive testing in various scenarios
+ * @todo Check different mirror shapes (e.g. round, oval)
+ * @todo Check different product types
  */
-
 
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -2549,11 +2953,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _dependencies_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../dependencies.js */ "./assets/js/configurator/dependencies.js");
-/* harmony import */ var _variables_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../variables.js */ "./assets/js/configurator/variables.js");
 /**
- * @version 2.3.0
+ * @version 2.5.0
+ *
+ * @note Seems to be final, no further changes if not needed
  */
-
 
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -2583,11 +2987,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _dependencies_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../dependencies.js */ "./assets/js/configurator/dependencies.js");
-/* harmony import */ var _variables_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../variables.js */ "./assets/js/configurator/variables.js");
 /**
- * @version 2.3.0
+ * @version 2.5.0
+ *
+ * @note Seems to be final, no further changes if not needed
  */
-
 
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -2618,14 +3022,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _dependencies_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../dependencies.js */ "./assets/js/configurator/dependencies.js");
-/* harmony import */ var _variables_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../variables.js */ "./assets/js/configurator/variables.js");
 /**
- * @version 2.3.0
+ * @version 2.5.0
+ *
+ * @note Seems to be final, no further changes if not needed
  */
 
 
-
 document.addEventListener("DOMContentLoaded", function () {
+  /**
+   * Values X Container
+   */
   (0,_dependencies_js__WEBPACK_IMPORTED_MODULE_0__.dependenciesValuesXcontainer)("ausschnitte", function (value) {
     return value === "1x";
   }, "ausschnitt_durchmesser");
@@ -2673,7 +3080,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @version 2.3.0
+ * @version 2.5.0
+ *
+ * @todo Intensive testing in various scenarios
+ * @todo Check different mirror shapes (e.g. round, oval)
+ * @todo Check different product types
  */
 
 
@@ -2761,18 +3172,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
 /* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _dependencies_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./../dependencies.js */ "./assets/js/configurator/dependencies.js");
-/* harmony import */ var _variables_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./../variables.js */ "./assets/js/configurator/variables.js");
+/* harmony import */ var _variables_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./../variables.js */ "./assets/js/configurator/variables.js");
 
 
 
 
 /**
- * @version 2.3.0
+ * @version 2.5.0
  *
  * @todo Optimize edge cases, i.e. refresh page, dachschraege position is default on "links", set "hoehe links" to 200 and then "hoehe rechts" to 100, but of them needs to be always above 400, actually specifically dependent on "dachschraege position"
  */
-
 
 
 
@@ -2820,42 +3229,42 @@ function updateDachschraegeConstraints() {
   var position = getDachschraegePosition();
 
   // Store original min values if not already stored
-  if (_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput && !_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput.dataset.originalMin) {
-    _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput.dataset.originalMin = _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput.getAttribute("min") || "400";
+  if (_variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheLinksInput && !_variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheLinksInput.dataset.originalMin) {
+    _variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheLinksInput.dataset.originalMin = _variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheLinksInput.getAttribute("min") || "400";
   }
-  if (_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput && !_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput.dataset.originalMin) {
-    _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput.dataset.originalMin = _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput.getAttribute("min") || "400";
+  if (_variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheRechtsInput && !_variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheRechtsInput.dataset.originalMin) {
+    _variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheRechtsInput.dataset.originalMin = _variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheRechtsInput.getAttribute("min") || "400";
   }
 
   // Always set breite_oben min to 0
-  if (_variables_js__WEBPACK_IMPORTED_MODULE_5__.breiteObenInput) {
-    _variables_js__WEBPACK_IMPORTED_MODULE_5__.breiteObenInput.setAttribute("min", "0");
+  if (_variables_js__WEBPACK_IMPORTED_MODULE_4__.breiteObenInput) {
+    _variables_js__WEBPACK_IMPORTED_MODULE_4__.breiteObenInput.setAttribute("min", "0");
   }
 
   // Update height constraints based on position
   if (position === "links") {
     // Links: hoehe_links can be 0, hoehe_rechts keeps original min
-    if (_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput) {
-      _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput.setAttribute("min", "0");
+    if (_variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheLinksInput) {
+      _variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheLinksInput.setAttribute("min", "0");
     }
-    if (_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput) {
-      _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput.setAttribute("min", _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput.dataset.originalMin);
+    if (_variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheRechtsInput) {
+      _variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheRechtsInput.setAttribute("min", _variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheRechtsInput.dataset.originalMin);
     }
   } else if (position === "rechts") {
     // Rechts: hoehe_rechts can be 0, hoehe_links keeps original min
-    if (_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput) {
-      _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput.setAttribute("min", _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput.dataset.originalMin);
+    if (_variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheLinksInput) {
+      _variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheLinksInput.setAttribute("min", _variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheLinksInput.dataset.originalMin);
     }
-    if (_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput) {
-      _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput.setAttribute("min", "0");
+    if (_variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheRechtsInput) {
+      _variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheRechtsInput.setAttribute("min", "0");
     }
   } else {
     // No position selected: restore original min values for both heights
-    if (_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput) {
-      _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput.setAttribute("min", _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput.dataset.originalMin);
+    if (_variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheLinksInput) {
+      _variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheLinksInput.setAttribute("min", _variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheLinksInput.dataset.originalMin);
     }
-    if (_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput) {
-      _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput.setAttribute("min", _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput.dataset.originalMin);
+    if (_variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheRechtsInput) {
+      _variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheRechtsInput.setAttribute("min", _variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheRechtsInput.dataset.originalMin);
     }
   }
 }
@@ -2868,9 +3277,9 @@ function updateDachschraegeConstraints() {
 function validateDachschraegePosition() {
   var position = getDachschraegePosition();
   if (!position) return null;
-  var hoeheLinks = parseFloat(_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput === null || _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput === void 0 ? void 0 : _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput.value) || 0;
-  var hoeheRechts = parseFloat(_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput === null || _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput === void 0 ? void 0 : _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput.value) || 0;
-  var originalMinHeight = parseFloat(_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput === null || _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput === void 0 ? void 0 : _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput.dataset.originalMin) || 400;
+  var hoeheLinks = parseFloat(_variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheLinksInput === null || _variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheLinksInput === void 0 ? void 0 : _variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheLinksInput.value) || 0;
+  var hoeheRechts = parseFloat(_variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheRechtsInput === null || _variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheRechtsInput === void 0 ? void 0 : _variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheRechtsInput.value) || 0;
+  var originalMinHeight = parseFloat(_variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheLinksInput === null || _variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheLinksInput === void 0 ? void 0 : _variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheLinksInput.dataset.originalMin) || 400;
   if (position === "links") {
     // Wenn links gewählt, muss rechte Höhe mindestens originalMin sein
     if (hoeheRechts < originalMinHeight) {
@@ -2951,7 +3360,7 @@ function getDachschraegeValidationMessage(field) {
   switch (field.name) {
     case "breite_oben":
       // Only validate breite_oben against breite_unten
-      return validateBreiteOben(field, _variables_js__WEBPACK_IMPORTED_MODULE_5__.breiteUntenInput);
+      return validateBreiteOben(field, _variables_js__WEBPACK_IMPORTED_MODULE_4__.breiteUntenInput);
     case "hoehe_links":
       // Only validate left height constraints - don't trigger right height validation here
       var position = getDachschraegePosition();
@@ -2983,7 +3392,7 @@ function getDachschraegeValidationMessage(field) {
       } else if (positionRight === "links") {
         // Bei Position "links" muss das rechte Höhe-Feld mindestens das ursprüngliche Minimum haben
         var hoeheRechts = parseFloat(field.value) || 0;
-        var _originalMinHeight = parseFloat(_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput === null || _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput === void 0 ? void 0 : _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput.dataset.originalMin) || 400;
+        var _originalMinHeight = parseFloat(_variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheRechtsInput === null || _variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheRechtsInput === void 0 ? void 0 : _variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheRechtsInput.dataset.originalMin) || 400;
         if (hoeheRechts < _originalMinHeight) {
           return "Bei Dachschr\xE4ge Position \"links\" muss die rechte H\xF6he mindestens ".concat(_originalMinHeight, " mm betragen.");
         }
@@ -3016,7 +3425,7 @@ function getDependentFields(field) {
   switch (field.name) {
     case "breite_unten":
       // When bottom width changes, re-validate top width (for breite_oben > breite_unten check)
-      if (_variables_js__WEBPACK_IMPORTED_MODULE_5__.breiteObenInput) dependentFields.push(_variables_js__WEBPACK_IMPORTED_MODULE_5__.breiteObenInput);
+      if (_variables_js__WEBPACK_IMPORTED_MODULE_4__.breiteObenInput) dependentFields.push(_variables_js__WEBPACK_IMPORTED_MODULE_4__.breiteObenInput);
       break;
     case "breite_oben":
       // Top width validation is self-contained - no dependent fields needed
@@ -3035,8 +3444,8 @@ function getDependentFields(field) {
       // Position radio buttons are handled internally - no dependent fields for validation UI
       // Constraint updates and validation happen through position change event listeners
       updateDachschraegeConstraints();
-      if (_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput) dependentFields.push(_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput);
-      if (_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput) dependentFields.push(_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput);
+      if (_variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheLinksInput) dependentFields.push(_variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheLinksInput);
+      if (_variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheRechtsInput) dependentFields.push(_variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheRechtsInput);
 
       // Trigger comprehensive update for position changes
       setTimeout(function () {
@@ -3089,19 +3498,19 @@ function validateAndUpdateAllPositionFields() {
   // Validate all fields if validation function is available
   if (window.validateField) {
     // Validate height fields (these trigger position-specific validation)
-    if (_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput) {
-      window.validateField(_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput);
+    if (_variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheLinksInput) {
+      window.validateField(_variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheLinksInput);
     }
-    if (_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput) {
-      window.validateField(_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput);
+    if (_variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheRechtsInput) {
+      window.validateField(_variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheRechtsInput);
     }
 
     // Validate width fields
-    if (_variables_js__WEBPACK_IMPORTED_MODULE_5__.breiteObenInput) {
-      window.validateField(_variables_js__WEBPACK_IMPORTED_MODULE_5__.breiteObenInput);
+    if (_variables_js__WEBPACK_IMPORTED_MODULE_4__.breiteObenInput) {
+      window.validateField(_variables_js__WEBPACK_IMPORTED_MODULE_4__.breiteObenInput);
     }
-    if (_variables_js__WEBPACK_IMPORTED_MODULE_5__.breiteUntenInput) {
-      window.validateField(_variables_js__WEBPACK_IMPORTED_MODULE_5__.breiteUntenInput);
+    if (_variables_js__WEBPACK_IMPORTED_MODULE_4__.breiteUntenInput) {
+      window.validateField(_variables_js__WEBPACK_IMPORTED_MODULE_4__.breiteUntenInput);
     }
 
     // Note: Position radio buttons are not validated via validateField
@@ -3117,9 +3526,9 @@ function validateAndUpdateAllPositionFields() {
  * More sophisticated than simple auto-detection
  */
 function suggestOptimalPosition() {
-  var hoeheLinks = parseFloat(_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput === null || _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput === void 0 ? void 0 : _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput.value) || 0;
-  var hoeheRechts = parseFloat(_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput === null || _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput === void 0 ? void 0 : _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput.value) || 0;
-  var originalMinHeight = parseFloat(_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput === null || _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput === void 0 ? void 0 : _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput.dataset.originalMin) || 400;
+  var hoeheLinks = parseFloat(_variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheLinksInput === null || _variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheLinksInput === void 0 ? void 0 : _variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheLinksInput.value) || 0;
+  var hoeheRechts = parseFloat(_variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheRechtsInput === null || _variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheRechtsInput === void 0 ? void 0 : _variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheRechtsInput.value) || 0;
+  var originalMinHeight = parseFloat(_variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheLinksInput === null || _variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheLinksInput === void 0 ? void 0 : _variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheLinksInput.dataset.originalMin) || 400;
   var currentPosition = getDachschraegePosition();
 
   // Determine optimal position based on values
@@ -3198,7 +3607,7 @@ function onDachschraegeFieldChange(field) {
     suggestOptimalPosition();
 
     // Re-validate the other height field after position might have changed
-    var otherHeightField = field.name === "hoehe_links" ? _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput : _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput;
+    var otherHeightField = field.name === "hoehe_links" ? _variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheRechtsInput : _variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheLinksInput;
     if (otherHeightField && window.validateField) {
       setTimeout(function () {
         window.validateField(otherHeightField);
@@ -3246,7 +3655,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Initial auto-detection with improved logic
   setTimeout(function () {
-    if (_variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput !== null && _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput !== void 0 && _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput.value && _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheLinksInput.value !== "0" || _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput !== null && _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput !== void 0 && _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput.value && _variables_js__WEBPACK_IMPORTED_MODULE_5__.hoeheRechtsInput.value !== "0") {
+    if (_variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheLinksInput !== null && _variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheLinksInput !== void 0 && _variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheLinksInput.value && _variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheLinksInput.value !== "0" || _variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheRechtsInput !== null && _variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheRechtsInput !== void 0 && _variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheRechtsInput.value && _variables_js__WEBPACK_IMPORTED_MODULE_4__.hoeheRechtsInput.value !== "0") {
       suggestOptimalPosition();
       validateAndUpdateAllPositionFields();
     }
@@ -3263,11 +3672,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _dependencies_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../dependencies.js */ "./assets/js/configurator/dependencies.js");
-/* harmony import */ var _variables_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../variables.js */ "./assets/js/configurator/variables.js");
 /**
- * @version 2.3.0
+ * @version 2.5.0
+ *
+ * @note Seems to be final, no further changes if not needed
  */
-
 
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -3293,13 +3702,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_string_includes_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.string.includes.js */ "./node_modules/core-js/modules/es.string.includes.js");
 /* harmony import */ var core_js_modules_es_string_includes_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_includes_js__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _dependencies_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./../dependencies.js */ "./assets/js/configurator/dependencies.js");
-/* harmony import */ var _variables_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./../variables.js */ "./assets/js/configurator/variables.js");
 
 
 /**
- * @version 2.3.0
+ * @version 2.5.0
+ *
+ * @todo Intensive testing in various scenarios
+ * @todo Check different mirror shapes (e.g. round, oval)
+ * @todo Check different product types
  */
-
 
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -3405,8 +3816,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_18___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_18__);
 /* harmony import */ var core_js_modules_web_dom_collections_iterator_js__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! core-js/modules/web.dom-collections.iterator.js */ "./node_modules/core-js/modules/web.dom-collections.iterator.js");
 /* harmony import */ var core_js_modules_web_dom_collections_iterator_js__WEBPACK_IMPORTED_MODULE_19___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_iterator_js__WEBPACK_IMPORTED_MODULE_19__);
-/* harmony import */ var _variables_js__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ../variables.js */ "./assets/js/configurator/variables.js");
-/* harmony import */ var _dependencies_js__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ../dependencies.js */ "./assets/js/configurator/dependencies.js");
+/* harmony import */ var _dependencies_js__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ../dependencies.js */ "./assets/js/configurator/dependencies.js");
+/* harmony import */ var _variables_js__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ../variables.js */ "./assets/js/configurator/variables.js");
 function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
@@ -3469,8 +3880,9 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
  * Dependencies:
  * - variables.js: Dimension inputs, lighting position flags, and product category flags
  *
- * @version 2.3.0
- * @package Configurator
+ * @version 2.5.0
+ *
+ * @todo Change "Plus" to "Solo" in the code and documentation
  */
 
 
@@ -3512,7 +3924,7 @@ var LIGHTING_TYPES = {
  * Lightstrip variant constants
  */
 var LIGHTSTRIP_VARIANTS = {
-  PLUS: "lightstrip_plus",
+  PLUS: "lightstrip_solo",
   GRADIENT: "lightstrip_gradient"
 };
 
@@ -3587,7 +3999,7 @@ var setupEventListeners = function setupEventListeners() {
  * Set up dimension input listeners for real-time price updates
  */
 var setupDimensionInputListeners = function setupDimensionInputListeners() {
-  var dimensionInputs = [_variables_js__WEBPACK_IMPORTED_MODULE_20__.durchmesserInput, _variables_js__WEBPACK_IMPORTED_MODULE_20__.breiteInput, _variables_js__WEBPACK_IMPORTED_MODULE_20__.hoeheInput].filter(Boolean);
+  var dimensionInputs = [_variables_js__WEBPACK_IMPORTED_MODULE_21__.durchmesserInput, _variables_js__WEBPACK_IMPORTED_MODULE_21__.breiteInput, _variables_js__WEBPACK_IMPORTED_MODULE_21__.hoeheInput].filter(Boolean);
   dimensionInputs.forEach(function (input) {
     if (!input) return;
     ["input", "change", "blur"].forEach(function (eventType) {
@@ -3681,47 +4093,47 @@ var setupResetListeners = function setupResetListeners() {
  */
 var setupPhilipsHueDependencies = function setupPhilipsHueDependencies() {
   // Hide incompatible containers when Philips Hue is selected (main lighting)
-  (0,_dependencies_js__WEBPACK_IMPORTED_MODULE_21__.dependenciesValuesXcontainer)("lichtfarbe", function (value) {
+  (0,_dependencies_js__WEBPACK_IMPORTED_MODULE_20__.dependenciesValuesXcontainer)("lichtfarbe", function (value) {
     return value !== "philips_hue";
   },
   // Show when NOT Philips Hue
-  "lichtstaerke", DEBUG_MODE);
-  (0,_dependencies_js__WEBPACK_IMPORTED_MODULE_21__.dependenciesValuesXcontainer)("lichtfarbe", function (value) {
+  "lichtstaerke");
+  (0,_dependencies_js__WEBPACK_IMPORTED_MODULE_20__.dependenciesValuesXcontainer)("lichtfarbe", function (value) {
     return value !== "philips_hue";
   },
   // Show when NOT Philips Hue
-  "smart_home", DEBUG_MODE);
+  "smart_home");
 
   // Hide incompatible containers when Philips Hue is selected (ambient lighting)
-  (0,_dependencies_js__WEBPACK_IMPORTED_MODULE_21__.dependenciesValuesXcontainer)("ambientelicht_lichtfarbe", function (value) {
+  (0,_dependencies_js__WEBPACK_IMPORTED_MODULE_20__.dependenciesValuesXcontainer)("ambientelicht_lichtfarbe", function (value) {
     return value !== "philips_hue";
   },
   // Show when NOT Philips Hue
-  "lichtstaerke", DEBUG_MODE);
-  (0,_dependencies_js__WEBPACK_IMPORTED_MODULE_21__.dependenciesValuesXcontainer)("ambientelicht_lichtfarbe", function (value) {
+  "lichtstaerke");
+  (0,_dependencies_js__WEBPACK_IMPORTED_MODULE_20__.dependenciesValuesXcontainer)("ambientelicht_lichtfarbe", function (value) {
     return value !== "philips_hue";
   },
   // Show when NOT Philips Hue
-  "smart_home", DEBUG_MODE);
+  "smart_home");
 
   // Show Philips Hue containers when Philips Hue is selected
-  (0,_dependencies_js__WEBPACK_IMPORTED_MODULE_21__.dependenciesValuesXcontainer)("lichtfarbe", function (value) {
+  (0,_dependencies_js__WEBPACK_IMPORTED_MODULE_20__.dependenciesValuesXcontainer)("lichtfarbe", function (value) {
     return value === "philips_hue";
   },
   // Show when Philips Hue
-  "lichtfarbe_philips_hue", DEBUG_MODE);
-  (0,_dependencies_js__WEBPACK_IMPORTED_MODULE_21__.dependenciesValuesXcontainer)("ambientelicht_lichtfarbe", function (value) {
+  "lichtfarbe_philips_hue");
+  (0,_dependencies_js__WEBPACK_IMPORTED_MODULE_20__.dependenciesValuesXcontainer)("ambientelicht_lichtfarbe", function (value) {
     return value === "philips_hue";
   },
   // Show when Philips Hue
-  "ambientelicht_philips_hue", DEBUG_MODE);
+  "ambientelicht_philips_hue");
 
   // Show Philips Hue App option only when lichtfarbe contains "hue"
-  (0,_dependencies_js__WEBPACK_IMPORTED_MODULE_21__.dependenciesValuesXvalues)("lichtfarbe", function (value) {
+  (0,_dependencies_js__WEBPACK_IMPORTED_MODULE_20__.dependenciesValuesXvalues)("lichtfarbe", function (value) {
     return value.includes("hue");
   }, "bedienung", function (value) {
     return value === "philips_hue_app";
-  }, DEBUG_MODE);
+  });
   debugLog("Philips Hue dependencies set up using dependenciesValuesXcontainer");
 };
 
@@ -3825,21 +4237,21 @@ var calculatePerimeter = function calculatePerimeter() {
   var lightingType = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : LIGHTING_TYPES.AMBIENT;
   try {
     // Handle circular mirrors (diameter input)
-    if (_variables_js__WEBPACK_IMPORTED_MODULE_20__.durchmesserInput !== null && _variables_js__WEBPACK_IMPORTED_MODULE_20__.durchmesserInput !== void 0 && _variables_js__WEBPACK_IMPORTED_MODULE_20__.durchmesserInput.value && parseFloat(_variables_js__WEBPACK_IMPORTED_MODULE_20__.durchmesserInput.value) > 0) {
-      var diameter = parseInputValue(_variables_js__WEBPACK_IMPORTED_MODULE_20__.durchmesserInput.value);
+    if (_variables_js__WEBPACK_IMPORTED_MODULE_21__.durchmesserInput !== null && _variables_js__WEBPACK_IMPORTED_MODULE_21__.durchmesserInput !== void 0 && _variables_js__WEBPACK_IMPORTED_MODULE_21__.durchmesserInput.value && parseFloat(_variables_js__WEBPACK_IMPORTED_MODULE_21__.durchmesserInput.value) > 0) {
+      var diameter = parseInputValue(_variables_js__WEBPACK_IMPORTED_MODULE_21__.durchmesserInput.value);
       if (diameter <= 0) {
-        debugLog("Invalid diameter value:", _variables_js__WEBPACK_IMPORTED_MODULE_20__.durchmesserInput.value);
+        debugLog("Invalid diameter value:", _variables_js__WEBPACK_IMPORTED_MODULE_21__.durchmesserInput.value);
         return 0;
       }
       return Math.ceil(Math.PI * diameter * 100) / 100;
     }
 
     // Handle rectangular mirrors (width and height inputs)
-    var hasWidth = (_variables_js__WEBPACK_IMPORTED_MODULE_20__.breiteInput === null || _variables_js__WEBPACK_IMPORTED_MODULE_20__.breiteInput === void 0 ? void 0 : _variables_js__WEBPACK_IMPORTED_MODULE_20__.breiteInput.value) && parseFloat(_variables_js__WEBPACK_IMPORTED_MODULE_20__.breiteInput.value) > 0;
-    var hasHeight = (_variables_js__WEBPACK_IMPORTED_MODULE_20__.hoeheInput === null || _variables_js__WEBPACK_IMPORTED_MODULE_20__.hoeheInput === void 0 ? void 0 : _variables_js__WEBPACK_IMPORTED_MODULE_20__.hoeheInput.value) && parseFloat(_variables_js__WEBPACK_IMPORTED_MODULE_20__.hoeheInput.value) > 0;
+    var hasWidth = (_variables_js__WEBPACK_IMPORTED_MODULE_21__.breiteInput === null || _variables_js__WEBPACK_IMPORTED_MODULE_21__.breiteInput === void 0 ? void 0 : _variables_js__WEBPACK_IMPORTED_MODULE_21__.breiteInput.value) && parseFloat(_variables_js__WEBPACK_IMPORTED_MODULE_21__.breiteInput.value) > 0;
+    var hasHeight = (_variables_js__WEBPACK_IMPORTED_MODULE_21__.hoeheInput === null || _variables_js__WEBPACK_IMPORTED_MODULE_21__.hoeheInput === void 0 ? void 0 : _variables_js__WEBPACK_IMPORTED_MODULE_21__.hoeheInput.value) && parseFloat(_variables_js__WEBPACK_IMPORTED_MODULE_21__.hoeheInput.value) > 0;
     if (hasWidth || hasHeight) {
-      var width = parseInputValue((_variables_js__WEBPACK_IMPORTED_MODULE_20__.breiteInput === null || _variables_js__WEBPACK_IMPORTED_MODULE_20__.breiteInput === void 0 ? void 0 : _variables_js__WEBPACK_IMPORTED_MODULE_20__.breiteInput.value) || "0");
-      var height = parseInputValue((_variables_js__WEBPACK_IMPORTED_MODULE_20__.hoeheInput === null || _variables_js__WEBPACK_IMPORTED_MODULE_20__.hoeheInput === void 0 ? void 0 : _variables_js__WEBPACK_IMPORTED_MODULE_20__.hoeheInput.value) || "0");
+      var width = parseInputValue((_variables_js__WEBPACK_IMPORTED_MODULE_21__.breiteInput === null || _variables_js__WEBPACK_IMPORTED_MODULE_21__.breiteInput === void 0 ? void 0 : _variables_js__WEBPACK_IMPORTED_MODULE_21__.breiteInput.value) || "0");
+      var height = parseInputValue((_variables_js__WEBPACK_IMPORTED_MODULE_21__.hoeheInput === null || _variables_js__WEBPACK_IMPORTED_MODULE_21__.hoeheInput === void 0 ? void 0 : _variables_js__WEBPACK_IMPORTED_MODULE_21__.hoeheInput.value) || "0");
       if (width <= 0 || height <= 0) {
         debugLog("Invalid rectangular dimensions:", {
           width: width,
@@ -3870,19 +4282,19 @@ var calculateAmbientPerimeter = function calculateAmbientPerimeter(width, height
     return 0;
   }
   debugLog("Product categories for ambient lighting:", {
-    isBadspiegel: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isBadspiegel,
-    isSpiegelschrank: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isSpiegelschrank,
-    isUnterschrank: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isUnterschrank,
-    isHochschrank: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isHochschrank,
-    isBoard: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isBoard
+    isBadspiegel: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isBadspiegel,
+    isSpiegelschrank: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isSpiegelschrank,
+    isUnterschrank: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isUnterschrank,
+    isHochschrank: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isHochschrank,
+    isBoard: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isBoard
   });
   debugLog("Selected ambient option:", selectedOption);
 
   // Product category specific logic
-  if (_variables_js__WEBPACK_IMPORTED_MODULE_20__.isBadspiegel || _variables_js__WEBPACK_IMPORTED_MODULE_20__.isSpiegelschrank) {
+  if (_variables_js__WEBPACK_IMPORTED_MODULE_21__.isBadspiegel || _variables_js__WEBPACK_IMPORTED_MODULE_21__.isSpiegelschrank) {
     return calculateMirrorAmbientLighting(width, height, selectedOption);
   }
-  if (_variables_js__WEBPACK_IMPORTED_MODULE_20__.isUnterschrank || _variables_js__WEBPACK_IMPORTED_MODULE_20__.isHochschrank || _variables_js__WEBPACK_IMPORTED_MODULE_20__.isBoard) {
+  if (_variables_js__WEBPACK_IMPORTED_MODULE_21__.isUnterschrank || _variables_js__WEBPACK_IMPORTED_MODULE_21__.isHochschrank || _variables_js__WEBPACK_IMPORTED_MODULE_21__.isBoard) {
     return calculateCabinetAmbientLighting(width, height, selectedOption);
   }
 
@@ -3897,25 +4309,25 @@ var calculateAmbientPerimeter = function calculateAmbientPerimeter(width, height
 var calculateMainLightingPerimeter = function calculateMainLightingPerimeter(width, height) {
   if (!validateDimensions(width, height)) return 0;
   debugLog("Product categories:", {
-    isBadspiegel: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isBadspiegel,
-    isSpiegelschrank: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isSpiegelschrank,
-    isUnterschrank: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isUnterschrank,
-    isHochschrank: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isHochschrank,
-    isBoard: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isBoard
+    isBadspiegel: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isBadspiegel,
+    isSpiegelschrank: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isSpiegelschrank,
+    isUnterschrank: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isUnterschrank,
+    isHochschrank: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isHochschrank,
+    isBoard: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isBoard
   });
   debugLog("Main lighting flags:", {
-    isLORU: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isLORU,
-    isLOR: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isLOR,
-    isLR: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isLR,
-    isOU: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isOU,
-    isO: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isO
+    isLORU: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isLORU,
+    isLOR: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isLOR,
+    isLR: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isLR,
+    isOU: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isOU,
+    isO: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isO
   });
 
   // Product category specific logic
-  if (_variables_js__WEBPACK_IMPORTED_MODULE_20__.isBadspiegel) {
+  if (_variables_js__WEBPACK_IMPORTED_MODULE_21__.isBadspiegel) {
     return calculateBadspiegelMainLighting(width, height);
   }
-  if (_variables_js__WEBPACK_IMPORTED_MODULE_20__.isSpiegelschrank) {
+  if (_variables_js__WEBPACK_IMPORTED_MODULE_21__.isSpiegelschrank) {
     // Spiegelschrank: Always LORU (all sides), regardless of detected flags
     var perimeter = Math.ceil(2 * (width + height) * 100) / 100;
     debugLog("Spiegelschrank main lighting (forced LORU):", {
@@ -3927,11 +4339,11 @@ var calculateMainLightingPerimeter = function calculateMainLightingPerimeter(wid
   }
 
   // Cabinets don't have main lighting
-  if (_variables_js__WEBPACK_IMPORTED_MODULE_20__.isUnterschrank || _variables_js__WEBPACK_IMPORTED_MODULE_20__.isHochschrank || _variables_js__WEBPACK_IMPORTED_MODULE_20__.isBoard) {
+  if (_variables_js__WEBPACK_IMPORTED_MODULE_21__.isUnterschrank || _variables_js__WEBPACK_IMPORTED_MODULE_21__.isHochschrank || _variables_js__WEBPACK_IMPORTED_MODULE_21__.isBoard) {
     debugLog("Product category has no main lighting:", {
-      isUnterschrank: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isUnterschrank,
-      isHochschrank: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isHochschrank,
-      isBoard: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isBoard
+      isUnterschrank: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isUnterschrank,
+      isHochschrank: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isHochschrank,
+      isBoard: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isBoard
     });
     return 0;
   }
@@ -4055,31 +4467,31 @@ var calculateCabinetAmbientLighting = function calculateCabinetAmbientLighting(w
  */
 var calculateBadspiegelMainLighting = function calculateBadspiegelMainLighting(width, height) {
   var lightingFlags = [{
-    flag: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isLORU,
+    flag: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isLORU,
     calculation: function calculation() {
       return Math.ceil(2 * (width + height) * 100) / 100;
     },
     name: "LORU"
   }, {
-    flag: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isLOR,
+    flag: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isLOR,
     calculation: function calculation() {
       return Math.ceil((width + 2 * height) * 100) / 100;
     },
     name: "LOR"
   }, {
-    flag: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isLR,
+    flag: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isLR,
     calculation: function calculation() {
       return Math.ceil(2 * height * 100) / 100;
     },
     name: "LR"
   }, {
-    flag: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isOU,
+    flag: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isOU,
     calculation: function calculation() {
       return Math.ceil(2 * width * 100) / 100;
     },
     name: "OU"
   }, {
-    flag: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isO,
+    flag: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isO,
     calculation: function calculation() {
       return Math.ceil(width * 100) / 100;
     },
@@ -4101,11 +4513,11 @@ var calculateBadspiegelMainLighting = function calculateBadspiegelMainLighting(w
     }
   }
   debugWarn("No main lighting position flag is active for Badspiegel!", {
-    isLORU: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isLORU,
-    isLOR: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isLOR,
-    isLR: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isLR,
-    isOU: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isOU,
-    isO: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isO
+    isLORU: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isLORU,
+    isLOR: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isLOR,
+    isLR: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isLR,
+    isOU: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isOU,
+    isO: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isO
   });
   return 0;
 };
@@ -4312,13 +4724,13 @@ var validateDimensions = function validateDimensions(width, height) {
  * Checks if the current product category supports main lighting
  */
 var hasMainLighting = function hasMainLighting() {
-  var hasMain = _variables_js__WEBPACK_IMPORTED_MODULE_20__.isBadspiegel || _variables_js__WEBPACK_IMPORTED_MODULE_20__.isSpiegelschrank;
+  var hasMain = _variables_js__WEBPACK_IMPORTED_MODULE_21__.isBadspiegel || _variables_js__WEBPACK_IMPORTED_MODULE_21__.isSpiegelschrank;
   debugLog("Main lighting availability:", {
-    isBadspiegel: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isBadspiegel,
-    isSpiegelschrank: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isSpiegelschrank,
-    isUnterschrank: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isUnterschrank,
-    isHochschrank: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isHochschrank,
-    isBoard: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isBoard,
+    isBadspiegel: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isBadspiegel,
+    isSpiegelschrank: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isSpiegelschrank,
+    isUnterschrank: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isUnterschrank,
+    isHochschrank: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isHochschrank,
+    isBoard: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isBoard,
     hasMain: hasMain
   });
   return hasMain;
@@ -4328,13 +4740,13 @@ var hasMainLighting = function hasMainLighting() {
  * Checks if the current product category supports ambient lighting
  */
 var hasAmbientLighting = function hasAmbientLighting() {
-  var hasAmbient = _variables_js__WEBPACK_IMPORTED_MODULE_20__.isBadspiegel || _variables_js__WEBPACK_IMPORTED_MODULE_20__.isSpiegelschrank || _variables_js__WEBPACK_IMPORTED_MODULE_20__.isUnterschrank || _variables_js__WEBPACK_IMPORTED_MODULE_20__.isHochschrank || _variables_js__WEBPACK_IMPORTED_MODULE_20__.isBoard;
+  var hasAmbient = _variables_js__WEBPACK_IMPORTED_MODULE_21__.isBadspiegel || _variables_js__WEBPACK_IMPORTED_MODULE_21__.isSpiegelschrank || _variables_js__WEBPACK_IMPORTED_MODULE_21__.isUnterschrank || _variables_js__WEBPACK_IMPORTED_MODULE_21__.isHochschrank || _variables_js__WEBPACK_IMPORTED_MODULE_21__.isBoard;
   debugLog("Ambient lighting availability:", {
-    isBadspiegel: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isBadspiegel,
-    isSpiegelschrank: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isSpiegelschrank,
-    isUnterschrank: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isUnterschrank,
-    isHochschrank: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isHochschrank,
-    isBoard: _variables_js__WEBPACK_IMPORTED_MODULE_20__.isBoard,
+    isBadspiegel: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isBadspiegel,
+    isSpiegelschrank: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isSpiegelschrank,
+    isUnterschrank: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isUnterschrank,
+    isHochschrank: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isHochschrank,
+    isBoard: _variables_js__WEBPACK_IMPORTED_MODULE_21__.isBoard,
     hasAmbient: hasAmbient
   });
   return hasAmbient;
@@ -4391,7 +4803,7 @@ var getPricesForCategory = function getPricesForCategory(elements, category) {
  * Gets the product type name for logging
  */
 var getProductTypeName = function getProductTypeName() {
-  return _variables_js__WEBPACK_IMPORTED_MODULE_20__.isUnterschrank ? "Unterschrank" : _variables_js__WEBPACK_IMPORTED_MODULE_20__.isHochschrank ? "Hochschrank" : _variables_js__WEBPACK_IMPORTED_MODULE_20__.isBoard ? "Side/Lowboard" : "Cabinet";
+  return _variables_js__WEBPACK_IMPORTED_MODULE_21__.isUnterschrank ? "Unterschrank" : _variables_js__WEBPACK_IMPORTED_MODULE_21__.isHochschrank ? "Hochschrank" : _variables_js__WEBPACK_IMPORTED_MODULE_21__.isBoard ? "Side/Lowboard" : "Cabinet";
 };
 
 // ========================================
@@ -4443,13 +4855,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_string_includes_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.string.includes.js */ "./node_modules/core-js/modules/es.string.includes.js");
 /* harmony import */ var core_js_modules_es_string_includes_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_includes_js__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _dependencies_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./../dependencies.js */ "./assets/js/configurator/dependencies.js");
-/* harmony import */ var _variables_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./../variables.js */ "./assets/js/configurator/variables.js");
 
 
 /**
- * @version 2.3.0
+ * @version 2.5.0
+ *
+ * @note Seems to be final, no further changes if not needed
  */
-
 
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -4500,12 +4912,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_array_concat_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.concat.js */ "./node_modules/core-js/modules/es.array.concat.js");
 /* harmony import */ var core_js_modules_es_array_concat_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_concat_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _dependencies_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../dependencies.js */ "./assets/js/configurator/dependencies.js");
-/* harmony import */ var _variables_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./../variables.js */ "./assets/js/configurator/variables.js");
 
 /**
- * @version 2.3.0
+ * @version 2.5.0
+ *
+ * @note Seems to be final, no further changes if not needed
  */
-
 
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -4588,13 +5000,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_string_includes_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.string.includes.js */ "./node_modules/core-js/modules/es.string.includes.js");
 /* harmony import */ var core_js_modules_es_string_includes_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_includes_js__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _dependencies_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./../dependencies.js */ "./assets/js/configurator/dependencies.js");
-/* harmony import */ var _variables_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./../variables.js */ "./assets/js/configurator/variables.js");
 
 
 /**
- * @version 2.3.0
+ * @version 2.5.0
+ *
+ * @note Seems to be final, no further changes if not needed
  */
-
 
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -4627,11 +5039,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _dependencies_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../dependencies.js */ "./assets/js/configurator/dependencies.js");
-/* harmony import */ var _variables_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../variables.js */ "./assets/js/configurator/variables.js");
 /**
- * @version 2.3.0
+ * @version 2.5.0
+ *
+ * @note Seems to be final, no further changes if not needed
  */
-
 
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -4656,26 +5068,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 /***/ }),
 
-/***/ "./assets/js/configurator/dependencies/tiefe.js":
-/*!******************************************************!*\
-  !*** ./assets/js/configurator/dependencies/tiefe.js ***!
-  \******************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _dependencies_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../dependencies.js */ "./assets/js/configurator/dependencies.js");
-/* harmony import */ var _variables_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../variables.js */ "./assets/js/configurator/variables.js");
-/**
- * @version 2.3.0
- * 
- * @todo Check if this file is needed
- */
-
-
-
-
-/***/ }),
-
 /***/ "./assets/js/configurator/dependencies/tueren.js":
 /*!*******************************************************!*\
   !*** ./assets/js/configurator/dependencies/tueren.js ***!
@@ -4684,11 +5076,11 @@ __webpack_require__.r(__webpack_exports__);
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _dependencies_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../dependencies.js */ "./assets/js/configurator/dependencies.js");
-/* harmony import */ var _variables_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../variables.js */ "./assets/js/configurator/variables.js");
 /**
- * @version 2.3.0
+ * @version 2.5.0
+ *
+ * @note Seems to be final, no further changes if not needed
  */
-
 
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -4745,13 +5137,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_string_includes_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.string.includes.js */ "./node_modules/core-js/modules/es.string.includes.js");
 /* harmony import */ var core_js_modules_es_string_includes_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_includes_js__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _dependencies_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./../dependencies.js */ "./assets/js/configurator/dependencies.js");
-/* harmony import */ var _variables_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./../variables.js */ "./assets/js/configurator/variables.js");
 
 
 /**
- * @version 2.3.0
+ * @version 2.5.0
+ *
+ * @note Seems to be final, no further changes if not needed
  */
-
 
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -4789,16 +5181,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
 /* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _dependencies_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../dependencies.js */ "./assets/js/configurator/dependencies.js");
-/* harmony import */ var _variables_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../variables.js */ "./assets/js/configurator/variables.js");
 
 
 
 
 
 /**
- * @version 2.3.0
+ * @version 2.5.0
+ *
+ * @note Seems to be final, no further changes if not needed
  */
-
 
 
 
@@ -5156,13 +5548,11 @@ function handleDimensionChange() {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _dependencies_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../dependencies.js */ "./assets/js/configurator/dependencies.js");
-/* harmony import */ var _variables_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../variables.js */ "./assets/js/configurator/variables.js");
 /**
- * @version 2.3.0
+ * @version 2.5.0
  *
  * @todo Check functionality on rounded mirrors
  */
-
 
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -5186,15 +5576,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _dependencies_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../dependencies.js */ "./assets/js/configurator/dependencies.js");
 /* harmony import */ var _variables_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../variables.js */ "./assets/js/configurator/variables.js");
 /**
- * @version 2.3.0
+ * @version 2.5.0
  */
 
 
 
 document.addEventListener("DOMContentLoaded", function () {
-  //*********************************/
-  // Dependencies: Values X Container
-  //*********************************/
+  /**
+   * Values X Container
+   */
   if (!_variables_js__WEBPACK_IMPORTED_MODULE_1__.isRund) {
     (0,_dependencies_js__WEBPACK_IMPORTED_MODULE_0__.dependenciesValuesXcontainer)("verblendung", function (value) {
       return value !== "";
@@ -5249,7 +5639,7 @@ __webpack_require__.r(__webpack_exports__);
  * - Dynamic event binding for configurator elements
  * - Performance optimizations with caching and debouncing
  *
- * @version 2.3.0
+ * @version 2.4.0
  * @package Configurator
  *
  * @todo Use for "dachschraege" calcPrice2x100, whilst using a "prefunction" to get the higher "breite" or "hoehe" value
@@ -5599,7 +5989,7 @@ __webpack_require__.r(__webpack_exports__);
  * configurator system. It includes number parsing, price formatting, DOM
  * manipulation helpers, and performance optimization utilities.
  *
- * @version 2.3.0
+ * @version 2.5.0
  * @package Configurator
  *
  * @todo Check if these functions can be used, for a better DRY concept
@@ -5856,17 +6246,20 @@ export function formatFileSize(bytes) {
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var core_js_modules_es_array_join_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.join.js */ "./node_modules/core-js/modules/es.array.join.js");
-/* harmony import */ var core_js_modules_es_array_join_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_join_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_es_function_name_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.function.name.js */ "./node_modules/core-js/modules/es.function.name.js");
-/* harmony import */ var core_js_modules_es_function_name_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_function_name_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "./node_modules/core-js/modules/es.object.to-string.js");
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.string.trim.js */ "./node_modules/core-js/modules/es.string.trim.js");
-/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
-/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _dependencies_dachschraege_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./dependencies/dachschraege.js */ "./assets/js/configurator/dependencies/dachschraege.js");
+/* harmony import */ var core_js_modules_es_array_concat_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.concat.js */ "./node_modules/core-js/modules/es.array.concat.js");
+/* harmony import */ var core_js_modules_es_array_concat_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_concat_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_array_join_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.array.join.js */ "./node_modules/core-js/modules/es.array.join.js");
+/* harmony import */ var core_js_modules_es_array_join_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_join_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_es_function_name_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.function.name.js */ "./node_modules/core-js/modules/es.function.name.js");
+/* harmony import */ var core_js_modules_es_function_name_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_function_name_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "./node_modules/core-js/modules/es.object.to-string.js");
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.string.trim.js */ "./node_modules/core-js/modules/es.string.trim.js");
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _dependencies_dachschraege_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./dependencies/dachschraege.js */ "./assets/js/configurator/dependencies/dachschraege.js");
+
 
 
 
@@ -5892,7 +6285,7 @@ __webpack_require__.r(__webpack_exports__);
  * - Dynamic min/max attribute updates
  * - Modular validation rules via callback system
  *
- * @version 2.3.0
+ * @version 2.5.0
  * @package Configurator
  */
 
@@ -5907,6 +6300,132 @@ document.addEventListener("DOMContentLoaded", function () {
   /**
    * Special field references for relational validation
    */
+  var durchmesserInput = document.querySelector('.option-input[name="durchmesser"]');
+  var schnittkanteInput = document.querySelector('.option-input[name="schnittkante"]');
+  var hoeheInput = document.querySelector('.option-input[name="hoehe_schnittkante"]') || document.querySelector('.option-input[name="breite_schnittkante"]');
+
+  /**
+   * SK1 geometric calculation functions
+   * Based on circular segment formulas
+   */
+
+  /**
+   * Calculates segment height from diameter and cut width
+   * @param {number} diameter - Circle diameter
+   * @param {number} cutWidth - Cut width (chord length)
+   * @returns {number|null} Calculated height or null if invalid
+   */
+  function calculateHeightFromDiameterAndCut(diameter, cutWidth) {
+    if (diameter <= 0 || cutWidth <= 0 || cutWidth > diameter) return null;
+    var r = diameter / 2;
+    var discriminant = r * r - cutWidth * cutWidth / 4;
+    if (discriminant < 0) return null;
+    var distanceToChord = r - Math.sqrt(discriminant);
+    var segmentHeight = 2 * r - distanceToChord;
+    return Math.round(segmentHeight); // Round to whole numbers
+  }
+
+  /**
+   * Calculates cut width from diameter and height
+   * @param {number} diameter - Circle diameter
+   * @param {number} height - Segment height
+   * @returns {number|null} Calculated cut width or null if invalid
+   */
+  function calculateCutFromDiameterAndHeight(diameter, height) {
+    if (diameter <= 0 || height <= 0 || height > diameter) return null;
+    var r = diameter / 2;
+    var distanceToChord = 2 * r - height;
+    var discriminant = r * r - distanceToChord * distanceToChord;
+    if (discriminant < 0) return null;
+    var cutWidth = 2 * Math.sqrt(discriminant);
+    return Math.round(cutWidth); // Round to whole numbers
+  }
+
+  /**
+   * Updates calculated field without triggering recursive calculations
+   * @param {HTMLElement} field - Target field to update
+   * @param {number} value - New calculated value
+   */
+  function updateCalculatedField(field, value) {
+    if (!field || value === null || value <= 0) return;
+
+    // Temporarily mark field as "calculating" to prevent recursive updates
+    field.dataset.calculating = 'true';
+    field.value = value;
+
+    // Trigger validation after update
+    if (window.validateField) {
+      validateField(field);
+    }
+
+    // Remove calculating flag after a short delay
+    setTimeout(function () {
+      delete field.dataset.calculating;
+    }, 100);
+  }
+
+  /**
+   * Performs SK1 calculations based on field changes
+   * @param {HTMLElement} changedField - The field that was changed
+   */
+  function performSK1Calculations(changedField) {
+    if (!changedField || changedField.dataset.calculating === 'true') return;
+    var diameter = parseFloat(durchmesserInput === null || durchmesserInput === void 0 ? void 0 : durchmesserInput.value) || 0;
+    var cutWidth = parseFloat(schnittkanteInput === null || schnittkanteInput === void 0 ? void 0 : schnittkanteInput.value) || 0;
+    var height = parseFloat(hoeheInput === null || hoeheInput === void 0 ? void 0 : hoeheInput.value) || 0;
+    console.log("[SK1 Calc] ".concat(changedField.name, " changed: D=").concat(diameter, ", C=").concat(cutWidth, ", H=").concat(height));
+    switch (changedField.name) {
+      case "durchmesser":
+        // Priority 1: Durchmesser changed -> calculate height based on schnittkante
+        if (diameter > 0 && cutWidth > 0) {
+          var calculatedHeight = calculateHeightFromDiameterAndCut(diameter, cutWidth);
+          if (calculatedHeight !== null && hoeheInput) {
+            console.log("[SK1 Calc] Diameter change: calculating height = ".concat(calculatedHeight));
+            updateCalculatedField(hoeheInput, calculatedHeight);
+          }
+        }
+        break;
+      case "hoehe_schnittkante":
+      case "breite_schnittkante":
+        // Priority 2: Height changed -> calculate schnittkante based on durchmesser
+        if (diameter > 0 && height > 0) {
+          var calculatedCut = calculateCutFromDiameterAndHeight(diameter, height);
+          if (calculatedCut !== null && schnittkanteInput) {
+            console.log("[SK1 Calc] Height change: calculating cut width = ".concat(calculatedCut));
+            updateCalculatedField(schnittkanteInput, calculatedCut);
+          }
+        }
+        break;
+      case "schnittkante":
+        // Priority 3: Schnittkante changed -> calculate height based on durchmesser
+        if (diameter > 0 && cutWidth > 0) {
+          var _calculatedHeight = calculateHeightFromDiameterAndCut(diameter, cutWidth);
+          if (_calculatedHeight !== null && hoeheInput) {
+            console.log("[SK1 Calc] Cut width change: calculating height = ".concat(_calculatedHeight));
+            updateCalculatedField(hoeheInput, _calculatedHeight);
+          }
+        }
+        break;
+    }
+  }
+
+  /**
+   * Updates the max attribute of schnittkante field based on durchmesser value
+   * Ensures schnittkante cannot exceed durchmesser and corrects values if needed
+   */
+  function updateSchnittkanteMax() {
+    if (!durchmesserInput || !schnittkanteInput) return;
+    var durchmesserValue = parseFloat(durchmesserInput.value) || 0;
+    if (durchmesserValue > 0) {
+      // Set max attribute to durchmesser value
+      schnittkanteInput.setAttribute("max", durchmesserValue);
+
+      // No auto-correction - let validation handle it
+    } else {
+      // Remove max constraint if no durchmesser value
+      schnittkanteInput.removeAttribute("max");
+    }
+  }
 
   /**
    * Ensures that an invalid feedback container exists for the given field
@@ -5966,7 +6485,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Trigger carousel height update when feedback visibility changes
-    (0,_dependencies_dachschraege_js__WEBPACK_IMPORTED_MODULE_5__.triggerCarouselHeightUpdate)();
+    (0,_dependencies_dachschraege_js__WEBPACK_IMPORTED_MODULE_6__.triggerCarouselHeightUpdate)();
   }
 
   /**
@@ -6002,8 +6521,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // 3. Custom relational validation rules
 
     // Dachschräge validation (outsourced to dedicated module)
-    if ((0,_dependencies_dachschraege_js__WEBPACK_IMPORTED_MODULE_5__.isDachschraegeField)(field)) {
-      var dachschraegeMessage = (0,_dependencies_dachschraege_js__WEBPACK_IMPORTED_MODULE_5__.getDachschraegeValidationMessage)(field);
+    if ((0,_dependencies_dachschraege_js__WEBPACK_IMPORTED_MODULE_6__.isDachschraegeField)(field)) {
+      var dachschraegeMessage = (0,_dependencies_dachschraege_js__WEBPACK_IMPORTED_MODULE_6__.getDachschraegeValidationMessage)(field);
       if (dachschraegeMessage) {
         messages.push(dachschraegeMessage);
       }
@@ -6101,9 +6620,19 @@ document.addEventListener("DOMContentLoaded", function () {
         updateAblageBreiteMax();
       }
 
+      // Handle durchmesser field changes for schnittkante max validation
+      if (field.name === "durchmesser") {
+        updateSchnittkanteMax();
+      }
+
+      // Handle SK1 geometric calculations
+      if (field.name === "durchmesser" || field.name === "schnittkante" || field.name === "hoehe_schnittkante" || field.name === "breite_schnittkante") {
+        performSK1Calculations(field);
+      }
+
       // Handle Dachschräge field dependencies using centralized logic
-      if ((0,_dependencies_dachschraege_js__WEBPACK_IMPORTED_MODULE_5__.isDachschraegeField)(field)) {
-        (0,_dependencies_dachschraege_js__WEBPACK_IMPORTED_MODULE_5__.onDachschraegeFieldInput)(field);
+      if ((0,_dependencies_dachschraege_js__WEBPACK_IMPORTED_MODULE_6__.isDachschraegeField)(field)) {
+        (0,_dependencies_dachschraege_js__WEBPACK_IMPORTED_MODULE_6__.onDachschraegeFieldInput)(field);
       }
 
       // Show 'is-valid' state during typing when no errors exist
@@ -6121,8 +6650,13 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     field.addEventListener("change", function () {
       // Handle Dachschräge field dependencies and position suggestions
-      if ((0,_dependencies_dachschraege_js__WEBPACK_IMPORTED_MODULE_5__.isDachschraegeField)(field)) {
-        (0,_dependencies_dachschraege_js__WEBPACK_IMPORTED_MODULE_5__.onDachschraegeFieldChange)(field);
+      if ((0,_dependencies_dachschraege_js__WEBPACK_IMPORTED_MODULE_6__.isDachschraegeField)(field)) {
+        (0,_dependencies_dachschraege_js__WEBPACK_IMPORTED_MODULE_6__.onDachschraegeFieldChange)(field);
+      }
+
+      // Handle SK1 geometric calculations on field completion
+      if (field.name === "durchmesser" || field.name === "schnittkante" || field.name === "hoehe_schnittkante" || field.name === "breite_schnittkante") {
+        performSK1Calculations(field);
       }
     });
 
@@ -6148,6 +6682,12 @@ document.addEventListener("DOMContentLoaded", function () {
    * Sets up initial max attribute if main width field has a value
    */
   updateAblageBreiteMax();
+
+  /**
+   * Initialize schnittkante constraints on page load
+   * Sets up initial max attribute if durchmesser field has a value
+   */
+  updateSchnittkanteMax();
 });
 
 /**
@@ -6240,7 +6780,7 @@ __webpack_require__.r(__webpack_exports__);
  * Includes MutationObserver to track dynamic attribute changes and search
  * functionality for option groups.
  *
- * @version 2.3.0
+ * @version 2.5.0
  * @package Configurator
  *
  * @todo Offdrops desktop, dropdowns are not navigable through keyboard
@@ -6797,16 +7337,13 @@ document.addEventListener("DOMContentLoaded", function () {
         /*
         // Visual feedback during search
         input.classList.add('searching');
-        
-        // Dismiss mobile keyboard
+          // Dismiss mobile keyboard
         input.blur();
-        
-        // Perform search with delay
+          // Perform search with delay
         setTimeout(() => {
           performSearch();
           input.classList.remove('searching');
-          
-          // Restore focus for screen readers
+            // Restore focus for screen readers
           if (document.activeElement === document.body) {
             input.focus({ preventScroll: true });
           }
@@ -6900,189 +7437,6 @@ document.addEventListener("DOMContentLoaded", function () {
  *   background-color: rgba(0,0,0,0.05);
  *   transition: background-color 0.2s ease;
  * }
- */
-
-/***/ }),
-
-/***/ "./assets/js/configurator/pricecalcs/pricelabels.js":
-/*!**********************************************************!*\
-  !*** ./assets/js/configurator/pricecalcs/pricelabels.js ***!
-  \**********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var core_js_modules_es_function_name_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.function.name.js */ "./node_modules/core-js/modules/es.function.name.js");
-/* harmony import */ var core_js_modules_es_function_name_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_function_name_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "./node_modules/core-js/modules/es.object.to-string.js");
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_es_string_starts_with_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.string.starts-with.js */ "./node_modules/core-js/modules/es.string.starts-with.js");
-/* harmony import */ var core_js_modules_es_string_starts_with_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_starts_with_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
-/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_3__);
-
-
-
-
-/**
- * Product Configurator - Price Labels Module
- *
- * This module handles the dynamic updating of price display labels that appear
- * next to price matrix select elements. It automatically populates and updates
- * label information including dimension types, option labels, and formatted prices
- * based on user selections in price calculation dropdowns.
- *
- * Features:
- * - Automatic price label updates on selection changes
- * - Dynamic dimension type detection and labeling
- * - Real-time price and option label synchronization
- * - Event delegation for performance optimization
- * - Support for multiple price matrix types (dimensions, depth, cuts, frames)
- * - Initial state population on page load
- * - Robust DOM structure validation
- *
- * @version 2.3.0
- * @package Configurator
- * @subpackage PriceCalculations
- */
-
-// ====================== PRICE LABEL UPDATE SYSTEM ======================
-
-/**
- * Updates the price display label element that follows a price matrix select
- * Populates dimension type, option label, and formatted price information
- * based on the currently selected option's data attributes
- *
- * @param {HTMLSelectElement} select - The price matrix select element to update labels for
- *
- * @example
- * // HTML structure expected:
- * // <select class="option-pricematrix" name="pxbh_spiegel">
- * //   <option data-label="80x60 cm" data-price="199,00 €">80x60</option>
- * // </select>
- * // <p>
- * //   <span class="sub_name"></span> -
- * //   <span class="sub_label"></span> -
- * //   <span class="sub_price"></span>
- * // </p>
- */
-function updatePriceLabel(select) {
-  // Get the currently selected option and its data
-  var opt = select.options[select.selectedIndex];
-
-  // Find the adjacent paragraph element that contains the price labels
-  var p = select.nextElementSibling;
-
-  // Validate DOM structure - ensure we have a paragraph element
-  if (!p || p.tagName !== "P") return;
-
-  // Query for the specific label span elements within the paragraph
-  var nameSpan = p.querySelector(".sub_name"); // Dimension type label
-  var labelSpan = p.querySelector(".sub_label"); // Option description label
-  var priceSpan = p.querySelector(".sub_price"); // Formatted price label
-
-  /**
-   * DIMENSION TYPE DETECTION AND LABELING
-   * =====================================
-   * Determines the appropriate German dimension label based on the select element's
-   * name attribute prefix. Each prefix corresponds to a specific calculation type.
-   */
-  if (nameSpan) {
-    nameSpan.textContent = select.name && select.name.startsWith("pxbh") ? "Maße" // Width x Height dimensions
-    : select.name && select.name.startsWith("pxd") ? "Durchmesser" // Diameter for round mirrors
-    : select.name && select.name.startsWith("pxt") ? "Tiefe" // Depth/thickness measurements
-    : ""; // No label for unrecognized prefixes
-  }
-
-  /**
-   * OPTION LABEL AND PRICE POPULATION
-   * =================================
-   * Extracts and displays the human-readable label and formatted price
-   * from the selected option's data attributes
-   */
-
-  // Update the descriptive label (e.g., "80x60 cm", "Ø 50 cm")
-  if (labelSpan) labelSpan.textContent = opt.dataset.label || "";
-
-  // Update the formatted price display (e.g., "199,00 €", "+ 50,00 €")
-  if (priceSpan) priceSpan.textContent = opt.dataset.price || "";
-}
-
-// ====================== INITIALIZATION SYSTEM ======================
-
-/**
- * Initial population of all price labels on page load
- * Ensures that pre-selected options display their labels immediately
- * without requiring user interaction
- */
-document.querySelectorAll("select.option-pricematrix, select.option-price").forEach(function (sel) {
-  return updatePriceLabel(sel);
-});
-
-// ====================== EVENT DELEGATION SYSTEM ======================
-
-/**
- * Global change event listener with event delegation
- * Provides efficient event handling for all price matrix selects
- * without individual event listener attachment
- *
- * Uses event delegation pattern for:
- * - Better performance with many select elements
- * - Automatic handling of dynamically added selects
- * - Centralized event management
- */
-document.addEventListener("change", function (event) {
-  var sel = event.target;
-
-  // Check if the changed element is a price matrix select
-  if (sel.matches("select.option-pricematrix, select.option-price")) {
-    updatePriceLabel(sel);
-  }
-});
-
-/**
- * Future Enhancement Ideas:
- *
- * 1. Animation support for label transitions:
- *    function animateLabel(element, newText) {
- *      element.style.opacity = '0';
- *      setTimeout(() => {
- *        element.textContent = newText;
- *        element.style.opacity = '1';
- *      }, 150);
- *    }
- *
- * 2. Label template system for internationalization:
- *    const labelTemplates = {
- *      'de': { pxbh: 'Maße', pxd: 'Durchmesser' },
- *      'en': { pxbh: 'Dimensions', pxd: 'Diameter' }
- *    };
- *
- * 3. Custom label formatting with currency conversion:
- *    function formatPrice(price, currency = 'EUR') {
- *      return new Intl.NumberFormat('de-DE', {
- *        style: 'currency',
- *        currency: currency
- *      }).format(parseFloat(price));
- *    }
- *
- * 4. Label validation and error handling:
- *    function validateLabelStructure(select) {
- *      const p = select.nextElementSibling;
- *      const requiredSpans = ['.sub_name', '.sub_label', '.sub_price'];
- *      return requiredSpans.every(sel => p?.querySelector(sel));
- *    }
- *
- * 5. Accessibility enhancements:
- *    function announceChange(select, newLabel) {
- *      const announcement = `Price updated: ${newLabel}`;
- *      const sr = document.createElement('div');
- *      sr.setAttribute('aria-live', 'polite');
- *      sr.setAttribute('aria-atomic', 'true');
- *      sr.className = 'sr-only';
- *      sr.textContent = announcement;
- *      document.body.appendChild(sr);
- *      setTimeout(() => sr.remove(), 1000);
- *    }
  */
 
 /***/ }),
@@ -7187,7 +7541,7 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
  * - Data attribute synchronization for price display
  * - Prevention of redundant calculations through value caching
  *
- * @version 2.3.0
+ * @version 2.4.0
  * @package Configurator
  * @subpackage PriceCalculations
  */
@@ -7221,6 +7575,71 @@ function findOption(pricematrixCache, pricematrixSelect, key, domFallbackFn) {
     optionToSelect = domFallbackFn(pricematrixSelect, key);
   }
   return optionToSelect;
+}
+
+/**
+ * DOM fallback function for finding options by data-label attribute
+ * This is the standard fallback used by single-dimension price calculations
+ * when the cache doesn't contain the required option
+ *
+ * @param {HTMLSelectElement} pricematrixSelect - The select element containing price options
+ * @param {string} key - The key to search for (numeric value as string)
+ * @returns {HTMLOptionElement|null} The matching option element or null if not found
+ */
+function findOptionByDataLabel(pricematrixSelect, key) {
+  return Array.from(pricematrixSelect.options).find(function (currentOption) {
+    var labelValue = parseInt(currentOption.dataset.label, 10);
+    return !isNaN(labelValue) && labelValue === parseInt(key, 10);
+  });
+}
+
+/**
+ * Calculates proportional price distribution for dual dimension inputs
+ * Distributes the total price proportionally based on the ratio of input dimensions
+ * to ensure both prices sum to the exact total while avoiding decimal values
+ *
+ * @param {number} inputValue1 - First dimension value (e.g., width)
+ * @param {number} inputValue2 - Second dimension value (e.g., height)
+ * @param {number} totalPrice - Total price to distribute
+ * @returns {Object} Object with price1 and price2 properties
+ *
+ * @example
+ * // Input: width=400, height=600, totalPrice=1000
+ * // Output: { price1: 400, price2: 600 }
+ * calculateProportionalPrices(400, 600, 1000);
+ */
+function calculateProportionalPrices(inputValue1, inputValue2, totalPrice) {
+  var dimensionSum = inputValue1 + inputValue2;
+
+  // Calculate exact proportions
+  var proportion1 = inputValue1 / dimensionSum;
+  var proportion2 = inputValue2 / dimensionSum;
+
+  // Calculate proportional prices and round to avoid decimals
+  var price1 = Math.round(totalPrice * proportion1);
+  var price2 = Math.round(totalPrice * proportion2);
+
+  // Ensure exact sum by adjusting the larger price if needed
+  var currentSum = price1 + price2;
+  if (currentSum !== totalPrice) {
+    var difference = totalPrice - currentSum;
+    // Adjust the price with larger proportion
+    if (proportion1 >= proportion2) {
+      return {
+        price1: price1 + difference,
+        price2: price2
+      };
+    } else {
+      return {
+        price1: price1,
+        price2: price2 + difference
+      };
+    }
+  }
+  return {
+    price1: price1,
+    price2: price2
+  };
 }
 
 // ====================== SINGLE DIMENSION CALCULATIONS ======================
@@ -7286,13 +7705,7 @@ function calcPrice1x100(inputElement, pricematrixSelect, pricematrixCache, lastV
    * Attempts to find matching option using cache first, then DOM search
    * The fallback function searches by data-label attribute for flexibility
    */
-  var optionToSelect = findOption(pricematrixCache, pricematrixSelect, String(valueToUse), function (pricematrixSelect, key) {
-    // DOM fallback: Search by data-label attribute
-    return Array.from(pricematrixSelect.options).find(function (currentOption) {
-      var labelValue = parseInt(currentOption.dataset.label, 10);
-      return !isNaN(labelValue) && labelValue === parseInt(key, 10);
-    });
-  });
+  var optionToSelect = findOption(pricematrixCache, pricematrixSelect, String(valueToUse), findOptionByDataLabel);
 
   // Exit if no matching option found
   if (!optionToSelect) return;
@@ -7301,11 +7714,11 @@ function calcPrice1x100(inputElement, pricematrixSelect, pricematrixCache, lastV
   (0,_functions__WEBPACK_IMPORTED_MODULE_20__.updateSelectAndTrigger)(pricematrixSelect, optionToSelect);
 
   // Synchronize price data attribute for display systems
-  inputElement.dataset.price = optionToSelect.dataset.price || "0";
+  inputElement.dataset.price = optionToSelect.dataset.price || "0"; // important for summary.js
 }
 
 /**
- * Calculates price for single dimension inputs with 50-unit rounding
+ * Calculates price for single dimension inputs with 50-unit rounding (e.g., Klappelemente, Tiefe, etc.)
  * Similar to calcPrice1x100 but rounds to the next multiple of 50 instead of 100
  * Ideal for configurations with smaller step sizes (e.g., 150, 200, 250, 300, 350, 400)
  *
@@ -7366,13 +7779,7 @@ function calcPrice1x50(inputElement, pricematrixSelect, pricematrixCache, lastVa
    * Attempts to find matching option using cache first, then DOM search
    * The fallback function searches by data-label attribute for flexibility
    */
-  var optionToSelect = findOption(pricematrixCache, pricematrixSelect, String(valueToUse), function (pricematrixSelect, key) {
-    // DOM fallback: Search by data-label attribute
-    return Array.from(pricematrixSelect.options).find(function (currentOption) {
-      var labelValue = parseInt(currentOption.dataset.label, 10);
-      return !isNaN(labelValue) && labelValue === parseInt(key, 10);
-    });
-  });
+  var optionToSelect = findOption(pricematrixCache, pricematrixSelect, String(valueToUse), findOptionByDataLabel);
 
   // Exit if no matching option found
   if (!optionToSelect) return;
@@ -7446,13 +7853,7 @@ function calcPrice1x10(inputElement, pricematrixSelect, pricematrixCache, lastVa
    * Attempts to find matching option using cache first, then DOM search
    * The fallback function searches by data-label attribute for flexibility
    */
-  var optionToSelect = findOption(pricematrixCache, pricematrixSelect, String(valueToUse), function (pricematrixSelect, key) {
-    // DOM fallback: Search by data-label attribute
-    return Array.from(pricematrixSelect.options).find(function (currentOption) {
-      var labelValue = parseInt(currentOption.dataset.label, 10);
-      return !isNaN(labelValue) && labelValue === parseInt(key, 10);
-    });
-  });
+  var optionToSelect = findOption(pricematrixCache, pricematrixSelect, String(valueToUse), findOptionByDataLabel);
 
   // Exit if no matching option found
   if (!optionToSelect) return;
@@ -7585,10 +7986,13 @@ function calcPrice2x100(inputElement1, inputElement2, pricematrixSelect, pricema
   // Use the same updateSelectAndTrigger function as calcPrice1x100 for consistency
   (0,_functions__WEBPACK_IMPORTED_MODULE_20__.updateSelectAndTrigger)(pricematrixSelect, optionToSelect);
 
-  // Synchronize data-price attributes for both input elements (same as calcPrice1x100)
-  var price = optionToSelect.dataset.price || "0";
-  inputElement1.dataset.price = price;
-  inputElement2.dataset.price = price;
+  // Intelligent proportional price distribution based on input dimensions
+  var totalPrice = parseInt(optionToSelect.dataset.price || "0", 10);
+  var proportionalPrices = calculateProportionalPrices(inputValue1, inputValue2, totalPrice);
+
+  // Synchronize proportional data-price attributes for both input elements
+  inputElement1.dataset.price = String(proportionalPrices.price1);
+  inputElement2.dataset.price = String(proportionalPrices.price2);
 }
 
 /**
@@ -7775,7 +8179,7 @@ __webpack_require__.r(__webpack_exports__);
  * - Diameter from Height: d = (h² + t²/4) / h
  * - All calculations based on circle geometry and segment formulas
  *
- * @version 2.3.0
+ * @version 2.4.0
  * @package Configurator
  * @subpackage PriceCalculations
  */
@@ -8240,7 +8644,7 @@ __webpack_require__.r(__webpack_exports__);
  * - Width/Height = (diameter - b) ÷ a
  * - Coefficients derived from manufacturing specifications
  *
- * @version 2.3.0
+ * @version 2.5.0
  * @package Configurator
  * @subpackage PriceCalculations
  */
@@ -8559,30 +8963,32 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_array_concat_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_concat_js__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var core_js_modules_es_array_from_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.array.from.js */ "./node_modules/core-js/modules/es.array.from.js");
 /* harmony import */ var core_js_modules_es_array_from_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_from_js__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var core_js_modules_es_array_slice_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.array.slice.js */ "./node_modules/core-js/modules/es.array.slice.js");
-/* harmony import */ var core_js_modules_es_array_slice_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_slice_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var core_js_modules_es_array_sort_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es.array.sort.js */ "./node_modules/core-js/modules/es.array.sort.js");
-/* harmony import */ var core_js_modules_es_array_sort_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_sort_js__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var core_js_modules_es_number_to_fixed_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es.number.to-fixed.js */ "./node_modules/core-js/modules/es.number.to-fixed.js");
-/* harmony import */ var core_js_modules_es_number_to_fixed_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_number_to_fixed_js__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var core_js_modules_es_object_get_prototype_of_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/es.object.get-prototype-of.js */ "./node_modules/core-js/modules/es.object.get-prototype-of.js");
-/* harmony import */ var core_js_modules_es_object_get_prototype_of_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_get_prototype_of_js__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var core_js_modules_es_object_set_prototype_of_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es.object.set-prototype-of.js */ "./node_modules/core-js/modules/es.object.set-prototype-of.js");
-/* harmony import */ var core_js_modules_es_object_set_prototype_of_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_set_prototype_of_js__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "./node_modules/core-js/modules/es.object.to-string.js");
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var core_js_modules_es_object_values_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! core-js/modules/es.object.values.js */ "./node_modules/core-js/modules/es.object.values.js");
-/* harmony import */ var core_js_modules_es_object_values_js__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_values_js__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! core-js/modules/es.promise.js */ "./node_modules/core-js/modules/es.promise.js");
-/* harmony import */ var core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_11__);
-/* harmony import */ var core_js_modules_es_string_iterator_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! core-js/modules/es.string.iterator.js */ "./node_modules/core-js/modules/es.string.iterator.js");
-/* harmony import */ var core_js_modules_es_string_iterator_js__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_iterator_js__WEBPACK_IMPORTED_MODULE_12__);
-/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! core-js/modules/es.string.trim.js */ "./node_modules/core-js/modules/es.string.trim.js");
-/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_13__);
-/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
-/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_14__);
-/* harmony import */ var _variables__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./variables */ "./assets/js/configurator/variables.js");
-/* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./functions */ "./assets/js/configurator/functions.js");
+/* harmony import */ var core_js_modules_es_array_map_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.array.map.js */ "./node_modules/core-js/modules/es.array.map.js");
+/* harmony import */ var core_js_modules_es_array_map_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_map_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var core_js_modules_es_array_slice_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es.array.slice.js */ "./node_modules/core-js/modules/es.array.slice.js");
+/* harmony import */ var core_js_modules_es_array_slice_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_slice_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var core_js_modules_es_array_sort_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es.array.sort.js */ "./node_modules/core-js/modules/es.array.sort.js");
+/* harmony import */ var core_js_modules_es_array_sort_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_sort_js__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var core_js_modules_es_number_to_fixed_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/es.number.to-fixed.js */ "./node_modules/core-js/modules/es.number.to-fixed.js");
+/* harmony import */ var core_js_modules_es_number_to_fixed_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_number_to_fixed_js__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var core_js_modules_es_object_get_prototype_of_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es.object.get-prototype-of.js */ "./node_modules/core-js/modules/es.object.get-prototype-of.js");
+/* harmony import */ var core_js_modules_es_object_get_prototype_of_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_get_prototype_of_js__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var core_js_modules_es_object_set_prototype_of_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core-js/modules/es.object.set-prototype-of.js */ "./node_modules/core-js/modules/es.object.set-prototype-of.js");
+/* harmony import */ var core_js_modules_es_object_set_prototype_of_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_set_prototype_of_js__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "./node_modules/core-js/modules/es.object.to-string.js");
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var core_js_modules_es_object_values_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! core-js/modules/es.object.values.js */ "./node_modules/core-js/modules/es.object.values.js");
+/* harmony import */ var core_js_modules_es_object_values_js__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_values_js__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! core-js/modules/es.promise.js */ "./node_modules/core-js/modules/es.promise.js");
+/* harmony import */ var core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_promise_js__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var core_js_modules_es_string_iterator_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! core-js/modules/es.string.iterator.js */ "./node_modules/core-js/modules/es.string.iterator.js");
+/* harmony import */ var core_js_modules_es_string_iterator_js__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_iterator_js__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! core-js/modules/es.string.trim.js */ "./node_modules/core-js/modules/es.string.trim.js");
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_14__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_15__);
+/* harmony import */ var _variables__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./variables */ "./assets/js/configurator/variables.js");
+/* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./functions */ "./assets/js/configurator/functions.js");
 /* provided dependency */ var $ = __webpack_require__(/*! jquery */ "jquery");
 function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i.return) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
 function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
@@ -8603,12 +9009,13 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
 
 
 
+
 /**
  * Product Configurator - Summary Module
  *
  * This module handles the dynamic summary display for the product configurator.
- * It collects selected options from various input types (text inputs, radio buttons,
- * price matrices), calculates total prices, and provides interactive navigation
+ * It collects selected options from various input types (text inputs, radio buttons),
+ * calculates total prices, and provides interactive navigation
  * back to specific configuration steps.
  *
  * Features:
@@ -8617,24 +9024,34 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
  * - Interactive navigation: click summary items to jump to configurator steps
  * - Print and save configuration as code or direct link
  * - Price calculation and formatted display for all options and total
- * - Support for nested/child option groups and price matrices
+ * - Support for nested/child option groups
  * - Accessible focus and keyboard navigation for summary and controls
  * - Tooltip initialization for summary actions
  * - Graceful error handling for print/save actions
  *
- * @version 2.3.0
+ * @version 2.5.0
  * @package Configurator
  */
 
 
 
 
+// ========================================
+// CONFIGURATION & CONSTANTS
+// ========================================
+
+/**
+ * DEBUG MODE CONFIGURATION
+ * Set to true to enable debug logging, false to disable all debug output
+ */
+var DEBUG_MODE = false;
+
 /**
  * Configuration flags for summary module behavior
  * @type {Object}
  */
 var summaryConfig = {
-  enableClickNavigation: false // Set to true to enable clicking summary items to navigate to steps
+  enableClickNavigation: false // Set to true to enable clicking summary list items to navigate to steps
 };
 
 /**
@@ -8647,27 +9064,13 @@ var summaryCache = {
 };
 
 /**
- * Hide tooltip for a specific element
- * @param {HTMLElement} element - The element with tooltip to hide
- */
-function hideTooltip(element) {
-  var _window$bootstrap;
-  if ((_window$bootstrap = window.bootstrap) !== null && _window$bootstrap !== void 0 && _window$bootstrap.Tooltip) {
-    var tooltip = bootstrap.Tooltip.getInstance(element);
-    if (tooltip) {
-      tooltip.hide();
-    }
-  }
-}
-
-/**
  * Set up click interactions for summary items
  */
 function setupSummaryInteractions() {
   var summary = document.getElementById("productConfiguratorSummary");
   if (!summary) return;
 
-  // Only add click navigation if enabled in config
+  // Set up list item click navigation if enabled in config
   if (summaryConfig.enableClickNavigation) {
     summary.addEventListener("click", function (e) {
       var item = e.target.closest(".list-group-item[data-step]");
@@ -8684,17 +9087,17 @@ function setupSummaryInteractions() {
     printBtn.addEventListener("click", function (e) {
       e.preventDefault();
       e.stopPropagation();
-      hideTooltip(printBtn);
+      window.hideTooltip(printBtn);
       printSummary();
     });
   }
   // Set up save button
-  var saveBtn = summary.querySelector(".btn-save-summary");
+  var saveBtn = summary.querySelector(".btn-favourite-summary");
   if (saveBtn) {
     saveBtn.addEventListener("click", function (e) {
       e.preventDefault();
       e.stopPropagation();
-      hideTooltip(saveBtn);
+      window.hideTooltip(saveBtn);
       saveSummaryConfig();
     });
   }
@@ -8705,7 +9108,7 @@ function setupSummaryInteractions() {
     editBtn.addEventListener("click", function (e) {
       e.preventDefault();
       e.stopPropagation();
-      hideTooltip(editBtn);
+      window.hideTooltip(editBtn);
       var step = editBtn.dataset.step;
       navigateToCarouselStep(step);
     });
@@ -8798,7 +9201,7 @@ function scrollToCarouselStep(step, key) {
     if (controlEl && controlType) {
       applyFocusWithTabindex(controlEl, "cleanup".concat(controlType.charAt(0).toUpperCase() + controlType.slice(1)));
     } else {
-      console.warn("[Summary] No focusable control element found for key:", key);
+      debugWarn("No focusable control element found for key:", key);
     }
   };
 
@@ -8822,6 +9225,7 @@ function scrollToCarouselStep(step, key) {
  * @param {string} step - The carousel step number to navigate to
  */
 function navigateToCarouselStep(step) {
+  // maybe move to carousel.js?
   if (!step) return;
   var carouselEl = document.getElementById("productConfiguratorCarousel");
   var carouselItem = carouselEl === null || carouselEl === void 0 ? void 0 : carouselEl.querySelector(".carousel-item[data-step=\"".concat(step, "\"]"));
@@ -8941,7 +9345,7 @@ function _printSummary() {
         case 5:
           _context.p = 5;
           _t = _context.v;
-          console.warn("Code generation failed for print:", _t);
+          debugWarn("Code generation failed for print:", _t);
           codeSection = "\n      <div class=\"print-code-section\">\n        <h3>Konfiguration als Code</h3>\n        <p class=\"text-muted\">Code konnte nicht generiert werden. Bitte speichern Sie Ihre Konfiguration separat.</p>\n      </div>\n    ";
         case 6:
           _context.p = 6;
@@ -8953,7 +9357,7 @@ function _printSummary() {
           return _context.f(6);
         case 7:
           printWindow = window.open("", "_blank");
-          printWindow.document.write("\n    <!DOCTYPE html>\n    <html>\n    <head>\n      <title>Badspiegel.de</title>\n      <style>\n        body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.5; font-size: 14px; }\n        .print-code-section, \n        .print-header { margin-bottom: 16px; border-bottom: 2px solid #dee2e6; }\n        .print-header p { margin: 0; margin-bottom: 16px; }\n        \n        /* Bootstrap-like grid system - modified for print */\n        .row { display: block; margin: 0; }\n        .list-group-item .row { display: flex; align-items: center; margin: 0; }\n        .row.g-1 { display: flex; align-items: center; margin: 0; }\n        .col { flex: 1; padding: 0 4px; }\n        .col-auto { flex: 0 0 auto; padding: 0 4px; }\n        .col-12 { width: 100%; display: block; margin-bottom: 15px; }\n        \n        /* Container layouts */\n        .list-group-body { display: block !important; }\n        .list-group-body > .row { display: block; }\n        \n        /* List styles */\n        .list-group { list-style: none; margin: 0; padding: 0; }\n        .list-group-item { padding: 12px 16px; border: 1px solid #ddd; margin-bottom: 1px; background: #fff; display: block; }\n        .list-group-flush .list-group-item { border-left: 0; border-right: 0; border-top: 0; }\n        .list-group-flush .list-group-item:first-child { border-top: 0; }\n        .list-group-flush .list-group-item:last-child { border-bottom: 0; }\n        \n        /* Typography */\n        .fw-medium { font-weight: 500; }\n        .text-end { text-align: right; }\n        .fs-5 { font-size: 1.25rem; }\n        .small { font-size: 0.875rem; }\n        .text-muted { color: #6c757d; }\n        .text-truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }\n        \n        /* Headers */\n        h5, h6 { font-weight: 500; }\n        h2 { font-size: 1.5rem; margin: 16px 0 16px 0; }\n        h3 { font-size: 1.3rem; margin: 16px 0 8px 0; font-weight: 500; }\n        h5 { font-size: 1.25rem; margin: 16px 0 16px 0; }\n        h6 { font-size: 1.1rem; margin: 16px 0 8px 0; }\n\n        /* Spacing */\n        .mb-0 { margin-bottom: 0; }\n        .px-3 { padding-left: 1rem; padding-right: 1rem; }\n        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }\n        .pt-3 { padding-top: 1rem; }\n        .p-3 { padding: 1rem; }\n        \n        /* Background and borders */\n        .border-secondary-subtle { border-color: #dee2e6; }\n        .border-top { border-top: 1px solid #dee2e6; }\n        \n        /* Layout improvements */\n        .d-flex { display: flex; }\n        .justify-content-between { justify-content: space-between; }\n        .align-items-center { align-items: center; }\n        \n        /* Hide print button in print */\n        .btn-print-summary,\n        .btn-save-summary,\n        .btn-edit-group,\n        div.vr.border-secondary-subtle { display: none; }\n\n        /* Price styling */\n        .product-price { font-weight: 600; }\n        \n        /* Page breaks */\n        @media print {\n          .print-header { page-break-after: avoid; }\n          .print-code-section { page-break-inside: avoid; }\n          .list-group-item { page-break-inside: avoid; }\n        }\n\n        /* Overwrites */\n        .d-flex.justify-content-between.align-items-center.bg-secondary-subtle.px-3.pt-3.mb-0,\n        .list-group-body.bg-secondary-subtle.row.g-3.p-3.pt-0.mx-0.mt-0 {\n          padding: 0\n        }\n        .list-group-item.border-secondary-subtle {\n          padding: 0.25rem;\n        }\n        .bg-secondary-subtle.border-top.border-secondary-subtle.text-end.px-3.py-2.mb-0.fs-5 {\n          padding: 0.5rem 1rem;\n          border-top: 2px double #dee2e6;\n        }\n\n      </style>\n    </head>\n    <body>\n      <div class=\"print-header\">\n        <h2>Badspiegel.de Konfiguration</h2>\n        <p>Gedruckt am: ".concat(new Date().toLocaleDateString("de-DE"), " um ").concat(new Date().toLocaleTimeString("de-DE"), "</p>\n      </div>\n      ").concat(codeSection, "\n      ").concat(summaryHtml, "\n      ").concat(totalHtml, "\n    </body>\n    </html>\n  "));
+          printWindow.document.write("\n    <!DOCTYPE html>\n    <html>\n    <head>\n      <title>Badspiegel.de</title>\n      <style>\n        body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.5; font-size: 14px; }\n        .print-code-section,\n        .print-header { margin-bottom: 16px; border-bottom: 2px solid #dee2e6; }\n        .print-header p { margin: 0; margin-bottom: 16px; }\n\n        /* Bootstrap-like grid system - modified for print */\n        .row { display: block; margin: 0; }\n        .list-group-item .row { display: flex; align-items: center; margin: 0; }\n        .row.g-1 { display: flex; align-items: center; margin: 0; }\n        .col { flex: 1; padding: 0 4px; }\n        .col-auto { flex: 0 0 auto; padding: 0 4px; }\n        .col-12 { width: 100%; display: block; margin-bottom: 15px; }\n\n        /* Container layouts */\n        .list-group-body { display: block !important; }\n        .list-group-body > .row { display: block; }\n\n        /* List styles */\n        .list-group { list-style: none; margin: 0; padding: 0; }\n        .list-group-item { padding: 12px 16px; border: 1px solid #ddd; margin-bottom: 1px; background: #fff; display: block; }\n        .list-group-flush .list-group-item { border-left: 0; border-right: 0; border-top: 0; }\n        .list-group-flush .list-group-item:first-child { border-top: 0; }\n        .list-group-flush .list-group-item:last-child { border-bottom: 0; }\n\n        /* Typography */\n        .fw-medium { font-weight: 500; }\n        .text-end { text-align: right; }\n        .fs-5 { font-size: 1.25rem; }\n        .small { font-size: 0.875rem; }\n        .text-muted { color: #6c757d; }\n        .text-truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }\n\n        /* Headers */\n        h5, h6 { font-weight: 500; }\n        h2 { font-size: 1.5rem; margin: 16px 0 16px 0; }\n        h3 { font-size: 1.3rem; margin: 16px 0 8px 0; font-weight: 500; }\n        h5 { font-size: 1.25rem; margin: 16px 0 16px 0; }\n        h6 { font-size: 1.1rem; margin: 16px 0 8px 0; }\n\n        /* Spacing */\n        .mb-0 { margin-bottom: 0; }\n        .px-3 { padding-left: 1rem; padding-right: 1rem; }\n        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }\n        .pt-3 { padding-top: 1rem; }\n        .p-3 { padding: 1rem; }\n\n        /* Background and borders */\n        .border-secondary-subtle { border-color: #dee2e6; }\n        .border-top { border-top: 1px solid #dee2e6; }\n\n        /* Layout improvements */\n        .d-flex { display: flex; }\n        .justify-content-between { justify-content: space-between; }\n        .align-items-center { align-items: center; }\n\n        /* Hide print button in print */\n        .btn-print-summary,\n        .btn-favourite-summary,\n        .btn-edit-group,\n        div.vr.border-secondary-subtle { display: none; }\n\n        /* Price styling */\n        .product-price { font-weight: 600; }\n\n        /* Page breaks */\n        @media print {\n          .print-header { page-break-after: avoid; }\n          .print-code-section { page-break-inside: avoid; }\n          .list-group-item { page-break-inside: avoid; }\n        }\n\n        /* Overwrites */\n        .d-flex.justify-content-between.align-items-center.bg-secondary-subtle.px-3.pt-3.mb-0,\n        .list-group-body.bg-secondary-subtle.row.g-3.p-3.pt-0.mx-0.mt-0 {\n          padding: 0\n        }\n        .list-group-item.border-secondary-subtle {\n          padding: 0.25rem;\n        }\n        .bg-secondary-subtle.border-top.border-secondary-subtle.text-end.px-3.py-2.mb-0.fs-5 {\n          padding: 0.5rem 1rem;\n          border-top: 2px double #dee2e6;\n        }\n\n      </style>\n    </head>\n    <body>\n      <div class=\"print-header\">\n        <h2>Badspiegel.de Konfiguration</h2>\n        <p>Gedruckt am: ".concat(new Date().toLocaleDateString("de-DE"), " um ").concat(new Date().toLocaleTimeString("de-DE"), "</p>\n      </div>\n      ").concat(codeSection, "\n      ").concat(summaryHtml, "\n      ").concat(totalHtml, "\n    </body>\n    </html>\n  "));
           printWindow.document.close();
           printWindow.focus();
           printWindow.print();
@@ -8966,7 +9370,7 @@ function _printSummary() {
   return _printSummary.apply(this, arguments);
 }
 function lockHeartButton(heartButton) {
-  var _window$bootstrap2, _window$bootstrap3;
+  var _window$bootstrap, _window$bootstrap2;
   if (!heartButton) return;
   var heartIcon = heartButton.querySelector("i");
   if (!heartIcon) return;
@@ -8982,13 +9386,13 @@ function lockHeartButton(heartButton) {
   heartButton.setAttribute("aria-pressed", "true");
 
   // Dispose any existing tooltip on the button FIRST
-  if ((_window$bootstrap2 = window.bootstrap) !== null && _window$bootstrap2 !== void 0 && _window$bootstrap2.Tooltip) {
+  if ((_window$bootstrap = window.bootstrap) !== null && _window$bootstrap !== void 0 && _window$bootstrap.Tooltip) {
     var existingTooltip = bootstrap.Tooltip.getInstance(heartButton);
     if (existingTooltip) {
       try {
         existingTooltip.dispose();
       } catch (error) {
-        console.warn("Error disposing existing tooltip:", error);
+        debugWarn("Error disposing existing tooltip:", error);
       }
     }
   }
@@ -9010,7 +9414,7 @@ function lockHeartButton(heartButton) {
 
   // Initialize tooltip on the wrapper with error handling
   var wrapperTooltip = null;
-  if ((_window$bootstrap3 = window.bootstrap) !== null && _window$bootstrap3 !== void 0 && _window$bootstrap3.Tooltip) {
+  if ((_window$bootstrap2 = window.bootstrap) !== null && _window$bootstrap2 !== void 0 && _window$bootstrap2.Tooltip) {
     try {
       wrapperTooltip = new bootstrap.Tooltip(wrapper, {
         container: "body",
@@ -9019,7 +9423,7 @@ function lockHeartButton(heartButton) {
         placement: "top"
       });
     } catch (error) {
-      console.warn("Error creating wrapper tooltip:", error);
+      debugWarn("Error creating wrapper tooltip:", error);
     }
   }
 
@@ -9044,7 +9448,7 @@ function lockHeartButton(heartButton) {
           try {
             wrapperTooltip.dispose();
           } catch (error) {
-            console.warn("Error disposing wrapper tooltip:", error);
+            debugWarn("Error disposing wrapper tooltip:", error);
           }
         }
 
@@ -9054,15 +9458,15 @@ function lockHeartButton(heartButton) {
 
         // Reinitialize tooltip on the button with delay
         setTimeout(function () {
-          var _window$bootstrap4;
-          if ((_window$bootstrap4 = window.bootstrap) !== null && _window$bootstrap4 !== void 0 && _window$bootstrap4.Tooltip) {
+          var _window$bootstrap3;
+          if ((_window$bootstrap3 = window.bootstrap) !== null && _window$bootstrap3 !== void 0 && _window$bootstrap3.Tooltip) {
             try {
               new bootstrap.Tooltip(heartButton, {
                 container: "body",
                 title: originalTitle || "Konfiguration speichern"
               });
             } catch (error) {
-              console.warn("Error recreating button tooltip:", error);
+              debugWarn("Error recreating button tooltip:", error);
             }
           }
         }, 100);
@@ -9093,6 +9497,7 @@ function lockHeartButton(heartButton) {
 
 /**
  * Save the configuration using the same functionality as the main save button
+ * Enhanced with bidirectional synchronization and code reuse
  */
 function saveSummaryConfig() {
   return _saveSummaryConfig.apply(this, arguments);
@@ -9105,11 +9510,11 @@ function saveSummaryConfig() {
  */
 function _saveSummaryConfig() {
   _saveSummaryConfig = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
-    var saveBtn, result, errorMessage, _t2;
+    var saveBtn, lastSaved, result, errorMessage, _t2;
     return _regenerator().w(function (_context2) {
       while (1) switch (_context2.p = _context2.n) {
         case 0:
-          saveBtn = document.querySelector(".btn-save-summary");
+          saveBtn = document.querySelector(".btn-favourite-summary");
           if (saveBtn) {
             _context2.n = 1;
             break;
@@ -9120,23 +9525,38 @@ function _saveSummaryConfig() {
             _context2.n = 2;
             break;
           }
-          console.error("ConfiguratorSave module not available");
+          debugError("ConfiguratorSave module not available");
           alert("Speichern-Funktion nicht verfügbar. Bitte verwenden Sie den Hauptspeichern-Button.");
           return _context2.a(2);
         case 2:
           _context2.p = 2;
+          // Check if there's already a saved configuration we can reuse
+          lastSaved = window.ConfiguratorSave.lastSavedConfig();
+          if (lastSaved && lastSaved.code) {
+            debugLog("🔄 Found existing saved configuration, checking if current config matches...");
+          }
+
+          // Use the enhanced save function which includes intelligent code reuse
           _context2.n = 3;
           return window.ConfiguratorSave.saveConfiguration($(saveBtn), "icon");
         case 3:
           result = _context2.v;
-          // Lock immediately after save is successful (modal is opening)
+          // The saveConfiguration function now handles all button synchronization automatically
+          // But we still lock the heart button for immediate visual feedback
           lockHeartButton(saveBtn);
+
+          // Log result for debugging
+          if (result.reused) {
+            debugLog("♻️ Reused existing configuration code:", result.code);
+          } else {
+            debugLog("✨ Generated new configuration code:", result.code);
+          }
           _context2.n = 5;
           break;
         case 4:
           _context2.p = 4;
           _t2 = _context2.v;
-          console.error("Error saving configuration from summary:", _t2);
+          debugError("Error saving configuration from summary:", _t2);
 
           // User-friendly error handling
           errorMessage = "Fehler beim Speichern der Konfiguration.";
@@ -9190,38 +9610,30 @@ function buildSummary(_ref) {
   var productTitle = _ref.productTitle,
     productPrice = _ref.productPrice,
     optionsSummary = _ref.optionsSummary;
-  var htmlOutput = "\n    <div class=\"d-flex justify-content-between align-items-center bg-secondary-subtle px-3 pt-3 pe-2 mb-0\">\n      <h5 class=\"lh-base me-auto mb-0\">Zusammenfassung</h5>\n      <div class=\"d-none vr border-secondary-subtle\"></div>\n      <button type=\"button\" class=\"btn-save-summary btn btn-sm btn-link link-body-emphasis\" style=\"--bs-btn-disabled-opacity: 1;--bs-btn-disabled-color: var(--bs-dark)\" title=\"Konfiguration speichern\" data-bs-tooltip-md=\"true\">\n        <i class=\"fa-sharp fa-fw fa-light fa-heart\"></i>\n        <span class=\"visually-hidden\">Speichern</span>\n      </button>\n      <div class=\"vr border-secondary-subtle\"></div>\n      <button type=\"button\" class=\"btn-print-summary btn btn-sm btn-link link-body-emphasis\" title=\"Konfiguration drucken\" data-bs-tooltip-md=\"true\">\n        <i class=\"fa-sharp fa-fw fa-light fa-print\"></i>\n        <span class=\"visually-hidden\">Drucken</span>\n      </button>\n    </div>\n    <div class=\"list-group-body bg-secondary-subtle row g-3 p-3 pt-0 mx-0 mt-0\">\n      <div class=\"col-12 px-0\">\n        <ul class=\"list-group list-group-flush\">\n          <li class=\"list-group-item border-secondary-subtle\">\n            <span class=\"row g-1\">\n              <span class=\"col text-truncate fw-medium\">".concat(productTitle, "</span>\n              <span class=\"col-auto\">").concat((0,_functions__WEBPACK_IMPORTED_MODULE_16__.formatPrice)(productPrice), "</span>\n            </span>\n          </li>\n        </ul>\n      </div>\n  ");
+  var htmlOutput = "\n    <div class=\"d-flex justify-content-between align-items-center bg-secondary-subtle px-3 pt-3 pe-2 mb-0\">\n      <h5 class=\"lh-base me-auto mb-0\">Zusammenfassung</h5>\n      <div class=\"d-none vr border-secondary-subtle\"></div>\n      <button type=\"button\" class=\"btn-favourite-summary btn btn-sm btn-link link-body-emphasis\" style=\"--bs-btn-disabled-opacity: 1;--bs-btn-disabled-color: var(--bs-dark)\" title=\"Konfiguration speichern\" data-bs-tooltip-md=\"true\">\n        <i class=\"fa-sharp fa-fw fa-light fa-heart\"></i>\n        <span class=\"visually-hidden\">Speichern</span>\n      </button>\n      <div class=\"vr border-secondary-subtle\"></div>\n      <button type=\"button\" class=\"btn-print-summary btn btn-sm btn-link link-body-emphasis\" title=\"Konfiguration drucken\" data-bs-tooltip-md=\"true\">\n        <i class=\"fa-sharp fa-fw fa-light fa-print\"></i>\n        <span class=\"visually-hidden\">Drucken</span>\n      </button>\n    </div>\n    <div class=\"list-group-body bg-secondary-subtle row g-3 p-3 pt-0 mx-0 mt-0\">\n      <div class=\"col-12 px-0\">\n        <ul class=\"list-group list-group-flush\">\n          <li class=\"list-group-item border-secondary-subtle\">\n            <span class=\"row g-1\">\n              <span class=\"col text-truncate fw-medium\">".concat(productTitle, "</span>\n              <span class=\"col-auto\">").concat((0,_functions__WEBPACK_IMPORTED_MODULE_17__.formatPrice)(productPrice), "</span>\n            </span>\n          </li>\n        </ul>\n      </div>\n  ");
   if (optionsSummary.length === 0) {
     htmlOutput += "\n        <ul class=\"list-group list-group-flush\">\n          <li class=\"list-group-item text-danger\">Keine Optionen ausgew\xE4hlt</li>\n        </ul>\n    ";
   } else {
     var groupedOptions = createGroupedOptions(optionsSummary);
     groupedOptions.forEach(function (group) {
       if (group.options.length === 0) return;
-      var showGroupLabel = group.options.some(function (opt) {
-        return !opt.isPricematrix;
-      });
       htmlOutput += "<div class=\"col-12 px-0\">";
-      if (showGroupLabel) {
-        htmlOutput += "\n          <div class=\"d-flex justify-content-between align-items-center mb-2\">\n            <h6 class=\"mb-0\">".concat(group.label, "</h6>\n            <button type=\"button\" class=\"btn-edit-group btn btn-sm btn-link link-body-emphasis\" data-step=\"").concat(group.step, "\" title=\"Bearbeiten\" data-bs-tooltip-md=\"true\">\n              <i class=\"fa-sharp fa-fw fa-light fa-edit\"></i>\n              <span class=\"visually-hidden\">Bearbeiten</span>\n            </button>\n          </div>\n        ");
-      }
+      htmlOutput += "\n        <div class=\"d-flex justify-content-between align-items-center mb-2\">\n          <h6 class=\"mb-0\">".concat(group.label, "</h6>\n          <button type=\"button\" class=\"btn-edit-group btn btn-sm btn-link link-body-emphasis\" data-step=\"").concat(group.step, "\" title=\"Bearbeiten\" data-bs-tooltip-md=\"true\">\n            <i class=\"fa-sharp fa-fw fa-light fa-edit\"></i>\n            <span class=\"visually-hidden\">Bearbeiten</span>\n          </button>\n        </div>\n      ");
       htmlOutput += "<ul class=\"list-group list-group-flush\">";
       group.options.forEach(function (item) {
         var key = item.key,
           label = item.label,
-          pricematrixLabel = item.pricematrixLabel,
-          pricematrixPrice = item.pricematrixPrice,
           inputValue = item.inputValue,
           inputPrice = item.inputPrice,
           radioLabel = item.radioLabel,
           radioPrice = item.radioPrice,
           isChild = item.isChild,
-          stepNumber = item.stepNumber,
-          isPricematrix = item.isPricematrix;
-        var value = radioLabel || inputValue || pricematrixLabel || "";
-        var price = radioPrice || inputPrice || pricematrixPrice || 0;
-        var formattedPrice = (0,_functions__WEBPACK_IMPORTED_MODULE_16__.formatPrice)(price) || "-";
-        var childClass = isChild ? " text-muted small" : ""; // Conditional classes and attributes for pricematrix items
-        var isClickable = !isPricematrix && summaryConfig.enableClickNavigation;
+          stepNumber = item.stepNumber;
+        var value = radioLabel || inputValue || "";
+        var price = radioPrice || inputPrice || 0;
+        var formattedPrice = (0,_functions__WEBPACK_IMPORTED_MODULE_17__.formatPrice)(price) || "-";
+        var childClass = isChild ? " text-muted small" : "";
+        var isClickable = summaryConfig.enableClickNavigation;
         var actionClass = isClickable ? " list-group-item-action" : "";
         var interactiveAttrs = isClickable ? "\n            role=\"button\"\n            data-step=\"".concat(stepNumber, "\"\n            data-key=\"").concat(key, "\"\n            tabindex=\"0\"\n            aria-label=\"Zur Option ").concat(label, " springen\"\n        ") : "";
         htmlOutput += "\n          <li\n            class=\"list-group-item".concat(actionClass, " list-group-item-secondary bg-body text-body border-secondary-subtle").concat(childClass, "\"\n            ").concat(interactiveAttrs, "\n          >\n            <span class=\"row g-1\">\n              <span class=\"col-auto fw-medium\">").concat(label, ":</span>\n              <span class=\"col text-truncate\">").concat(value, "</span>\n              <span class=\"col-auto\">").concat(formattedPrice, "</span>\n            </span>\n          </li>\n        ");
@@ -9237,10 +9649,10 @@ function buildSummary(_ref) {
  * Main function to update the product configuration summary
  */
 function updateSummary() {
-  var productPrice = (0,_functions__WEBPACK_IMPORTED_MODULE_16__.getProductPrice)();
-  var productTitle = (0,_functions__WEBPACK_IMPORTED_MODULE_16__.getProductTitle)();
+  var productPrice = (0,_functions__WEBPACK_IMPORTED_MODULE_17__.getProductPrice)();
+  var productTitle = (0,_functions__WEBPACK_IMPORTED_MODULE_17__.getProductTitle)();
   var optionsSummary = [];
-  _variables__WEBPACK_IMPORTED_MODULE_15__.optionGroups.forEach(function (group) {
+  _variables__WEBPACK_IMPORTED_MODULE_16__.optionGroups.forEach(function (group) {
     var _group$closest;
     var label = group.dataset.label || "Unbekannte Option";
     var isChild = group.classList.contains("option-group-child");
@@ -9252,19 +9664,6 @@ function updateSummary() {
       groupStep: parseInt(carouselItem === null || carouselItem === void 0 ? void 0 : carouselItem.dataset.step, 10) || 999,
       groupOrder: parseInt(group.dataset.order, 10) || 999
     };
-
-    // Check for pricematrix selections (pxbh = price x by height matrix)
-    var pricematrixEl = group.querySelector('.option-price[class*="pxbh"]');
-    var pricematrixLabel = null;
-    var pricematrixPrice = null;
-    var isPricematrix = false;
-    if (pricematrixEl && pricematrixEl.value.trim() !== "") {
-      var _selected$dataset, _selected$dataset2;
-      var selected = pricematrixEl.selectedOptions[0];
-      pricematrixLabel = (selected === null || selected === void 0 || (_selected$dataset = selected.dataset) === null || _selected$dataset === void 0 || (_selected$dataset = _selected$dataset.label) === null || _selected$dataset === void 0 ? void 0 : _selected$dataset.trim()) || "";
-      pricematrixPrice = (selected === null || selected === void 0 || (_selected$dataset2 = selected.dataset) === null || _selected$dataset2 === void 0 ? void 0 : _selected$dataset2.price) || null;
-      isPricematrix = true;
-    }
 
     // Check for text input values
     var inputEl = group.querySelector(".option-input");
@@ -9284,19 +9683,16 @@ function updateSummary() {
       radioPrice = radioEl.dataset.price || null;
     }
     var stepNumber = ((_group$closest = group.closest(".carousel-item")) === null || _group$closest === void 0 || (_group$closest = _group$closest.dataset) === null || _group$closest === void 0 ? void 0 : _group$closest.step) || null;
-    if (inputValue || radioLabel || pricematrixLabel) {
+    if (inputValue || radioLabel) {
       optionsSummary.push({
         key: key,
         label: label,
-        pricematrixLabel: pricematrixLabel,
-        pricematrixPrice: pricematrixPrice,
         inputValue: inputValue,
         inputPrice: inputPrice,
         radioLabel: radioLabel,
         radioPrice: radioPrice,
         isChild: isChild,
         stepNumber: stepNumber,
-        isPricematrix: isPricematrix,
         groupData: groupDataForSummary
       });
     }
@@ -9317,15 +9713,28 @@ function updateSummary() {
   var configuratorSummary = document.getElementById("productConfiguratorSummary");
   if (configuratorSummary) {
     configuratorSummary.innerHTML = summaryHtml;
-    setupSummaryInteractions(); // Re-establishes click handlers and initializes tooltips
+    setupSummaryInteractions(); // Need to re-setup interactions after summary update
   }
 
   // Calculate and display total price
   var extraPrice = optionsSummary.reduce(function (acc, item) {
-    return acc + (0,_functions__WEBPACK_IMPORTED_MODULE_16__.toNumber)(item.inputPrice) + (0,_functions__WEBPACK_IMPORTED_MODULE_16__.toNumber)(item.radioPrice) + (0,_functions__WEBPACK_IMPORTED_MODULE_16__.toNumber)(item.pricematrixPrice);
+    return acc + (0,_functions__WEBPACK_IMPORTED_MODULE_17__.toNumber)(item.inputPrice) + (0,_functions__WEBPACK_IMPORTED_MODULE_17__.toNumber)(item.radioPrice);
   }, 0);
   var totalPrice = productPrice + extraPrice;
-  var totalPriceFormatted = (0,_functions__WEBPACK_IMPORTED_MODULE_16__.formatPrice)(totalPrice.toFixed(2));
+  var totalPriceFormatted = (0,_functions__WEBPACK_IMPORTED_MODULE_17__.formatPrice)(totalPrice.toFixed(2));
+  debugLog("Price calculation:", {
+    productPrice: productPrice,
+    extraPrice: extraPrice,
+    totalPrice: totalPrice,
+    totalPriceFormatted: totalPriceFormatted,
+    optionsSummary: optionsSummary.map(function (item) {
+      return {
+        label: item.label,
+        inputPrice: item.inputPrice,
+        radioPrice: item.radioPrice
+      };
+    })
+  });
   var totalHtml = "\n    <p class=\"bg-secondary-subtle border-top border-secondary-subtle text-end px-3 py-2 mb-0 fs-5\">\n      <span class=\"product-price-total-text small\">Gesamtpreis:</span>\n      <span class=\"product-price price fw-medium\">".concat(totalPriceFormatted || "0,00 €", "</span>\n    </p>\n  ");
   var configuratorTotal = document.getElementById("productConfiguratorTotal");
   if (configuratorTotal) {
@@ -9343,6 +9752,50 @@ function updateSummary() {
 document.addEventListener("DOMContentLoaded", function () {
   setupSummaryInteractions();
 });
+
+// ========================================
+// DEBUG HELPER FUNCTIONS
+// ========================================
+
+/**
+ * Debug helper functions that respect DEBUG_MODE setting
+ */
+var debugLog = function debugLog() {
+  if (DEBUG_MODE) {
+    var _console;
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+    (_console = console).debug.apply(_console, ["[Summary]"].concat(args));
+  }
+};
+var debugWarn = function debugWarn() {
+  if (DEBUG_MODE) {
+    var _console2;
+    for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+      args[_key2] = arguments[_key2];
+    }
+    (_console2 = console).warn.apply(_console2, ["[Summary]"].concat(args));
+  }
+};
+var debugInfo = function debugInfo() {
+  if (DEBUG_MODE) {
+    var _console3;
+    for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+      args[_key3] = arguments[_key3];
+    }
+    (_console3 = console).info.apply(_console3, ["[Summary]"].concat(args));
+  }
+};
+var debugError = function debugError() {
+  if (DEBUG_MODE) {
+    var _console4;
+    for (var _len4 = arguments.length, args = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+      args[_key4] = arguments[_key4];
+    }
+    (_console4 = console).error.apply(_console4, ["[Summary]"].concat(args));
+  }
+};
 
 /***/ }),
 
@@ -9434,7 +9887,7 @@ __webpack_require__.r(__webpack_exports__);
  * Simple debug flag - set to false for production
  * @type {boolean}
  */
-var DEBUG_MODE = true;
+var DEBUG_MODE = false;
 
 // ====================== PRODUCT TYPE DETECTION ======================
 
@@ -17066,48 +17519,6 @@ fixRegExpWellKnownSymbolLogic('replace', function (_, nativeReplace, maybeCallNa
 
 /***/ }),
 
-/***/ "./node_modules/core-js/modules/es.string.starts-with.js":
-/*!***************************************************************!*\
-  !*** ./node_modules/core-js/modules/es.string.starts-with.js ***!
-  \***************************************************************/
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
-
-
-var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js/internals/export.js");
-var uncurryThis = __webpack_require__(/*! ../internals/function-uncurry-this-clause */ "./node_modules/core-js/internals/function-uncurry-this-clause.js");
-var getOwnPropertyDescriptor = (__webpack_require__(/*! ../internals/object-get-own-property-descriptor */ "./node_modules/core-js/internals/object-get-own-property-descriptor.js").f);
-var toLength = __webpack_require__(/*! ../internals/to-length */ "./node_modules/core-js/internals/to-length.js");
-var toString = __webpack_require__(/*! ../internals/to-string */ "./node_modules/core-js/internals/to-string.js");
-var notARegExp = __webpack_require__(/*! ../internals/not-a-regexp */ "./node_modules/core-js/internals/not-a-regexp.js");
-var requireObjectCoercible = __webpack_require__(/*! ../internals/require-object-coercible */ "./node_modules/core-js/internals/require-object-coercible.js");
-var correctIsRegExpLogic = __webpack_require__(/*! ../internals/correct-is-regexp-logic */ "./node_modules/core-js/internals/correct-is-regexp-logic.js");
-var IS_PURE = __webpack_require__(/*! ../internals/is-pure */ "./node_modules/core-js/internals/is-pure.js");
-
-var stringSlice = uncurryThis(''.slice);
-var min = Math.min;
-
-var CORRECT_IS_REGEXP_LOGIC = correctIsRegExpLogic('startsWith');
-// https://github.com/zloirock/core-js/pull/702
-var MDN_POLYFILL_BUG = !IS_PURE && !CORRECT_IS_REGEXP_LOGIC && !!function () {
-  var descriptor = getOwnPropertyDescriptor(String.prototype, 'startsWith');
-  return descriptor && !descriptor.writable;
-}();
-
-// `String.prototype.startsWith` method
-// https://tc39.es/ecma262/#sec-string.prototype.startswith
-$({ target: 'String', proto: true, forced: !MDN_POLYFILL_BUG && !CORRECT_IS_REGEXP_LOGIC }, {
-  startsWith: function startsWith(searchString /* , position = 0 */) {
-    var that = toString(requireObjectCoercible(this));
-    notARegExp(searchString);
-    var index = toLength(min(arguments.length > 1 ? arguments[1] : undefined, that.length));
-    var search = toString(searchString);
-    return stringSlice(that, index, index + search.length) === search;
-  }
-});
-
-
-/***/ }),
-
 /***/ "./node_modules/core-js/modules/es.string.trim.js":
 /*!********************************************************!*\
   !*** ./node_modules/core-js/modules/es.string.trim.js ***!
@@ -17900,38 +18311,40 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _scss_configurator_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./scss/configurator.scss */ "./assets/scss/configurator.scss");
 /* harmony import */ var _js_configurator_configcode_save__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./js/configurator/configcode/save */ "./assets/js/configurator/configcode/save.js");
-/* harmony import */ var _js_configurator_pricecalcs_pricelabels__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./js/configurator/pricecalcs/pricelabels */ "./assets/js/configurator/pricecalcs/pricelabels.js");
-/* harmony import */ var _js_configurator_pricecalcs_pricematrices__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./js/configurator/pricecalcs/pricematrices */ "./assets/js/configurator/pricecalcs/pricematrices.js");
-/* harmony import */ var _js_configurator_pricecalcs_sk1__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./js/configurator/pricecalcs/sk1 */ "./assets/js/configurator/pricecalcs/sk1.js");
-/* harmony import */ var _js_configurator_pricecalcs_sk2__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./js/configurator/pricecalcs/sk2 */ "./assets/js/configurator/pricecalcs/sk2.js");
-/* harmony import */ var _js_configurator_carousel__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./js/configurator/carousel */ "./assets/js/configurator/carousel.js");
-/* harmony import */ var _js_configurator_input__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./js/configurator/input */ "./assets/js/configurator/input.js");
-/* harmony import */ var _js_configurator_offdrops__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./js/configurator/offdrops */ "./assets/js/configurator/offdrops.js");
-/* harmony import */ var _js_configurator_summary__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./js/configurator/summary */ "./assets/js/configurator/summary.js");
-/* harmony import */ var _js_configurator_dependencies_ablage__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./js/configurator/dependencies/ablage */ "./assets/js/configurator/dependencies/ablage.js");
-/* harmony import */ var _js_configurator_dependencies_ablagen__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./js/configurator/dependencies/ablagen */ "./assets/js/configurator/dependencies/ablagen.js");
-/* harmony import */ var _js_configurator_dependencies_auflage__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./js/configurator/dependencies/auflage */ "./assets/js/configurator/dependencies/auflage.js");
-/* harmony import */ var _js_configurator_dependencies_ambientelicht__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./js/configurator/dependencies/ambientelicht */ "./assets/js/configurator/dependencies/ambientelicht.js");
-/* harmony import */ var _js_configurator_dependencies_ausschnitte__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./js/configurator/dependencies/ausschnitte */ "./assets/js/configurator/dependencies/ausschnitte.js");
-/* harmony import */ var _js_configurator_dependencies_bedienung__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./js/configurator/dependencies/bedienung */ "./assets/js/configurator/dependencies/bedienung.js");
-/* harmony import */ var _js_configurator_dependencies_digital_uhr__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./js/configurator/dependencies/digital-uhr */ "./assets/js/configurator/dependencies/digital-uhr.js");
-/* harmony import */ var _js_configurator_dependencies_lichtfarbe__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./js/configurator/dependencies/lichtfarbe */ "./assets/js/configurator/dependencies/lichtfarbe.js");
-/* harmony import */ var _js_configurator_dependencies_philips_hue__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./js/configurator/dependencies/philips-hue */ "./assets/js/configurator/dependencies/philips-hue.js");
-/* harmony import */ var _js_configurator_dependencies_tv_geraet__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./js/configurator/dependencies/tv-geraet */ "./assets/js/configurator/dependencies/tv-geraet.js");
-/* harmony import */ var _js_configurator_dependencies_tv_seitenanschluss__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./js/configurator/dependencies/tv-seitenanschluss */ "./assets/js/configurator/dependencies/tv-seitenanschluss.js");
-/* harmony import */ var _js_configurator_dependencies_anschluesse__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./js/configurator/dependencies/anschluesse */ "./assets/js/configurator/dependencies/anschluesse.js");
-/* harmony import */ var _js_configurator_dependencies_verblendung__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./js/configurator/dependencies/verblendung */ "./assets/js/configurator/dependencies/verblendung.js");
-/* harmony import */ var _js_configurator_dependencies_schrankart__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./js/configurator/dependencies/schrankart */ "./assets/js/configurator/dependencies/schrankart.js");
-/* harmony import */ var _js_configurator_dependencies_schminkspiegel__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./js/configurator/dependencies/schminkspiegel */ "./assets/js/configurator/dependencies/schminkspiegel.js");
-/* harmony import */ var _js_configurator_dependencies_spiegelheizung__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./js/configurator/dependencies/spiegelheizung */ "./assets/js/configurator/dependencies/spiegelheizung.js");
-/* harmony import */ var _js_configurator_dependencies_steckdose__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./js/configurator/dependencies/steckdose */ "./assets/js/configurator/dependencies/steckdose.js");
-/* harmony import */ var _js_configurator_dependencies_tiefe__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./js/configurator/dependencies/tiefe */ "./assets/js/configurator/dependencies/tiefe.js");
-/* harmony import */ var _js_configurator_dependencies_tueren__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ./js/configurator/dependencies/tueren */ "./assets/js/configurator/dependencies/tueren.js");
-/* harmony import */ var _js_configurator_dependencies_tuergriff__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ./js/configurator/dependencies/tuergriff */ "./assets/js/configurator/dependencies/tuergriff.js");
-/* harmony import */ var _js_configurator_events__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./js/configurator/events */ "./assets/js/configurator/events.js");
+/* harmony import */ var _js_configurator_pricecalcs_pricematrices__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./js/configurator/pricecalcs/pricematrices */ "./assets/js/configurator/pricecalcs/pricematrices.js");
+/* harmony import */ var _js_configurator_pricecalcs_sk1__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./js/configurator/pricecalcs/sk1 */ "./assets/js/configurator/pricecalcs/sk1.js");
+/* harmony import */ var _js_configurator_pricecalcs_sk2__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./js/configurator/pricecalcs/sk2 */ "./assets/js/configurator/pricecalcs/sk2.js");
+/* harmony import */ var _js_configurator_carousel__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./js/configurator/carousel */ "./assets/js/configurator/carousel.js");
+/* harmony import */ var _js_configurator_input__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./js/configurator/input */ "./assets/js/configurator/input.js");
+/* harmony import */ var _js_configurator_offdrops__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./js/configurator/offdrops */ "./assets/js/configurator/offdrops.js");
+/* harmony import */ var _js_configurator_summary__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./js/configurator/summary */ "./assets/js/configurator/summary.js");
+/* harmony import */ var _js_configurator_dependencies_ablage__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./js/configurator/dependencies/ablage */ "./assets/js/configurator/dependencies/ablage.js");
+/* harmony import */ var _js_configurator_dependencies_ablagen__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./js/configurator/dependencies/ablagen */ "./assets/js/configurator/dependencies/ablagen.js");
+/* harmony import */ var _js_configurator_dependencies_auflage__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./js/configurator/dependencies/auflage */ "./assets/js/configurator/dependencies/auflage.js");
+/* harmony import */ var _js_configurator_dependencies_ambientelicht__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./js/configurator/dependencies/ambientelicht */ "./assets/js/configurator/dependencies/ambientelicht.js");
+/* harmony import */ var _js_configurator_dependencies_ausschnitte__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./js/configurator/dependencies/ausschnitte */ "./assets/js/configurator/dependencies/ausschnitte.js");
+/* harmony import */ var _js_configurator_dependencies_bedienung__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./js/configurator/dependencies/bedienung */ "./assets/js/configurator/dependencies/bedienung.js");
+/* harmony import */ var _js_configurator_dependencies_digital_uhr__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./js/configurator/dependencies/digital-uhr */ "./assets/js/configurator/dependencies/digital-uhr.js");
+/* harmony import */ var _js_configurator_dependencies_lichtfarbe__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./js/configurator/dependencies/lichtfarbe */ "./assets/js/configurator/dependencies/lichtfarbe.js");
+/* harmony import */ var _js_configurator_dependencies_philips_hue__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./js/configurator/dependencies/philips-hue */ "./assets/js/configurator/dependencies/philips-hue.js");
+/* harmony import */ var _js_configurator_dependencies_tv_geraet__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./js/configurator/dependencies/tv-geraet */ "./assets/js/configurator/dependencies/tv-geraet.js");
+/* harmony import */ var _js_configurator_dependencies_tv_seitenanschluss__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./js/configurator/dependencies/tv-seitenanschluss */ "./assets/js/configurator/dependencies/tv-seitenanschluss.js");
+/* harmony import */ var _js_configurator_dependencies_anschluesse__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./js/configurator/dependencies/anschluesse */ "./assets/js/configurator/dependencies/anschluesse.js");
+/* harmony import */ var _js_configurator_dependencies_verblendung__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./js/configurator/dependencies/verblendung */ "./assets/js/configurator/dependencies/verblendung.js");
+/* harmony import */ var _js_configurator_dependencies_schrankart__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./js/configurator/dependencies/schrankart */ "./assets/js/configurator/dependencies/schrankart.js");
+/* harmony import */ var _js_configurator_dependencies_schminkspiegel__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./js/configurator/dependencies/schminkspiegel */ "./assets/js/configurator/dependencies/schminkspiegel.js");
+/* harmony import */ var _js_configurator_dependencies_spiegelheizung__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./js/configurator/dependencies/spiegelheizung */ "./assets/js/configurator/dependencies/spiegelheizung.js");
+/* harmony import */ var _js_configurator_dependencies_steckdose__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./js/configurator/dependencies/steckdose */ "./assets/js/configurator/dependencies/steckdose.js");
+/* harmony import */ var _js_configurator_dependencies_tueren__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./js/configurator/dependencies/tueren */ "./assets/js/configurator/dependencies/tueren.js");
+/* harmony import */ var _js_configurator_dependencies_tuergriff__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./js/configurator/dependencies/tuergriff */ "./assets/js/configurator/dependencies/tuergriff.js");
+/* harmony import */ var _js_configurator_events__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ./js/configurator/events */ "./assets/js/configurator/events.js");
 
 
-// configurator.js // noch nicht ready for update 06/2025
+/**
+ * Configurator
+ *
+ * @version 2.5.0
+ */
 
 // Import Scss
 
@@ -17939,7 +18352,6 @@ __webpack_require__.r(__webpack_exports__);
 // Import Js
 
 // import "./js/configurator/configcode/load"; // Included in global.js
-
 
 
 
@@ -17957,7 +18369,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
- // needs to be tested
+
 // import "./js/configurator/dependencies/facette";
 
 
@@ -17966,12 +18378,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
- // needs to be tested
- // needs to be tested
- // needs to be tested
 
 
- // needs to be tested
+
+
+
 
 // Events
 

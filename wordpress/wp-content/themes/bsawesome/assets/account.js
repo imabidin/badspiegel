@@ -17,7 +17,7 @@
  * - Password visibility toggle functionality
  * - Registration with automatic login and welcome flow
  *
- * @version Final
+ * @version 2.5.0
  * @package Account
  * @requires ajax_object global object with nonce and URL
  */

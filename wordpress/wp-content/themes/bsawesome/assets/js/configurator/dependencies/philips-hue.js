@@ -34,9 +34,12 @@
  * Dependencies:
  * - variables.js: Dimension inputs, lighting position flags, and product category flags
  *
- * @version 2.3.0
- * @package Configurator
+ * @version 2.5.0
+ *
+ * @todo Change "Plus" to "Solo" in the code and documentation
  */
+
+import { dependenciesValuesXcontainer, dependenciesValuesXvalues } from "../dependencies.js";
 
 import {
   durchmesserInput,
@@ -53,8 +56,6 @@ import {
   isHochschrank,
   isBoard,
 } from "../variables.js";
-
-import { dependenciesValuesXcontainer, dependenciesValuesXvalues } from "../dependencies.js";
 
 // ========================================
 // CONFIGURATION & CONSTANTS
@@ -92,7 +93,7 @@ const LIGHTING_TYPES = {
  * Lightstrip variant constants
  */
 const LIGHTSTRIP_VARIANTS = {
-  PLUS: "lightstrip_plus",
+  PLUS: "lightstrip_solo",
   GRADIENT: "lightstrip_gradient",
 };
 
@@ -270,45 +271,39 @@ const setupPhilipsHueDependencies = () => {
   dependenciesValuesXcontainer(
     "lichtfarbe",
     value => value !== "philips_hue", // Show when NOT Philips Hue
-    "lichtstaerke",
-    DEBUG_MODE
+    "lichtstaerke"
   );
 
   dependenciesValuesXcontainer(
     "lichtfarbe",
     value => value !== "philips_hue", // Show when NOT Philips Hue
-    "smart_home",
-    DEBUG_MODE
+    "smart_home"
   );
 
   // Hide incompatible containers when Philips Hue is selected (ambient lighting)
   dependenciesValuesXcontainer(
     "ambientelicht_lichtfarbe",
     value => value !== "philips_hue", // Show when NOT Philips Hue
-    "lichtstaerke",
-    DEBUG_MODE
+    "lichtstaerke"
   );
 
   dependenciesValuesXcontainer(
     "ambientelicht_lichtfarbe",
     value => value !== "philips_hue", // Show when NOT Philips Hue
-    "smart_home",
-    DEBUG_MODE
+    "smart_home"
   );
 
   // Show Philips Hue containers when Philips Hue is selected
   dependenciesValuesXcontainer(
     "lichtfarbe",
     value => value === "philips_hue", // Show when Philips Hue
-    "lichtfarbe_philips_hue",
-    DEBUG_MODE
+    "lichtfarbe_philips_hue"
   );
 
   dependenciesValuesXcontainer(
     "ambientelicht_lichtfarbe",
     value => value === "philips_hue", // Show when Philips Hue
-    "ambientelicht_philips_hue",
-    DEBUG_MODE
+    "ambientelicht_philips_hue"
   );
 
   // Show Philips Hue App option only when lichtfarbe contains "hue"
@@ -320,8 +315,7 @@ const setupPhilipsHueDependencies = () => {
     "bedienung",
     value => {
       return value === "philips_hue_app";
-    },
-    DEBUG_MODE
+    }
   );
 
   debugLog("Philips Hue dependencies set up using dependenciesValuesXcontainer");

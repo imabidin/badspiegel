@@ -9,7 +9,9 @@
  * - Min/max/step constraint enforcement
  * - Respects HTML5 input constraints (min="0" support)
  *
- * @version 2.3.0
+ * @version 2.5.0
+ *
+ * @todo Add a modal confirmation if user tries to set quantity to zero "0"
  */
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -82,19 +84,28 @@ document.addEventListener("DOMContentLoaded", function () {
    * @param {boolean} triggerChange - Whether to trigger change event
    */
   const updateInputState = (input, isValid, triggerChange = false) => {
-    // Update validation UI
+    // Update validation UI with better accessibility
     input.classList.toggle("is-invalid", !isValid);
     input.classList.toggle("border-danger", !isValid);
+    input.setAttribute("aria-invalid", !isValid);
 
     if (triggerChange) {
       input.dispatchEvent(new Event("change", { bubbles: true }));
 
-      // Trigger cart update
+      // Enhanced cart update with error handling
       const form = input.closest("form.woocommerce-cart-form");
       const updateBtn = form?.querySelector('button[name="update_cart"]');
       if (updateBtn && !updateBtn.disabled) {
         updateBtn.disabled = false;
-        setTimeout(() => updateBtn.click(), 50);
+        // Debounced update to prevent rapid-fire submissions
+        clearTimeout(updateBtn.updateTimeout);
+        updateBtn.updateTimeout = setTimeout(() => {
+          try {
+            updateBtn.click();
+          } catch (error) {
+            console.warn("Cart update failed:", error);
+          }
+        }, 150); // Slightly longer delay for better UX
       }
     }
   };
@@ -183,21 +194,21 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   /**
-   * Real-time input filtering (since we have type="number" + inputmode="numeric")
-   * Note: This provides additional safety for browsers that don't fully respect inputmode
+   * Real-time input filtering (integers only for whole products)
+   * Note: Strict integer validation since we only sell whole items
    */
   document.body.addEventListener("input", function (event) {
     if (!event.target.matches(".quantity .qty")) return;
 
     const input = event.target;
 
-    // Remove non-numeric characters (backup for browsers ignoring inputmode="numeric")
+    // Remove non-numeric characters (integers only)
     const cleanValue = input.value.replace(/[^0-9]/g, "");
     if (input.value !== cleanValue) {
       input.value = cleanValue;
     }
 
-    // Immediate validation feedback
+    // Immediate validation feedback for integers
     const isValid =
       input.value.trim() !== "" && !isNaN(parseInt(input.value, 10));
     updateInputState(input, isValid, false);

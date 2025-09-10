@@ -1,10 +1,9 @@
 /**
- * @version 2.3.0
+ * @version 2.5.0
  *
  * @todo Optimize edge cases, i.e. refresh page, dachschraege position is default on "links", set "hoehe links" to 200 and then "hoehe rechts" to 100, but of them needs to be always above 400, actually specifically dependent on "dachschraege position"
  */
 
-import { dependenciesValuesXvalues, dependenciesValuesXcontainer } from "./../dependencies.js";
 import { breiteUntenInput, breiteObenInput, hoeheLinksInput, hoeheRechtsInput } from "./../variables.js";
 
 /**

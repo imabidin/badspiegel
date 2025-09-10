@@ -10,7 +10,9 @@
 ## Schrankart Einbau
 - Einbaurahmen ja nein?
 Bei Schrankart Halbeinbau -> Aufjedenfall Einbaurahmen
-- Wenn einbaurahmen für halbeinbau, dann einbaurahmen 
+- Wenn einbaurahmen für halbeinbau, dann einbaurahmen
 - Wenn Einbaurahmen, "vorab einbaurahmen erhalten" anzeigen
 
 # Auflage vs Auflage Keramik
+
+# Stromauslass Bedingungen hinzufügen, wenn z.B. Steckdose konfiguriert wird etc.

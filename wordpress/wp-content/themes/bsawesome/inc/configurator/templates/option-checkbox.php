@@ -24,8 +24,7 @@
  * - $option_values: Array of selectable values
  * - $posted_value: Current/submitted value
  *
- * @version 2.4.0
- * @package configurator
+ * @version 2.5.0
  * @todo    Implement proper checkbox/radio/select functionality
  * @todo    Fix cart integration for these option types
  */
@@ -39,5 +38,5 @@
 // - Auto-load functionality
 
 echo '<div class="alert alert-warning" role="alert">';
-echo esc_html__('Checkbox/Radio/Select template not yet implemented.', 'my-product-configurator');
+echo esc_html__('Checkbox/Radio/Select template not yet implemented.', 'bsawesome');
 echo '</div>';

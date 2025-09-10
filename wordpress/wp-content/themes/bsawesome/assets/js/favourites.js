@@ -11,16 +11,53 @@
 
 class FavouritesManager {
     constructor() {
-        this.states = favouritesData.states || {};
-        this.count = favouritesData.count || 0;
+        // Debug configuration - set to false to disable console logging
+        this.debug = myAjaxData.favourites.debug !== undefined ? myAjaxData.favourites.debug : false;
+
+        this.states = myAjaxData.favourites.states || {};
+        this.count = myAjaxData.favourites.count || 0;
         this.isProcessing = new Set(); // Track processing products
         this.initialized = false; // Track if we're initializing
 
         this.init();
     }
 
+    /**
+     * Debug logging helper - only logs when debug mode is enabled
+     */
+    log(message, ...args) {
+        if (this.debug) {
+            console.log(message, ...args);
+        }
+    }
+
+    /**
+     * Debug warning helper - only logs when debug mode is enabled
+     */
+    warn(message, ...args) {
+        if (this.debug) {
+            console.warn(message, ...args);
+        }
+    }
+
+    /**
+     * Debug error helper - always logs errors regardless of debug mode
+     */
+    error(message, ...args) {
+        console.error(message, ...args);
+    }
+
+    /**
+     * Debug info helper - only logs when debug mode is enabled
+     */
+    info(message, ...args) {
+        if (this.debug) {
+            console.info(message, ...args);
+        }
+    }
+
     init() {
-        console.log('🚀 [Favourites] Initializing with pre-loaded states:', this.states);
+        this.log('🚀 [Favourites] Initializing with pre-loaded states:', this.states);
 
         // Initialize button states from server data
         this.initializeButtonStates();
@@ -45,7 +82,7 @@ class FavouritesManager {
             const configCode = this.extractConfigCode(button);
 
             if (!productId || !this.states[productId]) {
-                console.warn('⚠️ [Favourites] No state data for product:', productId);
+                this.warn('⚠️ [Favourites] No state data for product:', productId);
                 return;
             }
 
@@ -54,7 +91,7 @@ class FavouritesManager {
 
             this.updateButtonVisualState(button, isFavourite);
 
-            console.log(`✅ [Favourites] Initialized button for product ${productId}:`, {
+            this.log(`✅ [Favourites] Initialized button for product ${productId}:`, {
                 configCode,
                 isFavourite,
                 availableConfigs: productState.config_codes
@@ -119,6 +156,19 @@ class FavouritesManager {
                 this.handleRemoveClick(removeButton);
                 return;
             }
+
+            // Handle cart action buttons (loading state)
+            const cartButton = e.target.closest('.btn-cart-action');
+            if (cartButton) {
+                // Add loading state immediately
+                const originalContent = cartButton.innerHTML;
+                cartButton.innerHTML = '<i class="fa-sharp fa-light fa-spinner fa-spin"></i>';
+                cartButton.style.pointerEvents = 'none';
+
+                // Note: The actual navigation happens automatically via href
+                // The loading state gives visual feedback until page loads
+                return;
+            }
         });
     }
 
@@ -142,11 +192,11 @@ class FavouritesManager {
         const action = newState ? 'add' : 'remove';
         const key = `${action}-${productId}-${configCode || 'null'}`;
         if (this.isProcessing.has(key)) {
-            console.log('⏸️ [Favourites] Already processing:', key);
+            this.log('⏸️ [Favourites] Already processing:', key);
             return;
         }
 
-        console.log('🖱️ [Favourites] Button clicked:', { productId, configCode });
+        this.log('🖱️ [Favourites] Button clicked:', { productId, configCode });
 
         this.isProcessing.add(key);
 
@@ -155,35 +205,45 @@ class FavouritesManager {
             this.updateButtonVisualState(button, newState);
             this.updateLocalState(productId, configCode, newState);
 
-            console.log(`🔄 [Favourites] Optimistic update: ${currentState} → ${newState}`);
+            this.log(`🔄 [Favourites] Optimistic update: ${currentState} → ${newState}`);
 
             // Send AJAX request
             const response = await this.sendToggleRequest(productId, configCode);
 
             if (response.success) {
-                console.log('✅ [Favourites] Server confirmed:', response.data);
+                this.log('✅ [Favourites] Server confirmed:', response.data);
 
                 // Update global count
                 this.count = response.data.count;
                 this.updateBadge();
 
                 // Cache invalidation hint for next page load
-                if (favouritesData.cacheKey) {
-                    sessionStorage.setItem('bsawesome_cache_invalid_' + favouritesData.cacheKey, '1');
+                if (myAjaxData.favourites.cacheKey) {
+                    sessionStorage.setItem('bsawesome_cache_invalid_' + myAjaxData.favourites.cacheKey, '1');
                 }
 
                 // Server state should match our optimistic update
                 if (response.data.is_favourite !== newState) {
-                    console.warn('⚠️ [Favourites] State mismatch, correcting...');
+                    this.warn('⚠️ [Favourites] State mismatch, correcting...');
                     this.updateButtonVisualState(button, response.data.is_favourite);
                     this.updateLocalState(productId, configCode, response.data.is_favourite);
                 }
             } else {
-                throw new Error(response.data?.message || 'Server error');
+                // Check for specific error types
+                const errorType = response.data?.error_type;
+                const errorMessage = response.data?.message || 'Server error';
+
+                if (errorType === 'product_private') {
+                    // Special handling for private products - show gentle message
+                    this.info('ℹ️ [Favourites] Private product:', errorMessage);
+                    this.showInfo(errorMessage);
+                } else {
+                    throw new Error(errorMessage);
+                }
             }
 
         } catch (error) {
-            console.error('❌ [Favourites] Error:', error);
+            this.error('❌ [Favourites] Error:', error);
 
             // Rollback optimistic update
             const originalState = !this.isProductFavourite(
@@ -213,11 +273,11 @@ class FavouritesManager {
         // Prevent concurrent requests for same product
         const key = `remove-${productId}-${configCode || 'null'}`;
         if (this.isProcessing.has(key)) {
-            console.log('⏸️ [Favourites] Already processing remove:', key);
+            this.log('⏸️ [Favourites] Already processing remove:', key);
             return;
         }
 
-        console.log('🗑️ [Favourites] Remove button clicked:', { productId, configCode });
+        this.log('🗑️ [Favourites] Remove button clicked:', { productId, configCode });
 
         this.isProcessing.add(key);
 
@@ -231,7 +291,7 @@ class FavouritesManager {
             const response = await this.sendToggleRequest(productId, configCode);
 
             if (response.success) {
-                console.log('✅ [Favourites] Remove confirmed:', response.data);
+                this.log('✅ [Favourites] Remove confirmed:', response.data);
 
                 // Update global count
                 this.count = response.data.count;
@@ -267,7 +327,7 @@ class FavouritesManager {
             }
 
         } catch (error) {
-            console.error('❌ [Favourites] Remove error:', error);
+            this.error('❌ [Favourites] Remove error:', error);
 
             // Restore button state
             button.innerHTML = originalContent;
@@ -287,7 +347,7 @@ class FavouritesManager {
     showEmptyFavouritesMessage(container) {
         const emptyMessage = `
             <div class="favourites-empty alert alert-light text-center py-5 border-2 border-dashed">
-                <i class="fa-sharp fa-light fa-heart fa-4x text-muted mb-3 d-block"></i>
+                <i class="fa-sharp fa-light fa-heart-broken fa-4x text-muted mb-3 d-block"></i>
                 <h4 class="text-muted mb-3">Keine Favoriten gefunden</h4>
                 <p class="text-muted mb-4">Sie haben alle Favoriten entfernt.</p>
                 <a href="${this.getShopUrl()}" class="btn btn-primary">
@@ -311,7 +371,7 @@ class FavouritesManager {
      */
     getShopUrl() {
         // Try to get shop URL from various sources
-        return favouritesData.shopUrl || '/shop/';
+        return myAjaxData.favourites.shopUrl || '/shop/';
     }
 
     /**
@@ -325,7 +385,7 @@ class FavouritesManager {
         icon.className = 'fa-sharp fa-heart';
 
         if (isFavourite) {
-            icon.classList.add('fa-solid', 'text-warning');
+            icon.classList.add('fa-solid', 'text-danger');
             button.setAttribute('title', 'Aus Favoriten entfernen');
             button.setAttribute('aria-pressed', 'true');
         } else {
@@ -370,13 +430,13 @@ class FavouritesManager {
         const formData = new FormData();
         formData.append('action', 'favourite_toggle');
         formData.append('product_id', productId);
-        formData.append('nonce', favouritesData.nonce);
+        formData.append('nonce', myAjaxData.favourites.nonce);
 
         if (configCode) {
             formData.append('config_code', configCode);
         }
 
-        const response = await fetch(favouritesData.ajaxUrl, {
+        const response = await fetch(myAjaxData.favourites.ajaxUrl, {
             method: 'POST',
             body: formData
         });
@@ -391,10 +451,10 @@ class FavouritesManager {
     updateBadge(animate = true) {
         const badges = document.querySelectorAll('#favourites-count-badge, .favourites-count');
 
-        console.log(`🔢 [Favourites] Updating badge count to: ${this.count}, found ${badges.length} badges, animate: ${animate}`);
+        this.log(`🔢 [Favourites] Updating badge count to: ${this.count}, found ${badges.length} badges, animate: ${animate}`);
 
         badges.forEach((badge, index) => {
-            console.log(`🏷️ [Favourites] Badge ${index}: current display = ${badge.style.display}, computed = ${window.getComputedStyle(badge).display}`);
+            this.log(`🏷️ [Favourites] Badge ${index}: current display = ${badge.style.display}, computed = ${window.getComputedStyle(badge).display}`);
 
             badge.textContent = this.count;
 
@@ -404,7 +464,7 @@ class FavouritesManager {
                 badge.style.display = 'inline-block';
                 badge.style.visibility = 'visible';
 
-                console.log(`🟢 [Favourites] Badge ${index} should be visible now: ${badge.style.display}`);
+                this.log(`🟢 [Favourites] Badge ${index} should be visible now: ${badge.style.display}`);
 
                 // Add animation only if requested and not during initialization
                 if (animate && this.initialized) {
@@ -417,7 +477,7 @@ class FavouritesManager {
             } else {
                 badge.style.display = 'none';
                 badge.style.visibility = 'hidden';
-                console.log(`🔴 [Favourites] Badge ${index} hidden`);
+                this.log(`🔴 [Favourites] Badge ${index} hidden`);
             }
         });
 
@@ -436,6 +496,20 @@ class FavouritesManager {
         // Could integrate with your existing notification system
         alert(message);
     }
+
+    /**
+     * Show info message (less intrusive than error)
+     */
+    showInfo(message) {
+        // For now, use console and a less aggressive alert
+        this.info('ℹ️ [Favourites] Info:', message);
+
+        // You could replace this with a toast notification or similar
+        // For now, we'll use a less aggressive approach - no alert for info
+
+        // Optional: Show a subtle visual feedback instead of alert
+        // this.showToast(message, 'info');
+    }
 }
 
 // Initialize the favourites manager
@@ -445,7 +519,9 @@ if (!window.favouritesManagerInstance) {
 
 // Global function for backwards compatibility with configurator
 window.updateFavouritesBadgeDisplay = function(count) {
-    console.log('🔗 [Favourites] Legacy badge update called with count:', count);
+    if (window.favouritesManagerInstance && window.favouritesManagerInstance.debug) {
+        console.log('🔗 [Favourites] Legacy badge update called with count:', count);
+    }
 
     if (window.favouritesManagerInstance) {
         // Update the count and refresh badge
@@ -460,14 +536,17 @@ window.favouritesManager = window.favouritesManagerInstance;
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
     // Verify required data is available
-    if (typeof favouritesData === 'undefined') {
-        console.error('❌ [Favourites] favouritesData not found');
+    if (typeof myAjaxData === 'undefined' || typeof myAjaxData.favourites === 'undefined') {
+        console.error('❌ [Favourites] myAjaxData.favourites not found');
         return;
     }
 
     // Prevent double initialization
     if (window.favouritesManagerInstance) {
-        console.warn('⚠️ [Favourites] Already initialized, skipping');
+        // Only log warning if debug is enabled
+        if (myAjaxData.favourites.debug === true) {
+            console.warn('⚠️ [Favourites] Already initialized, skipping');
+        }
         return;
     }
 

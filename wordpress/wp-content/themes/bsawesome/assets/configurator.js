@@ -1,4 +1,8 @@
-// configurator.js // noch nicht ready for update 06/2025
+/**
+ * Configurator
+ *
+ * @version 2.5.0
+ */
 
 // Import Scss
 import "./scss/configurator.scss";
@@ -7,7 +11,6 @@ import "./scss/configurator.scss";
 import "./js/configurator/configcode/save";
 // import "./js/configurator/configcode/load"; // Included in global.js
 
-import "./js/configurator/pricecalcs/pricelabels";
 import "./js/configurator/pricecalcs/pricematrices";
 import "./js/configurator/pricecalcs/sk1";
 import "./js/configurator/pricecalcs/sk2";
@@ -25,7 +28,7 @@ import "./js/configurator/dependencies/auflage";
 import "./js/configurator/dependencies/ambientelicht";
 import "./js/configurator/dependencies/ausschnitte";
 import "./js/configurator/dependencies/bedienung";
-import "./js/configurator/dependencies/digital-uhr"; // needs to be tested
+import "./js/configurator/dependencies/digital-uhr";
 // import "./js/configurator/dependencies/facette";
 import "./js/configurator/dependencies/lichtfarbe";
 import "./js/configurator/dependencies/philips-hue";
@@ -34,12 +37,11 @@ import "./js/configurator/dependencies/tv-seitenanschluss";
 import "./js/configurator/dependencies/anschluesse";
 import "./js/configurator/dependencies/verblendung";
 import "./js/configurator/dependencies/schrankart";
-import "./js/configurator/dependencies/schminkspiegel"; // needs to be tested
-import "./js/configurator/dependencies/spiegelheizung"; // needs to be tested
-import "./js/configurator/dependencies/steckdose"; // needs to be tested
-import "./js/configurator/dependencies/tiefe";
+import "./js/configurator/dependencies/schminkspiegel";
+import "./js/configurator/dependencies/spiegelheizung";
+import "./js/configurator/dependencies/steckdose";
 import "./js/configurator/dependencies/tueren";
-import "./js/configurator/dependencies/tuergriff"; // needs to be tested
+import "./js/configurator/dependencies/tuergriff";
 
 // Events
 import "./js/configurator/events";

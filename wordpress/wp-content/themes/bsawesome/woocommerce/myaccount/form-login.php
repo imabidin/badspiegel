@@ -47,7 +47,7 @@ do_action('woocommerce_before_customer_login_form'); ?>
 				<div class="card-body">
 					<h5 class="card-title mb-3">Vorteile mit Konto</h5>
 
-					<ul class="list-unstyled mb-last-0">
+					<ul class="list-unstyled mb-0">
 						<li class="d-flex align-items-start mb-3">
 							<i class="fa-light fa-sharp fa-rocket fa-fw me-2 mt-1 text-primary"></i>
 							<div>

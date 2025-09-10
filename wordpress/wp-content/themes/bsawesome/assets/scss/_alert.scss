@@ -1,3 +1,11 @@
+//
+// Alert
+//
+// @version 2.5.0
+//
+// @todo Redo and add "alert dismiss"
+//
+
 .site-content {
   // Necessary for alerts outside of the content-area
   > div.woocommerce {
@@ -11,6 +19,7 @@
 //
 // Mixins
 //
+
 @mixin alert-display {
   display: flex;
   align-items: center;
@@ -67,6 +76,7 @@
 //
 // Fixing gap between alerts
 //
+
 @include media-breakpoint-down(md) {
   .alert + .alert {
     margin-top: -0.5rem;
@@ -82,6 +92,7 @@
 //
 // Global
 //
+
 .woocommerce-error,
 .woocommerce-info,
 .woocommerce-message {
@@ -104,6 +115,7 @@
 //
 // Error
 //
+
 .woocommerce-error {
   // @extend .alert;
   // @extend .alert-danger;
@@ -124,6 +136,7 @@
 //
 // Info
 //
+
 .woocommerce-info {
   // @extend .alert;
   // @extend .alert-info;
@@ -137,6 +150,7 @@
 //
 // Message
 //
+
 .woocommerce-message {
   // @extend .alert;
   // @extend .alert-success;
@@ -155,6 +169,7 @@
 // //
 // // Return to shop
 // //
+//
 // .return-to-shop {
 //   margin-bottom: 0;
 // }

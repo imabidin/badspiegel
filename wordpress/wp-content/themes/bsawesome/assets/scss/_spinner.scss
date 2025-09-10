@@ -1,6 +1,15 @@
 //
+// Spinner
+//
+// @version 2.5.0
+//
+// @todo Get rid of WooCommerce blockUI and create own spinner (cart und checkout)
+//
+
+//
 // Spinner background.
 //
+
 .blockUI,
 .loader {
   width: calc(100% + 0.5rem) !important;
@@ -10,6 +19,7 @@
 //
 // Spinner icon.
 //
+
 .blockUI::before,
 .loader::before {
   content: "";

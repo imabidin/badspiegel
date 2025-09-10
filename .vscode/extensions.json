@@ -3,49 +3,38 @@
         // 🐘 PHP Development Essentials
         "bmewburn.vscode-intelephense-client",
         "xdebug.php-debug",
-
         // 🐳 Docker & DevOps
         "ms-vscode-remote.remote-wsl",
-
         // 🌐 Web Development
         "christian-kohler.path-intellisense",
         "christian-kohler.npm-intellisense",
-        
         // 🌐 Server
         "ms-vscode.live-server",
-
         // 📝 Code Quality & Formatting
         "esbenp.prettier-vscode",
         "dbaeumer.vscode-eslint",
-
         // 🤖 AI & Productivity
         "github.copilot",
         "github.copilot-chat",
         "visualstudioexptteam.vscodeintellicode",
-
         // 🔧 Development Tools
         "ms-vscode.powershell",
         "ms-vscode.makefile-tools",
         "redhat.vscode-yaml",
         "lacroixdavid1.vscode-format-context-menu",
-
         // 🐍 Python Development (falls benötigt)
         "ms-python.python",
         "ms-python.vscode-pylance",
         "ms-python.debugpy",
         "ms-python.vscode-python-envs",
-
         // 🚀 GitHub & CI/CD
         "github.vscode-github-actions",
-
         // 🎨 Design Tools
         "figma.figma-vscode-extension",
-
         // 📊 Data & File Management
         "mechatroner.rainbow-csv",
         "qwtel.sqlite-viewer",
         "loadguard-ai.file-color-coder",
-
         // 🚀 Deployment & FTP
         "natizyskunk.sftp"
     ]

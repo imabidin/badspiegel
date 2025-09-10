@@ -6,7 +6,7 @@
  * Includes MutationObserver to track dynamic attribute changes and search
  * functionality for option groups.
  *
- * @version 2.3.0
+ * @version 2.5.0
  * @package Configurator
  *
  * @todo Offdrops desktop, dropdowns are not navigable through keyboard
@@ -560,15 +560,15 @@ document.addEventListener("DOMContentLoaded", () => {
         /*
         // Visual feedback during search
         input.classList.add('searching');
-        
+
         // Dismiss mobile keyboard
         input.blur();
-        
+
         // Perform search with delay
         setTimeout(() => {
           performSearch();
           input.classList.remove('searching');
-          
+
           // Restore focus for screen readers
           if (document.activeElement === document.body) {
             input.focus({ preventScroll: true });

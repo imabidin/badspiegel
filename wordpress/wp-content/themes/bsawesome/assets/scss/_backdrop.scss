@@ -1,24 +1,79 @@
-.backdrop-blur {
+//
+// Backdrop
+//
+// @version 2.5.0
+//
+// @todo Adding proper backdrop classes with different colors and create a small documentation for usage
+// @todo Merge btn states properly into Bootstrap with color calculation
+//
+
+.backdrop-blur:not(.btn) {
   background-color: RGBA(var(--bs-primary-rgb), 0.75);
   backdrop-filter: blur(8px);
 }
 
-// Generate .backdrop-blur-{color} classes for each Bootstrap theme color
-@each $color, $value in $theme-colors {
-  .backdrop-blur-#{$color} {
-    background-color: rgba(var(--bs-#{$color}-rgb), 0.75);
+// // Generate .backdrop-blur-{color} classes for each Bootstrap theme color
+// @each $color, $value in $theme-colors {
+//   .backdrop-blur-#{$color} {
+//     background-color: rgba(var(--bs-#{$color}-rgb), 0.75);
+//     backdrop-filter: blur(8px);
+//   }
+// }
+
+// .backdrop-blur-light {
+//   // Dark translucent backdrop with blur effect
+//   background: rgba(255, 255, 255, 0.5);
+//   backdrop-filter: blur(4px);
+// }
+
+// .backdrop-blur-dark {
+//   // Dark translucent backdrop with blur effect
+//   background: rgba(0, 0, 0, 0.5);
+//   backdrop-filter: blur(4px);
+// }
+
+// Global transparency for all backdrop-blur buttons
+$backdrop-transparency: 0.5;
+
+.btn {
+  &.backdrop-blur {
+    // Shared properties for all backdrop-blur buttons
     backdrop-filter: blur(8px);
+    border: 1px solid transparent;
+
+    // Generate backdrop variants for all Bootstrap theme colors
+    @each $color in (primary, light, dark) {
+      &.btn-#{$color} {
+        // Use Bootstrap's RGB variables and apply our transparency
+        // Let CSS handle the color mixing at runtime
+        --bs-btn-bg: rgba(var(--bs-#{$color}-rgb), #{$backdrop-transparency});
+
+        // For hover/active states, we use the same RGB values but with different opacity
+        // This creates a darker effect visually (higher opacity = more solid = appears darker)
+        --bs-btn-hover-bg: rgba(var(--bs-#{$color}-rgb), #{$backdrop-transparency + 0.1});
+        --bs-btn-active-bg: rgba(var(--bs-#{$color}-rgb), #{$backdrop-transparency + 0.15});
+        --bs-btn-disabled-bg: rgba(var(--bs-#{$color}-rgb), #{$backdrop-transparency * 0.5});
+
+        // Reset all borders to transparent
+        --bs-btn-border-color: transparent;
+        --bs-btn-hover-border-color: transparent;
+        --bs-btn-active-border-color: transparent;
+        --bs-btn-disabled-border-color: transparent;
+      }
+    }
+
+    // Default for .btn.backdrop-blur without specific color variant
+    &:not([class*="btn-"]) {
+      --bs-btn-bg: rgba(var(--bs-primary-rgb), #{$backdrop-transparency});
+      --bs-btn-hover-bg: rgba(var(--bs-primary-rgb), #{$backdrop-transparency + 0.1});
+      --bs-btn-active-bg: rgba(var(--bs-primary-rgb), #{$backdrop-transparency + 0.15});
+      --bs-btn-disabled-bg: rgba(var(--bs-primary-rgb), #{$backdrop-transparency * 0.5});
+
+      // Reset borders to transparent
+      --bs-btn-border-color: transparent;
+      --bs-btn-hover-border-color: transparent;
+      --bs-btn-active-border-color: transparent;
+      --bs-btn-disabled-border-color: transparent;
+    }
   }
-}
-
-.backdrop-blur-light {
-  // Dark translucent backdrop with blur effect
-  background: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(4px);
-}
-
-.backdrop-blur-dark {
-  // Dark translucent backdrop with blur effect
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
 }

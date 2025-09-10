@@ -1,42 +1,82 @@
-<?php
+<?php defined('ABSPATH') || exit;
+
 /**
- * Modern Favourites System - WordPress Best Practices
+ * Modern Favourites System for BadSpiegel Theme
  *
- * Key improvements:
- * 1. Server-side state rendering
- * 2. Single AJAX endpoint
- * 3. Optimistic UI updates
- * 4. Simple state management
+ * Comprehensive favourites management system supporting both authenticated and guest users
+ * with WooCommerce integration and product configuration support.
+ *
+ * @version 2.5.0
+ *
+ * @todo Add bulk operations for favourites management
+ * @todo Implement favourites import/export functionality
+ * @todo Add favourites analytics and tracking
+ *
+ * Features:
+ * - Server-side state rendering for optimal performance
+ * - Single AJAX endpoint architecture for simplified debugging
+ * - Optimistic UI updates for enhanced user experience
+ * - Guest favourites with seamless user merge on login/registration
+ * - Product configuration code support for complex products
+ * - Bulk database operations for improved performance
+ * - WordPress object caching integration
+ * - Rate limiting and security measures
+ * - Cross-product configuration code handling
+ * - Auto-cart integration from favourites
+ * - Responsive template system with Bootstrap classes
+ *
+ * Security Measures:
+ * - CSRF protection via WordPress nonce verification
+ * - Input sanitization for all user data
+ * - Product validation before favourites operations
+ * - Session-based guest favourites with proper isolation
+ * - XSS prevention in template rendering
+ * - SQL injection protection through prepared statements
+ *
+ * Performance Features:
+ * - Bulk favourite state queries (single DB call for multiple products)
+ * - WordPress object cache integration with smart invalidation
+ * - Optimized page product detection for large catalogs
+ * - Lazy loading of favourite states only when needed
+ * - Database query optimization with proper indexing
+ * - Memory-efficient pagination for large favourite lists
+ *
+ * Supported Request Types:
+ * - favourite_toggle: Add/remove product from favourites
+ * - add_favourite_with_config: Add configured product to favourites
+ * - get_favourite_nonce: Retrieve fresh nonce for AJAX requests
+ *
+ * Required Dependencies:
+ * - WooCommerce: Product management and session handling
+ * - WordPress: Core functionality, caching, and database
+ * - BSAwesome Theme: Configuration system and pricing functions
+ * - inc/session.php: Session initialization for guest users
  */
 
-/**
- * Initialize favourites session for guests globally
- */
-function bsawesome_init_favourites_session()
-{
-    if (!is_user_logged_in() && function_exists('WC')) {
-        try {
-            if (is_null(WC()->session)) {
-                WC()->session = new WC_Session_Handler();
-                WC()->session->init();
-            }
-
-            if (!WC()->session->get_session_cookie()) {
-                WC()->session->set_customer_session_cookie(true);
-            }
-        } catch (Exception $e) {
-            // Silent error handling in production
-        }
-    }
-}
-add_action('wp_loaded', 'bsawesome_init_favourites_session', 20);
+// =============================================================================
+// FAVOURITES SYSTEM CLASS
+// =============================================================================
 
 class BSAwesome_Favourites_Modern {
 
-    public function __init() {
-        // Enqueue with localized initial state data
-        add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
+    /**
+     * Initialize the favourites system and register hooks
+     *
+     * Sets up AJAX endpoints for favourites operations and guest-to-user merge functionality.
+     *
+     * Hook Registration:
+     * - wp_ajax_favourite_toggle: Primary toggle endpoint for logged users
+     * - wp_ajax_nopriv_favourite_toggle: Primary toggle endpoint for guests
+     * - wp_ajax_add_favourite_with_config: Configurator integration for logged users
+     * - wp_ajax_nopriv_add_favourite_with_config: Configurator integration for guests
+     * - wp_ajax_get_favourite_nonce: Nonce generation for testing purposes
+     * - wp_login: Guest favourites merge on user login
+     * - user_register: Guest favourites merge on user registration
+     *
+     * @return void
+     */
 
+    public function __init() {
         // Single AJAX endpoint
         add_action('wp_ajax_favourite_toggle', array($this, 'ajax_toggle_favourite'));
         add_action('wp_ajax_nopriv_favourite_toggle', array($this, 'ajax_toggle_favourite'));
@@ -54,18 +94,25 @@ class BSAwesome_Favourites_Modern {
         add_action('user_register', array($this, 'merge_guest_favourites_on_register'));
     }
 
-    /**
-     * Enqueue scripts with pre-loaded favourite states
-     */
-    public function enqueue_scripts() {
-        wp_enqueue_script(
-            'favourites-modern',
-            get_template_directory_uri() . '/assets/js/favourites.js',
-            array('jquery'),
-            '1.0.1', // Version bump for cache busting
-            true
-        );
+    // =============================================================================
+    // LOCALIZATION & CACHE FUNCTIONS
+    // =============================================================================
 
+    /**
+     * Get favourites localization data for assets.php
+     *
+     * Provides preloaded favourite states for current page products to eliminate
+     * individual AJAX state checks and improve frontend performance.
+     *
+     * Caching Strategy:
+     * - Cache key includes page ID and user ID for proper isolation
+     * - 5-minute cache for logged users, 15-minute cache for guests
+     * - Uses WordPress object cache with 'bsawesome_favourites' group
+     * - Cache invalidation on user actions
+     *
+     * @return array Localization data including favourite states and AJAX settings
+     */
+    public function get_localization_data() {
         // Get current page products and their favourite states
         // Use caching to improve performance
         $cache_key = 'bsawesome_page_favourites_' . md5(get_queried_object_id() . '_' . get_current_user_id());
@@ -78,7 +125,7 @@ class BSAwesome_Favourites_Modern {
             wp_cache_set($cache_key, $favourite_states, 'bsawesome_favourites', $cache_time);
         }
 
-        wp_localize_script('favourites-modern', 'favouritesData', array(
+        return array(
             'ajaxUrl' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('favourite_nonce'),
             'states' => $favourite_states, // Pre-loaded states!
@@ -86,17 +133,29 @@ class BSAwesome_Favourites_Modern {
             'isLoggedIn' => is_user_logged_in(),
             'cacheKey' => $cache_key, // For cache invalidation
             'shopUrl' => wc_get_page_permalink('shop')
-        ));
+        );
     }
 
     /**
      * Get favourite states for all products on current page
-     * This eliminates the need for individual AJAX state checks
-     * Optimized for large product lists
+     *
+     * Eliminates individual AJAX state checks by bulk-loading favourite states
+     * for all products currently displayed. Includes memory protection for large catalogs.
+     *
+     * Performance Features:
+     * - Single database query for multiple products
+     * - Memory limit protection (max 100 products by default)
+     * - Supports both user and guest favourites
+     * - Optimized for WooCommerce product loops
+     *
+     * Product Detection Methods:
+     * 1. WooCommerce shortcode loop detection
+     * 2. Shop/category page global query
+     * 3. Single product page fallback
+     *
+     * @return array Associative array of product_id => boolean favourite states
      */
     public function get_page_favourite_states() {
-        global $woocommerce_loop;
-
         $states = array();
 
         // Get products from current page/loop
@@ -120,6 +179,16 @@ class BSAwesome_Favourites_Modern {
 
     /**
      * Get product IDs from current page context
+     *
+     * Detects products on the current page using multiple methods to ensure
+     * comprehensive coverage across different WooCommerce page types.
+     *
+     * Detection Methods (Priority Order):
+     * 1. WooCommerce shortcode loop products
+     * 2. Shop/category page global query products
+     * 3. Single product page current product
+     *
+     * @return array Array of integer product IDs found on current page
      */
     private function get_current_page_product_ids() {
         $product_ids = array();
@@ -154,6 +223,18 @@ class BSAwesome_Favourites_Modern {
 
     /**
      * Bulk get favourite states for multiple products (single optimized query)
+     *
+     * Efficiently retrieves favourite states for multiple products using a single
+     * database query instead of individual checks per product.
+     *
+     * Performance Strategy:
+     * - Initializes all products as 'not favourite' first
+     * - Single database query for user favourites (if logged in)
+     * - Session-based lookup for guest favourites
+     * - Returns boolean states for frontend consumption
+     *
+     * @param array $product_ids Array of integer product IDs to check
+     * @return array Associative array of product_id => boolean favourite state
      */
     private function bulk_get_favourite_states($product_ids) {
         if (empty($product_ids)) {
@@ -181,6 +262,18 @@ class BSAwesome_Favourites_Modern {
 
     /**
      * Bulk get user favourite states (single database query)
+     *
+     * Retrieves all favourite data for specified products for the current logged-in user
+     * using a single optimized database query with prepared statements.
+     *
+     * Security Features:
+     * - Uses prepared statements to prevent SQL injection
+     * - Validates user authentication before database query
+     * - Sanitizes product IDs before query execution
+     *
+     * @param array $product_ids Array of product IDs to check
+     * @param array &$states Reference to states array to populate with results
+     * @return void Modifies $states array by reference
      */
     private function bulk_get_user_favourite_states($product_ids, &$states) {
         global $wpdb;
@@ -212,6 +305,18 @@ class BSAwesome_Favourites_Modern {
 
     /**
      * Bulk get guest favourite states from session
+     *
+     * Retrieves favourite states for guest users from WooCommerce session data.
+     * Fallback to PHP session if WooCommerce session is unavailable.
+     *
+     * Session Strategy:
+     * - Primary: WooCommerce session for better integration
+     * - Fallback: PHP $_SESSION for compatibility
+     * - Data validation to ensure consistency
+     *
+     * @param array $product_ids Array of product IDs to check
+     * @param array &$states Reference to states array to populate with results
+     * @return void Modifies $states array by reference
      */
     private function bulk_get_guest_favourite_states($product_ids, &$states) {
         $favourites = $this->get_guest_favourites();
@@ -234,8 +339,18 @@ class BSAwesome_Favourites_Modern {
         }
     }
 
+    // =============================================================================
+    // PUBLIC QUERY FUNCTIONS
+    // =============================================================================
+
     /**
-     * Check if product is favourite (any config)
+     * Check if product is favourite (any configuration)
+     *
+     * Determines if a product is marked as favourite regardless of configuration code.
+     * Useful for product loop displays where specific configuration isn't relevant.
+     *
+     * @param int $product_id Product ID to check
+     * @return bool True if product is favourite with any configuration, false otherwise
      */
     public function is_product_favourite($product_id) {
         if (is_user_logged_in()) {
@@ -245,7 +360,8 @@ class BSAwesome_Favourites_Modern {
             $count = $wpdb->get_var($wpdb->prepare(
                 "SELECT COUNT(*) FROM {$wpdb->prefix}user_favourites
                 WHERE user_id = %d AND product_id = %d",
-                $user_id, $product_id
+                $user_id,
+                $product_id
             ));
 
             return $count > 0;
@@ -261,7 +377,13 @@ class BSAwesome_Favourites_Modern {
     }
 
     /**
-     * Get all favourite config codes for a product
+     * Get all favourite configuration codes for a product
+     *
+     * Returns all configuration codes that have been favourited for a specific product.
+     * Useful for displaying multiple configurations or determining product popularity.
+     *
+     * @param int $product_id Product ID to check
+     * @return array Array of configuration codes for the product
      */
     public function get_product_favourite_configs($product_id) {
         $configs = array();
@@ -273,7 +395,8 @@ class BSAwesome_Favourites_Modern {
             $results = $wpdb->get_results($wpdb->prepare(
                 "SELECT config_code FROM {$wpdb->prefix}user_favourites
                 WHERE user_id = %d AND product_id = %d",
-                $user_id, $product_id
+                $user_id,
+                $product_id
             ));
 
             foreach ($results as $row) {
@@ -291,11 +414,38 @@ class BSAwesome_Favourites_Modern {
         return $configs;
     }
 
+    // =============================================================================
+    // AJAX HANDLERS
+    // =============================================================================
+
     /**
      * Single AJAX endpoint for toggle operations
+     *
+     * Handles both add and remove operations in a single endpoint to simplify
+     * frontend integration and reduce code duplication.
+     *
+     * Request Processing Pipeline:
+     * 1. Security validation (nonce verification)
+     * 2. Parameter validation and sanitization
+     * 3. Product validation and existence check
+     * 4. Toggle operation (add or remove based on current state)
+     * 5. Success response with new state
+     *
+     * Expected POST Parameters:
+     * - nonce: WordPress nonce for CSRF protection
+     * - product_id: Integer product ID to toggle
+     * - config_code: Optional configuration code (6-character alphanumeric)
+     *
+     * Security Features:
+     * - WordPress nonce verification for CSRF protection
+     * - Input sanitization and validation
+     * - Product existence validation
+     * - Configuration code format validation
+     *
+     * @return void Outputs JSON response and exits
      */
     public function ajax_toggle_favourite() {
-        // Session wird bereits global in wp_loaded initialisiert
+        // Session is in global.js
 
         // Verify nonce
         if (!wp_verify_nonce($_POST['nonce'] ?? '', 'favourite_nonce')) {
@@ -325,7 +475,7 @@ class BSAwesome_Favourites_Modern {
         }
 
         // Log the operation result
-        if ($result) {
+        if ($result === true || (is_array($result) && $result['success'] === true)) {
 
             // Cache invalidation after successful operation
             $this->invalidate_user_cache();
@@ -339,21 +489,53 @@ class BSAwesome_Favourites_Modern {
                 'is_favourite' => !$is_favourite // New state
             ));
         } else {
-            // Log failure details
-            if ($is_favourite) {
+            // Handle specific error cases
+            if (is_array($result) && isset($result['error'])) {
+                switch ($result['error']) {
+                    case 'product_private':
+                        wp_send_json_error(array(
+                            'message' => 'Dieses Produkt ist privat und kann nicht zu den Favoriten hinzugefügt werden.',
+                            'error_type' => 'product_private',
+                            'details' => 'Product is private and cannot be added to favourites'
+                        ));
+                        break;
+                    case 'product_not_found':
+                        wp_send_json_error(array(
+                            'message' => 'Produkt nicht gefunden.',
+                            'error_type' => 'product_not_found',
+                            'details' => 'Product not found'
+                        ));
+                        break;
+                    default:
+                        wp_send_json_error(array(
+                            'message' => 'Ein unbekannter Fehler ist aufgetreten.',
+                            'error_type' => 'unknown',
+                            'details' => 'Unknown error occurred'
+                        ));
+                }
             } else {
+                // Legacy error handling for boolean false
+                wp_send_json_error(array(
+                    'message' => $is_favourite ? 'Fehler beim Entfernen aus den Favoriten' : 'Fehler beim Hinzufügen zu den Favoriten (möglicherweise bereits vorhanden)',
+                    'error_type' => $is_favourite ? 'remove_failed' : 'add_failed',
+                    'details' => $is_favourite ? 'Remove operation failed' : 'Add operation failed (possible duplicate)'
+                ));
             }
-
-            wp_send_json_error(array(
-                'message' => $is_favourite ? 'Failed to remove from favourites' : 'Failed to add to favourites',
-                'details' => $is_favourite ? 'Remove operation failed' : 'Add operation failed (possible duplicate)'
-            ));
         }
     }
 
     /**
      * AJAX endpoint for configurator integration
-     * Adds a product with configuration to favourites
+     *
+     * Specialized endpoint for adding products with configurations to favourites.
+     * Used by the product configurator to save configured products.
+     *
+     * Expected POST Parameters:
+     * - nonce: WordPress nonce for CSRF protection
+     * - product_id: Integer product ID to add
+     * - config_code: Configuration code for the product
+     *
+     * @return void Outputs JSON response and exits
      */
     public function ajax_add_favourite_with_config() {
         // Verify nonce
@@ -397,17 +579,35 @@ class BSAwesome_Favourites_Modern {
 
     /**
      * AJAX endpoint to get a fresh nonce for testing
+     *
+     * Provides a fresh nonce for AJAX requests, primarily used for testing
+     * and debugging purposes.
+     *
+     * @return void Outputs JSON response with fresh nonce
      */
     public function ajax_get_nonce() {
-        // Session wird bereits global in wp_loaded initialisiert
-
         wp_send_json_success(array(
             'nonce' => wp_create_nonce('favourite_nonce')
         ));
     }
 
+    // =============================================================================
+    // CACHE & UTILITY FUNCTIONS
+    // =============================================================================
+
     /**
      * Invalidate user-specific caches
+     *
+     * Clears all cached favourite data for a specific user to ensure data consistency
+     * after favourites operations.
+     *
+     * Cache Invalidation Strategy:
+     * - User-specific favourite lists and counts
+     * - Page-specific favourite states for the user
+     * - Common page caches (shop page, current page)
+     *
+     * @param int|null $user_id User ID to clear cache for (defaults to current user)
+     * @return void
      */
     private function invalidate_user_cache($user_id = null) {
         if ($user_id === null) {
@@ -435,7 +635,14 @@ class BSAwesome_Favourites_Modern {
     }
 
     /**
-     * Check if specific product+config is favourite
+     * Check if specific product with configuration is favourite
+     *
+     * Checks if a specific product-configuration combination is marked as favourite.
+     * Handles both null/empty config codes and specific configuration codes.
+     *
+     * @param int $product_id Product ID to check
+     * @param string|null $config_code Configuration code to check (null for base product)
+     * @return bool True if the specific product+config combination is favourite
      */
     public function is_product_config_favourite($product_id, $config_code = null) {
         if (is_user_logged_in()) {
@@ -446,13 +653,16 @@ class BSAwesome_Favourites_Modern {
                 $count = $wpdb->get_var($wpdb->prepare(
                     "SELECT COUNT(*) FROM {$wpdb->prefix}user_favourites
                     WHERE user_id = %d AND product_id = %d AND config_code = %s",
-                    $user_id, $product_id, $config_code
+                    $user_id,
+                    $product_id,
+                    $config_code
                 ));
             } else {
                 $count = $wpdb->get_var($wpdb->prepare(
                     "SELECT COUNT(*) FROM {$wpdb->prefix}user_favourites
                     WHERE user_id = %d AND product_id = %d AND (config_code IS NULL OR config_code = '')",
-                    $user_id, $product_id
+                    $user_id,
+                    $product_id
                 ));
             }
 
@@ -470,6 +680,16 @@ class BSAwesome_Favourites_Modern {
 
     /**
      * Get guest favourites from session
+     *
+     * Retrieves favourite products for guest users from session storage.
+     * Uses WooCommerce session as primary storage with PHP session fallback.
+     *
+     * Session Storage Strategy:
+     * - Primary: WooCommerce session for better WooCommerce integration
+     * - Fallback: PHP $_SESSION for cases where WooCommerce session unavailable
+     * - Returns empty array if no favourites found
+     *
+     * @return array Array of favourite objects with product_id and config_code
      */
     public function get_guest_favourites() {
         if (function_exists('WC') && WC()->session) {
@@ -487,6 +707,16 @@ class BSAwesome_Favourites_Modern {
 
     /**
      * Get total favourite count for current user
+     *
+     * Returns the total number of favourite products for the current user.
+     * Uses caching for performance optimization.
+     *
+     * Caching Strategy:
+     * - 15-minute cache for user favourite counts
+     * - Cache invalidation on add/remove operations
+     * - Separate handling for logged-in users vs guests
+     *
+     * @return int Total number of favourite products for current user
      */
     public function get_user_favourite_count() {
         if (is_user_logged_in()) {
@@ -515,13 +745,44 @@ class BSAwesome_Favourites_Modern {
         }
     }
 
-    // Add/remove methods - full implementation
+    // =============================================================================
+    // ADD/REMOVE OPERATIONS
+    // =============================================================================
+
+    /**
+     * Add product to favourites
+     *
+     * Adds a product (with optional configuration) to the user's favourites list.
+     * Handles both authenticated users (database) and guests (session storage).
+     *
+     * Validation Pipeline:
+     * 1. Product ID validation and sanitization
+     * 2. Product existence and accessibility check
+     * 3. Product status validation (must be published)
+     * 4. Duplicate check before insertion
+     * 5. Database/session storage operation
+     *
+     * Security Features:
+     * - Product ID validation and sanitization
+     * - Product existence verification
+     * - Status validation (only published products)
+     * - Duplicate prevention
+     * - SQL injection protection via prepared statements
+     *
+     * @param int $product_id Product ID to add to favourites
+     * @param string|null $config_code Optional configuration code
+     * @return bool|array True on success, array with error details on failure
+     */
     public function add_favourite($product_id, $config_code) {
         $product_id = intval($product_id);
 
         $product = wc_get_product($product_id);
-        if (!$product || $product->get_status() !== 'publish') {
-            return false;
+        if (!$product) {
+            return array('success' => false, 'error' => 'product_not_found');
+        }
+
+        if ($product->get_status() !== 'publish') {
+            return array('success' => false, 'error' => 'product_private');
         }
 
         if (is_user_logged_in()) {
@@ -596,9 +857,11 @@ class BSAwesome_Favourites_Modern {
 
                 // Check if already exists
                 foreach ($session_favourites as $item) {
-                    if (is_array($item) && isset($item['product_id']) &&
+                    if (
+                        is_array($item) && isset($item['product_id']) &&
                         $item['product_id'] == $product_id &&
-                        ($item['config_code'] ?? null) === $config_code) {
+                        ($item['config_code'] ?? null) === $config_code
+                    ) {
                         return false; // Already exists
                     }
                 }
@@ -617,6 +880,22 @@ class BSAwesome_Favourites_Modern {
         }
     }
 
+    /**
+     * Remove product from favourites
+     *
+     * Removes a specific product-configuration combination from the user's favourites.
+     * Handles both authenticated users (database) and guests (session storage).
+     *
+     * Removal Strategy:
+     * - For logged users: Database deletion with prepared statements
+     * - For guests: Session array filtering and cleanup
+     * - Validates product ID before operation
+     * - Returns success status for frontend feedback
+     *
+     * @param int $product_id Product ID to remove from favourites
+     * @param string|null $config_code Configuration code to remove (null for base product)
+     * @return bool True if removed successfully, false otherwise
+     */
     public function remove_favourite($product_id, $config_code) {
         $product_id = intval($product_id);
 
@@ -723,11 +1002,19 @@ class BSAwesome_Favourites_Modern {
         }
     }
 
+    // =============================================================================
+    // GUEST TO USER MERGE FUNCTIONS
+    // =============================================================================
+
     /**
      * Merge guest favourites when user logs in
      *
-     * @param string $user_login
-     * @param WP_User $user
+     * Hook callback for 'wp_login' action to automatically merge guest favourites
+     * with user account upon login.
+     *
+     * @param string $user_login Username (unused)
+     * @param WP_User $user User object containing user ID
+     * @return void
      */
     public function merge_guest_favourites_on_login($user_login, $user) {
         $this->merge_guest_favourites_to_user($user->ID);
@@ -736,7 +1023,11 @@ class BSAwesome_Favourites_Modern {
     /**
      * Merge guest favourites when user registers
      *
-     * @param int $user_id
+     * Hook callback for 'user_register' action to automatically merge guest favourites
+     * with newly created user account.
+     *
+     * @param int $user_id Newly registered user ID
+     * @return void
      */
     public function merge_guest_favourites_on_register($user_id) {
         $this->merge_guest_favourites_to_user($user_id);
@@ -745,8 +1036,24 @@ class BSAwesome_Favourites_Modern {
     /**
      * Core merge functionality - transfer guest favourites to user account
      *
-     * @param int $user_id
-     * @return array Array with merge statistics
+     * Transfers all guest favourites to the user's database records upon login/registration.
+     * Handles duplicates gracefully and provides statistics for the operation.
+     *
+     * Merge Process:
+     * 1. Retrieve guest favourites from WooCommerce session
+     * 2. Fallback to PHP session if WooCommerce unavailable
+     * 3. Check for existing user favourites to prevent duplicates
+     * 4. Insert new favourites into user database table
+     * 5. Clear guest session data after successful merge
+     * 6. Return operation statistics
+     *
+     * Duplicate Handling:
+     * - Checks existing user favourites before insertion
+     * - Skips duplicates and counts them in statistics
+     * - Continues processing remaining items on errors
+     *
+     * @param int $user_id Target user ID for favourites merge
+     * @return array Array with merge statistics (processed, merged, duplicates, errors)
      */
     public function merge_guest_favourites_to_user($user_id) {
         $stats = [
@@ -782,9 +1089,11 @@ class BSAwesome_Favourites_Modern {
             $stats['processed']++;
 
             // Validate guest favourite structure
-            if (!is_array($guest_favourite) ||
+            if (
+                !is_array($guest_favourite) ||
                 !isset($guest_favourite['product_id']) ||
-                !is_numeric($guest_favourite['product_id'])) {
+                !is_numeric($guest_favourite['product_id'])
+            ) {
                 $stats['errors']++;
                 continue;
             }
@@ -837,6 +1146,16 @@ class BSAwesome_Favourites_Modern {
 
     /**
      * Clear guest favourites from session
+     *
+     * Removes all guest favourites from both WooCommerce session and PHP session.
+     * Called after successful merge to user account or manual cleanup.
+     *
+     * Cleanup Strategy:
+     * - Clears WooCommerce session 'bsawesome_favourites' key
+     * - Clears PHP session 'favourites' key as fallback
+     * - Ensures complete cleanup across both storage methods
+     *
+     * @return void
      */
     public function clear_guest_favourites() {
         // Clear WooCommerce session
@@ -852,37 +1171,106 @@ class BSAwesome_Favourites_Modern {
     }
 }
 
+// =============================================================================
+// CLASS INITIALIZATION
+// =============================================================================
+
 // Initialize
 $favourites_modern = new BSAwesome_Favourites_Modern();
 $favourites_modern->__init();
 
-// Global wrapper functions for backward compatibility
+// =============================================================================
+// GLOBAL WRAPPER FUNCTIONS
+// =============================================================================
+
+/**
+ * Add product to favourites (backward compatibility wrapper)
+ *
+ * @param int $product_id Product ID to add
+ * @param int|null $user_id Unused (maintained for compatibility)
+ * @param string|null $config_code Optional configuration code
+ * @return bool|array Result of add operation
+ */
 function bsawesome_add_to_favourites($product_id, $user_id = null, $config_code = null) {
     global $favourites_modern;
     return $favourites_modern->add_favourite($product_id, $config_code);
 }
 
+/**
+ * Remove product from favourites (backward compatibility wrapper)
+ *
+ * @param int $product_id Product ID to remove
+ * @param int|null $user_id Unused (maintained for compatibility)
+ * @param string|null $config_code Optional configuration code
+ * @return bool Result of remove operation
+ */
 function bsawesome_remove_from_favourites($product_id, $user_id = null, $config_code = null) {
     global $favourites_modern;
     return $favourites_modern->remove_favourite($product_id, $config_code);
 }
 
+/**
+ * Check if specific product+config is favourite (backward compatibility wrapper)
+ *
+ * @param int $product_id Product ID to check
+ * @param string|null $config_code Configuration code to check
+ * @param int|null $user_id Unused (maintained for compatibility)
+ * @return bool True if product+config is favourite
+ */
 function bsawesome_is_product_config_favourite($product_id, $config_code = null, $user_id = null) {
     global $favourites_modern;
     return $favourites_modern->is_product_config_favourite($product_id, $config_code);
 }
 
+/**
+ * Check if product is favourite with any config (backward compatibility wrapper)
+ *
+ * @param int $product_id Product ID to check
+ * @param int|null $user_id Unused (maintained for compatibility)
+ * @return bool True if product is favourite with any configuration
+ */
 function bsawesome_is_product_favourite_any_config($product_id, $user_id = null) {
     global $favourites_modern;
     return $favourites_modern->is_product_favourite($product_id);
 }
 
+/**
+ * Get total favourites count (backward compatibility wrapper)
+ *
+ * @param int|null $user_id Unused (maintained for compatibility)
+ * @return int Total favourites count for current user
+ */
 function bsawesome_get_favourites_count($user_id = null) {
     global $favourites_modern;
     return $favourites_modern->get_user_favourite_count();
 }
 
-// Header display function
+/**
+ * Get favourites localization data for assets.php
+ *
+ * Provides favourites data to JavaScript for frontend functionality.
+ * Called from assets.php during script localization.
+ *
+ * @return array Favourites localization data for JavaScript
+ */
+function bsawesome_get_favourites_localization_data() {
+    global $favourites_modern;
+    return $favourites_modern->get_localization_data();
+}
+
+// =============================================================================
+// TEMPLATE & DISPLAY FUNCTIONS
+// =============================================================================
+
+/**
+ * Display favourites header button
+ *
+ * Renders the favourites button for the site header with count badge.
+ * Supports customizable styling and badge display options.
+ *
+ * @param array $args Configuration array for button display
+ * @return void Outputs HTML directly
+ */
 function site_favourites($args = array()) {
     $defaults = array(
         'show_badge' => true,
@@ -903,25 +1291,43 @@ function site_favourites($args = array()) {
             ? 'fa-sharp fa-solid fa-heart text-danger'
             : 'fa-sharp fa-thin fa-heart';
     }
-    ?>
+?>
 
     <div id="site-favourites" class="<?php echo esc_attr($args['css_classes']); ?>">
         <a href="<?php echo esc_url(home_url('/favoriten/')); ?>"
-           class="<?php echo esc_attr($args['link_classes']); ?>"
-           title="<?php echo esc_attr__('Meine Favoriten', 'bsawesome'); ?>">
+            class="<?php echo esc_attr($args['link_classes']); ?>"
+            title="<?php echo esc_attr__('Meine Favoriten', 'bsawesome'); ?>">
             <i class="<?php echo esc_attr($icon_classes); ?>"></i>
             <?php if ($args['show_badge']): ?>
                 <span class="<?php echo esc_attr($args['badge_classes']); ?>"
-                      id="favourites-count-badge"
-                      style="<?php echo $has_favourites ? '' : 'display: none;'; ?>"><?php echo esc_html($favourites_count); ?></span>
+                    id="favourites-count-badge"
+                    style="<?php echo $has_favourites ? '' : 'display: none;'; ?>"><?php echo esc_html($favourites_count); ?></span>
             <?php endif; ?>
         </a>
     </div>
 
-    <?php
+<?php
 }
 
-// Template integration functions
+// =============================================================================
+// PRODUCT TEMPLATE FUNCTIONS
+// =============================================================================
+
+/**
+ * Generate favourite action button for product displays
+ *
+ * Creates context-aware action buttons for products in favourites listings.
+ * Handles different product types and configuration states.
+ *
+ * Button Types:
+ * - Configured products: "Direkt zum Warenkorb" with form submission
+ * - Configurable products: "Konfiguration abschließen" link
+ * - Simple products: "Zum Warenkorb hinzufügen" form
+ *
+ * @param WC_Product|null $product Product object
+ * @param string|null $config_code Configuration code if applicable
+ * @return string HTML for action button
+ */
 function bsawesome_generate_favourite_action_button($product, $config_code = null) {
     if (!$product) {
         return '';
@@ -985,6 +1391,21 @@ function bsawesome_generate_favourite_action_button($product, $config_code = nul
     return ob_get_clean();
 }
 
+/**
+ * Render favourite button for product loops
+ *
+ * Context-aware button rendering for different product display contexts.
+ * Automatically detects favourites page vs regular product loops.
+ *
+ * Context Handling:
+ * - Favourites context: Shows remove button + cart action button
+ * - Regular context: Shows add/remove toggle button
+ * - Supports configuration-specific favourites
+ *
+ * Dependencies: Uses global $product and various template functions
+ *
+ * @return void Outputs HTML directly
+ */
 function bsawesome_render_loop_favourite_button() {
     global $product;
 
@@ -997,9 +1418,10 @@ function bsawesome_render_loop_favourite_button() {
 
     $config_code = bsawesome_get_current_config_code($product_id);
 
-    // Favorites context - show remove button
+    // Favorites context - show remove button AND cart button
     if ($is_favourites_context) {
         echo bsawesome_render_remove_button_template($product_id, $config_code);
+        echo bsawesome_render_cart_button_template($product, $config_code);
         return;
     }
 
@@ -1017,6 +1439,22 @@ function bsawesome_render_loop_favourite_button() {
 
     echo bsawesome_render_toggle_button_template($product_id, $config_code, $is_favourite);
 }
+
+/**
+ * Get current configuration code for product
+ *
+ * Determines the active configuration code from multiple sources with priority order.
+ * Used to maintain configuration context across different page types.
+ *
+ * Source Priority:
+ * 1. Global favourites context variable
+ * 2. URL parameters (load_config, config_code)
+ * 3. WooCommerce session data for product pages
+ * 4. Format validation (6-character alphanumeric)
+ *
+ * @param int $product_id Product ID for session-based config lookup
+ * @return string|null Configuration code or null if none found/valid
+ */
 
 function bsawesome_get_current_config_code($product_id) {
     $config_code = null;
@@ -1052,36 +1490,68 @@ function bsawesome_get_current_config_code($product_id) {
     return $config_code;
 }
 
+/**
+ * Render remove button template for favourites context
+ *
+ * Creates a remove button for products displayed in favourites listings.
+ * Positioned absolutely in top-right corner with modern styling.
+ *
+ * Features:
+ * - AJAX-based removal functionality
+ * - Bootstrap dark styling with backdrop effect
+ * - FontAwesome close icon
+ * - Accessibility attributes
+ * - Data attributes for JavaScript handling
+ *
+ * @param int $product_id Product ID for removal
+ * @param string|null $config_code Configuration code for specific removal
+ * @return string HTML for remove button
+ */
 function bsawesome_render_remove_button_template($product_id, $config_code = null) {
     ob_start();
 
     // Modern AJAX-based remove button with improved styling
-    echo '<button type="button" class="btn btn-danger btn-sm btn-favourite-remove position-absolute end-0 top-0 z-3 mt-2 me-2" ';
+    echo '<button type="button" class="backdrop-blur btn btn-sm btn-dark btn-favourite-remove position-absolute end-0 top-0 z-3 border-end-0" ';
     echo 'data-product-id="' . esc_attr($product_id) . '" ';
     if ($config_code) {
         echo 'data-config-code="' . esc_attr($config_code) . '" ';
     }
     echo 'title="' . esc_attr__('Aus Favoriten entfernen', 'bsawesome') . '" ';
     echo 'aria-label="' . esc_attr__('Aus Favoriten entfernen', 'bsawesome') . '" ';
-    echo 'style="opacity: 0.8; transition: all 0.2s ease;" ';
-    echo 'onmouseover="this.style.opacity=\'1\'; this.style.transform=\'scale(1.1)\'" ';
-    echo 'onmouseout="this.style.opacity=\'0.8\'; this.style.transform=\'scale(1)\'">';
+    echo '>';
     echo '<i class="fa-sharp fa-light fa-times"></i>';
     echo '</button>';
 
     return ob_get_clean();
 }
 
+/**
+ * Render toggle button template for product loops
+ *
+ * Creates an add/remove toggle button for products in regular product loops.
+ * Dynamically styled based on current favourite state.
+ *
+ * Button States:
+ * - Favourite: Solid heart icon with primary color
+ * - Not favourite: Light heart icon with default styling
+ * - Accessible attributes and ARIA states
+ * - Data attributes for JavaScript handling
+ *
+ * @param int $product_id Product ID for toggle action
+ * @param string|null $config_code Configuration code for specific toggle
+ * @param bool $is_favourite Current favourite state for styling
+ * @return string HTML for toggle button
+ */
 function bsawesome_render_toggle_button_template($product_id, $config_code = null, $is_favourite = false) {
     ob_start();
 
     $icon_classes = $is_favourite
-        ? 'fa-solid fa-heart text-warning'
+        ? 'fa-solid fa-heart text-danger'
         : 'fa-light fa-heart';
 
     $button_attrs = array(
         'type' => 'button',
-        'class' => 'btn btn-dark btn-favourite-loop position-absolute end-0 bottom-0 z-3',
+        'class' => 'btn btn-light btn-favourite-loop position-absolute end-0 bottom-0 z-3 border-0 backdrop-blur',
         'data-product-id' => $product_id,
         'aria-label' => esc_attr__('Toggle favourites', 'bsawesome'),
         'title' => $is_favourite
@@ -1099,8 +1569,76 @@ function bsawesome_render_toggle_button_template($product_id, $config_code = nul
         echo esc_attr($attr) . '="' . esc_attr($value) . '" ';
     }
     echo '>';
-    echo '<i class="fa-sharp ' . esc_attr($icon_classes) . '" style="--fa-beat-fade-scale: 1.25;"></i>';
+    echo '<i class="fa-sharp ' . esc_attr($icon_classes) . '"></i>';
     echo '</button>';
+
+    return ob_get_clean();
+}
+
+/**
+ * Render cart button template for favourites context
+ *
+ * Creates action buttons for adding favourited products to cart.
+ * Handles different product types and configuration states intelligently.
+ *
+ * Button Logic:
+ * - Configured products: Direct cart addition with auto_add_to_cart parameter
+ * - Configurable products: Redirect to product page for configuration
+ * - Simple products: Direct AJAX add-to-cart functionality
+ *
+ * Features:
+ * - Context-aware button styling and positioning
+ * - FontAwesome icons for visual clarity
+ * - Accessibility attributes and tooltips
+ * - URL parameter handling for configured products
+ *
+ * @param WC_Product|null $product Product object
+ * @param string|null $config_code Configuration code for direct cart addition
+ * @return string HTML for cart action button
+ */
+function bsawesome_render_cart_button_template($product, $config_code = null) {
+    if (!$product) {
+        return '';
+    }
+
+    $product_id = $product->get_id();
+    $product_url = get_permalink($product_id);
+
+    // Check if product is configurable by checking if it has configurator options
+    $is_configurable = false;
+    if (function_exists('get_product_options')) {
+        $options = get_product_options($product);
+        $is_configurable = !empty($options);
+    }
+
+    ob_start();
+
+    if ($config_code) {
+        // Product has configuration - create URL with config and auto-add to cart
+        $config_url = add_query_arg([
+            'load_config' => $config_code,
+            'auto_add_to_cart' => '1'
+        ], $product_url);
+
+        echo '<a href="' . esc_url($config_url) . '" class="btn btn-primary backdrop-blur btn-cart-action position-absolute end-0 bottom-0 z-3 border-end-0" ';
+        echo 'title="' . esc_attr__('Konfiguriertes Produkt direkt zum Warenkorb hinzufügen', 'bsawesome') . '">';
+        echo '<i class="fa-sharp fa-light fa-shopping-cart"></i>';
+        echo '</a>';
+    } elseif ($is_configurable) {
+        // Configurable product without configuration - "Konfiguration abschließen" button
+        echo '<a href="' . esc_url($product_url) . '" class="btn btn-primary backdrop-blur btn-cart-action position-absolute end-0 bottom-0 z-3 border-end-0" ';
+        echo 'title="' . esc_attr__('Produkt konfigurieren', 'bsawesome') . '">';
+        echo '<i class="fa-sharp fa-light fa-cogs"></i>';
+        echo '</a>';
+    } else {
+        // Simple product - use AJAX add-to-cart URL
+        $add_to_cart_url = wc_get_cart_url() . '?add-to-cart=' . $product_id;
+
+        echo '<a href="' . esc_url($add_to_cart_url) . '" class="btn btn-primary backdrop-blur btn-cart-action position-absolute end-0 bottom-0 z-3 border-end-0" ';
+        echo 'title="' . esc_attr__('Produkt zum Warenkorb hinzufügen', 'bsawesome') . '">';
+        echo '<i class="fa-sharp fa-light fa-shopping-cart"></i>';
+        echo '</a>';
+    }
 
     return ob_get_clean();
 }
@@ -1108,7 +1646,31 @@ function bsawesome_render_toggle_button_template($product_id, $config_code = nul
 // Hook for product loop
 add_action('after_product_thumbnail', 'bsawesome_render_loop_favourite_button', 5);
 
-// Shortcode implementation
+// =============================================================================
+// SHORTCODE & PAGE DISPLAY FUNCTIONS
+// =============================================================================
+
+/**
+ * Favourites shortcode implementation
+ *
+ * Main shortcode for displaying favourites lists on pages.
+ * Supports both authenticated users and guests with customizable options.
+ *
+ * Shortcode Attributes:
+ * - columns: Number of product columns (default: 4)
+ * - per_page: Products per page for pagination (default: 20)
+ * - show_title: Whether to show page title (default: true)
+ * - allow_guest_view: Allow guests to view their session favourites (default: true)
+ * - class: Additional CSS classes for container
+ *
+ * User Type Handling:
+ * - Logged users: Database favourites with pagination
+ * - Guests (if allowed): Session favourites with login promotion
+ * - Guests (if not allowed): Login form display
+ *
+ * @param array $atts Shortcode attributes
+ * @return string HTML output for favourites display
+ */
 function bsawesome_favourites_shortcode($atts) {
     $atts = shortcode_atts(array(
         'columns'           => 4,
@@ -1127,11 +1689,11 @@ function bsawesome_favourites_shortcode($atts) {
 
     ob_start();
 
-    // Show title if enabled
-    if (filter_var($atts['show_title'], FILTER_VALIDATE_BOOLEAN)) {
-        $title = is_user_logged_in() ? $atts['title'] : $atts['guest_title'];
-        echo '<h2 class="favourites-title">' . esc_html($title) . '</h2>';
-    }
+    // Show title if enabled // disabled for now
+    // if (filter_var($atts['show_title'], FILTER_VALIDATE_BOOLEAN)) {
+    //     $title = is_user_logged_in() ? $atts['title'] : $atts['guest_title'];
+    //     echo '<h2 class="favourites-title">' . esc_html($title) . '</h2>';
+    // }
 
     if (!is_user_logged_in()) {
         if (!$allow_guest_view) {
@@ -1182,11 +1744,8 @@ function bsawesome_display_guest_favourites($atts) {
 
     ob_start();
 
-    // Guest notice
-    echo '<div class="alert alert-info mb-4">';
-    echo '<i class="fa-sharp fa-light fa-info-circle me-2"></i>';
-    echo esc_html($atts['guest_notice']);
-    echo '</div>';
+    // Guest login promotion alert
+    echo bsawesome_render_guest_login_alert();
 
     echo bsawesome_display_favourites_content($formatted_favourites, $atts, false);
 
@@ -1275,7 +1834,7 @@ function bsawesome_display_favourites_content($favourites, $atts, $is_logged_use
 
         if ($config_code) {
             // Add configuration code display after title
-            $config_display_callback = function() use ($config_code) {
+            $config_display_callback = function () use ($config_code) {
                 echo '<div class="config-code-display mx-3 mb-2">';
                 echo '<small class="text-muted"><i class="fa-sharp fa-light fa-cogs me-1"></i>';
                 echo 'Konfig: <strong>' . esc_html($config_code) . '</strong></small>';
@@ -1284,13 +1843,13 @@ function bsawesome_display_favourites_content($favourites, $atts, $is_logged_use
             add_action('woocommerce_after_shop_loop_item_title', $config_display_callback, 5);
 
             // Modify product links to include config code
-            $link_filter_callback = function($link) use ($config_code) {
+            $link_filter_callback = function ($link) use ($config_code) {
                 return add_query_arg('load_config', $config_code, $link);
             };
             add_filter('woocommerce_loop_product_link', $link_filter_callback);
 
             // Filter price to show configured price
-            $price_filter_callback = function($price_html, $product_obj) use ($product, $config_code) {
+            $price_filter_callback = function ($price_html, $product_obj) use ($product, $config_code) {
                 if ($product_obj->get_id() === $product->get_id()) {
                     return bsawesome_get_configured_product_price_html($product, $config_code);
                 }
@@ -1303,7 +1862,7 @@ function bsawesome_display_favourites_content($favourites, $atts, $is_logged_use
         $action_button_callback = function () use ($product, $config_code) {
             echo bsawesome_generate_favourite_action_button($product, $config_code);
         };
-        add_action('woocommerce_after_shop_loop_item_title', $action_button_callback, 25);
+        // add_action('woocommerce_after_shop_loop_item_title', $action_button_callback, 25); // Disabled to avoid layout issues
 
         // Render the product
         wc_get_template_part('content', 'product');
@@ -1361,7 +1920,7 @@ function bsawesome_display_empty_favourites($type = 'empty', $is_logged_user = t
     $atts = wp_parse_args($atts, $default_atts);
 
     echo '<div class="favourites-empty alert alert-light text-center py-5 border-2 border-dashed">';
-    echo '<i class="fa-sharp fa-light fa-heart fa-4x text-muted mb-3 d-block"></i>';
+    echo '<div class="d-flex justify-content-center"><i class="fa-sharp fa-light fa-heart-crack fa-4x text-muted mb-3 d-block"></i></div>';
 
     if ($type === 'invalid') {
         echo '<h4 class="text-warning mb-3">' . __('Einige Favoriten nicht verfügbar', 'bsawesome') . '</h4>';
@@ -1376,11 +1935,11 @@ function bsawesome_display_empty_favourites($type = 'empty', $is_logged_user = t
             echo __('Jetzt Produkte entdecken', 'bsawesome');
             echo '</a>';
         } else {
-            echo '<p class="text-muted mb-4">' . esc_html($atts['login_text']) . '</p>';
-            echo '<a href="' . esc_url(wp_login_url(get_permalink())) . '" class="btn btn-primary me-2">';
+            echo '<p class="text-muted mb-4">Erstellen Sie Favoriten und speichern Sie diese dauerhaft in Ihrem Konto.</p>';
+            echo '<button class="btn btn-dark me-2 empty-guest-account-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#empty-guest-account-section" aria-expanded="false" aria-controls="empty-guest-account-section">';
             echo '<i class="fa-sharp fa-light fa-sign-in me-2"></i>';
-            echo __('Anmelden', 'bsawesome');
-            echo '</a>';
+            echo __('Anmelden / Registrieren', 'bsawesome');
+            echo '</button>';
             echo '<a href="' . esc_url(wc_get_page_permalink('shop')) . '" class="btn btn-outline-primary">';
             echo '<i class="fa-sharp fa-light fa-shopping-bag me-2"></i>';
             echo __('Ohne Anmeldung stöbern', 'bsawesome');
@@ -1389,41 +1948,242 @@ function bsawesome_display_empty_favourites($type = 'empty', $is_logged_user = t
     }
 
     echo '</div>';
+
+    // Add login form for empty guests
+    if (!$is_logged_user && $type === 'empty') {
+        echo bsawesome_render_empty_guest_login_form();
+    }
+
     return ob_get_clean();
 }
 
 function bsawesome_display_login_form($atts) {
     ob_start();
 
-    echo '<div class="favourites-login-required alert alert-warning text-center py-5">';
-    echo '<i class="fa-sharp fa-light fa-lock fa-3x text-warning mb-3 d-block"></i>';
-    echo '<h4 class="mb-3">' . __('Anmeldung erforderlich', 'bsawesome') . '</h4>';
-    echo '<p class="mb-4">' . esc_html($atts['login_text']) . '</p>';
-    echo '<a href="' . esc_url(wp_login_url(get_permalink())) . '" class="btn btn-primary">';
-    echo '<i class="fa-sharp fa-light fa-sign-in me-2"></i>';
-    echo __('Jetzt anmelden', 'bsawesome');
-    echo '</a>';
-    echo '</div>';
+    $current_url = get_permalink();
+
+    ?>
+    <div class="favourites-login-container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-primary text-white text-center">
+                        <i class="fa-sharp fa-light fa-heart fa-2x mb-2"></i>
+                        <h4 class="mb-0"><?php echo esc_html__('Favoriten ansehen', 'bsawesome'); ?></h4>
+                    </div>
+                    <div class="card-body p-4">
+                        <p class="text-center text-muted mb-4">
+                            <?php echo esc_html($atts['login_text']); ?>
+                        </p>
+
+                        <?php
+                        // Original WooCommerce My Account Forms with redirect filters
+                        if (function_exists('wc_get_template')) {
+                            // Set redirect to current favourites page
+                            add_filter('woocommerce_registration_redirect', function () use ($current_url) {
+                                return $current_url;
+                            });
+                            add_filter('woocommerce_login_redirect', function ($redirect, $user) use ($current_url) {
+                                return $current_url;
+                            }, 10, 2);
+
+                            // Load WooCommerce my-account/form-login.php template
+                            wc_get_template('myaccount/form-login.php', array(
+                                'redirect' => $current_url
+                            ));
+                        } else {
+                            echo '<div class="alert alert-warning">' . esc_html__('WooCommerce nicht verfügbar.', 'bsawesome') . '</div>';
+                        }
+                        ?>
+
+                        <!-- Benefits Section -->
+                        <div class="mt-4 pt-4 border-top">
+                            <h6 class="text-center mb-3"><?php echo esc_html__('Vorteile eines Kundenkontos', 'bsawesome'); ?></h6>
+                            <div class="row g-3">
+                                <div class="col-4 text-center">
+                                    <i class="fa-sharp fa-light fa-heart text-primary fa-2x mb-2"></i>
+                                    <small class="d-block text-muted"><?php echo esc_html__('Favoriten speichern', 'bsawesome'); ?></small>
+                                </div>
+                                <div class="col-4 text-center">
+                                    <i class="fa-sharp fa-light fa-rocket text-primary fa-2x mb-2"></i>
+                                    <small class="d-block text-muted"><?php echo esc_html__('Schneller einkaufen', 'bsawesome'); ?></small>
+                                </div>
+                                <div class="col-4 text-center">
+                                    <i class="fa-sharp fa-light fa-star text-primary fa-2x mb-2"></i>
+                                    <small class="d-block text-muted"><?php echo esc_html__('Exklusive Angebote', 'bsawesome'); ?></small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Continue as Guest -->
+                        <div class="text-center mt-4 pt-3 border-top">
+                            <p class="mb-2 text-muted">
+                                <?php echo esc_html__('Oder stöbern Sie ohne Anmeldung weiter:', 'bsawesome'); ?>
+                            </p>
+                            <a href="<?php echo esc_url(wc_get_page_permalink('shop')); ?>" class="btn btn-outline-secondary">
+                                <i class="fa-sharp fa-light fa-shopping-bag me-2"></i>
+                                <?php echo esc_html__('Produkte entdecken', 'bsawesome'); ?>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php
 
     return ob_get_clean();
 }
 
+function bsawesome_render_guest_login_alert() {
+    ob_start();
+    ?>
+    <div class="alert alert-primary mb-4" role="alert" id="guest-login-promotion">
+        <div class="row g-3 align-items-center">
+            <div class="col-auto d-flex align-items-center">
+                <i class="fa-sharp fa-light fa-user fa-2x text-primary" aria-hidden="true"></i>
+                <i class="fa-sharp fa-solid fa-heart text-primary" aria-hidden="true"></i>
+            </div>
+            <div class="col">
+                <div class="row g-3 align-items-center">
+                    <div class="col">
+                        <h6 class="alert-heading mb-1"><?php echo esc_html__('Favoriten dauerhaft speichern', 'bsawesome'); ?></h6>
+                        <p class="mb-0"><?php echo esc_html__('Melden Sie sich an oder registrieren Sie sich, damit Ihre Favoriten nicht verloren gehen.', 'bsawesome'); ?></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-auto">
+                <button class="btn btn-dark guest-account-toggle mw-100 text-truncate col-12 col-sm-auto" type="button" data-bs-toggle="collapse" data-bs-target="#guest-account-section" aria-expanded="false" aria-controls="guest-account-section">
+                    <i class="fa-thin fa-sharp fa-sign-in-alt me-2" aria-hidden="true"></i>
+                    <span><?php echo esc_html__('Anmelden / Registrieren', 'bsawesome'); ?></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Collapsible WooCommerce Mein Konto Section -->
+    <div class="collapse pb-4" id="guest-account-section">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <h5 class="card-title"><?php echo esc_html__('Anmelden oder Konto erstellen', 'bsawesome'); ?></h5>
+                    <p class="text-muted mb-0"><?php echo esc_html__('Speichern Sie Ihre Favoriten dauerhaft und greifen Sie von jedem Gerät darauf zu.', 'bsawesome'); ?></p>
+                </div>
+
+                <?php
+                // Original WooCommerce My Account Forms
+                if (function_exists('wc_get_template')) {
+                    // Set redirect to current favourites page
+                    add_filter('woocommerce_registration_redirect', function () {
+                        return is_page(1969) ? get_permalink(1969) : get_permalink();
+                    });
+                    add_filter('woocommerce_login_redirect', function ($redirect, $user) {
+                        return is_page(1969) ? get_permalink(1969) : get_permalink();
+                    }, 10, 2);
+
+                    // Load WooCommerce my-account/form-login.php template
+                    wc_get_template('myaccount/form-login.php', array(
+                        'redirect' => is_page(1969) ? get_permalink(1969) : get_permalink()
+                    ));
+                } else {
+                    echo '<div class="alert alert-warning">' . esc_html__('WooCommerce nicht verfügbar.', 'bsawesome') . '</div>';
+                }
+                ?>
+            </div>
+        </div>
+    </div>
+    <?php
+    return ob_get_clean();
+}
+
+function bsawesome_render_empty_guest_login_form() {
+    ob_start();
+    ?>
+    <div class="collapse pb-4 mt-4" id="empty-guest-account-section">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <h5 class="card-title"><?php echo esc_html__('Konto erstellen oder anmelden', 'bsawesome'); ?></h5>
+                    <p class="text-muted mb-0"><?php echo esc_html__('Speichern Sie Ihre Favoriten dauerhaft und greifen Sie von jedem Gerät darauf zu.', 'bsawesome'); ?></p>
+                </div>
+
+                <?php
+                // Original WooCommerce My Account Forms
+                if (function_exists('wc_get_template')) {
+                    // Set redirect to current page
+                    $current_url = get_permalink();
+                    add_filter('woocommerce_registration_redirect', function () use ($current_url) {
+                        return $current_url;
+                    });
+                    add_filter('woocommerce_login_redirect', function ($redirect, $user) use ($current_url) {
+                        return $current_url;
+                    }, 10, 2);
+
+                    // Load WooCommerce my-account/form-login.php template
+                    wc_get_template('myaccount/form-login.php', array(
+                        'redirect' => $current_url
+                    ));
+                } else {
+                    echo '<div class="alert alert-warning">' . esc_html__('WooCommerce nicht verfügbar.', 'bsawesome') . '</div>';
+                }
+                ?>
+            </div>
+        </div>
+    </div>
+    <?php
+    return ob_get_clean();
+}
+
 function bsawesome_display_pagination($total_pages, $current_page) {
+    if ($total_pages <= 1) {
+        return '';
+    }
+
     ob_start();
 
-    echo '<nav class="favourites-pagination mt-4" aria-label="' . esc_attr__('Favoriten Navigation', 'bsawesome') . '">';
-    echo paginate_links(array(
+    // Use WooCommerce-style pagination
+    $pagination_links = paginate_links(array(
         'base' => esc_url_raw(str_replace(999999999, '%#%', remove_query_arg('add-to-cart', get_pagenum_link(999999999, false)))),
         'format' => '',
         'current' => max(1, $current_page),
         'total' => $total_pages,
-        'prev_text' => '<i class="fa-sharp fa-light fa-chevron-left"></i> ' . __('Zurück', 'bsawesome'),
-        'next_text' => __('Weiter', 'bsawesome') . ' <i class="fa-sharp fa-light fa-chevron-right"></i>',
-        'type' => 'list',
-        'end_size' => 3,
-        'mid_size' => 3
+        'prev_text' => is_rtl() ? '<i class="fa-sharp fa-light fa-angle-right fa-sm"></i>' : '<i class="fa-sharp fa-light fa-angle-left fa-sm"></i>',
+        'next_text' => is_rtl() ? '<i class="fa-sharp fa-light fa-angle-left fa-sm"></i>' : '<i class="fa-sharp fa-light fa-angle-right fa-sm"></i>',
+        'type' => 'array',
+        'end_size' => 1,
+        'mid_size' => 2,
+        'show_all' => false,
     ));
-    echo '</nav>';
+
+    if (is_array($pagination_links)) {
+        echo '<nav class="woocommerce-pagination mb-4" aria-label="' . esc_attr__('Favoriten Navigation', 'bsawesome') . '">';
+        echo '<ul class="pagination">';
+
+        // Process each pagination link
+        foreach ($pagination_links as $link) {
+            // Skip WordPress default dots
+            if (strpos($link, 'dots') !== false) {
+                continue;
+            }
+
+            $is_prev = strpos($link, 'prev') !== false;
+            $is_next = strpos($link, 'next') !== false;
+            $is_current = strpos($link, 'current') !== false;
+
+            // Convert WP pagination classes to Bootstrap pagination classes
+            $link = str_replace('page-numbers', 'page-link', $link);
+
+            // Add Bootstrap page-item wrapper
+            if ($is_current) {
+                echo '<li class="page-item active">' . $link . '</li>';
+            } else {
+                echo '<li class="page-item">' . $link . '</li>';
+            }
+        }
+
+        echo '</ul>';
+        echo '</nav>';
+    }
 
     return ob_get_clean();
 }
@@ -1591,17 +2351,14 @@ function bsawesome_get_configured_product_price_html($product, $config_code) {
             return '<span class="price">' . wc_price($base_price) . '</span>';
         }
 
-        // Show configured pricing with breakdown
+        // Show configured pricing - only display final price to users
+        // Calculation breakdown (kept as comment): base_price + additional_price = total_price
         $base_price_html = wc_price($base_price);
         $total_price_html = wc_price($total_price);
         $additional_price_html = wc_price($additional_price);
 
-        return '<span class="configured-price">' .
-               '<span class="base-price">' . $base_price_html . '</span>' .
-               ' + <span class="additional-price">' . $additional_price_html . '</span>' .
-               ' = <span class="total-price"><strong>' . $total_price_html . '</strong></span>' .
-               '</span>';
-
+        // Display only the final total price to users
+        return '<span class="price"><strong>' . $total_price_html . '</strong></span>';
     } catch (Exception $e) {
         return '<span class="price">Price calculation error</span>';
     }
@@ -1810,5 +2567,122 @@ function bsawesome_decode_config_code($config_code, $product_id = null) {
     return false;
 }
 
+/**
+ * Auto-add configured product to cart from favourites
+ */
+function bsawesome_auto_add_configured_product_to_cart() {
+    // Only run on product pages with auto_add_to_cart parameter
+    if (!is_product() || !isset($_GET['auto_add_to_cart']) || !isset($_GET['load_config'])) {
+        return;
+    }
+
+    global $product;
+    if (!$product) {
+        return;
+    }
+
+    $config_code = sanitize_text_field($_GET['load_config']);
+    $product_id = $product->get_id();
+
+    // Decode the configuration
+    if (!function_exists('bsawesome_decode_config_code')) {
+        return;
+    }
+
+    $decoded_config = bsawesome_decode_config_code($config_code, $product_id);
+    if (!$decoded_config) {
+        return;
+    }
+
+    // Calculate pricing using the existing function
+    if (!function_exists('calculate_configured_product_price')) {
+        return;
+    }
+
+    $price_result = calculate_configured_product_price($product, $config_code);
+    if (!$price_result) {
+        return;
+    }
+
+    // Prepare cart item data with configuration
+    $cart_item_data = array(
+        'custom_configurator' => $decoded_config,
+        'unique_key' => md5(microtime() . wp_rand())
+    );
+
+    // Add pricing information
+    $cart_item_data['custom_configurator']['original_price'] = $price_result['base_price'];
+    $cart_item_data['custom_configurator']['additional_price'] = $price_result['additional_price'];
+    $cart_item_data['custom_configurator']['auto_generated_code'] = $config_code;
+
+    // Build configuration URL
+    $product_url = get_permalink($product_id);
+    if ($product_url) {
+        $config_url = add_query_arg('load_config', $config_code, $product_url);
+        $cart_item_data['custom_configurator']['config_url'] = $config_url;
+    }
+
+    // Add the product to cart with configuration data
+    $added = WC()->cart->add_to_cart($product_id, 1, 0, array(), $cart_item_data);
+
+    if ($added) {
+        // Redirect to cart page
+        wp_safe_redirect(wc_get_cart_url());
+        exit;
+    }
+}
+add_action('wp', 'bsawesome_auto_add_configured_product_to_cart', 20);
+
 // Register shortcode
 add_shortcode('bsawesome_favourites', 'bsawesome_favourites_shortcode');
+
+// Add JavaScript for form toggles
+function bsawesome_favourites_footer_scripts() {
+    ?>
+    <script>
+    // Handle login/register form toggles
+    document.addEventListener('DOMContentLoaded', function() {
+        // Main favourites page toggles
+        const mainLoginToggle = document.querySelector('[data-bs-target="#favourites-login-form"]');
+        const mainRegisterToggle = document.querySelector('[data-bs-target="#favourites-register-form"]');
+
+        if (mainLoginToggle && mainRegisterToggle) {
+            mainLoginToggle.addEventListener('click', function() {
+                this.classList.remove('btn-outline-primary');
+                this.classList.add('btn-primary');
+                mainRegisterToggle.classList.remove('btn-primary');
+                mainRegisterToggle.classList.add('btn-outline-primary');
+            });
+
+            mainRegisterToggle.addEventListener('click', function() {
+                this.classList.remove('btn-outline-primary');
+                this.classList.add('btn-primary');
+                mainLoginToggle.classList.remove('btn-primary');
+                mainLoginToggle.classList.add('btn-outline-primary');
+            });
+        }
+
+        // Guest section toggles
+        const guestLoginToggle = document.querySelector('[data-bs-target="#guest-login-form"]');
+        const guestRegisterToggle = document.querySelector('[data-bs-target="#guest-register-form"]');
+
+        if (guestLoginToggle && guestRegisterToggle) {
+            guestLoginToggle.addEventListener('click', function() {
+                this.classList.remove('btn-outline-primary');
+                this.classList.add('btn-primary');
+                guestRegisterToggle.classList.remove('btn-primary');
+                guestRegisterToggle.classList.add('btn-outline-primary');
+            });
+
+            guestRegisterToggle.addEventListener('click', function() {
+                this.classList.remove('btn-outline-primary');
+                this.classList.add('btn-primary');
+                guestLoginToggle.classList.remove('btn-primary');
+                guestLoginToggle.classList.add('btn-outline-primary');
+            });
+        }
+    });
+    </script>
+    <?php
+}
+add_action('wp_footer', 'bsawesome_favourites_footer_scripts');

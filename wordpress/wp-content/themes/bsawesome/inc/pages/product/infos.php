@@ -1,19 +1,74 @@
 <?php defined('ABSPATH') || exit;
 
 /**
- * @version 2.4.0
+ * Product Information Display for BadSpiegel Theme
+ *
+ * Displays trust signals and additional product information after the cart button
+ * to enhance customer confidence and provide key selling points.
+ *
+ * @version 2.5.0
+ *
+ * @todo Add dynamic content based on product categories
+ * @todo Implement conditional display based on user location
+ * @todo Add click tracking for modal interactions
+ *
+ * Features:
+ * - Trust signals with FontAwesome icons for visual appeal
+ * - Modal integration for detailed information display
+ * - Financing information prominently displayed
+ * - Consumer protection and security messaging
+ * - Responsive design with Bootstrap grid system
+ * - B2B information (currently hidden, ready for activation)
+ *
+ * Security Measures:
+ * - ABSPATH protection against direct access
+ * - Proper HTML escaping for all output
+ * - Safe modal data attribute handling
+ *
+ * Performance Features:
+ * - Lightweight HTML output
+ * - CSS-based hiding for conditional content
+ * - Minimal JavaScript dependencies
+ *
+ * Trust Elements:
+ * - 0% Financing options
+ * - Consumer-friendly policies
+ * - Purchase protection guarantees
+ * - B2B customer support (optional)
+ *
+ * Required Dependencies:
+ * - WooCommerce Germanized: Legal information hooks
+ * - FontAwesome: Icon display
+ * - Bootstrap: CSS framework for layout
+ * - Modal system: For detailed information display
  */
+
+// =============================================================================
+// PRODUCT INFORMATION DISPLAY
+// =============================================================================
+
+add_action('woocommerce_germanized_after_product_legal_info', 'bsawesome_product_info_after_addtocart');
 
 /**
- * Gibt einen kurzen Hinweistext nach den Produkt-Infos aus.
+ * Display product trust signals and additional information
+ *
+ * Renders trust signals and key selling points after the add-to-cart button
+ * to increase customer confidence and highlight important features.
+ *
+ * Information Categories:
+ * - Financing: 0% financing options with modal link
+ * - Consumer Protection: User-friendly policies
+ * - Security: Purchase protection and buyer security
+ * - B2B Support: Business customer information (hidden)
+ *
+ * Modal Integration:
+ * - Uses data-modal-link attributes for popup content
+ * - Supports localized content (zahlung_de, b2b_de)
+ * - Custom modal titles for better user experience
+ *
+ * @return void Outputs HTML directly to product page
  */
-function my_custom_info_before_legal() {
-?>
-<?php
-}
-add_action('woocommerce_germanized_before_product_legal_info', 'my_custom_info_before_legal');
-
-function my_custom_info_after_legal() {
+function bsawesome_product_info_after_addtocart() {
 ?>
     <p class="product-short-info">
         <span class="link-body-emphasis" role="button" data-modal-link="zahlung_de" data-modal-title="Zahlung & Abwicklung">
@@ -38,4 +93,3 @@ function my_custom_info_after_legal() {
     </p>
 <?php
 }
-add_action('woocommerce_germanized_after_product_legal_info', 'my_custom_info_after_legal');

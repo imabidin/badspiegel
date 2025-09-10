@@ -1,12 +1,10 @@
 /**
- * @version 2.3.0
+ * @version 2.5.0
  *
  * @todo Check functionality on rounded mirrors
  */
 
-import { dependenciesValuesXvalues, dependenciesValuesXcontainer } from "./../dependencies.js";
-
-import {} from "./../variables.js";
+import { dependenciesValuesXcontainer } from "./../dependencies.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   /**

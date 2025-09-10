@@ -9,8 +9,7 @@
  *
  * @package BSAwesome
  * @subpackage Setup
- * @since 1.0.0
- * @version 2.4.0
+ * @version 2.5.0
  *
  * Features:
  * - WordPress core feature support (HTML5, title tags, responsive embeds)
@@ -19,7 +18,7 @@
  * - Image size optimization and custom thumbnail creation
  * - Content width configuration for optimal display
  *
- * @note WooCommerce specific functions have been moved to woocommerce.php
+ * @todo WooCommerce specific functions have been moved to woocommerce.php
  */
 
 // =============================================================================

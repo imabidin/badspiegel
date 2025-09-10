@@ -8,7 +8,7 @@
  * specific features. Implements custom product loops, favorites system, B2B payment restrictions,
  * and enhanced sorting algorithms.
  *
- * @version 2.4.0
+ * @version 2.5.0
  *
  * @todo Review all functions and functionalities for necessity
  * @todo Optimize product loop for better marketing (e.g., badges for mirror differences)
@@ -32,7 +32,6 @@
  *
  * @package BSAwesome
  * @subpackage WooCommerce
- * @since 1.0.0
  * @author BSAwesome Team
  */
 

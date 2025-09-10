@@ -61,7 +61,11 @@ var __webpack_exports__ = {};
   \****************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _scss_checkout_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./scss/checkout.scss */ "./assets/scss/checkout.scss");
-// checkout.js
+/**
+ * Checkout
+ *
+ * @version 2.5.0
+ */
 
 // Import Scss
 

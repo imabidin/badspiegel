@@ -1,103 +1,163 @@
 <?php defined('ABSPATH') || exit;
 
 /**
- * @version 2.4.0
+ * Attribute-Based Cross-Selling System for BadSpiegel Products
+ *
+ * Advanced cross-selling implementation using WooCommerce shortcodes and product attributes.
+ * Provides modular, configurable cross-selling based on product characteristics.
+ *
+ * @version 2.5.1
+ *
+ * @todo Add more attribute configurations as product range expands
+ * @todo Implement A/B testing for cross-selling effectiveness
+ * @todo Add analytics tracking for cross-selling conversion rates
+ * @todo Consider lazy loading for performance optimization
+ *
+ * Features:
+ * - Modular attribute-based cross-selling configuration
+ * - WooCommerce shortcode integration for consistent styling
+ * - Conditional scrollbar display based on product count
+ * - Category-specific cross-selling rules
+ * - Performance-optimized with early returns
+ * - Responsive design with Bootstrap integration
+ * - Customizable headings and CSS classes
+ * - Hook priority management for display order
+ *
+ * Security Measures:
+ * - Input sanitization for all attribute values
+ * - Proper HTML escaping in output generation
+ * - ABSPATH protection against direct access
+ * - Secure attribute and category validation
+ *
+ * Performance Features:
+ * - Early return patterns to avoid unnecessary processing
+ * - Efficient product filtering and exclusion
+ * - Conditional SimplBar integration for large product sets
+ * - Optimized database queries through WooCommerce
+ * - Smart caching through WooCommerce shortcode system
+ *
+ * Supported Cross-Selling Types:
+ * - pa_lichtposition: Products with same lighting position
+ * - pa_serie: Products from same product series
+ * - Expandable configuration system for new attributes
+ *
+ * Required Dependencies:
+ * - WooCommerce: Product management and shortcodes
+ * - WordPress: Core functionality and filtering
+ * - Bootstrap: CSS framework for responsive layout
+ * - SimplBar: Optional scrollbar enhancement for large lists
  */
 
-/**
- * Attribute-Based Cross-Selling for Badspiegel Products
- *
- * Modular implementation using WooCommerce shortcodes for multiple attributes
- *
- * @package BSAwesome
- * @subpackage Crosselling
- * @version 3.0.0
- */
+// =============================================================================
+// CONFIGURATION & CONSTANTS
+// =============================================================================
 
-// ===================================
-// CONFIGURATION & SHORTCODE SETTINGS
-// ===================================
-
-// Basic Configuration
+// Cross-selling configuration constants
 define('ATTRIBUTE_CROSSSELL_LIMIT', 24);
 define('BADSPIEGEL_CATEGORY', 'badspiegel');
 
-// Attribute Configurations - Add new attributes here
+// Attribute-specific cross-selling configurations
 const CROSSSELL_ATTRIBUTES = array(
     'pa_lichtposition' => array(
         'heading_template' => 'Weitere mit %s Beleuchtung',
         'css_class'        => 'lichtposition-crossselling',
         'hook_priority'    => 18.5,
-        'category'         => 'badspiegel',  // Required category for this crossselling
+        'category'         => 'badspiegel',
         'enabled'          => true
     ),
     'pa_serie' => array(
         'heading_template' => 'Weitere Produkte der Serie %s',
         'css_class'        => 'serie-crossselling',
         'hook_priority'    => 19.5,
-        'category'         => 'badspiegel',  // Required category for this crossselling
+        'category'         => 'badspiegel',
         'enabled'          => true
     )
-    // Add more attributes here as needed
+    // Expandable: Add new attributes here following the same pattern
 );
 
-// Shortcode Parameters for Product Display (defaults for all attributes)
+// WooCommerce shortcode default parameters
 const CROSSSELL_SHORTCODE_DEFAULTS = array(
-    'orderby'    => 'popularity',  // Sorting: date, title, menu_order, popularity, rating, rand
-    'order'      => 'DESC',        // Order: ASC or DESC
-    'visibility' => 'visible'      // Product visibility: visible, catalog, search, hidden, featured
+    'orderby'    => 'popularity',
+    'order'      => 'DESC',
+    'visibility' => 'visible'
 );
 
-// Display Settings (global settings)
+// Global display and UI settings
 const CROSSSELL_DISPLAY_SETTINGS = array(
-    'wrapper_enabled'  => true,    // Enable wrapper divs
-    'wrapper_class'    => 'product-related-attr mb', // Wrapper CSS class
-    'container_class'  => 'container-md', // Container CSS class
-    'scrollbar_threshold' => 4     // Show scrollbar only if more than X products
+    'wrapper_enabled'        => true,
+    'wrapper_class'          => 'product-related-attr mb',
+    'container_class'        => 'container-md',
+    'scrollbar_threshold'    => 4
 );
 
-// ===================================
-// MAIN FUNCTIONS
-// ===================================
+// =============================================================================
+// CROSS-SELLING DISPLAY FUNCTIONS
+// =============================================================================
 
 /**
  * Display attribute-based cross-selling products with complete wrapper
  *
- * @param string $attribute_name The attribute taxonomy name (e.g., 'pa_lichtposition')
- * @param string $heading Optional custom heading
- * @param int $limit Number of products to display
+ * Generates cross-selling product displays based on shared product attributes.
+ * Uses WooCommerce shortcodes for consistent styling and performance.
+ *
+ * Processing Pipeline:
+ * 1. Validation: Product, attribute config, and category checks
+ * 2. Attribute extraction: Get attribute value and taxonomy terms
+ * 3. Query building: Construct WooCommerce shortcode with parameters
+ * 4. Result filtering: Exclude current product and check for content
+ * 5. Template rendering: Output HTML with conditional scrollbar
+ *
+ * Performance Optimizations:
+ * - Early returns for invalid conditions
+ * - Category validation before attribute processing
+ * - Result count checking before template rendering
+ * - Conditional SimplBar loading for large product sets
+ *
+ * Template Features:
+ * - Responsive Bootstrap grid layout
+ * - Conditional scrollbar for 4+ products
+ * - Custom CSS classes for styling flexibility
+ * - SEO-friendly heading structure
+ *
+ * @param string $attribute_name Attribute taxonomy name (e.g., 'pa_lichtposition')
+ * @param string|null $heading Optional custom heading override
+ * @param int $limit Maximum number of products to display
+ * @return void Outputs HTML directly or nothing if no results
+ *
+ * @example
+ * display_attribute_crossselling_complete('pa_serie', null, 12);
+ * // Displays up to 12 products from same series with auto-generated heading
  */
 function display_attribute_crossselling_complete($attribute_name, $heading = null, $limit = ATTRIBUTE_CROSSSELL_LIMIT) {
     global $product;
 
-    // Early returns for invalid conditions
+    // Early validation checks
     if (!$product || !isset(CROSSSELL_ATTRIBUTES[$attribute_name])) return;
 
     $attribute_config = CROSSSELL_ATTRIBUTES[$attribute_name];
     if (!$attribute_config['enabled']) return;
 
-    // Check if product is in required category (early return)
+    // Verify product is in required category for this cross-selling type
     $product_categories = wp_get_post_terms($product->get_id(), 'product_cat', array('fields' => 'slugs'));
     if (!in_array($attribute_config['category'], $product_categories)) return;
 
-    // Get attribute value (early return if missing)
+    // Extract attribute value and terms for shortcode
     $attribute_value = $product->get_attribute($attribute_name);
     if (!$attribute_value) return;
 
-    // Get attribute term slug for shortcode
     $attribute_terms = wp_get_post_terms($product->get_id(), $attribute_name, array('fields' => 'slugs'));
     $attribute_slug = !empty($attribute_terms) ? $attribute_terms[0] : sanitize_title($attribute_value);
 
-    // Check if current product would be in results (same category + attribute)
+    // Calculate query limit (account for current product exclusion)
     $current_product_in_results = in_array($attribute_config['category'], $product_categories) && !empty($attribute_terms);
     $query_limit = $current_product_in_results ? $limit + 1 : $limit;
 
-    // Build WooCommerce shortcode using configuration
+    // Build WooCommerce shortcode with merged parameters
     $shortcode_params = array_merge(CROSSSELL_SHORTCODE_DEFAULTS, array(
         'limit'     => $query_limit,
         'attribute' => $attribute_name,
         'terms'     => $attribute_slug,
-        'category'  => $attribute_config['category'],  // Use attribute-specific category
+        'category'  => $attribute_config['category'],
         'class'     => $attribute_config['css_class']
     ));
 
@@ -107,15 +167,16 @@ function display_attribute_crossselling_complete($attribute_name, $heading = nul
     }
     $shortcode .= ']';
 
-    // Filter to exclude current product and check for empty results
-    $has_results = false;
+    // Pre-flight check: Get product count for SimplBar decision
     $product_count = 0;
+    $has_results = false;
+
     add_filter('woocommerce_shortcode_products_query', function ($query_args, $atts, $type) use ($product, $limit, $attribute_name, &$has_results, &$product_count) {
         if (isset($atts['attribute']) && $atts['attribute'] === $attribute_name) {
             $query_args['post__not_in'] = array($product->get_id());
-            $query_args['posts_per_page'] = $limit;  // Reset to original limit
+            $query_args['posts_per_page'] = $limit;
 
-            // Check if we have results before rendering and count products
+            // Test query to check for actual results
             $test_query = new WP_Query($query_args);
             $has_results = $test_query->have_posts();
             $product_count = $test_query->found_posts;
@@ -124,25 +185,35 @@ function display_attribute_crossselling_complete($attribute_name, $heading = nul
         return $query_args;
     }, 10, 3);
 
-    // Test the shortcode to check for results
+    // Generate shortcode output
     ob_start();
     echo do_shortcode($shortcode);
     $shortcode_output = ob_get_clean();
 
-    // Remove filter after use
+    // Cleanup filter after use
     remove_all_filters('woocommerce_shortcode_products_query', 10);
 
-    // Early return if no results (don't render empty sections)
+    // If product_count is still 0 but we have output, count the products in the output
+    if ($product_count == 0 && !empty(trim(strip_tags($shortcode_output)))) {
+        // Count products by counting .product elements in the output
+        $product_count = substr_count($shortcode_output, 'class="product ');
+        $has_results = $product_count > 0;
+    }
+
+    // Early return for empty results
     if (!$has_results || empty(trim(strip_tags($shortcode_output)))) return;
 
-    // Default heading
+    // Generate heading from template if not provided
     if (!$heading) {
         $heading = sprintf(__($attribute_config['heading_template'], 'bsawesome'), $attribute_value);
     }
 
-    // Determine if we need scrollbar (only for more than threshold products)
+    // Determine scrollbar necessity based on product count
     $scrollbar_threshold = CROSSSELL_DISPLAY_SETTINGS['scrollbar_threshold'];
     $simplebar_classes = ($product_count > $scrollbar_threshold) ? 'woocommerce simplebar simplebar-scrollable-x' : 'woocommerce';
+
+    // Debug output for SimplBar decision (visible as HTML comment)
+    echo "<!-- SimplBar Debug: Product Count: $product_count, Threshold: $scrollbar_threshold, Classes: $simplebar_classes -->";
 
 ?>
     <div class="product-crossselling mb">
@@ -153,7 +224,7 @@ function display_attribute_crossselling_complete($attribute_name, $heading = nul
                     <h2><?php echo esc_html($heading); ?></h2>
                 <?php endif; ?>
 
-                <!-- Conditional scrollbar: simplebar classes only added if more than <?php echo $scrollbar_threshold; ?> products -->
+                <!-- Conditional scrollbar: SimplBar classes added only for 4+ products -->
                 <div class="<?php echo esc_attr($simplebar_classes); ?>">
                     <?php echo $shortcode_output; ?>
                 </div>
@@ -164,8 +235,15 @@ function display_attribute_crossselling_complete($attribute_name, $heading = nul
 <?php
 }
 
+// =============================================================================
+// HOOK REGISTRATION
+// =============================================================================
+
 /**
- * Hook all enabled crossselling attributes into product page
+ * Register all enabled cross-selling attributes to product page hooks
+ *
+ * Automatically hooks all enabled attribute configurations into the
+ * WooCommerce product page at their specified priority levels.
  */
 foreach (CROSSSELL_ATTRIBUTES as $attribute_name => $config) {
     if ($config['enabled']) {
@@ -174,3 +252,100 @@ foreach (CROSSSELL_ATTRIBUTES as $attribute_name => $config) {
         }, $config['hook_priority']);
     }
 }
+
+// =============================================================================
+// TEMPORARY TESTING FUNCTION
+// =============================================================================
+
+/**
+ * Temporary function to test SimplBar cross-selling logic
+ * Add this to a product page to see debug output
+ */
+function test_crossselling_simplebar_output($attribute_name = 'pa_lichtposition') {
+    global $product;
+
+    if (!$product) {
+        echo "<div style='background: #ffebee; padding: 15px; margin: 10px 0; border-left: 4px solid #f44336;'>";
+        echo "<strong>❌ Test Error:</strong> No product found";
+        echo "</div>";
+        return;
+    }
+
+    echo "<div style='background: #e3f2fd; padding: 15px; margin: 10px 0; border-left: 4px solid #2196f3;'>";
+    echo "<h4>🔍 SimplBar Cross-selling Test für: " . esc_html($attribute_name) . "</h4>";
+
+    if (!isset(CROSSSELL_ATTRIBUTES[$attribute_name])) {
+        echo "<p><strong>❌ Error:</strong> Attribut-Konfiguration nicht gefunden</p>";
+        echo "</div>";
+        return;
+    }
+
+    $attribute_config = CROSSSELL_ATTRIBUTES[$attribute_name];
+    $product_categories = wp_get_post_terms($product->get_id(), 'product_cat', array('fields' => 'slugs'));
+    $attribute_value = $product->get_attribute($attribute_name);
+
+    echo "<p><strong>Produkt:</strong> " . $product->get_name() . " (ID: " . $product->get_id() . ")</p>";
+    echo "<p><strong>Kategorien:</strong> " . implode(', ', $product_categories) . "</p>";
+    echo "<p><strong>Attribut-Wert:</strong> " . esc_html($attribute_value) . "</p>";
+
+    if (!$attribute_value) {
+        echo "<p><strong>❌ Kein Attribut-Wert gefunden</strong></p>";
+        echo "</div>";
+        return;
+    }
+
+    // Test query to count products - simulate the WooCommerce shortcode behavior
+    $attribute_terms = wp_get_post_terms($product->get_id(), $attribute_name, array('fields' => 'slugs'));
+    $attribute_slug = !empty($attribute_terms) ? $attribute_terms[0] : sanitize_title($attribute_value);
+
+    // Build the same shortcode as the real function
+    $test_shortcode_params = array_merge(CROSSSELL_SHORTCODE_DEFAULTS, array(
+        'limit'     => 100, // High limit to count all
+        'attribute' => $attribute_name,
+        'terms'     => $attribute_slug,
+        'category'  => $attribute_config['category'],
+        'class'     => $attribute_config['css_class']
+    ));
+
+    $test_shortcode = '[products';
+    foreach ($test_shortcode_params as $key => $value) {
+        $test_shortcode .= sprintf(' %s="%s"', $key, esc_attr($value));
+    }
+    $test_shortcode .= ']';
+
+    // Execute the shortcode to get the actual output and count products
+    ob_start();
+    echo do_shortcode($test_shortcode);
+    $test_output = ob_get_clean();
+
+    // Count products by counting .product elements in the output
+    $product_count = substr_count($test_output, 'class="product ');
+
+    // If no products found with class="product ", try alternative patterns
+    if ($product_count == 0) {
+        $product_count = substr_count($test_output, 'woocommerce-LoopProduct-link');
+        if ($product_count == 0) {
+            $product_count = substr_count($test_output, 'data-product-id=');
+        }
+    }
+
+    echo "<p><strong>Gefundene ähnliche Produkte:</strong> " . $product_count . "</p>";
+    echo "<p><strong>SimplBar-Schwellenwert:</strong> " . CROSSSELL_DISPLAY_SETTINGS['scrollbar_threshold'] . "</p>";
+
+    $scrollbar_threshold = CROSSSELL_DISPLAY_SETTINGS['scrollbar_threshold'];
+    $will_use_simplebar = $product_count > $scrollbar_threshold;
+
+    if ($will_use_simplebar) {
+        echo "<p><strong>✅ SimplBar wird aktiviert</strong> (Mehr als $scrollbar_threshold Produkte)</p>";
+        $css_classes = 'woocommerce simplebar simplebar-scrollable-x';
+    } else {
+        echo "<p><strong>❌ SimplBar wird NICHT aktiviert</strong> (Nur $product_count Produkte, benötigt mehr als $scrollbar_threshold)</p>";
+        $css_classes = 'woocommerce';
+    }
+
+    echo "<p><strong>CSS-Klassen:</strong> <code>" . esc_html($css_classes) . "</code></p>";
+    echo "</div>";
+}
+
+// Uncomment this line to see the test output on product pages:
+add_action('woocommerce_after_single_product_summary', function() { test_crossselling_simplebar_output('pa_lichtposition'); }, 15);

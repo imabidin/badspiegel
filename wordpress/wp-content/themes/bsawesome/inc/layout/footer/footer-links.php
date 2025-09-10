@@ -1,14 +1,67 @@
 <?php defined('ABSPATH') || exit;
 
 /**
- * Display the footer links.
+ * Footer Navigation Links Display Component
  *
- * @version 2.4.0
+ * Renders organized footer navigation with categorized links for products,
+ * company information, shop features, and customer support sections.
  *
- * @todo Add more links if needed
+ * @version 2.5.0
+ *
+ * Features:
+ * - Categorized footer navigation with four main sections
+ * - Responsive grid layout with mobile and desktop optimizations
+ * - Internationalized link labels and category titles
+ * - Dark theme styling with consistent link colors
+ * - Base64 URL encoding for potential analytics integration
+ * - Accessibility-compliant ARIA labels and semantic markup
+ * - Output buffering for clean HTML generation
+ *
+ * Security Measures:
+ * - ABSPATH protection against direct access
+ * - Comprehensive output escaping with esc_url(), esc_attr(), esc_html()
+ * - Safe URL processing with WordPress sanitization functions
+ * - Base64 encoding for URL data attributes
+ *
+ * Performance Features:
+ * - Efficient array-based link structure for easy maintenance
+ * - Output buffering for optimized HTML rendering
+ * - Minimal DOM manipulation with clean nested loops
+ * - Bootstrap responsive utilities for mobile optimization
+ *
+ * Dependencies:
+ * - WordPress internationalization functions
+ * - Bootstrap 5 responsive grid and utility classes
+ * - WordPress URL and text escaping functions
+ * - PHP base64 encoding for URL attributes
+ *
+ * @todo Add additional links as business requirements evolve
+ */
+
+/**
+ * Display organized footer navigation links
+ *
+ * Renders categorized footer links in a responsive grid layout with
+ * four main categories: Popular products, Company info, Shop features,
+ * and Customer support. Each category displays as a separate column
+ * with uppercase heading and list of relevant links.
+ *
+ * Link Categories:
+ * - Beliebt: Popular product categories (mirrors, cabinets, etc.)
+ * - Unternehmen: Company/legal pages (terms, privacy, imprint)
+ * - Shop: E-commerce features (account, cart, B2B, checkout)
+ * - Support: Customer assistance (installation, security, payment, shipping)
+ *
+ * Responsive Behavior:
+ * - Mobile: 2-column grid with compact spacing
+ * - Desktop: Horizontal layout with centered alignment
+ * - Dark theme with light link colors for visibility
+ *
+ * @return void Outputs complete footer navigation HTML
  */
 function site_links()
 {
+    // Define organized footer navigation structure
     $footer_links = [
         __('Beliebt', 'imabi') => [
             [
@@ -86,7 +139,7 @@ function site_links()
 
     ob_start();
 ?>
-    <!-- site-links -->
+    <!-- Footer navigation links with categorized sections -->
     <div class="text-bg-dark">
         <div class="container-md pt">
             <div class="row g-3 g-md-5 justify-content-md-center">
@@ -99,6 +152,7 @@ function site_links()
                             <?php foreach ($links as $link): ?>
                                 <li>
                                     <?php
+                                    // Base64 encode URL for potential analytics integration
                                     $encoded_url = esc_attr(base64_encode($link['url']));
                                     ?>
                                     <a

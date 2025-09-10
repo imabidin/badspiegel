@@ -1,4 +1,8 @@
-// cart.js
+/**
+ * Cart
+ *
+ * @version 2.5.0
+ */
 
 // Import Scss
 import "./scss/cart.scss";

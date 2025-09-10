@@ -7,7 +7,7 @@
  * Bootstrap dark button positioned bottom-right with Font Awesome icon and
  * accessibility attributes. Excluded from checkout/cart to prevent purchase flow disruption.
  *
- * @version 2.4.0
+ * @version 2.5.0
  *
  * @todo Add chat availability status indicators
  * @todo Implement chat button customization options
@@ -20,7 +20,6 @@
  * - Font Awesome message icon with accessibility attributes
  * - Excluded from checkout/cart pages
  *
- * @since 1.0.0
  * @return void Outputs HTML chat button and Zendesk script
  */
 

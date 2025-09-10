@@ -2466,7 +2466,7 @@ function get_all_product_options()
             'group' => 'korpus',
             'label' => 'Dekor Korpus',
             'description' => 'Erfahren Sie mehr über Dekore.',
-            'description_file' => 'dekor-korpus.html',
+            'description_file' => 'dekor/korpus.html',
             'applies_to' => array(
                 'products'           => array(),
                 'categories'         => array('spiegelschraenke', 'unterschraenke', 'hochschraenke', 'lowboards', 'sideboards'),
@@ -2977,7 +2977,7 @@ function get_all_product_options()
             'group' => 'korpus',
             'label' => 'Dekor Front',
             'description' => 'Erfahren Sie mehr über Dekore.',
-            'description_file' => 'dekor-front.html',
+            'description_file' => 'dekor/front.html',
             'applies_to' => array(
                 'products'           => array(),
                 'categories'         => array('unterschraenke', 'hochschraenke', 'lowboards', 'sideboards'),
@@ -3488,7 +3488,7 @@ function get_all_product_options()
             'group' => 'korpus',
             'label' => 'Dekor',
             'description' => 'Erfahren Sie mehr über Dekore.',
-            'description_file' => 'dekor-muster.html',
+            'description_file' => 'dekor/muster.html',
             'applies_to' => array(
                 'products'           => array(2400),
                 'categories'         => array(),
@@ -7570,6 +7570,40 @@ function get_all_product_options()
                 'excluded_attributes'=> array(),
             ),
             'options' => array(
+                'kunststoff_lichtdurchlaessig' => array(
+                    'key' => 'kunststoff_lichtdurchlaessig',
+                    'price' => 0,
+                    'label' => 'Kunststoff lichtdurchlässig',
+                    'order' => 4,
+                ),
+                'kunststoff_weiss' => array(
+                    'key' => 'kunststoff_weiss',
+                    'price' => 0,
+                    'label' => 'Kunststoff weiß',
+                    'order' => 5,
+                    'image' => '1653',
+                ),
+                'aluminium_matt' => array(
+                    'key' => 'aluminium_matt',
+                    'price' => 0,
+                    'label' => 'Aluminium matt',
+                    'order' => 6,
+                    'image' => '1605',
+                ),
+                'aluminium_gebuersted' => array(
+                    'key' => 'aluminium_gebuersted',
+                    'price' => 0,
+                    'label' => 'Aluminium gebürsted',
+                    'order' => 7,
+                    'image' => '1583',
+                ),
+                'aluminium_schwarz' => array(
+                    'key' => 'aluminium_schwarz',
+                    'price' => 10,
+                    'label' => 'Aluminium schwarz',
+                    'order' => 8,
+                    'image' => '1627',
+                ),
             ),
         ),
         'verblendung_auraeffekt' => array(

@@ -9,8 +9,7 @@
  *
  * @package BSAwesome
  * @subpackage Loop
- * @since 1.0.0
- * @version 2.4.0
+ * @version 2.5.0
  *
  * Features:
  * - Admin meta box for product hover image selection
@@ -29,8 +28,6 @@
 
 /**
  * Add hover image meta box to product edit screen
- *
- * @since 1.0.0
  */
 add_action('add_meta_boxes', 'bsawesome_add_hover_image_meta_box');
 function bsawesome_add_hover_image_meta_box() {
@@ -47,7 +44,6 @@ function bsawesome_add_hover_image_meta_box() {
 /**
  * Hover image meta box callback function
  *
- * @since 1.0.0
  * @param WP_Post $post The current post object
  */
 function bsawesome_hover_image_meta_box_callback($post) {
@@ -100,7 +96,6 @@ function bsawesome_hover_image_meta_box_callback($post) {
 /**
  * Save hover image meta box data
  *
- * @since 1.0.0
  * @param int $post_id Product post ID
  */
 add_action('save_post', 'bsawesome_save_hover_image_meta_box');
@@ -139,7 +134,6 @@ function bsawesome_save_hover_image_meta_box($post_id) {
 /**
  * Add JavaScript for media uploader in admin
  *
- * @since 1.0.0
  */
 add_action('admin_footer', 'bsawesome_hover_image_script');
 function bsawesome_hover_image_script() {
@@ -255,7 +249,6 @@ function bsawesome_hover_image_script() {
 /**
  * Get hover image ID for a product
  *
- * @since 1.0.0
  * @param int|WC_Product|null $product Product ID or product object
  * @return int|false Hover image attachment ID or false if not set
  */
@@ -313,7 +306,6 @@ function bsawesome_get_product_hover_image_id($product = null) {
 /**
  * Get hover image HTML for a product
  *
- * @since 1.0.0
  * @param int|WC_Product|null $product Product ID or product object
  * @param string $size Image size
  * @param array $attr Additional image attributes
@@ -341,7 +333,6 @@ function bsawesome_get_product_hover_image_html($product = null, $size = 'woocom
 /**
  * Check if product has hover image
  *
- * @since 1.0.0
  * @param int|WC_Product|null $product Product ID or product object
  * @return bool
  */
@@ -357,7 +348,6 @@ function bsawesome_product_has_hover_image($product = null) {
 /**
  * Custom product loop layout with Bootstrap card styling
  *
- * @since 1.0.0
  */
 add_action('woocommerce_before_shop_loop_item', 'wrapping_loop_start', 1);
 add_action('woocommerce_after_shop_loop_item', 'wrapping_loop_end', 20);
@@ -365,7 +355,6 @@ add_action('woocommerce_after_shop_loop_item', 'wrapping_loop_end', 20);
 /**
  * Start wrapper for product loop items
  *
- * @since 1.0.0
  */
 function wrapping_loop_start() {
     echo '<div class="card border-0 h-100 shadow-sm">';
@@ -374,7 +363,6 @@ function wrapping_loop_start() {
 /**
  * End wrapper for product loop items
  *
- * @since 1.0.0
  */
 function wrapping_loop_end() {
     echo '</div>';
@@ -383,7 +371,6 @@ function wrapping_loop_end() {
 /**
  * Override default WooCommerce product link wrapper (open)
  *
- * @since 1.0.0
  */
 function woocommerce_template_loop_product_link_open() {
     // Remove default WooCommerce product link wrapper
@@ -392,7 +379,6 @@ function woocommerce_template_loop_product_link_open() {
 /**
  * Custom product thumbnail implementation with hover image support
  *
- * @since 1.0.0
  */
 function woocommerce_template_loop_product_thumbnail() {
     global $product;
@@ -421,7 +407,6 @@ function woocommerce_template_loop_product_thumbnail() {
 /**
  * Custom product title implementation for product loops
  *
- * @since 1.0.0
  */
 function woocommerce_template_loop_product_title() {
     global $product;
@@ -435,7 +420,6 @@ function woocommerce_template_loop_product_title() {
 /**
  * Override default WooCommerce product link wrapper (close)
  *
- * @since 1.0.0
  */
 function woocommerce_template_loop_product_link_close() {
     // Remove default WooCommerce product link close wrapper
@@ -449,6 +433,6 @@ function woocommerce_template_loop_product_link_close() {
  * Favorites button integration is now handled by favourites.php
  * The button is hooked into 'after_product_thumbnail' action
  *
- * @since 2.4.0
+ * @since 2.5.0
  * @see favourites.php - bsawesome_render_loop_favourite_button()
  */

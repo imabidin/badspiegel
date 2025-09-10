@@ -134,6 +134,7 @@ services:
   wp-cli:
     image: wordpress:cli-php8.2
     container_name: wp-cli
+    restart: unless-stopped
     depends_on:
       - db
       - wordpress
@@ -156,6 +157,7 @@ services:
       context: .
       dockerfile: Dockerfile.python
     container_name: badspiegel-python
+    restart: unless-stopped
     depends_on:
       - db
     environment:

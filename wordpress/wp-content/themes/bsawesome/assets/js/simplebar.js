@@ -82,10 +82,48 @@ const CLASSES = {
  * Automatically finds and processes all elements with "simplebar" class
  */
 document.addEventListener("DOMContentLoaded", () => {
+  initAllSimpleBars();
+});
+
+/**
+ * Initialize SimpleBar for all containers (can be called multiple times)
+ * Useful for dynamically loaded content like AJAX-loaded cross-selling sections
+ */
+function initAllSimpleBars() {
   document.querySelectorAll(".simplebar").forEach((container) => {
     initCustomScroll(container);
   });
+}
+
+/**
+ * Observe for new SimplBar containers added dynamically
+ * Uses MutationObserver to detect new .simplebar elements
+ */
+const observer = new MutationObserver((mutations) => {
+  mutations.forEach((mutation) => {
+    mutation.addedNodes.forEach((node) => {
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        // Check if the added node itself has simplebar class
+        if (node.classList && node.classList.contains('simplebar')) {
+          initCustomScroll(node);
+        }
+        // Check for simplebar elements within the added node
+        node.querySelectorAll && node.querySelectorAll('.simplebar').forEach((container) => {
+          initCustomScroll(container);
+        });
+      }
+    });
+  });
 });
+
+// Start observing for dynamically added content
+observer.observe(document.body, {
+  childList: true,
+  subtree: true
+});
+
+// Global function for manual initialization (useful for AJAX callbacks)
+window.initSimpleBars = initAllSimpleBars;
 
 // =============================================================================
 // CORE FUNCTIONS
@@ -93,7 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 /**
  * Main initialization function for custom scrollbar with navigation buttons
- * 
+ *
  * @param {HTMLElement} container - The container element to enhance with SimpleBar
  * @description
  * 1. Prevents duplicate initialization with data attribute check
@@ -122,7 +160,7 @@ function initCustomScroll(container) {
 
 /**
  * Creates and configures scroll navigation buttons for a SimpleBar container
- * 
+ *
  * @param {HTMLElement} container - The container element
  * @param {SimpleBar} simpleBarInstance - The SimpleBar instance
  * @description
@@ -144,11 +182,11 @@ function addScrollButtons(container, simpleBarInstance) {
     "beforeend",
     `
         <div class="${CLASSES.BTN_GROUP}">
-            <button class="btn ${CLASSES.BTN_COLOR} simplebar-btn ${CLASSES.BTN_LEFT} ${CLASSES.FADE}" 
+            <button class="btn ${CLASSES.BTN_COLOR} simplebar-btn ${CLASSES.BTN_LEFT} ${CLASSES.FADE}"
                     aria-label="Nach links scrollen">
                 <i class="fa-sharp fa-light fa-chevron-left"></i>
             </button>
-            <button class="btn ${CLASSES.BTN_COLOR} simplebar-btn ${CLASSES.BTN_RIGHT} ${CLASSES.FADE}" 
+            <button class="btn ${CLASSES.BTN_COLOR} simplebar-btn ${CLASSES.BTN_RIGHT} ${CLASSES.FADE}"
                     aria-label="Nach rechts scrollen">
                 <i class="fa-sharp fa-light fa-chevron-right"></i>
             </button>
@@ -217,7 +255,7 @@ function addScrollButtons(container, simpleBarInstance) {
 
   // Bind scroll event with debounced handler
   scrollElement.addEventListener("scroll", updateVisibility);
-  
+
   // Observe container size changes for responsive updates
   new ResizeObserver(updateVisibility).observe(container);
 
@@ -231,7 +269,7 @@ function addScrollButtons(container, simpleBarInstance) {
 
 /**
  * Updates scroll button visibility based on current scroll position
- * 
+ *
  * @param {HTMLElement} container - The container element
  * @param {HTMLElement} scrollElement - The scrollable element from SimpleBar
  * @description
@@ -257,7 +295,7 @@ function updateButtonVisibility(container, scrollElement) {
 
 /**
  * Creates a debounced version of a function for performance optimization
- * 
+ *
  * @param {Function} func - The function to debounce
  * @param {number} delay - Delay in milliseconds (default: 100ms)
  * @returns {Function} Debounced function that delays execution
@@ -265,7 +303,7 @@ function updateButtonVisibility(container, scrollElement) {
  * Prevents excessive function calls during rapid events (like scroll/resize).
  * Only executes the function after the specified delay has passed since
  * the last call, improving performance and preventing UI jank.
- * 
+ *
  * @example
  * const debouncedScroll = debounce(handleScroll, 100);
  * element.addEventListener('scroll', debouncedScroll);

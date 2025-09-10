@@ -1,16 +1,62 @@
 <?php defined('ABSPATH') || exit;
 
 /**
- * Get payment methods array
+ * Payment Methods Display and Icon Management System
  *
- * @version 2.4.0
- * @return array Array of payment method configurations
+ * Comprehensive payment method icon display system with flexible configuration
+ * options and responsive layout for e-commerce payment transparency.
  *
- * @todo Add Klarna back when available
+ * @version 2.5.0
+ *
+ * Features:
+ * - Comprehensive payment method icon management system
+ * - Flexible HTML generation with customizable options
+ * - Responsive payment icon display with consistent sizing
+ * - Support for various payment providers (PayPal, Apple Pay, Google Pay, etc.)
+ * - Legacy function support for backward compatibility
+ * - Custom styling options for individual payment methods
+ * - Internationalized payment method names
+ *
+ * Security Measures:
+ * - ABSPATH protection against direct access
+ * - Comprehensive output escaping with esc_attr(), esc_url()
+ * - Safe array processing with wp_parse_args()
+ * - Input validation for custom options and configurations
+ *
+ * Performance Features:
+ * - Efficient array-based payment method configuration
+ * - Lazy loading attributes for payment method images
+ * - Minimal HTML generation with clean iteration
+ * - Configurable upload paths for flexible asset management
+ *
+ * Dependencies:
+ * - WordPress wp_parse_args() for option handling
+ * - WordPress internationalization functions
+ * - Bootstrap 5 for responsive grid layout
+ * - Payment method icon assets in uploads directory
+ *
+ * @todo Add Klarna payment method when service becomes available
+ */
+
+// =============================================================================
+// PAYMENT METHOD CONFIGURATION
+// =============================================================================
+
+/**
+ * Get complete payment methods configuration array
+ *
+ * Returns structured array of all supported payment methods with their
+ * respective icon filenames, alt text, and optional custom styling.
+ * Supports easy addition/removal of payment providers.
+ *
+ * @return array Comprehensive payment method configuration array
+ *
+ * @todo Add Klarna configuration when service integration is completed
  */
 function get_payment_methods()
 {
     return array(
+        // Klarna temporarily disabled - uncomment when available
         // array(
         //     'src'  => 'payments-klarna.png',
         //     'alt'  => __('Klarna', 'bsawesome'),
@@ -46,24 +92,34 @@ function get_payment_methods()
         array(
             'src'  => 'payments-visa.png',
             'alt'  => __('Visa', 'bsawesome'),
-            'style' => 'padding: 6px;'
+            'style' => 'padding: 6px;' // Custom spacing for Visa logo
         ),
     );
 }
 
+// =============================================================================
+// HTML GENERATION FUNCTIONS
+// =============================================================================
+
 /**
- * Get payment icons HTML with flexible options
+ * Generate payment icons HTML with flexible configuration options
  *
- * @param array $options Configuration options
- *                      - height: Custom height (default: '30px')
- *                      - wrapper_class: CSS class for wrapper div (default: 'col-auto')
- *                      - img_class: Additional CSS classes for images (default: '')
- *                      - upload_path: Custom upload path (default: '/wp-content/uploads/')
- * @return string HTML string with payment icons
+ * Creates customizable HTML output for payment method icons with support
+ * for various styling options, wrapper classes, and upload paths.
+ * Provides comprehensive flexibility for different display contexts.
+ *
+ * Configuration Options:
+ * - height: Custom icon height (default: '30px')
+ * - wrapper_class: CSS class for individual icon wrappers (default: 'col-auto')
+ * - img_class: Additional CSS classes for images (default: '')
+ * - upload_path: Custom upload directory path (default: '/wp-content/uploads/')
+ *
+ * @param array $options Configuration options for HTML generation
+ * @return string Complete HTML string with payment method icons
  */
 function get_payment_icons_html($options = array())
 {
-    // Default options
+    // Define default configuration options
     $defaults = array(
         'height' => '30px',
         'wrapper_class' => 'col-auto',
@@ -71,10 +127,12 @@ function get_payment_icons_html($options = array())
         'upload_path' => '/wp-content/uploads/'
     );
 
+    // Merge user options with defaults
     $options = wp_parse_args($options, $defaults);
     $payment_methods = get_payment_methods();
     $html = '';
 
+    // Generate HTML for each payment method
     foreach ($payment_methods as $method) {
         $custom_style = isset($method['style']) ? $method['style'] : '';
         $img_classes = !empty($options['img_class']) ? ' class="' . esc_attr($options['img_class']) . '"' : '';
@@ -94,24 +152,36 @@ function get_payment_icons_html($options = array())
 }
 
 /**
- * Render payment method icons directly (legacy support)
+ * Render payment icons directly with custom height (legacy support)
  *
- * @param string $custom_height Height for the images (default: '30px')
+ * Provides backward compatibility for existing implementations while
+ * leveraging the new flexible HTML generation system internally.
+ *
+ * @param string $custom_height Custom height for payment icons (default: '30px')
+ * @return void Outputs payment icons HTML directly
  */
 function render_payment_icons($custom_height = '30px')
 {
     echo get_payment_icons_html(array('height' => $custom_height));
 }
 
+// =============================================================================
+// MAIN DISPLAY FUNCTION
+// =============================================================================
+
 /**
- * Display the site payments (original function, now using new helpers)
+ * Display payment methods in footer with responsive layout
  *
- * @imabi: Ready for launch 02/25
+ * Renders complete payment method section using the flexible HTML generation
+ * system with default configuration optimized for footer display.
+ * Provides dark theme styling and responsive grid layout.
+ *
+ * @return void Outputs complete payment methods section HTML
  */
 function site_payments()
 {
 ?>
-    <!-- site-payments -->
+    <!-- Payment methods display with responsive grid layout -->
     <div class="text-bg-dark">
         <div class="container-md pt">
             <div class="row g-3 justify-content-md-center">

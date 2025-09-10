@@ -34,10 +34,11 @@
  * - $posted_value: Current/submitted value for auto-loading
  * - $modal_link: Link for description modal
  *
- * @version 2.4.0
+ * @version 2.5.0
  * @package configurator
  *
  * @todo Imrove description icons, image zoom icons, etc.
+ * @todo Imrove Offcanvas header
  */
 
 /**
@@ -137,7 +138,7 @@ if (!empty($posted_value)) {
                         <input type="search"
                             enterkeyhint="search"
                             class="option-search-input form-control ps-5"
-                            placeholder="<?= esc_attr__('Optionen suchen...', 'my-product-configurator'); ?>"
+                            placeholder="<?= esc_attr__('Optionen suchen...', 'bsawesome'); ?>"
                             data-target="#<?= esc_attr($offcanvas_id); ?> .values-group, #<?= esc_attr($dropdown_id); ?> .values-group">
                         <!-- Clear Search Button -->
                         <button class="option-search-input-reset btn btn-link position-absolute end-0 top-50 translate-middle-y me-md-3" type="button">
@@ -184,7 +185,7 @@ if (!empty($posted_value)) {
                                         id="<?= esc_attr($value_none_id); ?>"
                                         value=""
                                         data-value=""
-                                        data-label="<?= !empty($option_placeholder) ? esc_attr($option_placeholder) : esc_attr__('Keins', 'my-product-configurator'); ?>"
+                                        data-label="<?= !empty($option_placeholder) ? esc_attr($option_placeholder) : esc_attr__('Keins', 'bsawesome'); ?>"
                                         data-price="0"
                                         <?php echo $none_is_selected ? 'checked' : ''; ?>>
                                 </span>
@@ -200,7 +201,7 @@ if (!empty($posted_value)) {
                                 <?php endif; ?>
                                 <!-- Label Text -->
                                 <span class="col text-truncate text-start">
-                                    <?= !empty($option_placeholder) ? esc_html($option_placeholder) : esc_html__('Keins', 'my-product-configurator'); ?>
+                                    <?= !empty($option_placeholder) ? esc_html($option_placeholder) : esc_html__('Keins', 'bsawesome'); ?>
                                 </span>
                                 <!-- Placeholder Description Button -->
                                 <?php if (!empty($option_placeholder_description_file)):
@@ -216,7 +217,7 @@ if (!empty($posted_value)) {
                                             class="btn btn-link text-hind p-2 ms-1"
                                             style="--bs-bt-color: var(--bs-body-color);--bs-btn-hover-bg: transparent; --bs-btn-active-bg: transparent;"
                                             data-modal-link="<?= esc_attr($placeholder_modal_link); ?>"
-                                            data-modal-title="<?= !empty($option_placeholder) ? esc_attr($option_placeholder) : esc_attr__('Keins', 'my-product-configurator'); ?>">
+                                            data-modal-title="<?= !empty($option_placeholder) ? esc_attr($option_placeholder) : esc_attr__('Keins', 'bsawesome'); ?>">
                                             <i class="fa-sharp fa-lg mt-1 fa-light fa-circle-question" aria-hidden="true"></i>
                                         </button>
                                     </span>
@@ -235,11 +236,11 @@ if (!empty($posted_value)) {
                                     <span class="col-auto">
                                         <button type="button"
                                             data-bs-tooltip="true"
-                                            title="<?= esc_attr__('Bild vergrößern', 'my-product-configurator'); ?>"
+                                            title="<?= esc_attr__('Bild vergrößern', 'bsawesome'); ?>"
                                             class="btn btn-link text-hind p-2 ms-1"
                                             style="--bs-bt-color: var(--bs-body-color);--bs-btn-hover-bg: transparent; --bs-btn-active-bg: transparent;"
                                             data-modal-image="<?= esc_attr($option_placeholder_image); ?>"
-                                            data-modal-title="<?= !empty($option_placeholder) ? esc_attr($option_placeholder) : esc_attr__('Keins', 'my-product-configurator'); ?>">
+                                            data-modal-title="<?= !empty($option_placeholder) ? esc_attr($option_placeholder) : esc_attr__('Keins', 'bsawesome'); ?>">
                                             <i class="fa-sharp fa-lg mt-1 fa-light fa-image" aria-hidden="true"></i>
                                         </button>
                                     </span>
@@ -348,7 +349,7 @@ if (!empty($posted_value)) {
                                     <span class="col-auto">
                                         <button type="button"
                                             data-bs-tooltip="true"
-                                            title="<?= esc_attr__('Bild vergrößern', 'my-product-configurator'); ?>"
+                                            title="<?= esc_attr__('Bild vergrößern', 'bsawesome'); ?>"
                                             class="btn btn-link text-hind p-2 ms-1"
                                             style="--bs-bt-color: var(--bs-body-color);--bs-btn-hover-bg: transparent; --bs-btn-active-bg: transparent;"
                                             data-modal-image="<?= esc_attr($sub_image); ?>"

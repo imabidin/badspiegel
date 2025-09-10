@@ -25,7 +25,7 @@
  * Simple debug flag - set to false for production
  * @type {boolean}
  */
-export const DEBUG_MODE = true;
+export const DEBUG_MODE = false;
 
 // ====================== PRODUCT TYPE DETECTION ======================
 

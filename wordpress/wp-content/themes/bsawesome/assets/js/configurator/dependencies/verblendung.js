@@ -1,15 +1,15 @@
 /**
- * @version 2.3.0
+ * @version 2.5.0
  */
 
-import { dependenciesValuesXvalues, dependenciesValuesXcontainer } from "./../dependencies.js";
+import { dependenciesValuesXcontainer } from "./../dependencies.js";
 
 import { isRund } from "./../variables.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-  //*********************************/
-  // Dependencies: Values X Container
-  //*********************************/
+  /**
+   * Values X Container
+   */
   if (!isRund) {
     dependenciesValuesXcontainer(
       "verblendung",

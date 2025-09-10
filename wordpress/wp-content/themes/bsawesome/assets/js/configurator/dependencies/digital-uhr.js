@@ -1,10 +1,10 @@
 /**
- * @version 2.3.0
+ * @version 2.5.0
+ *
+ * @note Seems to be final, no further changes if not needed
  */
 
-import { dependenciesValuesXvalues, dependenciesValuesXcontainer } from "./../dependencies.js";
-
-import { isRund, isLOR, isLR, isOU } from "./../variables.js";
+import { dependenciesValuesXcontainer } from "./../dependencies.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   /**

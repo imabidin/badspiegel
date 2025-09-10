@@ -10,7 +10,7 @@
  * @package BSAwesome
  * @subpackage Assets
  * @since 1.0.0
- * @version 2.4.0
+ * @version 2.5.0
  */
 
 /**
@@ -22,8 +22,7 @@
  * @since 1.0.0
  * @return void
  */
-function assets()
-{
+function assets() {
     // Get theme directory paths for asset loading
     $stylesheet_directory = get_stylesheet_directory();
     $stylesheet_directory_uri = get_stylesheet_directory_uri();
@@ -60,8 +59,9 @@ function assets()
             'modalFileNonce' => wp_create_nonce('modal_content_nonce'),
             'favouriteNonce' => wp_create_nonce('favourite_nonce'),
             'productId'      => get_the_ID(),
-            'is_user_logged_in' => is_user_logged_in(),
-            'user_id' => get_current_user_id()
+            'user_id'        => get_current_user_id(),
+            // Favourites data (includes its own nonce, ajaxUrl, isLoggedIn)
+            'favourites'     => bsawesome_get_favourites_localization_data()
         )
     );
 

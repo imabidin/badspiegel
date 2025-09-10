@@ -10,7 +10,7 @@
  * @package BSAwesome
  * @subpackage Templates
  * @since 1.0.0
- * @version 2.4.0
+ * @version 2.5.0
  *
  * @link https://developer.wordpress.org/themes/basics/template-files/#template-partials
  */

@@ -2,8 +2,8 @@
  * Product Configurator - Summary Module
  *
  * This module handles the dynamic summary display for the product configurator.
- * It collects selected options from various input types (text inputs, radio buttons,
- * price matrices), calculates total prices, and provides interactive navigation
+ * It collects selected options from various input types (text inputs, radio buttons),
+ * calculates total prices, and provides interactive navigation
  * back to specific configuration steps.
  *
  * Features:
@@ -12,24 +12,34 @@
  * - Interactive navigation: click summary items to jump to configurator steps
  * - Print and save configuration as code or direct link
  * - Price calculation and formatted display for all options and total
- * - Support for nested/child option groups and price matrices
+ * - Support for nested/child option groups
  * - Accessible focus and keyboard navigation for summary and controls
  * - Tooltip initialization for summary actions
  * - Graceful error handling for print/save actions
  *
- * @version 2.3.0
+ * @version 2.5.0
  * @package Configurator
  */
 
 import { optionGroups } from "./variables";
 import { toNumber, formatPrice, getProductTitle, getProductPrice } from "./functions";
 
+// ========================================
+// CONFIGURATION & CONSTANTS
+// ========================================
+
+/**
+ * DEBUG MODE CONFIGURATION
+ * Set to true to enable debug logging, false to disable all debug output
+ */
+const DEBUG_MODE = false;
+
 /**
  * Configuration flags for summary module behavior
  * @type {Object}
  */
 const summaryConfig = {
-  enableClickNavigation: false, // Set to true to enable clicking summary items to navigate to steps
+  enableClickNavigation: false, // Set to true to enable clicking summary list items to navigate to steps
 };
 
 /**
@@ -42,26 +52,13 @@ let summaryCache = {
 };
 
 /**
- * Hide tooltip for a specific element
- * @param {HTMLElement} element - The element with tooltip to hide
- */
-function hideTooltip(element) {
-  if (window.bootstrap?.Tooltip) {
-    const tooltip = bootstrap.Tooltip.getInstance(element);
-    if (tooltip) {
-      tooltip.hide();
-    }
-  }
-}
-
-/**
  * Set up click interactions for summary items
  */
 function setupSummaryInteractions() {
   const summary = document.getElementById("productConfiguratorSummary");
   if (!summary) return;
 
-  // Only add click navigation if enabled in config
+  // Set up list item click navigation if enabled in config
   if (summaryConfig.enableClickNavigation) {
     summary.addEventListener("click", e => {
       const item = e.target.closest(".list-group-item[data-step]");
@@ -79,17 +76,17 @@ function setupSummaryInteractions() {
     printBtn.addEventListener("click", e => {
       e.preventDefault();
       e.stopPropagation();
-      hideTooltip(printBtn);
+      window.hideTooltip(printBtn);
       printSummary();
     });
   }
   // Set up save button
-  const saveBtn = summary.querySelector(".btn-save-summary");
+  const saveBtn = summary.querySelector(".btn-favourite-summary");
   if (saveBtn) {
     saveBtn.addEventListener("click", e => {
       e.preventDefault();
       e.stopPropagation();
-      hideTooltip(saveBtn);
+      window.hideTooltip(saveBtn);
       saveSummaryConfig();
     });
   }
@@ -100,7 +97,7 @@ function setupSummaryInteractions() {
     editBtn.addEventListener("click", e => {
       e.preventDefault();
       e.stopPropagation();
-      hideTooltip(editBtn);
+      window.hideTooltip(editBtn);
       const step = editBtn.dataset.step;
       navigateToCarouselStep(step);
     });
@@ -192,7 +189,7 @@ function scrollToCarouselStep(step, key) {
     if (controlEl && controlType) {
       applyFocusWithTabindex(controlEl, `cleanup${controlType.charAt(0).toUpperCase() + controlType.slice(1)}`);
     } else {
-      console.warn("[Summary] No focusable control element found for key:", key);
+      debugWarn("No focusable control element found for key:", key);
     }
   };
 
@@ -216,7 +213,7 @@ function scrollToCarouselStep(step, key) {
  *
  * @param {string} step - The carousel step number to navigate to
  */
-function navigateToCarouselStep(step) {
+function navigateToCarouselStep(step) { // maybe move to carousel.js?
   if (!step) return;
 
   const carouselEl = document.getElementById("productConfiguratorCarousel");
@@ -342,7 +339,7 @@ async function printSummary() {
       `;
     }
   } catch (error) {
-    console.warn("Code generation failed for print:", error);
+    debugWarn("Code generation failed for print:", error);
     codeSection = `
       <div class="print-code-section">
         <h3>Konfiguration als Code</h3>
@@ -366,10 +363,10 @@ async function printSummary() {
       <title>Badspiegel.de</title>
       <style>
         body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.5; font-size: 14px; }
-        .print-code-section, 
+        .print-code-section,
         .print-header { margin-bottom: 16px; border-bottom: 2px solid #dee2e6; }
         .print-header p { margin: 0; margin-bottom: 16px; }
-        
+
         /* Bootstrap-like grid system - modified for print */
         .row { display: block; margin: 0; }
         .list-group-item .row { display: flex; align-items: center; margin: 0; }
@@ -377,18 +374,18 @@ async function printSummary() {
         .col { flex: 1; padding: 0 4px; }
         .col-auto { flex: 0 0 auto; padding: 0 4px; }
         .col-12 { width: 100%; display: block; margin-bottom: 15px; }
-        
+
         /* Container layouts */
         .list-group-body { display: block !important; }
         .list-group-body > .row { display: block; }
-        
+
         /* List styles */
         .list-group { list-style: none; margin: 0; padding: 0; }
         .list-group-item { padding: 12px 16px; border: 1px solid #ddd; margin-bottom: 1px; background: #fff; display: block; }
         .list-group-flush .list-group-item { border-left: 0; border-right: 0; border-top: 0; }
         .list-group-flush .list-group-item:first-child { border-top: 0; }
         .list-group-flush .list-group-item:last-child { border-bottom: 0; }
-        
+
         /* Typography */
         .fw-medium { font-weight: 500; }
         .text-end { text-align: right; }
@@ -396,7 +393,7 @@ async function printSummary() {
         .small { font-size: 0.875rem; }
         .text-muted { color: #6c757d; }
         .text-truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        
+
         /* Headers */
         h5, h6 { font-weight: 500; }
         h2 { font-size: 1.5rem; margin: 16px 0 16px 0; }
@@ -410,25 +407,25 @@ async function printSummary() {
         .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
         .pt-3 { padding-top: 1rem; }
         .p-3 { padding: 1rem; }
-        
+
         /* Background and borders */
         .border-secondary-subtle { border-color: #dee2e6; }
         .border-top { border-top: 1px solid #dee2e6; }
-        
+
         /* Layout improvements */
         .d-flex { display: flex; }
         .justify-content-between { justify-content: space-between; }
         .align-items-center { align-items: center; }
-        
+
         /* Hide print button in print */
         .btn-print-summary,
-        .btn-save-summary,
+        .btn-favourite-summary,
         .btn-edit-group,
         div.vr.border-secondary-subtle { display: none; }
 
         /* Price styling */
         .product-price { font-weight: 600; }
-        
+
         /* Page breaks */
         @media print {
           .print-header { page-break-after: avoid; }
@@ -496,7 +493,7 @@ function lockHeartButton(heartButton) {
       try {
         existingTooltip.dispose();
       } catch (error) {
-        console.warn("Error disposing existing tooltip:", error);
+        debugWarn("Error disposing existing tooltip:", error);
       }
     }
   }
@@ -527,7 +524,7 @@ function lockHeartButton(heartButton) {
         placement: "top",
       });
     } catch (error) {
-      console.warn("Error creating wrapper tooltip:", error);
+      debugWarn("Error creating wrapper tooltip:", error);
     }
   }
 
@@ -552,7 +549,7 @@ function lockHeartButton(heartButton) {
           try {
             wrapperTooltip.dispose();
           } catch (error) {
-            console.warn("Error disposing wrapper tooltip:", error);
+            debugWarn("Error disposing wrapper tooltip:", error);
           }
         }
 
@@ -569,7 +566,7 @@ function lockHeartButton(heartButton) {
                 title: originalTitle || "Konfiguration speichern",
               });
             } catch (error) {
-              console.warn("Error recreating button tooltip:", error);
+              debugWarn("Error recreating button tooltip:", error);
             }
           }
         }, 100);
@@ -601,35 +598,42 @@ function lockHeartButton(heartButton) {
 
 /**
  * Save the configuration using the same functionality as the main save button
+ * Enhanced with bidirectional synchronization and code reuse
  */
 async function saveSummaryConfig() {
-  const saveBtn = document.querySelector(".btn-save-summary");
+  const saveBtn = document.querySelector(".btn-favourite-summary");
   if (!saveBtn) return;
 
   // Check if ConfiguratorSave module is available
   if (!window.ConfiguratorSave || !window.ConfiguratorSave.saveConfiguration) {
-    console.error("ConfiguratorSave module not available");
+    debugError("ConfiguratorSave module not available");
     alert("Speichern-Funktion nicht verfügbar. Bitte verwenden Sie den Hauptspeichern-Button.");
     return;
   }
 
   try {
-    // // Get current config code if available
-    // const configData = window.ConfiguratorSave.gatherConfigData(false);
-    // const configCode = configData && configData.code ? configData.code : null;
+    // Check if there's already a saved configuration we can reuse
+    const lastSaved = window.ConfiguratorSave.lastSavedConfig();
 
-    // // Add config_code as data attribute to the button for the AJAX call
-    // if (configCode) {
-    //     saveBtn.setAttribute('data-config-code', configCode);
-    // }
+    if (lastSaved && lastSaved.code) {
+      debugLog("🔄 Found existing saved configuration, checking if current config matches...");
+    }
 
-    // Lock the heart button IMMEDIATELY after successful save (when modal opens)
+    // Use the enhanced save function which includes intelligent code reuse
     const result = await window.ConfiguratorSave.saveConfiguration($(saveBtn), "icon");
 
-    // Lock immediately after save is successful (modal is opening)
+    // The saveConfiguration function now handles all button synchronization automatically
+    // But we still lock the heart button for immediate visual feedback
     lockHeartButton(saveBtn);
+
+    // Log result for debugging
+    if (result.reused) {
+      debugLog("♻️ Reused existing configuration code:", result.code);
+    } else {
+      debugLog("✨ Generated new configuration code:", result.code);
+    }
   } catch (error) {
-    console.error("Error saving configuration from summary:", error);
+    debugError("Error saving configuration from summary:", error);
 
     // User-friendly error handling
     let errorMessage = "Fehler beim Speichern der Konfiguration.";
@@ -688,7 +692,7 @@ export function buildSummary({ productTitle, productPrice, optionsSummary }) {
     <div class="d-flex justify-content-between align-items-center bg-secondary-subtle px-3 pt-3 pe-2 mb-0">
       <h5 class="lh-base me-auto mb-0">Zusammenfassung</h5>
       <div class="d-none vr border-secondary-subtle"></div>
-      <button type="button" class="btn-save-summary btn btn-sm btn-link link-body-emphasis" style="--bs-btn-disabled-opacity: 1;--bs-btn-disabled-color: var(--bs-dark)" title="Konfiguration speichern" data-bs-tooltip-md="true">
+      <button type="button" class="btn-favourite-summary btn btn-sm btn-link link-body-emphasis" style="--bs-btn-disabled-opacity: 1;--bs-btn-disabled-color: var(--bs-dark)" title="Konfiguration speichern" data-bs-tooltip-md="true">
         <i class="fa-sharp fa-fw fa-light fa-heart"></i>
         <span class="visually-hidden">Speichern</span>
       </button>
@@ -723,20 +727,17 @@ export function buildSummary({ productTitle, productPrice, optionsSummary }) {
     groupedOptions.forEach(group => {
       if (group.options.length === 0) return;
 
-      const showGroupLabel = group.options.some(opt => !opt.isPricematrix);
       htmlOutput += `<div class="col-12 px-0">`;
 
-      if (showGroupLabel) {
-        htmlOutput += `
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <h6 class="mb-0">${group.label}</h6>
-            <button type="button" class="btn-edit-group btn btn-sm btn-link link-body-emphasis" data-step="${group.step}" title="Bearbeiten" data-bs-tooltip-md="true">
-              <i class="fa-sharp fa-fw fa-light fa-edit"></i>
-              <span class="visually-hidden">Bearbeiten</span>
-            </button>
-          </div>
-        `;
-      }
+      htmlOutput += `
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h6 class="mb-0">${group.label}</h6>
+          <button type="button" class="btn-edit-group btn btn-sm btn-link link-body-emphasis" data-step="${group.step}" title="Bearbeiten" data-bs-tooltip-md="true">
+            <i class="fa-sharp fa-fw fa-light fa-edit"></i>
+            <span class="visually-hidden">Bearbeiten</span>
+          </button>
+        </div>
+      `;
 
       htmlOutput += `<ul class="list-group list-group-flush">`;
 
@@ -744,22 +745,19 @@ export function buildSummary({ productTitle, productPrice, optionsSummary }) {
         const {
           key,
           label,
-          pricematrixLabel,
-          pricematrixPrice,
           inputValue,
           inputPrice,
           radioLabel,
           radioPrice,
           isChild,
           stepNumber,
-          isPricematrix,
         } = item;
 
-        const value = radioLabel || inputValue || pricematrixLabel || "";
-        const price = radioPrice || inputPrice || pricematrixPrice || 0;
+        const value = radioLabel || inputValue || "";
+        const price = radioPrice || inputPrice || 0;
         const formattedPrice = formatPrice(price) || "-";
-        const childClass = isChild ? " text-muted small" : ""; // Conditional classes and attributes for pricematrix items
-        const isClickable = !isPricematrix && summaryConfig.enableClickNavigation;
+        const childClass = isChild ? " text-muted small" : "";
+        const isClickable = summaryConfig.enableClickNavigation;
         const actionClass = isClickable ? " list-group-item-action" : "";
         const interactiveAttrs = isClickable
           ? `
@@ -814,19 +812,6 @@ export function updateSummary() {
       groupOrder: parseInt(group.dataset.order, 10) || 999,
     };
 
-    // Check for pricematrix selections (pxbh = price x by height matrix)
-    const pricematrixEl = group.querySelector('.option-price[class*="pxbh"]');
-    let pricematrixLabel = null;
-    let pricematrixPrice = null;
-    let isPricematrix = false;
-
-    if (pricematrixEl && pricematrixEl.value.trim() !== "") {
-      const selected = pricematrixEl.selectedOptions[0];
-      pricematrixLabel = selected?.dataset?.label?.trim() || "";
-      pricematrixPrice = selected?.dataset?.price || null;
-      isPricematrix = true;
-    }
-
     // Check for text input values
     const inputEl = group.querySelector(".option-input");
     let inputValue = null;
@@ -849,19 +834,16 @@ export function updateSummary() {
 
     const stepNumber = group.closest(".carousel-item")?.dataset?.step || null;
 
-    if (inputValue || radioLabel || pricematrixLabel) {
+    if (inputValue || radioLabel) {
       optionsSummary.push({
         key,
         label,
-        pricematrixLabel,
-        pricematrixPrice,
         inputValue,
         inputPrice,
         radioLabel,
         radioPrice,
         isChild,
         stepNumber,
-        isPricematrix,
         groupData: groupDataForSummary,
       });
     }
@@ -883,16 +865,28 @@ export function updateSummary() {
   const configuratorSummary = document.getElementById("productConfiguratorSummary");
   if (configuratorSummary) {
     configuratorSummary.innerHTML = summaryHtml;
-    setupSummaryInteractions(); // Re-establishes click handlers and initializes tooltips
+    setupSummaryInteractions(); // Need to re-setup interactions after summary update
   }
 
   // Calculate and display total price
   const extraPrice = optionsSummary.reduce(
-    (acc, item) => acc + toNumber(item.inputPrice) + toNumber(item.radioPrice) + toNumber(item.pricematrixPrice),
+    (acc, item) => acc + toNumber(item.inputPrice) + toNumber(item.radioPrice),
     0
   );
   const totalPrice = productPrice + extraPrice;
   const totalPriceFormatted = formatPrice(totalPrice.toFixed(2));
+
+  debugLog("Price calculation:", {
+    productPrice,
+    extraPrice,
+    totalPrice,
+    totalPriceFormatted,
+    optionsSummary: optionsSummary.map(item => ({
+      label: item.label,
+      inputPrice: item.inputPrice,
+      radioPrice: item.radioPrice,
+    })),
+  });
 
   const totalHtml = `
     <p class="bg-secondary-subtle border-top border-secondary-subtle text-end px-3 py-2 mb-0 fs-5">
@@ -917,3 +911,34 @@ export function updateSummary() {
 document.addEventListener("DOMContentLoaded", () => {
   setupSummaryInteractions();
 });
+
+// ========================================
+// DEBUG HELPER FUNCTIONS
+// ========================================
+
+/**
+ * Debug helper functions that respect DEBUG_MODE setting
+ */
+const debugLog = (...args) => {
+  if (DEBUG_MODE) {
+    console.debug("[Summary]", ...args);
+  }
+};
+
+const debugWarn = (...args) => {
+  if (DEBUG_MODE) {
+    console.warn("[Summary]", ...args);
+  }
+};
+
+const debugInfo = (...args) => {
+  if (DEBUG_MODE) {
+    console.info("[Summary]", ...args);
+  }
+};
+
+const debugError = (...args) => {
+  if (DEBUG_MODE) {
+    console.error("[Summary]", ...args);
+  }
+};

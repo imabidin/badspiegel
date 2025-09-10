@@ -1,254 +1,260 @@
-<!-- SECTION: Kontakt-Seite (B2C) -->
-<!-- CACHE TEST: Version <?= date('H:i:s') ?> -->
+<?php
+
+/**
+ * @version 2.5.0
+ */
+
+?>
+
 <section class="py-5 bg-light">
     <div class="container">
 
-      <!-- Überschrift & Einleitung -->
-      <div class="row mb-4">
-        <div class="col-12 text-center">
-          <h1 class="mb-3">Kontakt & Hilfe</h1>
-          <p class="lead mb-0">
-            Sie haben Fragen zu unseren Produkten, Ihrer Bestellung oder benötigen Hilfe?
-            Schreiben Sie uns oder werfen Sie einen Blick in unsere FAQs!
-         </p>
-       </div>
-     </div>
+        <?php // Überschrift & Einleitung
+        ?>
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <h1 class="mb-3">Kontakt & Hilfe</h1>
+                <p class="lead mb-0">
+                    Sie haben Fragen zu unseren Produkten, Ihrer Bestellung oder benötigen Hilfe?
+                    Schreiben Sie uns oder werfen Sie einen Blick in unsere FAQs!
+                </p>
+            </div>
+        </div>
 
-      <!-- Kontaktformular -->
-      <div class="row justify-content-center mb-5">
-        <div class="col-12 col-md-8 col-lg-6">
-          <div class="card shadow-sm">
-            <div class="card-body p-4">
-              <h2 class="card-title h4 text-center mb-4">Kontaktformular</h2>
-              <!-- Beispiel-Kontaktformular; in WP ggf. per Plugin realisieren -->
-              <form>
-                <div class="mb-3">
-                  <label for="name" class="form-label">Name *</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="name"
-                    placeholder="Max Mustermann"
-                    required
-                  >
-               </div>
-                <div class="mb-3">
-                  <label for="email" class="form-label">E-Mail-Adresse *</label>
-                  <input
-                    type="email"
-                    class="form-control"
-                    id="email"
-                    placeholder="name@beispiel.de"
-                    required
-                  >
-               </div>
-                <div class="mb-3">
-                  <label for="subject" class="form-label">Betreff</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="subject"
-                    placeholder="Kurze Zusammenfassung Ihres Anliegens"
-                  >
-               </div>
-                <div class="mb-3">
-                  <label for="message" class="form-label">Nachricht *</label>
-                  <textarea
-                    class="form-control"
-                    id="message"
-                    rows="5"
-                    placeholder="Beschreiben Sie hier Ihr Anliegen..."
-                    required
-                  ></textarea>
-               </div>
-                <button type="submit" class="btn btn-primary w-100">
-                  Nachricht senden
-               </button>
-             </form>
-           </div>
-         </div>
-       </div>
-     </div>
+        <?php // Überschrift & Einleitung
+        ?>
+        <div class="row justify-content-center mb-5">
+            <div class="col-12 col-md-8 col-lg-6">
+                <div class="card shadow-sm">
+                    <div class="card-body p-4">
+                        <h2 class="card-title h4 text-center mb-4">Kontaktformular</h2>
+                        <!-- Beispiel-Kontaktformular; in WP ggf. per Plugin realisieren -->
+                        <form>
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Name *</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="name"
+                                    placeholder="Max Mustermann"
+                                    required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">E-Mail-Adresse *</label>
+                                <input
+                                    type="email"
+                                    class="form-control"
+                                    id="email"
+                                    placeholder="name@beispiel.de"
+                                    required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="subject" class="form-label">Betreff</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="subject"
+                                    placeholder="Kurze Zusammenfassung Ihres Anliegens">
+                            </div>
+                            <div class="mb-3">
+                                <label for="message" class="form-label">Nachricht *</label>
+                                <textarea
+                                    class="form-control"
+                                    id="message"
+                                    rows="5"
+                                    placeholder="Beschreiben Sie hier Ihr Anliegen..."
+                                    required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">
+                                Nachricht senden
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-      <!-- FAQ-Bereich -->
-      <div class="row">
-        <div class="col-12">
-          <h2 class="mb-4">Häufige Fragen (FAQ)</h2>
-          <p class="text-muted">
-            Finden Sie hier Antworten auf die gängigsten Fragen zu unseren Produkten,
-            Ihrer Bestellung, Bezahlung, Versand und mehr. Sollte Ihre Frage nicht
-            beantwortet werden, rufen Sie uns an (Mo–Fr: 8:00–16:00 Uhr) oder schreiben
-            Sie uns eine E-Mail.
-         </p>
-       </div>
-     </div>
+        <?php // FAQ-Bereich
+        ?>
+        <div class="row">
+            <div class="col-12">
+                <h2 class="mb-4">Häufige Fragen (FAQ)</h2>
+                <p class="text-muted">
+                    Finden Sie hier Antworten auf die gängigsten Fragen zu unseren Produkten,
+                    Ihrer Bestellung, Bezahlung, Versand und mehr. Sollte Ihre Frage nicht
+                    beantwortet werden, rufen Sie uns an (Mo–Fr: 8:00–16:00 Uhr) oder schreiben
+                    Sie uns eine E-Mail.
+                </p>
+            </div>
+        </div>
 
-      <!-- FAQ Kategorisierte Darstellung (optional) -->
-      <div class="row g-4 mt-3">
-        <!-- Kategorie: Produkte -->
-        <div class="col-12 col-lg-4">
-          <div class="bg-white p-3 shadow-sm h-100">
-            <h3 class="h5 mb-3">Produkte</h3>
-            <p class="fw-bold mb-1">Kann ich telefonisch bestellen?</p>
-            <p>
-              Leider nein. Aufgrund der Vielzahl an Optionen (Wunschmaße, Ausstattung)
-              bestellen Sie bitte ausschließlich über die Webseite und überprüfen Sie
-              sorgfältig die Angaben in der Auftragsbestätigung.
-           </p>
+        <?php // FAQ Kategorisierte Darstellung (optional)
+        ?>
+        <div class="row g-4 mt-3">
+            <?php // Kategorie: Produkte
+            ?>
+            <div class="col-12 col-lg-4">
+                <div class="bg-white p-3 shadow-sm h-100">
+                    <h3 class="h5 mb-3">Produkte</h3>
+                    <p class="fw-bold mb-1">Kann ich telefonisch bestellen?</p>
+                    <p>
+                        Leider nein. Aufgrund der Vielzahl an Optionen (Wunschmaße, Ausstattung)
+                        bestellen Sie bitte ausschließlich über die Webseite und überprüfen Sie
+                        sorgfältig die Angaben in der Auftragsbestätigung.
+                    </p>
 
-            <p class="fw-bold mb-1">Kann ich persönlich vor Ort bestellen?</p>
-            <p>
-              Ja, das ist möglich. Unsere Öffnungszeiten sind Mo–Fr von 8:00–15:00 Uhr.
-              Dort können Sie auch direkt (z. B. per EC-Karte) bezahlen und
-              auf Wunsch Ihre Ware abholen.
-           </p>
+                    <p class="fw-bold mb-1">Kann ich persönlich vor Ort bestellen?</p>
+                    <p>
+                        Ja, das ist möglich. Unsere Öffnungszeiten sind Mo–Fr von 8:00–15:00 Uhr.
+                        Dort können Sie auch direkt (z. B. per EC-Karte) bezahlen und
+                        auf Wunsch Ihre Ware abholen.
+                    </p>
 
-            <p class="fw-bold mb-1">Ich habe keine Bestellbestätigung erhalten. Was tun?</p>
-            <p>
-              Bitte prüfen Sie zuerst Ihren Spam-Ordner. Sollten Sie dort nichts finden,
-              kontaktieren Sie uns telefonisch oder per E-Mail, damit wir den Eingang
-              Ihrer Bestellung überprüfen können.
-           </p>
-         </div>
-       </div>
+                    <p class="fw-bold mb-1">Ich habe keine Bestellbestätigung erhalten. Was tun?</p>
+                    <p>
+                        Bitte prüfen Sie zuerst Ihren Spam-Ordner. Sollten Sie dort nichts finden,
+                        kontaktieren Sie uns telefonisch oder per E-Mail, damit wir den Eingang
+                        Ihrer Bestellung überprüfen können.
+                    </p>
+                </div>
+            </div>
+            <?php // Kategorie: Bezahlung
+            ?>
+            <div class="col-12 col-lg-4">
+                <div class="bg-white p-3 shadow-sm h-100">
+                    <h3 class="h5 mb-3">Bezahlung</h3>
+                    <p class="fw-bold mb-1">Wie kann ich bezahlen?</p>
+                    <p>
+                        Alle Informationen zu unseren Zahlungsarten finden Sie auf
+                        unserer <a href="#" class="text-primary">Zahlungsarten-Seite</a>.
+                    </p>
 
-        <!-- Kategorie: Bezahlung -->
-        <div class="col-12 col-lg-4">
-          <div class="bg-white p-3 shadow-sm h-100">
-            <h3 class="h5 mb-3">Bezahlung</h3>
-            <p class="fw-bold mb-1">Wie kann ich bezahlen?</p>
-            <p>
-              Alle Informationen zu unseren Zahlungsarten finden Sie auf
-              unserer <a href="#" class="text-primary">Zahlungsarten-Seite</a>.
-           </p>
+                    <p class="fw-bold mb-1">
+                        Warum habe ich zwei Rechnungen erhalten (Klarna & Spiegel21)?
+                    </p>
+                    <p>
+                        Wenn Sie per Klarna Rechnungskauf bestellt haben, zahlen Sie
+                        ausschließlich an Klarna. Die Rechnung von uns dient lediglich
+                        zu Ihrer Dokumentation. Bitte überweisen Sie NICHT an uns,
+                        sonst kann es zu Mahngebühren kommen.
+                    </p>
 
-            <p class="fw-bold mb-1">
-              Warum habe ich zwei Rechnungen erhalten (Klarna & Spiegel21)?
-           </p>
-            <p>
-              Wenn Sie per Klarna Rechnungskauf bestellt haben, zahlen Sie
-              ausschließlich an Klarna. Die Rechnung von uns dient lediglich
-              zu Ihrer Dokumentation. Bitte überweisen Sie NICHT an uns,
-              sonst kann es zu Mahngebühren kommen.
-           </p>
+                    <p class="fw-bold mb-1">Sofortüberweisung heißt jetzt Klarna Sofort, was bedeutet das?</p>
+                    <p>
+                        Die Sofort AG wurde von Klarna übernommen. Die Funktion ist
+                        jedoch identisch. Bei Ihrer Bestellung wählen Sie einfach
+                        "Klarna sofort" als Zahlart.
+                    </p>
+                </div>
+            </div>
 
-            <p class="fw-bold mb-1">Sofortüberweisung heißt jetzt Klarna Sofort, was bedeutet das?</p>
-            <p>
-              Die Sofort AG wurde von Klarna übernommen. Die Funktion ist
-              jedoch identisch. Bei Ihrer Bestellung wählen Sie einfach
-              "Klarna sofort" als Zahlart.
-           </p>
-         </div>
-       </div>
+            <?php // Kategorie: Versand & Lieferung
+            ?>
+            <div class="col-12 col-lg-4">
+                <div class="bg-white p-3 shadow-sm h-100">
+                    <h3 class="h5 mb-3">Versand & Lieferung</h3>
+                    <p class="fw-bold mb-1">Wie hoch sind die Versandkosten?</p>
+                    <p>
+                        Der Versand von Spiegeln innerhalb Deutschlands ist
+                        in der Regel kostenlos (außer TV-Spiegel). Für Lieferungen
+                        in die EU berechnen wir 49,99 € inkl. MwSt. Bei Sperrgut
+                        (Spiegelschränke, TV-Spiegel) fällt ein Aufschlag an.
+                    </p>
 
-        <!-- Kategorie: Versand & Lieferung -->
-        <div class="col-12 col-lg-4">
-          <div class="bg-white p-3 shadow-sm h-100">
-            <h3 class="h5 mb-3">Versand & Lieferung</h3>
-            <p class="fw-bold mb-1">Wie hoch sind die Versandkosten?</p>
-            <p>
-              Der Versand von Spiegeln innerhalb Deutschlands ist
-              in der Regel kostenlos (außer TV-Spiegel). Für Lieferungen
-              in die EU berechnen wir 49,99 € inkl. MwSt. Bei Sperrgut
-              (Spiegelschränke, TV-Spiegel) fällt ein Aufschlag an.
-           </p>
+                    <p class="fw-bold mb-1">Was bedeutet Lieferung "frei Bordsteinkante"?</p>
+                    <p>
+                        Die Ware wird bis zum Bürgersteig bzw. zur Grundstücksgrenze
+                        angeliefert. Achten Sie bei schweren Spiegeln darauf, eine zweite
+                        Person zum Tragen einzuplanen.
+                    </p>
 
-            <p class="fw-bold mb-1">Was bedeutet Lieferung "frei Bordsteinkante"?</p>
-            <p>
-              Die Ware wird bis zum Bürgersteig bzw. zur Grundstücksgrenze
-              angeliefert. Achten Sie bei schweren Spiegeln darauf, eine zweite
-              Person zum Tragen einzuplanen.
-           </p>
+                    <p class="fw-bold mb-1">Liefern Sie auch an Packstationen?</p>
+                    <p>
+                        Leider nein, das ist aufgrund der Größe und Handhabung der
+                        Spiegel und Spiegelschränke nicht möglich.
+                    </p>
+                </div>
+            </div>
+        </div>
 
-            <p class="fw-bold mb-1">Liefern Sie auch an Packstationen?</p>
-            <p>
-              Leider nein, das ist aufgrund der Größe und Handhabung der
-              Spiegel und Spiegelschränke nicht möglich.
-           </p>
-         </div>
-       </div>
-     </div>
+        <?php // Mehr FAQs / Accordion / Weitere Kategorien (optional)
+        ?>
 
-      <!-- Mehr FAQs / Accordion / Weitere Kategorien (optional) -->
-      <div class="row mt-5">
-        <div class="col-12">
-          <h3 class="mb-3">Weitere Themen</h3>
-          <!-- Beispiel-Accordion (optional) -->
-          <div class="accordion" id="faqAccordion">
-            <!-- 1. Thema -->
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="headingOne">
-                <button
-                  class="accordion-button collapsed"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#collapseOne"
-                  aria-expanded="false"
-                  aria-controls="collapseOne"
-                >
-                  Montage & Reklamationen
-               </button>
-             </h2>
-              <div
-                id="collapseOne"
-                class="accordion-collapse collapse"
-                aria-labelledby="headingOne"
-                data-bs-parent="#faqAccordion"
-              >
-                <div class="accordion-body">
-                  <p class="fw-bold mb-1">Wann sollte ich einen Monteur beauftragen?</p>
-                  <p>
-                    Wir empfehlen, erst nach Erhalt und Prüfung der Ware. So stellen Sie sicher,
-                    dass alle Artikel vollständig und unbeschädigt sind, bevor Sie den Handwerker
-                    bestellen.
-                 </p>
-                  <p class="fw-bold mb-1">Was tun bei Transportschäden?</p>
-                  <p>
-                    Bitte dokumentieren Sie den Schaden (Foto, Bestellnummer) und melden Sie sich
-                    umgehend bei uns per E-Mail an reklamation@beispiel.de.
-                 </p>
-               </div>
-             </div>
-           </div>
+        <div class="row mt-5">
+            <div class="col-12">
+                <h3 class="mb-3">Weitere Themen</h3>
+                <!-- Beispiel-Accordion (optional) -->
+                <div class="accordion" id="faqAccordion">
+                    <!-- 1. Thema -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button
+                                class="accordion-button collapsed"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#collapseOne"
+                                aria-expanded="false"
+                                aria-controls="collapseOne">
+                                Montage & Reklamationen
+                            </button>
+                        </h2>
+                        <div
+                            id="collapseOne"
+                            class="accordion-collapse collapse"
+                            aria-labelledby="headingOne"
+                            data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <p class="fw-bold mb-1">Wann sollte ich einen Monteur beauftragen?</p>
+                                <p>
+                                    Wir empfehlen, erst nach Erhalt und Prüfung der Ware. So stellen Sie sicher,
+                                    dass alle Artikel vollständig und unbeschädigt sind, bevor Sie den Handwerker
+                                    bestellen.
+                                </p>
+                                <p class="fw-bold mb-1">Was tun bei Transportschäden?</p>
+                                <p>
+                                    Bitte dokumentieren Sie den Schaden (Foto, Bestellnummer) und melden Sie sich
+                                    umgehend bei uns per E-Mail an reklamation@beispiel.de.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
 
-            <!-- 2. Thema -->
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="headingTwo">
-                <button
-                  class="accordion-button collapsed"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#collapseTwo"
-                  aria-expanded="false"
-                  aria-controls="collapseTwo"
-                >
-                  Gutscheine & Kundenkonto
-               </button>
-             </h2>
-              <div
-                id="collapseTwo"
-                class="accordion-collapse collapse"
-                aria-labelledby="headingTwo"
-                data-bs-parent="#faqAccordion"
-              >
-                <div class="accordion-body">
-                  <p class="fw-bold mb-1">Kann ich einen Amazon-Gutschein nutzen?</p>
-                  <p>
-                    Nein, das ist nicht möglich. Amazon-Gutscheine gelten nur auf Amazon-Websites.
-                 </p>
-                  <p class="fw-bold mb-1">Wie kann ich meine Konfiguration speichern?</p>
-                  <p>
-                    Legen Sie sich ein Kundenkonto an und speichern Sie Ihre Spiegelkonfiguration
-                    direkt im Warenkorb. Sie können Ihre Konfigurationen jederzeit vergleichen
-                    oder löschen.
-                 </p>
-               </div>
-             </div>
-           </div>
-         </div>
-          <!-- Ende Accordion -->
-       </div>
-     </div>
+                    <!-- 2. Thema -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button
+                                class="accordion-button collapsed"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#collapseTwo"
+                                aria-expanded="false"
+                                aria-controls="collapseTwo">
+                                Gutscheine & Kundenkonto
+                            </button>
+                        </h2>
+                        <div
+                            id="collapseTwo"
+                            class="accordion-collapse collapse"
+                            aria-labelledby="headingTwo"
+                            data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <p class="fw-bold mb-1">Kann ich einen Amazon-Gutschein nutzen?</p>
+                                <p>
+                                    Nein, das ist nicht möglich. Amazon-Gutscheine gelten nur auf Amazon-Websites.
+                                </p>
+                                <p class="fw-bold mb-1">Wie kann ich meine Konfiguration speichern?</p>
+                                <p>
+                                    Legen Sie sich ein Kundenkonto an und speichern Sie Ihre Spiegelkonfiguration
+                                    direkt im Warenkorb. Sie können Ihre Konfigurationen jederzeit vergleichen
+                                    oder löschen.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Ende Accordion -->
+            </div>
+        </div>
 
-   </div>
- </section>
+    </div>
+</section>

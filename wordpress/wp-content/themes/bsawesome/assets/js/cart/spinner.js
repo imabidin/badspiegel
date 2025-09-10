@@ -1,19 +1,23 @@
 /**
- * Simple checkout button loading state management
+ * Enhanced checkout button loading state management
  *
  * Features:
  * - Prevents multiple clicks during loading
- * - 20-second timeout reset
- * - Simple and reliable
+ * - Timeout reset with fallback
+ * - Error handling and recovery
+ * - Memory leak prevention
+ * - WooCommerce AJAX integration
  *
- * @version 2.3.0
+ * @version 2.5.0
+ *
+ * @note Seems to be final, no further changes if not needed
  */
 
 // Configuration constants
 const CONFIG = {
-  TIMEOUT_DURATION: 10000, // 10 seconds timeout
-  NAVIGATION_DELAY: 150, // Delay before navigation (ms)
-  LOADING_TEXT: "Kasse wird vorbereitet…",
+  TIMEOUT_DURATION: 10000, // 10 seconds timeout (consistent with comment)
+  NAVIGATION_DELAY: 1000, // Delay before navigation (ms)
+  LOADING_TEXT: "Kasse wird vorbereitet…", // Loading text (German)
   DEBUG: false, // Enable debug logging
 };
 
@@ -24,6 +28,10 @@ const debug = (...args) => {
   }
 };
 
+// Global state management
+let isInitialized = false;
+let timeoutIds = new Set(); // Track all timeouts for cleanup
+
 /**
  * Initialize checkout spinner functionality on DOM ready
  */
@@ -33,23 +41,25 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 /**
- * Re-initialize after WooCommerce AJAX updates using vanilla JS
+ * Cleanup timeouts on page unload to prevent memory leaks
+ */
+window.addEventListener("beforeunload", function () {
+  debug("Page unloading, cleaning up timeouts");
+  timeoutIds.forEach(id => clearTimeout(id));
+  timeoutIds.clear();
+});
+
+/**
+ * WooCommerce AJAX event integration (consolidated)
  */
 document.addEventListener("DOMContentLoaded", function () {
-  // Listen for WooCommerce AJAX events on document body
-  document.body.addEventListener("updated_wc_div", function () {
-    debug("WooCommerce updated_wc_div detected, re-initializing");
-    initCheckoutSpinner();
-  });
+  const wooEvents = ["updated_wc_div", "updated_cart_totals", "wc_fragments_refreshed"];
 
-  document.body.addEventListener("updated_cart_totals", function () {
-    debug("WooCommerce updated_cart_totals detected, re-initializing");
-    initCheckoutSpinner();
-  });
-
-  document.body.addEventListener("wc_fragments_refreshed", function () {
-    debug("WooCommerce wc_fragments_refreshed detected, re-initializing");
-    initCheckoutSpinner();
+  wooEvents.forEach(eventName => {
+    document.body.addEventListener(eventName, function () {
+      debug(`WooCommerce ${eventName} detected, re-initializing`);
+      initCheckoutSpinner();
+    });
   });
 });
 
@@ -59,19 +69,23 @@ document.addEventListener("DOMContentLoaded", function () {
 function initCheckoutSpinner() {
   debug("Initializing checkout spinner");
 
-  // Remove existing event listeners to prevent duplicates
-  document.removeEventListener("click", handleCheckoutClick, true);
+  // Prevent duplicate initialization
+  if (isInitialized) {
+    debug("Already initialized, skipping");
+    return;
+  }
 
   // Use event delegation to handle dynamically added buttons
   document.addEventListener("click", handleCheckoutClick, true);
+  isInitialized = true;
 }
 
 /**
- * Simple checkout button click handler
+ * Enhanced checkout button click handler with error handling
  *
  * 1. Click → Set loading state
  * 2. Navigate after delay
- * 3. Reset after 20 seconds (simple timeout)
+ * 3. Reset after timeout with error recovery
  */
 function handleCheckoutClick(event) {
   // Early return if not a checkout button
@@ -86,16 +100,49 @@ function handleCheckoutClick(event) {
     return;
   }
 
+  // Validate button state
+  if (!checkoutButton.href) {
+    debug("No href found, aborting");
+    return;
+  }
+
   // Store original state
   const originalContent = checkoutButton.innerHTML;
   const originalHref = checkoutButton.href;
 
   debug("Setting loading state");
+  setLoadingState(checkoutButton, originalContent);
 
-  // Store original content
-  checkoutButton.setAttribute("data-original-content", originalContent);
+  // Navigate after delay with error handling
+  const navigationTimeout = setTimeout(() => {
+    try {
+      debug("Navigating to:", originalHref);
+      window.location.href = originalHref;
+    } catch (error) {
+      debug("Navigation error:", error);
+      resetButton(checkoutButton, originalContent);
+    }
+  }, CONFIG.NAVIGATION_DELAY);
 
-  // Create spinner HTML
+  timeoutIds.add(navigationTimeout);
+
+  // Timeout reset with error recovery
+  const resetTimeout = setTimeout(() => {
+    debug("Timeout reached, resetting button");
+    resetButton(checkoutButton, originalContent);
+    timeoutIds.delete(navigationTimeout);
+    timeoutIds.delete(resetTimeout);
+  }, CONFIG.TIMEOUT_DURATION);
+
+  timeoutIds.add(resetTimeout);
+}
+
+/**
+ * Set button to loading state
+ */
+function setLoadingState(button, originalContent) {
+  button.setAttribute("data-original-content", originalContent);
+
   const spinnerHTML = `
     <span role="status" aria-atomic="true">
       <span class="spinner-border me-2"
@@ -108,29 +155,19 @@ function handleCheckoutClick(event) {
     </span>
   `;
 
-  // Set loading state
-  checkoutButton.innerHTML = spinnerHTML;
-  checkoutButton.setAttribute("aria-busy", "true");
-  checkoutButton.setAttribute("data-loading", "true");
-  // checkoutButton.style.pointerEvents = "none";
-  checkoutButton.setAttribute("tabindex", "-1");
+  button.innerHTML = spinnerHTML;
+  button.setAttribute("aria-busy", "true");
+  button.setAttribute("data-loading", "true");
+  button.setAttribute("tabindex", "-1");
+}
 
-  // Navigate after delay
-  setTimeout(() => {
-    debug("Navigating to:", originalHref);
-    window.location.href = originalHref;
-  }, CONFIG.NAVIGATION_DELAY);
-
-  // Simple timeout reset after 20 seconds
-  setTimeout(() => {
-    debug("20 second timeout reached, resetting button");
-
-    // Reset button to original state
-    checkoutButton.innerHTML = originalContent;
-    checkoutButton.setAttribute("aria-busy", "false");
-    checkoutButton.removeAttribute("data-loading");
-    checkoutButton.removeAttribute("data-original-content");
-    // checkoutButton.style.pointerEvents = "";
-    checkoutButton.removeAttribute("tabindex");
-  }, CONFIG.TIMEOUT_DURATION);
+/**
+ * Reset button to original state
+ */
+function resetButton(button, originalContent) {
+  button.innerHTML = originalContent;
+  button.setAttribute("aria-busy", "false");
+  button.removeAttribute("data-loading");
+  button.removeAttribute("data-original-content");
+  button.removeAttribute("tabindex");
 }

@@ -42,6 +42,8 @@ backups/
 !backups/.gitkeep
 
 # Imports
+kinsta/
+!kinsta/.gitkeep
 kinsta-import/
 !kinsta-import/.gitkeep
 

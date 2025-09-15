@@ -61,14 +61,14 @@ const CROSSSELL_ATTRIBUTES = array(
     'pa_lichtposition' => array(
         'heading_template' => 'Weitere mit %s Beleuchtung',
         'css_class'        => 'lichtposition-crossselling',
-        'hook_priority'    => 18.5,
+        'hook_priority'    => 18,
         'category'         => 'badspiegel',
         'enabled'          => true
     ),
     'pa_serie' => array(
         'heading_template' => 'Weitere Produkte der Serie %s',
         'css_class'        => 'serie-crossselling',
-        'hook_priority'    => 19.5,
+        'hook_priority'    => 18,
         'category'         => 'badspiegel',
         'enabled'          => true
     )
@@ -167,20 +167,10 @@ function display_attribute_crossselling_complete($attribute_name, $heading = nul
     }
     $shortcode .= ']';
 
-    // Pre-flight check: Get product count for SimplBar decision
-    $product_count = 0;
-    $has_results = false;
-
-    add_filter('woocommerce_shortcode_products_query', function ($query_args, $atts, $type) use ($product, $limit, $attribute_name, &$has_results, &$product_count) {
-        if (isset($atts['attribute']) && $atts['attribute'] === $attribute_name) {
+    // Add filter to exclude current product from results
+    add_filter('woocommerce_shortcode_products_query', function ($query_args, $atts, $type) use ($product) {
+        if (isset($atts['attribute']) && isset($atts['terms'])) {
             $query_args['post__not_in'] = array($product->get_id());
-            $query_args['posts_per_page'] = $limit;
-
-            // Test query to check for actual results
-            $test_query = new WP_Query($query_args);
-            $has_results = $test_query->have_posts();
-            $product_count = $test_query->found_posts;
-            wp_reset_postdata();
         }
         return $query_args;
     }, 10, 3);
@@ -193,15 +183,27 @@ function display_attribute_crossselling_complete($attribute_name, $heading = nul
     // Cleanup filter after use
     remove_all_filters('woocommerce_shortcode_products_query', 10);
 
-    // If product_count is still 0 but we have output, count the products in the output
-    if ($product_count == 0 && !empty(trim(strip_tags($shortcode_output)))) {
-        // Count products by counting .product elements in the output
-        $product_count = substr_count($shortcode_output, 'class="product ');
-        $has_results = $product_count > 0;
+    // Count products by counting .product elements in the output
+    $product_count = substr_count($shortcode_output, 'class="product ');
+
+    // Alternative counting methods if first one fails
+    if ($product_count == 0) {
+        $product_count = substr_count($shortcode_output, 'woocommerce-LoopProduct-link');
+        if ($product_count == 0) {
+            $product_count = substr_count($shortcode_output, 'data-product-id=');
+        }
     }
 
+    $has_results = $product_count > 0 && !empty(trim(strip_tags($shortcode_output)));
+
+    // Debug output
+    echo "<!-- Debug: Shortcode: $shortcode -->";
+    echo "<!-- Debug: Product count: $product_count -->";
+    echo "<!-- Debug: Has results: " . ($has_results ? 'true' : 'false') . " -->";
+    echo "<!-- Debug: Output length: " . strlen($shortcode_output) . " -->";
+
     // Early return for empty results
-    if (!$has_results || empty(trim(strip_tags($shortcode_output)))) return;
+    if (!$has_results) return;
 
     // Generate heading from template if not provided
     if (!$heading) {
@@ -347,5 +349,50 @@ function test_crossselling_simplebar_output($attribute_name = 'pa_lichtposition'
     echo "</div>";
 }
 
-// Uncomment this line to see the test output on product pages:
-add_action('woocommerce_after_single_product_summary', function() { test_crossselling_simplebar_output('pa_lichtposition'); }, 15);
+// Debug function to test shortcode output
+function debug_crossselling_shortcode($attribute_name = 'pa_lichtposition') {
+    global $product;
+
+    if (!$product) return;
+
+    $attribute_config = CROSSSELL_ATTRIBUTES[$attribute_name];
+    $attribute_value = $product->get_attribute($attribute_name);
+    $attribute_terms = wp_get_post_terms($product->get_id(), $attribute_name, array('fields' => 'slugs'));
+    $attribute_slug = !empty($attribute_terms) ? $attribute_terms[0] : sanitize_title($attribute_value);
+
+    $shortcode_params = array_merge(CROSSSELL_SHORTCODE_DEFAULTS, array(
+        'limit'     => 6,
+        'attribute' => $attribute_name,
+        'terms'     => $attribute_slug,
+        'category'  => $attribute_config['category'],
+        'class'     => $attribute_config['css_class']
+    ));
+
+    $shortcode = '[products';
+    foreach ($shortcode_params as $key => $value) {
+        $shortcode .= sprintf(' %s="%s"', $key, esc_attr($value));
+    }
+    $shortcode .= ']';
+
+    echo "<div style='background: #f0f0f0; padding: 20px; margin: 20px 0; border: 1px solid #ccc;'>";
+    echo "<h4>Debug Cross-selling für: " . esc_html($attribute_name) . "</h4>";
+    echo "<p><strong>Shortcode:</strong> " . esc_html($shortcode) . "</p>";
+    echo "<p><strong>Attribut-Wert:</strong> " . esc_html($attribute_value) . "</p>";
+    echo "<p><strong>Terms:</strong> " . implode(', ', $attribute_terms) . "</p>";
+
+    ob_start();
+    echo do_shortcode($shortcode);
+    $output = ob_get_clean();
+
+    echo "<p><strong>Output-Länge:</strong> " . strlen($output) . "</p>";
+    echo "<div style='background: white; padding: 10px; border: 1px solid #ddd;'>";
+    echo $output;
+    echo "</div>";
+    echo "</div>";
+}
+
+// Debug both cross-selling types:
+// add_action('woocommerce_after_single_product_summary', function() {
+//     debug_crossselling_shortcode('pa_lichtposition');
+//     debug_crossselling_shortcode('pa_serie');
+// }, 16);

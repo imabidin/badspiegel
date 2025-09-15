@@ -55,6 +55,11 @@ global $product;
 								$image_url    = wp_get_attachment_url($thumbnail_id);
 								$cat_link     = get_term_link($category);
 
+								// Überspringe Kategorien ohne Bild
+								if (!$image_url) {
+									continue;
+								}
+
 								// Setze zusätzliche Klassen: erstes Element bekommt ps-0, letztes pe-0.
 								$col_classes = 'col';
 								if ($i === 0) {
@@ -66,14 +71,9 @@ global $product;
 							?>
 								<div class="<?php echo esc_attr($col_classes); ?>">
 									<div class="card h-100 border-0 bg-light shadow-sm">
-										<?php if ($image_url) : ?>
-											<a class="opacity-75-hover transition" href="<?php echo esc_url($cat_link); ?>">
-												<img src="<?php echo esc_url($image_url); ?>" class="card-img-top" alt="<?php echo esc_attr($category->name); ?>" style="filter: drop-shadow(0.5rem 0.25rem 0.5rem rgba(0,0,0,.25));">
-											</a>
-										<?php else : ?>
-											<!-- Optional: Fallback-Bild, falls kein Bild hinterlegt ist -->
-											<img src="<?php echo esc_url(get_template_directory_uri() . '/assets/img/placeholder.png'); ?>" class="card-img-top" alt="<?php echo esc_attr($category->name); ?>">
-										<?php endif; ?>
+										<a class="opacity-75-hover transition" href="<?php echo esc_url($cat_link); ?>">
+											<img src="<?php echo esc_url($image_url); ?>" class="card-img-top" alt="<?php echo esc_attr($category->name); ?>" style="filter: drop-shadow(0.5rem 0.25rem 0.5rem rgba(0,0,0,.25));">
+										</a>
 										<a class="text-center text-montserrat link-body-emphasis mb-3" href="<?php echo esc_url($cat_link); ?>"><?php echo esc_html($category->name); ?></a>
 									</div>
 								</div>

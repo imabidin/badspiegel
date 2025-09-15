@@ -40,6 +40,7 @@ import "./js/configurator/dependencies/schrankart";
 import "./js/configurator/dependencies/schminkspiegel";
 import "./js/configurator/dependencies/spiegelheizung";
 import "./js/configurator/dependencies/steckdose";
+import "./js/configurator/dependencies/stromanschluss";
 import "./js/configurator/dependencies/tueren";
 import "./js/configurator/dependencies/tuergriff";
 

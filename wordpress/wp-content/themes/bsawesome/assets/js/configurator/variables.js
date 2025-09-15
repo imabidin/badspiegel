@@ -65,8 +65,10 @@ if (DEBUG_MODE) {
  * @type {boolean}
  */
 export const isLED = product?.classList.contains("product_attr-beleuchtung_ja");
+export const isNotLED = product?.classList.contains("product_attr-beleuchtung_nein");
 
 if (DEBUG_MODE && isLED) console.log("✅ const isLED: ", isLED);
+if (DEBUG_MODE && isNotLED) console.log("✅ const isNotLED: ", isNotLED);
 
 /**
  * LED lighting position

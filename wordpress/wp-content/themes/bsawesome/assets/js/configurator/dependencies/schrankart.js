@@ -38,6 +38,13 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     "einbaurahmen_tiefe"
   );
+  dependenciesValuesXcontainer(
+    "einbaurahmen",
+    value => {
+      return value === "ja";
+    },
+    "einbaurahmen_vorab"
+  );
 
   /**
    * Einbaurahmen Tiefe Min/Max von Breite-Input ableiten

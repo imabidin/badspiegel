@@ -7605,7 +7605,8 @@ function get_all_product_options()
             'price' => 0,
             'group' => 'weitere-optionen',
             'label' => 'Stromanschluss',
-            'description' => 'Erfahren Sie mehr über Stromanschluss.',
+            'description' => 'Welcher Stromanschluss ist der richtige für mich?',
+            'description_file' => 'stromanschluss.html',
             'placeholder' => 'Mehradriges Kabel',
             'applies_to' => array(
                 'products'           => array(),
@@ -7616,12 +7617,6 @@ function get_all_product_options()
                 'excluded_attributes'=> array(),
             ),
             'options' => array(
-                'kabel' => array(
-                    'key' => 'kabel',
-                    'price' => 0,
-                    'label' => 'Kabel',
-                    'order' => 1,
-                ),
                 'eu_stecker' => array(
                     'key' => 'eu_stecker',
                     'price' => 22,

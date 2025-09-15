@@ -111,13 +111,19 @@ if (!empty($posted_value)) {
              * Optional help button with description modal trigger
              */
             if (!empty($option_description) && !empty($option_description_file)): ?>
-                <div class="col-12 p-0 px-md-3 mt-3">
+                <div class="col-12 p-0 ps-4 pe-md-3 mt-3">
                     <button type="button"
-                        class="option-desc-btn btn btn-sm btn-dark text-truncate mw-100<?php echo $search_field_treshold ? '' : ' mb-3'; ?>"
+                        class="option-desc-btn btn btn-sm btn-link text-wrap text-start mw-100 p-0<?php echo $search_field_treshold ? '' : ' mb-3'; ?>"
                         data-modal-link="<?= esc_attr($modal_link); ?>"
                         data-modal-title="<?= esc_attr($option_label); ?>">
-                        <span class="option-desc-label text-truncate"><?= esc_attr($option_description); ?></span>
-                        <i class="fa-sharp fa-light fa-circle-question ms-2" aria-hidden="true"></i>
+                        <div class="row g-3 align-items-start">
+                            <div class="col-auto ps-1">
+                                <i class="fa-sharp fa-light fa-circle-question fa-lg pt-2" aria-hidden="true"></i>
+                            </div>
+                            <div class="col">
+                                <span class="option-desc-label"><?= esc_attr($option_description); ?></span>
+                            </div>
+                        </div>
                     </button>
                 </div>
             <?php endif; ?>

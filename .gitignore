@@ -15,6 +15,9 @@ wordpress/wp-content/themes/*
 # BSAwesome Theme spezifische Dateien
 # =============================================================================
 
+# Theme Build-Ausgaben (JavaScript, CSS, Source Maps)
+wordpress/wp-content/themes/bsawesome/dist/
+!wordpress/wp-content/themes/bsawesome/dist/.gitkeep
 
 # Excel-Konfigurationsdateien
 wordpress/wp-content/themes/bsawesome/inc/configurator/*.xlsx

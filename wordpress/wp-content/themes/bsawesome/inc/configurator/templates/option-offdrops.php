@@ -70,7 +70,7 @@ if (!empty($posted_value)) {
 }
 ?>
 
-<!-- Off-Canvas Dropdown Option Container -->
+<?php /* Off-Canvas Dropdown Option Container */ ?>
 <div class="option-group<?php echo ($option_type === 'offdrops-child') ? ' option-group-child d-none' : ''; ?> option-offdrop col-12 mt-0"
     id="option_<?php echo esc_attr($option_key); ?>"
     data-key="<?php echo esc_attr($option_key); ?>"
@@ -130,17 +130,17 @@ if (!empty($posted_value)) {
             if ($search_field_treshold): ?>
                 <div class="col-12 sticky-top p-0">
                     <div class="option-search-wrapper d-flex position-relative py-3 px-md-3">
-                        <!-- Search Icon -->
+                        <?php /* Search Icon */ ?>
                         <span class="btn btn-link pe-none text-muted position-absolute ms-1">
                             <i class="fa-sharp fa-light fa-search"></i>
                         </span>
-                        <!-- Search Input -->
+                        <?php /* Search Input */ ?>
                         <input type="search"
                             enterkeyhint="search"
                             class="option-search-input form-control ps-5"
                             placeholder="<?= esc_attr__('Optionen suchen...', 'bsawesome'); ?>"
                             data-target="#<?= esc_attr($offcanvas_id); ?> .values-group, #<?= esc_attr($dropdown_id); ?> .values-group">
-                        <!-- Clear Search Button -->
+                        <?php /* Clear Search Button */ ?>
                         <button class="option-search-input-reset btn btn-link position-absolute end-0 top-50 translate-middle-y me-md-3" type="button">
                             <i class="fa-sharp fa-light fa-xmark"></i>
                         </button>
@@ -189,9 +189,9 @@ if (!empty($posted_value)) {
                                         data-price="0"
                                         <?php echo $none_is_selected ? 'checked' : ''; ?>>
                                 </span>
-                                <!-- Placeholder Image -->
+                                <?php /* Placeholder Image */ ?>
                                 <?php if (!empty($option_placeholder_image)): ?>
-                                    <span class="col-3 me-3">
+                                    <span class="col-3 col-xl-2 me-3">
                                         <?php
                                         echo do_shortcode(
                                             '[img id="' . esc_attr($option_placeholder_image) . '" class="pe-none border" size="thumbnail"]'
@@ -199,11 +199,11 @@ if (!empty($posted_value)) {
                                         ?>
                                     </span>
                                 <?php endif; ?>
-                                <!-- Label Text -->
+                                <?php /* Label Text */ ?>
                                 <span class="col text-truncate text-start">
                                     <?= !empty($option_placeholder) ? esc_html($option_placeholder) : esc_html__('Keins', 'bsawesome'); ?>
                                 </span>
-                                <!-- Placeholder Description Button -->
+                                <?php /* Placeholder Description Button */ ?>
                                 <?php if (!empty($option_placeholder_description_file)):
                                     // Generate modal link for placeholder description file
                                     // Preserve subfolder structure by removing only .html extension
@@ -222,7 +222,7 @@ if (!empty($posted_value)) {
                                         </button>
                                     </span>
                                 <?php elseif (!empty($option_placeholder_description)): ?>
-                                    <!-- Fallback: Show tooltip only if no description file but description exists -->
+                                    <?php /* Fallback: Show tooltip only if no description file but description exists */ ?>
                                     <span class="col-auto">
                                         <span class="btn btn btn-link text-hind p-2 ms-1"
                                             style="--bs-bt-color: var(--bs-body-color); --bs-btn-hover-color: var(--bs-body-color); --bs-btn-active-color: var(--bs-body-color); --bs-btn-hover-bg: transparent; --bs-btn-active-bg: transparent;"
@@ -232,7 +232,7 @@ if (!empty($posted_value)) {
                                         </span>
                                     </span>
                                 <?php elseif (!empty($option_placeholder_image)): ?>
-                                    <!-- Image zoom modal fallback for placeholder when no description but image exists -->
+                                    <?php /* Image zoom modal fallback for placeholder when no description but image exists */ ?>
                                     <span class="col-auto">
                                         <button type="button"
                                             data-bs-tooltip="true"
@@ -297,9 +297,9 @@ if (!empty($posted_value)) {
                                         data-price="<?= esc_attr($sub_price); ?>"
                                         <?php echo $is_selected ? 'checked' : ''; ?>>
                                 </span>
-                                <!-- Option Image -->
+                                <?php /* Option Image */ ?>
                                 <?php if (!empty($sub_image)): ?>
-                                    <span class="col-3 me-3">
+                                    <span class="col-3 col-xl-2 me-3">
                                         <?php
                                         echo do_shortcode(
                                             '[img id="' . esc_attr($sub_image) . '" class="pe-none border" size="thumbnail"]'
@@ -307,15 +307,15 @@ if (!empty($posted_value)) {
                                         ?>
                                     </span>
                                 <?php endif; ?>
-                                <!-- Option Label -->
+                                <?php /* Option Label */ ?>
                                 <span class="col w-100 text-truncate text-start"><?= esc_html($sub_label); ?></span>
-                                <!-- Price Display -->
+                                <?php /* Price Display */ ?>
                                 <span class="value-price col-auto">
                                     <?php if (!empty($sub_price) && $sub_price != '0'): ?>
                                         (+<?= esc_html(str_replace('.', ',', $sub_price)); ?> €)
                                     <?php endif; ?>
                                 </span>
-                                <!-- Value Description Button -->
+                                <?php /* Value Description Button */ ?>
                                 <?php if (!empty($sub_description_file)): ?>
                                     <?php
                                     // Generate modal link for value description file using same pattern as option descriptions
@@ -335,7 +335,7 @@ if (!empty($posted_value)) {
                                         </button>
                                     </span>
                                 <?php elseif (!empty($sub_description)): ?>
-                                    <!-- Fallback: Show tooltip only if no description file but description exists -->
+                                    <?php /* Fallback: Show tooltip only if no description file but description exists */ ?>
                                     <span class="col-auto">
                                         <span class="btn btn btn-link text-hind p-2 ms-1"
                                             style="--bs-bt-color: var(--bs-body-color); --bs-btn-hover-color: var(--bs-body-color); --bs-btn-active-color: var(--bs-body-color); --bs-btn-hover-bg: transparent; --bs-btn-active-bg: transparent;"
@@ -345,7 +345,7 @@ if (!empty($posted_value)) {
                                         </span>
                                     </span>
                                 <?php elseif (!empty($sub_image)): ?>
-                                    <!-- Image zoom modal fallback when no description but image exists -->
+                                    <?php /* Image zoom modal fallback when no description but image exists */ ?>
                                     <span class="col-auto">
                                         <button type="button"
                                             data-bs-tooltip="true"
@@ -358,7 +358,7 @@ if (!empty($posted_value)) {
                                         </button>
                                     </span>
                                 <?php else: ?>
-                                    <!-- Fallback: Show empty span when neither description file nor description exists -->
+                                    <?php /* Fallback: Show empty span when neither description file nor description exists */ ?>
                                     <span class="col-auto">
                                         <span class="btn btn btn-link text-hind p-2 ms-1"
                                             style="--bs-btn-bg: transparent;--bs-btn-hover-bg: transparent; --bs-btn-active-bg: transparent;">
@@ -395,11 +395,11 @@ if (!empty($posted_value)) {
          */
         ?>
         <div class="offcanvas-header p-3">
-            <!-- Offcanvas Title -->
+            <?php /* Offcanvas Title */ ?>
             <h5 class="offcanvas-title" id="<?= esc_attr($offcanvas_id); ?>_label">
                 <?= esc_html($option_label); ?>
             </h5>
-            <!-- Offcanvas Close Button -->
+            <?php /* Offcanvas Close Button */ ?>
             <button type="button"
                 class="btn-close"
                 data-bs-dismiss="offcanvas"

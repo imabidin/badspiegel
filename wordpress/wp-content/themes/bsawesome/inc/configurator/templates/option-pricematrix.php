@@ -20,7 +20,7 @@
  * - $option_placeholder: Placeholder text
  * - $option_values: Array of selectable values with labels and prices
  *
- * @version 2.5.0
+ * @version 2.6.0
  * @package configurator
  */
 

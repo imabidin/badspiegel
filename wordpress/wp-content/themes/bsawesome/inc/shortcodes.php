@@ -7,9 +7,10 @@
  * like lazy loading, responsive sizing, and security validation. Enables shortcode processing
  * in category descriptions.
  *
- * @version 2.5.0
+ * @version 2.6.0
  *
  * @todo Optimize img shortcode for better src and sizes generation
+ * @todo Make html shortcode performance checks
  *
  * Available Shortcodes:
  * - [html file="path/to/file"] - Include HTML content from theme/html/ directory

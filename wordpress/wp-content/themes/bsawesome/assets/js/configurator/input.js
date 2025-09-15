@@ -18,7 +18,7 @@
  * - Dynamic min/max attribute updates
  * - Modular validation rules via callback system
  *
- * @version 2.5.0
+ * @version 2.6.0
  * @package Configurator
  */
 

@@ -11,7 +11,7 @@ defined('ABSPATH') || exit;
  * - Lazy Loading
  * - Responsive Images
  *
- * @version 2.5.0
+ * @version 2.6.0
  *
  */
 class Bootstrap_Walker_Nav_Menu extends Walker_Nav_Menu

@@ -36,9 +36,9 @@ if (isset($_GET['fix'])) {
 	if ($config_de) {
 		$decoded = unserialize($config_de);
 		if ($decoded) {
-			$decoded->cookieDomain = 'localhost';
+			$decoded->cookieDomain = 'www.badspiegel.local';
 			$decoded->cookieSecure = false;
-			$decoded->pluginUrl = 'http://localhost/wp-content/plugins/borlabs-cookie';
+			$decoded->pluginUrl = 'http://www.badspiegel.local/wp-content/plugins/borlabs-cookie';
 
 			update_option('BorlabsCookieGeneralConfig_de', serialize($decoded));
 			echo '<p style="color: green;">✅ Deutsche Konfiguration aktualisiert</p>';
@@ -48,9 +48,9 @@ if (isset($_GET['fix'])) {
 	if ($config_en) {
 		$decoded = unserialize($config_en);
 		if ($decoded) {
-			$decoded->cookieDomain = 'localhost';
+			$decoded->cookieDomain = 'www.badspiegel.local';
 			$decoded->cookieSecure = false;
-			$decoded->pluginUrl = 'http://localhost/wp-content/plugins/borlabs-cookie';
+			$decoded->pluginUrl = 'http://www.badspiegel.local/wp-content/plugins/borlabs-cookie';
 
 			update_option('BorlabsCookieGeneralConfig_en', serialize($decoded));
 			echo '<p style="color: green;">✅ Englische Konfiguration aktualisiert</p>';
@@ -58,8 +58,8 @@ if (isset($_GET['fix'])) {
 	}
 
 	// WordPress URLs sicherstellen
-	update_option('home', 'http://localhost');
-	update_option('siteurl', 'http://localhost');
+	update_option('home', 'http://www.badspiegel.local');
+	update_option('siteurl', 'http://www.badspiegel.local');
 
 	// Cache löschen
 	wp_cache_flush();
@@ -67,7 +67,7 @@ if (isset($_GET['fix'])) {
 	echo '<p style="color: green;">✅ Fix abgeschlossen!</p>';
 	echo '<p><strong>Nächste Schritte:</strong></p>';
 	echo '<ol>';
-	echo '<li>Browser-Cache/Cookies für localhost löschen</li>';
+	echo '<li>Browser-Cache/Cookies für www.badspiegel.local löschen</li>';
 	echo '<li>Diese Seite in neuem Inkognito-Tab öffnen</li>';
 	echo '<li>Cookie-Banner sollte jetzt funktionieren</li>';
 	echo '</ol>';

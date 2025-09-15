@@ -6,7 +6,7 @@
  * Utility function for determining whether a WooCommerce product has
  * configurable option groups available for customization purposes.
  *
- * @version 2.5.0
+ * @version 2.6.0
  *
  * Features:
  * - Efficient product option group detection

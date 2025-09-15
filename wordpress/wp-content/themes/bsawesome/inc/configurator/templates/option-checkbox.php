@@ -24,7 +24,7 @@
  * - $option_values: Array of selectable values
  * - $posted_value: Current/submitted value
  *
- * @version 2.5.0
+ * @version 2.6.0
  * @todo    Implement proper checkbox/radio/select functionality
  * @todo    Fix cart integration for these option types
  */

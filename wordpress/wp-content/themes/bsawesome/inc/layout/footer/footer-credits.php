@@ -6,7 +6,7 @@
  * Displays Trusted Shops certification badge and buyer protection information
  * in the footer area with responsive layout and accessibility features.
  *
- * @version 2.5.0
+ * @version 2.6.0
  *
  * Features:
  * - Trusted Shops certification badge display with SVG icon

@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
  * - Option grouping and sorting functionality
  * - Single-step interface fallback for simple configurations
  *
- * @version 2.5.0
+ * @version 2.6.0
  * @package configurator
  */
 
@@ -412,7 +412,7 @@ function render_product_configurator() {
             </div>
 
             <!-- Configuration Summary and Total Price Display // add "show" class to collapse to show summary on pageload -->
-            <div id="productConfiguratorSummary" class="collapse show"></div>
+            <div id="productConfiguratorSummary" class="collapse"></div>
             <div id="productConfiguratorTotal" class="mb-3"></div>
 
         <?php } else {

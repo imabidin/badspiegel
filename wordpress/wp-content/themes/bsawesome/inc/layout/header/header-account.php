@@ -6,7 +6,7 @@
  * Displays user account link in the site header for quick access to
  * customer dashboard and account management features.
  *
- * @version 2.5.0
+ * @version 2.6.0
  *
  * Features:
  * - Direct link to customer account dashboard page

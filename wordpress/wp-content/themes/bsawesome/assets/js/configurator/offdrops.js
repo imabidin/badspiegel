@@ -6,7 +6,7 @@
  * Includes MutationObserver to track dynamic attribute changes and search
  * functionality for option groups.
  *
- * @version 2.5.0
+ * @version 2.6.0
  * @package Configurator
  *
  * @todo Offdrops desktop, dropdowns are not navigable through keyboard

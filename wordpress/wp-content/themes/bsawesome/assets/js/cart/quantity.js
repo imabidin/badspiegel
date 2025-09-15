@@ -9,7 +9,7 @@
  * - Min/max/step constraint enforcement
  * - Respects HTML5 input constraints (min="0" support)
  *
- * @version 2.5.0
+ * @version 2.6.0
  *
  * @todo Add a modal confirmation if user tries to set quantity to zero "0"
  */

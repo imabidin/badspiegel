@@ -6,7 +6,7 @@
  * Comprehensive wrapper system for WooCommerce product pages using Bootstrap grid.
  * Provides responsive layout structure with proper container management.
  *
- * @version 2.5.0
+ * @version 2.6.0
  *
  * @todo Add conditional wrapper classes based on product types
  * @todo Implement dynamic container sizing for different layouts

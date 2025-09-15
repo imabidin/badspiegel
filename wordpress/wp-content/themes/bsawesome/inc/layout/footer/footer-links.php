@@ -6,7 +6,7 @@
  * Renders organized footer navigation with categorized links for products,
  * company information, shop features, and customer support sections.
  *
- * @version 2.5.0
+ * @version 2.6.0
  *
  * Features:
  * - Categorized footer navigation with four main sections
@@ -77,8 +77,8 @@ function site_links()
                 'url'   => '/shop/spiegelschraenke/',
             ],
             [
-                'label' => __('Unterschränke', 'bsawesome'),
-                'url'   => '/shop/unterschraenke/',
+                'label' => __('Geschäftskunden', 'bsawesome'),
+                'url'   => '/b2b/',
             ],
         ],
         __('Unternehmen', 'imabi') => [
@@ -99,24 +99,24 @@ function site_links()
                 'url'   => '/impressum/',
             ],
         ],
-        __('Shop', 'imabi') => [
-            [
-                'label' => __('Geschäftskunden', 'bsawesome'),
-                'url'   => '/b2b/',
-            ],
-            [
-                'label' => __('Mein Konto', 'bsawesome'),
-                'url'   => '/konto/',
-            ],
-            [
-                'label' => __('Warenkorb', 'bsawesome'),
-                'url'   => '/warenkorb/',
-            ],
-            [
-                'label' => __('Kasse', 'bsawesome'),
-                'url'   => '/kasse/',
-            ],
-        ],
+        // __('Shop', 'imabi') => [
+        //     [
+        //         'label' => __('Geschäftskunden', 'bsawesome'),
+        //         'url'   => '/b2b/',
+        //     ],
+        //     [
+        //         'label' => __('Mein Konto', 'bsawesome'),
+        //         'url'   => '/konto/',
+        //     ],
+        //     [
+        //         'label' => __('Warenkorb', 'bsawesome'),
+        //         'url'   => '/warenkorb/',
+        //     ],
+        //     [
+        //         'label' => __('Kasse', 'bsawesome'),
+        //         'url'   => '/kasse/',
+        //     ],
+        // ],
         __('Support', 'imabi') => [
             [
                 'label' => __('Montage', 'bsawesome'),

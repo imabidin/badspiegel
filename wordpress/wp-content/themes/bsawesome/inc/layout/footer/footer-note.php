@@ -6,7 +6,7 @@
  * Displays legal disclaimer about pricing, VAT inclusion, and crossed-out
  * price explanations with link to homepage for legal compliance.
  *
- * @version 2.5.0
+ * @version 2.6.0
  *
  * Features:
  * - Legal pricing disclaimer with VAT information

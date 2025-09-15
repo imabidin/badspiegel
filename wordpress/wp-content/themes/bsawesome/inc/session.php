@@ -7,7 +7,7 @@
  * and other session-based functionality without requiring
  * cart interactions or user login.
  *
- * @version 2.5.0
+ * @version 2.6.0
  * @package bsawesome
  */
 

@@ -6,7 +6,7 @@
  * Displays time-sensitive promotional content with countdown timer and
  * context-aware call-to-action buttons for marketing campaigns.
  *
- * @version 2.5.0
+ * @version 2.6.0
  *
  * Features:
  * - Time-sensitive campaign display with automatic start/end handling

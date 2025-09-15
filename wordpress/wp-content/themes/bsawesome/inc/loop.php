@@ -9,7 +9,7 @@
  *
  * @package BSAwesome
  * @subpackage Loop
- * @version 2.5.0
+ * @version 2.6.0
  *
  * Features:
  * - Admin meta box for product hover image selection

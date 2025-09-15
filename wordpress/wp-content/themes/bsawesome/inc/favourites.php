@@ -6,7 +6,7 @@
  * Comprehensive favourites management system supporting both authenticated and guest users
  * with WooCommerce integration and product configuration support.
  *
- * @version 2.5.0
+ * @version 2.6.0
  *
  * @todo Add bulk operations for favourites management
  * @todo Implement favourites import/export functionality

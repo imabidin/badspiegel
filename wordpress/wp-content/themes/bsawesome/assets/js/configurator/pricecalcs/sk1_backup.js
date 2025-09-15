@@ -20,7 +20,7 @@
  * - Diameter from Height: d = (h² + t²/4) / h
  * - All calculations based on circle geometry and segment formulas
  *
- * @version 2.5.0
+ * @version 2.6.0
  * @package Configurator
  * @subpackage PriceCalculations
  */

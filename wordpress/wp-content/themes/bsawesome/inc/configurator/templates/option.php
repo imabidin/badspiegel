@@ -9,7 +9,7 @@
  * their type. Handles auto-loading of saved configurations and delegates to
  * specific template files for different option types.
  *
- * @version 2.5.0
+ * @version 2.6.0
  * @package configurator
  */
 

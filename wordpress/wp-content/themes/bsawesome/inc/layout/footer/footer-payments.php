@@ -6,7 +6,7 @@
  * Comprehensive payment method icon display system with flexible configuration
  * options and responsive layout for e-commerce payment transparency.
  *
- * @version 2.5.0
+ * @version 2.6.0
  *
  * Features:
  * - Comprehensive payment method icon management system

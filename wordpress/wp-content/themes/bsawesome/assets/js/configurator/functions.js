@@ -5,7 +5,7 @@
  * configurator system. It includes number parsing, price formatting, DOM
  * manipulation helpers, and performance optimization utilities.
  *
- * @version 2.5.0
+ * @version 2.6.0
  * @package Configurator
  *
  * @todo Check if these functions can be used, for a better DRY concept

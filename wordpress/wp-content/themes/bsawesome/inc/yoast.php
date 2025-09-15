@@ -7,7 +7,7 @@
  * Disables unnecessary redirect features and implements custom canonical URL handling for
  * WooCommerce shop pages to prevent duplicate content issues.
  *
- * @version 2.5.0
+ * @version 2.6.0
  *
  * Features:
  * - Disabled automatic redirects for post and term slug changes

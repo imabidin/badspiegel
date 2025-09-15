@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
  * - CSV import/export support for price matrix assignments
  * - Comprehensive caching system for performance optimization
  *
- * @version 2.5.0
+ * @version 2.6.0
  * @package configurator
  */
 

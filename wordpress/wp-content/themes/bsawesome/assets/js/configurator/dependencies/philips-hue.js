@@ -34,7 +34,7 @@
  * Dependencies:
  * - variables.js: Dimension inputs, lighting position flags, and product category flags
  *
- * @version 2.5.0
+ * @version 2.6.0
  *
  * @todo Change "Plus" to "Solo" in the code and documentation
  */

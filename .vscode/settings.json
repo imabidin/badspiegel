@@ -14,21 +14,15 @@
     },
     // File exclusions (Performance)
     "files.exclude": {
-        "**/data": true,
-        "**/logs": true,
-        "**/backups": true,
-        "**/kinsta-import": true,
         "**/.git": true,
-        "**/.svn": true,
-        "**/.hg": true,
-        "**/CVS": true,
-        "**/.DS_Store": true,
         "**/.venv": true
     },
     "search.exclude": {
         "**/data": true,
         "**/logs": true,
+        "**/backups": true,
         "**/node_modules": true,
+        "**/kinsta": true,
         "**/bower_components": true,
         "**/vendor": true,
         "**/dist": true

@@ -28,7 +28,7 @@
  * - $posted_value: Current/submitted value
  * - $modal_link: Link for description modal
  *
- * @version 2.5.0
+ * @version 2.6.0
  */
 ?>
 

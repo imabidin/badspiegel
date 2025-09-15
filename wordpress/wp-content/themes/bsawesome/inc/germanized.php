@@ -8,7 +8,7 @@
  *
  * @package BSAwesome
  * @subpackage Germanized
- * @version 2.5.0
+ * @version 2.6.0
  *
  * @return void Outputs modified checkout tax table HTML with Bootstrap classes
  */

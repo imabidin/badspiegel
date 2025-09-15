@@ -14,8 +14,8 @@ sleep 5
 # WordPress URLs in der Datenbank aktualisieren
 echo "🔄 Aktualisiere WordPress URLs..."
 docker-compose exec -T db mysql -u wordpress -pwordpress_password wordpress << 'EOF'
-UPDATE wp_options SET option_value = 'http://localhost' WHERE option_name = 'home';
-UPDATE wp_options SET option_value = 'http://localhost' WHERE option_name = 'siteurl';
+UPDATE wp_options SET option_value = 'http://www.badspiegel.local' WHERE option_name = 'home';
+UPDATE wp_options SET option_value = 'http://www.badspiegel.local' WHERE option_name = 'siteurl';
 EOF
 
 # Borlabs Cookie Plugin-Einstellungen zurücksetzen
@@ -36,11 +36,11 @@ docker-compose exec redis redis-cli FLUSHALL
 echo "✅ Borlabs Cookie Fix abgeschlossen!"
 echo ""
 echo "📋 Nächste Schritte:"
-echo "1. Öffnen Sie http://localhost in Ihrem Browser"
+echo "1. Öffnen Sie http://www.badspiegel.local in Ihrem Browser"
 echo "2. Gehen Sie zu WordPress Admin > Borlabs Cookie > Einstellungen"
 echo "3. Überprüfen Sie die Cookie-Domain-Einstellungen"
 echo "4. Testen Sie den Cookie-Banner"
 echo ""
 echo "🔧 Falls das Problem weiterhin besteht:"
-echo "   - Löschen Sie Ihre Browser-Cookies für localhost"
+echo "   - Löschen Sie Ihre Browser-Cookies für www.badspiegel.local"
 echo "   - Verwenden Sie den Inkognito-Modus zum Testen"

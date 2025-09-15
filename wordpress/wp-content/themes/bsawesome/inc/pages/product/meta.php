@@ -6,7 +6,7 @@
  * Moves WooCommerce product meta data (SKU, categories, tags) from the product summary
  * to a position below the main product content for improved layout design.
  *
- * @version 2.5.0
+ * @version 2.6.0
  *
  * @todo Consider adding custom meta display styling
  * @todo Implement conditional meta display based on product types

@@ -9,7 +9,7 @@
  *
  * @package BSAwesome
  * @subpackage Setup
- * @version 2.5.0
+ * @version 2.6.0
  *
  * Features:
  * - WordPress core feature support (HTML5, title tags, responsive embeds)
@@ -112,7 +112,7 @@ function body_classes($classes) {
     }
 
     $classes[] = 'site-body';
-    $classes[] = 'why-do-u-wanna-c-my-underware';
+    // $classes[] = 'why-do-u-wanna-c-my-underware';
 
     return $classes;
 }

@@ -7,7 +7,7 @@
  * Focuses on pagination handling for WooCommerce shop and category pages to optimize
  * SEO and prevent duplicate content from paginated archives.
  *
- * @version 2.5.0
+ * @version 2.6.0
  *
  * Features:
  * - Pagination parameter removal for WooCommerce category pages

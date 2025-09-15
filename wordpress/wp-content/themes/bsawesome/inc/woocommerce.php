@@ -8,11 +8,13 @@
  * specific features. Implements custom product loops, favorites system, B2B payment restrictions,
  * and enhanced sorting algorithms.
  *
- * @version 2.5.0
+ * @version 2.6.0
  *
  * @todo Review all functions and functionalities for necessity
  * @todo Optimize product loop for better marketing (e.g., badges for mirror differences)
  * @todo Consider implementing product quick view functionality
+ * @todo DRY out H1 title generation, exclusions
+ * @todo Show "invoice" payment method also for admins
  *
  * Features:
  * - Theme support configuration with custom image sizes
@@ -202,6 +204,7 @@ add_filter('woocommerce_output_related_products_args', 'wc_related_products');
 // =============================================================================
 // CONTENT WRAPPERS AND LAYOUT
 // =============================================================================
+
 remove_action('woocommerce_before_main_content', 'woocommerce_output_content_wrapper', 10);
 remove_action('woocommerce_after_main_content', 'woocommerce_output_content_wrapper_end', 10);
 add_action('woocommerce_before_main_content', 'wc_wrapper_before');
@@ -256,6 +259,8 @@ remove_action('woocommerce_before_checkout_form', 'woocommerce_checkout_coupon_f
 
 // /**
 //  * Removes the <span class="woocommerce-input-wrapper"> wrapper from checkout fields
+//  *
+//  * @note: May be not needed anymore, no woocommerce-input-wrapper found in checkout fields
 //  */
 //
 // add_filter('woocommerce_form_field', 'custom_remove_input_wrapper_span', 10, 4);
@@ -293,6 +298,7 @@ function custom_invoice_gateway_for_specific_users($available_gateways) {
 
 	return $available_gateways;
 }
+
 /**
  * Add B2B badge to invoice payment method title
  *

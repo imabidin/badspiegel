@@ -6,7 +6,7 @@
  * Displays shopping cart link with item count badge in the site header
  * for quick access to cart functionality and visual cart status indication.
  *
- * @version 2.5.0
+ * @version 2.6.0
  *
  * Features:
  * - Shopping cart link with Font Awesome cart icon

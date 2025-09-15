@@ -24,14 +24,14 @@ if ($general_config_de) {
 	if ($config) {
 		echo "🔧 Aktualisiere Cookie-Domain von: " . $config->cookieDomain . "\n";
 
-		// Cookie-Domain auf localhost setzen
-		$config->cookieDomain = 'localhost';
+		// Cookie-Domain auf www.badspiegel.local setzen
+		$config->cookieDomain = 'www.badspiegel.local';
 
 		// Cookie-Secure auf false setzen (für HTTP)
 		$config->cookieSecure = false;
 
 		// Plugin-URL aktualisieren
-		$config->pluginUrl = 'http://localhost/wp-content/plugins/borlabs-cookie';
+		$config->pluginUrl = 'http://www.badspiegel.local/wp-content/plugins/borlabs-cookie';
 
 		echo "🔧 Neue Cookie-Domain: " . $config->cookieDomain . "\n";
 		echo "🔒 Cookie-Secure: " . ($config->cookieSecure ? 'true' : 'false') . "\n";
@@ -50,9 +50,9 @@ if ($general_config_en) {
 	$config = unserialize($general_config_en);
 
 	if ($config) {
-		$config->cookieDomain = 'localhost';
+		$config->cookieDomain = 'www.badspiegel.local';
 		$config->cookieSecure = false;
-		$config->pluginUrl = 'http://localhost/wp-content/plugins/borlabs-cookie';
+		$config->pluginUrl = 'http://www.badspiegel.local/wp-content/plugins/borlabs-cookie';
 
 		$serialized = serialize($config);
 		update_option('BorlabsCookieGeneralConfig_en', $serialized);
@@ -62,8 +62,8 @@ if ($general_config_en) {
 }
 
 // WordPress URLs sicherstellen
-update_option('home', 'http://localhost');
-update_option('siteurl', 'http://localhost');
+update_option('home', 'http://www.badspiegel.local');
+update_option('siteurl', 'http://www.badspiegel.local');
 
 // Alle Caches löschen
 wp_cache_flush();
@@ -71,6 +71,6 @@ wp_cache_flush();
 echo "🧹 WordPress Cache geleert\n";
 echo "✅ Borlabs Cookie Fix abgeschlossen!\n";
 echo "\n📋 Nächste Schritte:\n";
-echo "1. Browser-Cache/Cookies für localhost löschen\n";
+echo "1. Browser-Cache/Cookies für www.badspiegel.local löschen\n";
 echo "2. Inkognito-Modus verwenden\n";
-echo "3. http://localhost aufrufen\n";
+echo "3. http://www.badspiegel.local aufrufen\n";

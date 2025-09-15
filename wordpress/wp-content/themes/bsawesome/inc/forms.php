@@ -9,7 +9,7 @@
  *
  * @package BSAwesome
  * @subpackage Forms
- * @version 2.5.0
+ * @version 2.6.0
  *
  * Features:
  * - Bootstrap form classes for all input types

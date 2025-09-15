@@ -1,5 +1,5 @@
 /**
- * @version 2.5.0
+ * @version 2.6.0
  *
  * @note Seems to be final, no further changes if not needed
  */

@@ -6,7 +6,7 @@
  * Displays responsive site logo with optimized image delivery and
  * proper accessibility attributes for homepage linking.
  *
- * @version 2.5.0
+ * @version 2.6.0
  *
  * Features:
  * - Responsive logo display with WordPress srcset optimization

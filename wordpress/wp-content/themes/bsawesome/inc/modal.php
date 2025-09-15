@@ -7,7 +7,7 @@
  * security measures, rate limiting, and performance optimizations. This is an
  * improved, modular version that follows DRY principles for better maintainability.
  *
- * @version 2.5.0
+ * @version 2.6.0
  *
  * @todo improve performance, maybe preload all files if debug is false
  *

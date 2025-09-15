@@ -6,7 +6,7 @@
  * Displays trust signals and additional product information after the cart button
  * to enhance customer confidence and provide key selling points.
  *
- * @version 2.5.0
+ * @version 2.6.0
  *
  * @todo Add dynamic content based on product categories
  * @todo Implement conditional display based on user location

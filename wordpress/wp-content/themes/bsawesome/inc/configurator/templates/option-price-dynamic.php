@@ -5,7 +5,7 @@
  *
  * Handles dropdown selection for pricing options with dynamically managed values#
  *
- * @version 2.5.0
+ * @version 2.6.0
  *
  * @note This template can be deleted if not needed
  *

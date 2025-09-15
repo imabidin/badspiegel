@@ -17,7 +17,7 @@
  * - Tooltip initialization for summary actions
  * - Graceful error handling for print/save actions
  *
- * @version 2.5.0
+ * @version 2.6.0
  * @package Configurator
  */
 

@@ -6,7 +6,7 @@
  * Replaces default WooCommerce breadcrumbs with Yoast SEO breadcrumbs
  * and applies Bootstrap 5 styling for consistent theme integration.
  *
- * @version 2.5.0
+ * @version 2.6.0
  *
  * Features:
  * - Yoast SEO breadcrumb integration with Bootstrap navigation structure

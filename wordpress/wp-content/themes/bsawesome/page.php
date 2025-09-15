@@ -10,7 +10,7 @@
  * @package BSAwesome
  * @subpackage Templates
  * @since 1.0.0
- * @version 2.5.0
+ * @version 2.6.0
  *
  * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
  */
@@ -27,7 +27,7 @@ get_header();
 
 		<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
-			<!-- <header class="entry-header"></header> -->
+			<!-- <header class="entry-header"> -->
 
 			<?php
 			// Array of slugs where the H1 heading should be removed.
@@ -47,6 +47,8 @@ get_header();
 				the_title('<h1 class="entry-title mb">', '</h1>');
 			}
 			?>
+
+			<!-- </header> -->
 
 			<div class="entry-content">
 				<?php the_content(); ?>

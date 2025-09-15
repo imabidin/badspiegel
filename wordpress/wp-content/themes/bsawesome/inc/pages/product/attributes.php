@@ -6,7 +6,7 @@
  * Custom product attributes table with organized sections and Bootstrap styling.
  * Replaces WooCommerce default attribute display with categorized sections.
  *
- * @version 2.5.0
+ * @version 2.6.0
  *
  * @todo Add new attribute headings as product range expands
  * @todo Implement responsive table breakpoints for mobile devices

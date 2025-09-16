@@ -692,7 +692,21 @@ class BSAwesome_Favourites_Modern {
      * @return array Array of favourite objects with product_id and config_code
      */
     public function get_guest_favourites() {
-        if (function_exists('WC') && WC()->session) {
+        // Use optimized session function if available
+        if (function_exists('bsawesome_get_wc_session_for_favourites')) {
+            $session = bsawesome_get_wc_session_for_favourites('get_guest_favourites');
+            if ($session) {
+                return $session->get('bsawesome_favourites', array());
+            }
+        }
+
+        // Fallback to direct WC session check - use optimized function if available
+        if (function_exists('bsawesome_get_wc_session_for_favourites')) {
+            $session = bsawesome_get_wc_session_for_favourites('get_guest_favourites');
+            if ($session) {
+                return $session->get('bsawesome_favourites', array());
+            }
+        } elseif (function_exists('WC') && WC()->session) {
             $favourites = WC()->session->get('bsawesome_favourites', array());
             return $favourites;
         }
@@ -822,9 +836,16 @@ class BSAwesome_Favourites_Modern {
             return $result > 0;
         } else {
             // Guest users - use working logic from old system
-            if (function_exists('WC') && WC()->session) {
+            // Use optimized session function if available
+            if (function_exists('bsawesome_get_wc_session_for_favourites')) {
+                $session = bsawesome_get_wc_session_for_favourites('add_favourite');
+            } else {
+                $session = (function_exists('WC') && WC()->session) ? WC()->session : null;
+            }
+
+            if ($session) {
                 try {
-                    $session_favourites = WC()->session->get('bsawesome_favourites', array());
+                    $session_favourites = $session->get('bsawesome_favourites', array());
                     $favourite_item = array(
                         'product_id' => $product_id,
                         'config_code' => $config_code
@@ -842,7 +863,7 @@ class BSAwesome_Favourites_Modern {
                     }
 
                     $session_favourites[] = $favourite_item;
-                    WC()->session->set('bsawesome_favourites', $session_favourites);
+                    $session->set('bsawesome_favourites', $session_favourites);
                     return true;
                 } catch (Exception $e) {
                     return false;
@@ -930,8 +951,15 @@ class BSAwesome_Favourites_Modern {
             return $result !== false && $result > 0;
         } else {
             // Guest handling
-            if (function_exists('WC') && WC()->session) {
-                $favourites = WC()->session->get('bsawesome_favourites', array());
+            // Use optimized session function if available
+            if (function_exists('bsawesome_get_wc_session_for_favourites')) {
+                $session = bsawesome_get_wc_session_for_favourites('remove_favourite');
+            } else {
+                $session = (function_exists('WC') && WC()->session) ? WC()->session : null;
+            }
+
+            if ($session) {
+                $favourites = $session->get('bsawesome_favourites', array());
                 $updated = false;
 
                 foreach ($favourites as $index => $item) {
@@ -958,7 +986,7 @@ class BSAwesome_Favourites_Modern {
 
                 if ($updated) {
                     $favourites = array_values($favourites); // Re-index
-                    WC()->session->set('bsawesome_favourites', $favourites);
+                    $session->set('bsawesome_favourites', $favourites);
                     return true;
                 }
             } else {
@@ -1066,7 +1094,13 @@ class BSAwesome_Favourites_Modern {
         // Get guest favourites from WooCommerce session
         $guest_favourites = array();
 
-        if (function_exists('WC') && WC()->session) {
+        // Use optimized session function if available
+        if (function_exists('bsawesome_get_wc_session_for_favourites')) {
+            $session = bsawesome_get_wc_session_for_favourites('merge_favourites');
+            if ($session) {
+                $guest_favourites = $session->get('bsawesome_favourites', array());
+            }
+        } elseif (function_exists('WC') && WC()->session) {
             $guest_favourites = WC()->session->get('bsawesome_favourites', array());
         }
 
@@ -1158,8 +1192,13 @@ class BSAwesome_Favourites_Modern {
      * @return void
      */
     public function clear_guest_favourites() {
-        // Clear WooCommerce session
-        if (function_exists('WC') && WC()->session) {
+        // Clear WooCommerce session using optimized function if available
+        if (function_exists('bsawesome_get_wc_session_for_favourites')) {
+            $session = bsawesome_get_wc_session_for_favourites('clear_favourites');
+            if ($session) {
+                $session->set('bsawesome_favourites', array());
+            }
+        } elseif (function_exists('WC') && WC()->session) {
             WC()->session->set('bsawesome_favourites', array());
         }
 
@@ -1475,10 +1514,20 @@ function bsawesome_get_current_config_code($product_id) {
     }
 
     // Check session data for product pages
-    if (!$config_code && is_product() && function_exists('WC') && WC()->session) {
-        $current_config = WC()->session->get('current_product_config_' . $product_id, null);
-        if ($current_config && is_string($current_config) && strlen($current_config) === 6) {
-            $config_code = $current_config;
+    if (!$config_code && is_product()) {
+        if (function_exists('bsawesome_get_wc_session_for_favourites')) {
+            $session = bsawesome_get_wc_session_for_favourites('get_current_config');
+            if ($session) {
+                $current_config = $session->get('current_product_config_' . $product_id, null);
+                if ($current_config && is_string($current_config) && strlen($current_config) === 6) {
+                    $config_code = $current_config;
+                }
+            }
+        } elseif (function_exists('WC') && WC()->session) {
+            $current_config = WC()->session->get('current_product_config_' . $product_id, null);
+            if ($current_config && is_string($current_config) && strlen($current_config) === 6) {
+                $config_code = $current_config;
+            }
         }
     }
 

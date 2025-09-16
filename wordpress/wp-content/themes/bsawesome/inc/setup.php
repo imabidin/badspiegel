@@ -131,6 +131,7 @@ function image_sizes() {
     // Remove unused default WordPress and plugin image sizes
     remove_image_size('1536x1536');
     remove_image_size('2048x2048');
+	remove_image_size('wc_order_status_icon');
     remove_image_size('mailpoet_newsletter_max');
 
     // Register custom 48x48px thumbnail size for navigation elements

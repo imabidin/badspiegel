@@ -3,13 +3,10 @@
 /**
  * Theme Footer Template
  *
- * Displays the site footer including links, contact information, payment methods,
- * and credits. Content is conditionally displayed based on current page type.
- *
  * @package BSAwesome
  * @subpackage Templates
  * @since 1.0.0
- * @version 2.6.0
+ * @version 2.7.0
  */
 
 ?>

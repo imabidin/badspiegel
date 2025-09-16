@@ -3,29 +3,10 @@
 /**
  * Main Theme Functions File
  *
- * Features:
- * - Theme setup and configuration management
- * - Asset management (CSS/JS) with versioning and conditional loading
- * - WooCommerce integration with custom hooks and filters
- * - User account functionality with AJAX authentication
- * - Product configurator system with dynamic pricing
- * - Favourites system with session and database storage
- * - SEO optimization through Yoast integration
- * - German market compliance features
- * - Custom layout components and navigation
- * - Modal system for product details and configurations
- *
- * Architecture:
- * - Modular structure with organized file inclusions
- * - Separation of concerns across different functional areas
- * - Layout components organized by header, navigation, footer sections
- * - Page-specific functionality for categories and products
- * - Helper functions for development and debugging
- *
  * @package BSAwesome
  * @subpackage Core
  * @since 1.0.0
- * @version 2.6.0
+ * @version 2.7.0
  */
 
 // =============================================================================

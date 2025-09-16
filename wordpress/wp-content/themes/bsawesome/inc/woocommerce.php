@@ -3,38 +3,13 @@
 /**
  * WooCommerce Integration and Customizations
  *
- * Handles all WooCommerce-related functionality for the BSAwesome theme including theme support
- * configuration, product customizations, cart modifications, checkout processes, and e-commerce
- * specific features. Implements custom product loops, favorites system, B2B payment restrictions,
- * and enhanced sorting algorithms.
- *
- * @version 2.6.0
- *
  * @todo Review all functions and functionalities for necessity
  * @todo Optimize product loop for better marketing (e.g., badges for mirror differences)
  * @todo Consider implementing product quick view functionality
- * @todo DRY out H1 title generation, exclusions
- * @todo Show "invoice" payment method also for admins
- *
- * Features:
- * - Theme support configuration with custom image sizes
- * - Custom product loop styling with Bootstrap card layout
- * - Favorites system integration with configuration support
- * - B2B payment method restrictions and badges
- * - Enhanced product sorting (popularity with fallback)
- * - Custom shipping price display
- * - Product attribute classes for dynamic styling
- * - Responsive gallery thumbnails and hover images
- *
- * Security Measures:
- * - User ID validation for B2B payment access
- * - Configuration code validation (6-character alphanumeric)
- * - Proper data sanitization for all user inputs
- * - Admin area protection for payment modifications
  *
  * @package BSAwesome
  * @subpackage WooCommerce
- * @author BSAwesome Team
+ * @version 2.7.0
  */
 
 // =============================================================================
@@ -46,9 +21,6 @@
  *
  * Adds comprehensive theme support for WooCommerce including image size configurations
  * and gallery features. Configures optimal image dimensions for different contexts.
- *
- * @since 1.0.0
- * @return void
  */
 function wc_setup() {
 	add_theme_support(
@@ -67,8 +39,6 @@ add_action('after_setup_theme', 'wc_setup');
 
 /**
  * Remove WooCommerce sidebar from shop pages
- *
- * @since 1.0.0
  */
 function remove_woocommerce_sidebar() {
 	if (is_woocommerce()) {
@@ -78,24 +48,10 @@ function remove_woocommerce_sidebar() {
 add_action('wp', 'remove_woocommerce_sidebar');
 
 /**
- * Remove WooCommerce specific image sizes
- *
- * @since 1.0.0
- */
-function wc_remove_image_sizes() {
-	remove_image_size('wc_order_status_icon');
-}
-add_action('init', 'wc_remove_image_sizes');
-
-/**
  * Add WooCommerce-specific body classes for enhanced styling
  *
  * Automatically adds the 'woocommerce-active' class to the HTML body when viewing
  * any WooCommerce page for targeted CSS styling.
- *
- * @since 1.0.0
- * @param array $classes Array of existing body CSS classes
- * @return array Array of modified body classes including WooCommerce class
  */
 function wc_body_classes($classes) {
 	if (is_woocommerce()) {
@@ -117,7 +73,6 @@ add_filter('body_class', 'wc_body_classes');
  * attributes (form, lighting, light position, cut edge). Enables precise CSS targeting
  * for product-specific styling and JavaScript functionality.
  *
- * @since 1.0.0
  * @param array $classes Array of existing post CSS classes
  * @param int   $post_id The post ID (product ID)
  * @return array Array of modified post classes with product-specific classes
@@ -171,7 +126,6 @@ add_filter('post_class', 'wc_product_post_classes', 21, 2);
  * Overrides the default WooCommerce products per page setting to display 24 products
  * per page for optimal grid layout.
  *
- * @since 1.0.0
  * @param int $args Default number of products per page
  * @return int Custom number of products per page (24)
  */
@@ -186,7 +140,6 @@ add_filter('loop_shop_per_page', 'wc_number_products');
  * Customizes the number of related products shown on single product pages to 24 products
  * for consistency with shop page layout and enhanced cross-selling opportunities.
  *
- * @since 1.0.0
  * @param array $args Array of arguments for related products query
  * @return array Modified arguments with custom posts_per_page setting
  */
@@ -216,7 +169,6 @@ add_action('woocommerce_after_main_content', 'wc_wrapper_after');
  * Outputs HTML structure for main content area with different container classes based on page type.
  * Product pages use full-width layout, other pages use Bootstrap container-md.
  *
- * @since 1.0.0
  * @see wc_wrapper_after()
  */
 function wc_wrapper_before() {
@@ -235,7 +187,6 @@ function wc_wrapper_before() {
  * Outputs HTML structure that closes the main content area for WooCommerce pages.
  * Paired with wc_wrapper_before() to create complete content container.
  *
- * @since 1.0.0
  * @see wc_wrapper_before()
  */
 function wc_wrapper_after() {
@@ -252,8 +203,6 @@ function wc_wrapper_after() {
  *
  * Removes the default WooCommerce coupon form that appears before the checkout form
  * to streamline the checkout process.
- *
- * @since 1.0.0
  */
 remove_action('woocommerce_before_checkout_form', 'woocommerce_checkout_coupon_form', 10);
 
@@ -277,21 +226,21 @@ remove_action('woocommerce_before_checkout_form', 'woocommerce_checkout_coupon_f
  * Restricts the "Invoice" payment method to specific authorized user IDs implementing
  * a B2B payment system where only approved business customers can pay by invoice.
  *
- * @since 1.0.0
  * @param array $available_gateways Array of available payment gateways
  * @return array Filtered array of payment gateways
  */
 add_filter('woocommerce_available_payment_gateways', 'custom_invoice_gateway_for_specific_users');
 function custom_invoice_gateway_for_specific_users($available_gateways) {
-	if (is_admin()) {
-		return $available_gateways;
-	}
-
 	$allowed_user_ids = array(2, 5, 8);
 	$current_user_id = get_current_user_id();
 
 	if (isset($available_gateways['invoice'])) {
-		if (! in_array($current_user_id, $allowed_user_ids, true)) {
+		// Show invoice payment method for allowed users OR admins
+		$is_allowed_user = in_array($current_user_id, $allowed_user_ids, true);
+		$is_admin = current_user_can('manage_options');
+
+		// Remove invoice gateway if user is neither allowed nor admin
+		if (!$is_allowed_user && !$is_admin) {
 			unset($available_gateways['invoice']);
 		}
 	}
@@ -300,23 +249,22 @@ function custom_invoice_gateway_for_specific_users($available_gateways) {
 }
 
 /**
- * Add B2B badge to invoice payment method title
+ * Add B2B badge to invoice payment method icon area
  *
- * Adds Bootstrap warning badge with "B2B" text to the invoice payment method title
+ * Adds Bootstrap success badge with "B2B" text to the invoice payment method icon area
  * to clearly indicate it's for business customers.
  *
- * @since 1.0.0
- * @param string $title The payment gateway title
+ * @param string $icon The payment gateway icon HTML
  * @param string $gateway_id The payment gateway ID
- * @return string Modified title with B2B badge for invoice gateway
+ * @return string Modified icon with B2B badge for invoice gateway
  */
-add_filter('woocommerce_gateway_title', 'add_b2b_badge_to_invoice_title', 10, 2);
-function add_b2b_badge_to_invoice_title($title, $gateway_id) {
+add_filter('woocommerce_gateway_icon', 'add_b2b_badge_to_invoice_icon', 10, 2);
+function add_b2b_badge_to_invoice_icon($icon, $gateway_id) {
 	if ('invoice' === $gateway_id) {
-		$badge = ' <span class="badge bg-warning fw-medium">B2B</span>';
-		return $title . $badge;
+		$badge = '<span class="badge text-bg-success">B2B</span>';
+		return $icon . $badge;
 	}
-	return $title;
+	return $icon;
 }
 
 // =============================================================================
@@ -329,7 +277,6 @@ function add_b2b_badge_to_invoice_title($title, $gateway_id) {
  * Filters and modifies image attributes for WooCommerce product images adding custom
  * CSS classes based on context and page type for enhanced styling.
  *
- * @since 2.8.0
  * @param string[]     $attr       Array of attribute values for the image markup, keyed by attribute name
  * @param WP_Post      $attachment Image attachment post object
  * @param string|int[] $size       Requested image size (name or array of dimensions)
@@ -346,52 +293,16 @@ function filter_wp_get_attachment_image_attributes($attr, $attachment, $size) {
 }
 add_filter('wp_get_attachment_image_attributes', 'filter_wp_get_attachment_image_attributes', 10, 3);
 
-/**
- * Remove H1 page titles on specific WooCommerce pages by slug
- *
- * Conditionally removes the default WooCommerce page title (H1 heading) when the current
- * page or taxonomy slug matches predefined slugs for custom page layouts without conflicting headings.
- *
- * @since 1.0.0
- * @param bool $show Default value (true = show title, false = hide title)
- * @return bool Whether to show the page title (false = remove H1)
- */
-function remove_h1_heading_by_slug($show) {
-	// Array der Slugs, bei denen die H1-Überschrift entfernt werden soll
-	$slugs_to_remove = array('b2b');
-
-	// Das aktuell abgefragte Objekt (Seite oder Taxonomie-Term)
-	$queried_object = get_queried_object();
-
-	// Prüfe, ob es sich um eine Seite handelt und ob der Seiten-Slug in der Liste steht
-	if (is_page() && isset($queried_object->post_name)) {
-		if (in_array($queried_object->post_name, $slugs_to_remove, true)) {
-			return false;
-		}
-	}
-
-	// Prüfe, ob es sich um einen Taxonomie-Begriff (z. B. Produktkategorie) handelt
-	if (is_tax() && isset($queried_object->slug)) {
-		if (in_array($queried_object->slug, $slugs_to_remove, true)) {
-			return false;
-		}
-	}
-
-	return $show;
-}
-add_filter('woocommerce_show_page_title', 'remove_h1_heading_by_slug');
-
 // =============================================================================
-// SHIPPING AND ACCOUNT CUSTOMIZATIONS
+// SHIPPING CUSTOMIZATIONS
 // =============================================================================
 
 /**
  * Custom shipping method price display
  *
  * Returns shipping price as formatted amount according to WooCommerce tax display settings.
- * Replaces default shipping method label with clean price-only display.
+ * Replaces default shipping method label "Nationaler Versand" with clean price-only display "0,00 €".
  *
- * @since 1.0.0
  * @param string $label The original shipping method label
  * @param object $method The shipping method object containing cost and tax data
  * @return string Formatted price only (no method name)
@@ -412,7 +323,7 @@ function custom_shipping_method_full_label($label, $method) {
 }
 
 /**
- * Entfernt den Standard-Labeltext aus den Versandraten.
+ * Removes the default label text from shipping rates.
  *
  * Maybe not needed
  */
@@ -425,13 +336,16 @@ function custom_shipping_method_full_label($label, $method) {
 // 	return $rates;
 // }
 
+// =============================================================================
+// ACCOUNT CUSTOMIZATIONS
+// =============================================================================
+
 /**
  * Custom "My Account" page titles based on login status
  *
  * Dynamically changes the title of the WooCommerce My Account page depending on user's
  * login status: "Mein Konto" for logged in users, "Anmelden oder registrieren" for guests.
  *
- * @since 1.0.0
  * @param string $title Original page title
  * @param int $id Page ID being filtered
  * @return string Modified page title if on account page, original title otherwise
@@ -459,7 +373,6 @@ function custom_my_account_page_title($title, $id) {
  * by menu order (ascending) for products with equal or zero sales. Ensures proper ordering
  * for new shops with limited sales data.
  *
- * @since 1.0.0
  * @param array $query_args WooCommerce product query arguments
  * @return array Modified query arguments
  */
@@ -488,7 +401,6 @@ function custom_enhanced_popularity_sorting($query_args) {
  * Ensures that the total_sales meta field is available for sorting by adding it to
  * the posts_clauses if needed.
  *
- * @since 1.0.0
  * @param array $clauses Query clauses
  * @param WP_Query $query Current query object
  * @return array Modified clauses

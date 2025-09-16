@@ -1,26 +1,11 @@
 <?php defined('ABSPATH') || exit;
 
 /**
- * Zendesk Chat Integration for BadSpiegel Theme
+ * Zendesk Chat Integration
  *
- * Floating chat button with German localization and intelligent page exclusions.
- * Bootstrap dark button positioned bottom-right with Font Awesome icon and
- * accessibility attributes. Excluded from checkout/cart to prevent purchase flow disruption.
+ * Excluded from checkout/cart to prevent purchase flow disruption.
  *
- * @version 2.6.0
- *
- * @todo Add chat availability status indicators
- * @todo Implement chat button customization options
- * @todo Add mobile-responsive positioning adjustments
- *
- * Features:
- * - Bootstrap dark button (btn-dark btn-lg) positioned bottom-right
- * - Zendesk Web Widget with German locale
- * - Deferred script loading for performance
- * - Font Awesome message icon with accessibility attributes
- * - Excluded from checkout/cart pages
- *
- * @return void Outputs HTML chat button and Zendesk script
+ * @version 2.7.0
  */
 
 function zendesk_chat() {

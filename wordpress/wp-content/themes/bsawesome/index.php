@@ -3,16 +3,10 @@
 /**
  * Main Index Template
  *
- * This is the most generic template file in a WordPress theme and serves
- * as the fallback template when no more specific template can be found.
- * In this theme, it displays a basic page structure.
- *
  * @package BSAwesome
  * @subpackage Templates
  * @since 1.0.0
- * @version 2.6.0
- *
- * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
+ * @version 2.7.0
  */
 
 get_header();

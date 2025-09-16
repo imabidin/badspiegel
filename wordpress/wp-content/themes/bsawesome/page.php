@@ -3,16 +3,12 @@
 /**
  * Page Template
  *
- * This template displays all standard pages by default. It provides
- * the basic structure for page content display including breadcrumbs,
- * page content, and any additional page-specific elements.
- *
  * @package BSAwesome
  * @subpackage Templates
  * @since 1.0.0
- * @version 2.6.0
+ * @version 2.7.0
  *
- * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
+ * @todo Consider adding a small plugin, do deactive H1 headings through the backend.
  */
 
 get_header();

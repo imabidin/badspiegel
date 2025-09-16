@@ -1276,7 +1276,7 @@ function site_favourites($args = array()) {
         'show_badge' => true,
         'css_classes' => 'site-favourites col-auto',
         'link_classes' => 'btn btn-dark',
-        'badge_classes' => 'badge bg-light text-dark rounded-pill small ms-1'
+        'badge_classes' => 'badge text-bg-light rounded-pill small'
     );
 
     $args = wp_parse_args($args, $defaults);

@@ -3,16 +3,10 @@
 /**
  * Theme Header Template
  *
- * Displays the HTML head section and site header including navigation,
- * search, cart, and account functionality. This template is included
- * on every page of the website.
- *
  * @package BSAwesome
  * @subpackage Templates
  * @since 1.0.0
- * @version 2.6.0
- *
- * @link https://developer.wordpress.org/themes/basics/template-files/#template-partials
+ * @version 2.7.0
  */
 
 ?>
@@ -24,7 +18,6 @@
 <head>
 	<meta charset="<?php bloginfo('charset'); ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="profile" href="https://gmpg.org/xfn/11">
 
 	<?php wp_head(); ?>
 </head>

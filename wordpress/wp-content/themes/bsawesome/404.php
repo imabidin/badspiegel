@@ -3,15 +3,10 @@
 /**
  * 404 Error Page Template
  *
- * This template is displayed when a requested page cannot be found.
- * It provides a user-friendly error message and helpful navigation options.
- *
  * @package BSAwesome
  * @subpackage Templates
  * @since 1.0.0
- * @version 2.6.0
- *
- * @link https://codex.wordpress.org/Creating_an_Error_404_Page
+ * @version 2.7.0
  */
 
 get_header();

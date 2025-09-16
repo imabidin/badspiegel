@@ -7,30 +7,15 @@
  * like lazy loading, responsive sizing, and security validation. Enables shortcode processing
  * in category descriptions.
  *
- * @version 2.6.0
- *
- * @todo Optimize img shortcode for better src and sizes generation
- * @todo Make html shortcode performance checks
- *
  * Available Shortcodes:
  * - [html file="path/to/file"] - Include HTML content from theme/html/ directory
  * - [img id="123" size="large" container="container" ...] - Display responsive images
  *
- * Features:
- * - Path traversal protection for HTML includes
- * - Intelligent responsive image sizing based on Bootstrap grid
- * - Automatic srcset and sizes generation
- * - Native lazy loading support
- * - Bootstrap-compatible container sizing
+ * @version 2.7.0
  *
- * Security Measures:
- * - Filename pattern validation with allowed characters only
- * - Path traversal protection via realpath() verification
- * - File existence validation within HTML directory boundaries
+ * @todo Optimize img shortcode for better src and sizes generation
+ * @todo Make html shortcode performance checks
  *
- * @package BSAwesome
- * @subpackage Shortcodes
- * @author BSAwesome Team
  */
 
 // =============================================================================

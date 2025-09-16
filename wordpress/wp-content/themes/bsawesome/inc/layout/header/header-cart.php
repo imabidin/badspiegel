@@ -59,7 +59,7 @@ function site_cart()
         <a class="cart-contents btn btn-dark" href="<?php echo esc_url(wc_get_cart_url()); ?>" title="<?php _e('Warenkorb aufrufen', 'woocommerce'); ?>" rel="nofollow">
             <i class="fa-sharp fa-thin fa-cart-shopping fa-fw" aria-hidden="true"></i>
             <?php if (WC()->cart->get_cart_contents_count() > 0) : ?>
-                <span class="badge bg-danger rounded-pill small"><?php echo WC()->cart->get_cart_contents_count(); ?></span>
+                <span class="badge text-bg-danger rounded-pill small"><?php echo WC()->cart->get_cart_contents_count(); ?></span>
             <?php endif; ?>
         </a>
     </div>

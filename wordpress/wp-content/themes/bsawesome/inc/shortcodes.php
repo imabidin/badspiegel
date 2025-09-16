@@ -48,6 +48,11 @@ function initialize_custom_shortcodes() {
      * @return string The content of the included HTML file or error message
      */
     function custom_html_shortcode($atts) {
+        // Prevent recursive includes
+        static $loading_files = array();
+        if (in_array($atts['file'] ?? 'default', $loading_files)) {
+            return __('Recursive include detected for: ', 'bsawesome') . esc_html($atts['file'] ?? 'default');
+        }
         // Set default values for shortcode attributes
         $atts = shortcode_atts(
             array(
@@ -65,11 +70,35 @@ function initialize_custom_shortcodes() {
             return __('Invalid filename specified.', 'bsawesome');
         }
 
-        // Get absolute path to HTML directory
-        $html_dir = realpath(get_stylesheet_directory() . '/html');
+        // Get absolute path to HTML directory (cached)
+        $html_dir_cache_key = 'html_base_dir';
+        $html_dir = wp_cache_get($html_dir_cache_key, 'theme_paths');
+        if ($html_dir === false) {
+            $html_dir = realpath(get_stylesheet_directory() . '/html');
+            wp_cache_set($html_dir_cache_key, $html_dir, 'theme_paths', 3600);
+        }
 
-        // Create full path to requested file
-        $full_path = realpath($html_dir . '/' . $atts['file'] . '.html');
+        // Quick file existence check before expensive realpath()
+        $file_path = $html_dir . '/' . $atts['file'] . '.html';
+        if (!file_exists($file_path)) {
+            return __('File not found: ', 'bsawesome') . esc_html($atts['file']);
+        }
+
+        // File size validation to prevent memory issues
+        $file_size = filesize($file_path);
+        if ($file_size === false || $file_size > 1024 * 1024) { // 1MB limit
+            return __('File too large or unreadable: ', 'bsawesome') . esc_html($atts['file']);
+        }
+
+        // Create full path to requested file (cached)
+        $full_path_cache_key = 'html_full_path_' . md5($atts['file']);
+        $full_path = wp_cache_get($full_path_cache_key, 'theme_paths');
+        if ($full_path === false) {
+            $full_path = realpath($file_path);
+            if ($full_path !== false) {
+                wp_cache_set($full_path_cache_key, $full_path, 'theme_paths', 3600);
+            }
+        }
 
         // Security check: ensure file is within the HTML directory
         if ($full_path === false || strpos($full_path, $html_dir) !== 0) {
@@ -79,8 +108,18 @@ function initialize_custom_shortcodes() {
         // Smart caching with automatic invalidation on file changes
         // Skip caching in development mode for immediate changes
         if (!defined('WP_DEBUG') || !WP_DEBUG) {
-            // Get file modification time for cache invalidation
-            $file_time = filemtime($full_path);
+            // Get file modification time for cache invalidation with transient cache
+            $file_time_cache_key = 'html_file_time_' . md5($atts['file']);
+            $file_time = get_transient($file_time_cache_key);
+
+            if ($file_time === false) {
+                $file_time = filemtime($full_path);
+                if ($file_time !== false) {
+                    // Cache filemtime for 5 minutes to reduce filesystem I/O
+                    set_transient($file_time_cache_key, $file_time, 300);
+                }
+            }
+
             if ($file_time !== false) {
                 // Create cache key including file timestamp for auto-invalidation
                 $cache_key = 'html_shortcode_' . md5($atts['file'] . '_' . $file_time);
@@ -93,10 +132,16 @@ function initialize_custom_shortcodes() {
             }
         }
 
+        // Add current file to loading stack
+        $loading_files[] = $atts['file'];
+
         // Include file and capture content
         ob_start();
         include $full_path;
         $content = ob_get_clean();
+
+        // Remove from loading stack after successful include
+        array_pop($loading_files);
 
         // Cache the content (only in production mode)
         if (!defined('WP_DEBUG') || !WP_DEBUG) {

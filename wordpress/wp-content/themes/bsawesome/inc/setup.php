@@ -9,16 +9,7 @@
  *
  * @package BSAwesome
  * @subpackage Setup
- * @version 2.6.0
- *
- * Features:
- * - WordPress core feature support (HTML5, title tags, responsive embeds)
- * - Navigation menu location registration
- * - Custom body classes for enhanced styling control
- * - Image size optimization and custom thumbnail creation
- * - Content width configuration for optimal display
- *
- * @todo WooCommerce specific functions have been moved to woocommerce.php
+ * @version 2.7.0
  */
 
 // =============================================================================
@@ -27,8 +18,6 @@
 
 /**
  * Initialize theme setup
- *
- * @since 1.0.0
  */
 function setup() {
     // load_theme_textdomain('bsawesome', get_theme_file_path() . '/languages');
@@ -51,20 +40,7 @@ function setup() {
         )
     );
 
-    // add_theme_support(
-    //     'post-formats',
-    //     array(
-    //         'aside',
-    //         'image',
-    //         'video',
-    //         'quote',
-    //         'link',
-    //     )
-    // );
-
     // add_theme_support('post-thumbnails');
-
-    // add_theme_support('custom-logo');
 
     register_nav_menus(
         array(
@@ -73,11 +49,7 @@ function setup() {
         )
     );
 
-    add_theme_support('title-tag');
-
-    add_filter('dwpb_disable_author_archives', '__return_true');
-
-    // add_theme_support('responsive-embeds')
+    add_theme_support('title-tag'); // SEO recommendation
 
 }
 add_action('after_setup_theme', 'setup');
@@ -89,7 +61,6 @@ add_action('after_setup_theme', 'setup');
 /**
  * Customize body classes
  *
- * @since 1.0.0
  * @param array $classes Default body classes provided by WordPress
  * @return array Modified array of body classes
  */
@@ -112,7 +83,6 @@ function body_classes($classes) {
     }
 
     $classes[] = 'site-body';
-    // $classes[] = 'why-do-u-wanna-c-my-underware';
 
     return $classes;
 }
@@ -131,7 +101,7 @@ function image_sizes() {
     // Remove unused default WordPress and plugin image sizes
     remove_image_size('1536x1536');
     remove_image_size('2048x2048');
-	remove_image_size('wc_order_status_icon');
+    remove_image_size('wc_order_status_icon');
     remove_image_size('mailpoet_newsletter_max');
 
     // Register custom 48x48px thumbnail size for navigation elements

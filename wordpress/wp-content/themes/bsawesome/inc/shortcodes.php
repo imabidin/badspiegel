@@ -14,8 +14,6 @@
  * @version 2.7.0
  *
  * @todo Optimize img shortcode for better src and sizes generation
- * @todo Make html shortcode performance checks
- *
  */
 
 // =============================================================================

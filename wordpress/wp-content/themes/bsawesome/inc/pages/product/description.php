@@ -6,7 +6,7 @@
  * Removes product description from default WooCommerce tabs and short description
  * from product summary to relocate content for better UX design.
  *
- * @version 2.6.0
+ * @version 2.7.0
  *
  * @todo Consider implementing description in modal or accordion format
  * @todo Add alternative content display options for mobile devices

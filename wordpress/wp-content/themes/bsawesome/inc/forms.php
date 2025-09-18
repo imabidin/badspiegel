@@ -7,16 +7,7 @@
  * default WooCommerce wrapper elements. Provides comprehensive form field customization
  * with proper DOM manipulation and UTF-8 support.
  *
- * @package BSAwesome
- * @subpackage Forms
- * @version 2.6.0
- *
- * Features:
- * - Bootstrap form classes for all input types
- * - WooCommerce wrapper element removal
- * - DOM-based HTML manipulation for reliability
- * - UTF-8 encoding preservation
- * - Address field placeholder customization
+ * @version 2.7.0
  *
  * @todo Check if floating label is an option
  */

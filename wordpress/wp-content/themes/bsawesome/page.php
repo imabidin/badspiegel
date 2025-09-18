@@ -27,7 +27,7 @@ get_header();
 
 			<?php
 			// Array of slugs where the H1 heading should be removed.
-			$remove_title_slugs = array('b2b', 'montage', 'agb', 'datenschutz', 'impressum', 'widerruf', 'sicherheit', 'zahlung', 'versand');
+			$remove_title_slugs = array('ueber-uns','b2b', 'montage', 'agb', 'datenschutz', 'impressum', 'widerruf', 'sicherheit', 'zahlung', 'versand');
 
 			// Get the current page slug.
 			$current_slug = '';

@@ -31,9 +31,9 @@ defined('ABSPATH') || exit;
 
 		<?php if ($order->has_status('failed')) : ?>
 
-			<p class="woocommerce-notice woocommerce-notice--error woocommerce-thankyou-order-failed"><?php esc_html_e('Unfortunately your order cannot be processed as the originating bank/merchant has declined your transaction. Please attempt your purchase again.', 'woocommerce'); ?></p>
+			<p class="woocommerce-notice woocommerce-notice--error callout callout-danger woocommerce-thankyou-order-failed"><?php esc_html_e('Unfortunately your order cannot be processed as the originating bank/merchant has declined your transaction. Please attempt your purchase again.', 'woocommerce'); ?></p>
 
-			<p class="woocommerce-notice woocommerce-notice--error woocommerce-thankyou-order-failed-actions">
+			<p class="woocommerce-notice woocommerce-notice--error callout callout-danger woocommerce-thankyou-order-failed-actions">
 				<a href="<?php echo esc_url($order->get_checkout_payment_url()); ?>" class="button pay"><?php esc_html_e('Pay', 'woocommerce'); ?></a>
 				<?php if (is_user_logged_in()) : ?>
 					<a href="<?php echo esc_url(wc_get_page_permalink('myaccount')); ?>" class="button pay"><?php esc_html_e('My account', 'woocommerce'); ?></a>
@@ -44,7 +44,7 @@ defined('ABSPATH') || exit;
 
 			<?php wc_get_template('checkout/order-received.php', array('order' => $order)); ?>
 
-			<ul class="woocommerce-order-overview woocommerce-thankyou-order-details order_details">
+			<ul class="woocommerce-order-overview woocommerce-thankyou-order-details order_details bg-light py-2 pe-3 shadow-sm">
 
 				<li class="woocommerce-order-overview__order order">
 					<?php esc_html_e('Order number:', 'woocommerce'); ?>

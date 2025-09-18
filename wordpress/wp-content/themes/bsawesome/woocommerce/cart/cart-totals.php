@@ -23,9 +23,9 @@ defined('ABSPATH') || exit;
 
 	<?php do_action('woocommerce_before_cart_totals'); ?>
 
-	<h2><?php esc_html_e('Cart totals', 'woocommerce'); ?></h2>
+	<h2 class="visually-hidden"><?php esc_html_e('Cart totals', 'woocommerce'); ?></h2>
 
-	<table cellspacing="0" class="table table-light shop_table table shop_table_responsive">
+	<table cellspacing="0" class="table table-light shop_table shadow-sm table shop_table_responsive" style="--bs-table-border-color: var(--bs-body-bg);">
 
 		<tr class="cart-subtotal">
 			<th><?php esc_html_e('Subtotal', 'woocommerce'); ?></th>

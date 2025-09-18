@@ -7,7 +7,7 @@
  * product category pages with collapsible interface, visual display toggles,
  * and accessible filter management.
  *
- * @version 2.6.0
+ * @version 2.7.0
  *
  * Features:
  * - Collapsible filter interface with Bootstrap accordion

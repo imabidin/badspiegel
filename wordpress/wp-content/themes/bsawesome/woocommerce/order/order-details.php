@@ -45,14 +45,14 @@ if ($show_downloads) {
 	);
 }
 ?>
-<section class="woocommerce-order-details">
+<section class="woocommerce-order-details my">
 	<?php do_action('woocommerce_order_details_before_order_table', $order); ?>
 
 	<h2 class="woocommerce-order-details__title"><?php esc_html_e('Order details', 'woocommerce'); ?></h2>
 
-	<table class="woocommerce-table woocommerce-table--order-details table table-light shop_table order_details">
+	<table class="woocommerce-table woocommerce-table--order-details table table-light shop_table shadow-sm order_details" style="--bs-table-border-color: var(--bs-body-bg);">
 
-		<thead style="--bs-table-bg: var(--bs-dark-bg-subtle);">
+		<thead>
 			<tr>
 				<th class="woocommerce-table__product-name product-name"><?php esc_html_e('Product', 'woocommerce'); ?></th>
 				<th class="woocommerce-table__product-table product-total text-end"><?php esc_html_e('Total', 'woocommerce'); ?></th>

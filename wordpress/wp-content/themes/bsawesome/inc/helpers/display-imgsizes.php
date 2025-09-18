@@ -6,7 +6,7 @@
  * Development tool for displaying all registered WordPress image sizes
  * in the admin interface to assist with theme and plugin development.
  *
- * @version 2.6.0
+ * @version 2.7.0
  *
  * Features:
  * - Complete image size registry display (default and custom sizes)

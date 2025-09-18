@@ -6,7 +6,7 @@
  * Development tool for analyzing and displaying functions attached to specific
  * WordPress hooks with priority information and detailed function identification.
  *
- * @version 2.6.0
+ * @version 2.7.0
  *
  * Features:
  * - Complete hook analysis with priority-based sorting

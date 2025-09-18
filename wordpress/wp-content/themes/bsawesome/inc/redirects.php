@@ -7,25 +7,11 @@
  * Focuses on pagination handling for WooCommerce shop and category pages to optimize
  * SEO and prevent duplicate content from paginated archives.
  *
- * @version 2.6.0
- *
- * Features:
- * - Pagination parameter removal for WooCommerce category pages
- * - Pagination parameter removal for main WooCommerce shop page
- * - SEO optimization to prevent duplicate content
- * - More aggressive approach than canonical meta tags through actual HTTP redirects
- *
- * Scenarios handled:
- * 1. Paginated product category pages (/category/page/2/) redirect to main category page
- * 2. Paginated shop pages (/shop/page/2/) redirect to main shop page
- *
- * @package BSAwesome
- * @subpackage SEO
- * @author BSAwesome Team
- *
  * @param string $redirect_url The redirect URL suggested by WordPress
  * @param string $requested_url The URL of the current request
  * @return string Modified redirect URL (or original if no intervention needed)
+ *
+ * @version 2.7.0
  */
 
 add_filter('redirect_canonical', function ($redirect_url, $requested_url) {

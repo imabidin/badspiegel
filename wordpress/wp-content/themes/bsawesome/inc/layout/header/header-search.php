@@ -6,7 +6,7 @@
  * Provides responsive product search functionality with mobile offcanvas
  * interface and desktop inline display for optimal user experience.
  *
- * @version 2.6.0
+ * @version 2.7.0
  *
  * Features:
  * - Responsive search interface with mobile offcanvas and desktop inline

@@ -6,7 +6,7 @@
  * Responsive primary navigation system with Bootstrap offcanvas for mobile
  * and horizontal layout for desktop with accessibility and SEO optimization.
  *
- * @version 2.6.0
+ * @version 2.7.0
  *
  * Features:
  * - Responsive navigation with Bootstrap offcanvas for mobile

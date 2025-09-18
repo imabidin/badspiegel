@@ -5,37 +5,7 @@
  *
  * Provides secure, performant, and intelligent session management for guest users.
  *
- * Features:
- * - Smart session initialization (only when needed)
- * - Performance caching to prevent redundant operations
- * - Input validation and sanitization for security
- * - WP_DEBUG-aware error logging
- * - Automatic session cleanup and maintenance
- * - Comprehensive session statistics and monitoring
- *
- * Enables features like:
- * - Favourites storage for guest users
- * - Product configurations and customizations
- * - Custom session-based functionality
- * - Secure session data handling
- *
- * Performance Optimizations:
- * - Conditional loading based on page context
- * - Session state caching prevents redundant initialization
- * - Optimized cookie handling reduces WooCommerce API calls
- * - Memory-efficient session data storage
- *
- * Security Features:
- * - Session key validation prevents injection attacks
- * - Value sanitization protects against XSS/data corruption
- * - Reserved prefix protection prevents conflicts
- * - Secure fallback to PHP sessions when needed
- *
- * @version 3.0.0
- * @author BSAwesome Team
- * @since 2.7.0 Basic session management
- * @since 2.8.0 Performance caching optimizations
- * @since 3.0.0 Security enhancements and smart loading
+ * @version 2.7.0
  */
 
 /**

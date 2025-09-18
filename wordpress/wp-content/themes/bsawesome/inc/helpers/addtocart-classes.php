@@ -6,7 +6,7 @@
  * Provides intelligent CSS class generation for WooCommerce Add to Cart buttons
  * with dynamic styling based on product configurator complexity and performance optimization.
  *
- * @version 2.6.0
+ * @version 2.7.0
  *
  * Features:
  * - Dynamic button styling based on product option groups count

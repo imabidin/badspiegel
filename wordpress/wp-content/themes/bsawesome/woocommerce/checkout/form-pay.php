@@ -22,8 +22,8 @@ $totals = $order->get_order_item_totals(); // phpcs:ignore WordPress.WP.GlobalVa
 ?>
 <form id="order_review" method="post">
 
-	<table class="table table-light shop_table">
-		<thead style="--bs-table-bg: var(--bs-dark-bg-subtle);">
+	<table class="table table-light shop_table shadow-sm" style="--bs-table-border-color: var(--bs-body-bg);">
+		<thead>
 			<tr>
 				<th class="product-name"><?php esc_html_e('Product', 'woocommerce'); ?></th>
 				<th class="product-quantity"><?php esc_html_e('Qty', 'woocommerce'); ?></th>
@@ -38,7 +38,7 @@ $totals = $order->get_order_item_totals(); // phpcs:ignore WordPress.WP.GlobalVa
 						continue;
 					}
 					?>
-					<tr class="<?php echo esc_attr(apply_filters('woocommerce_order_item_class', 'order_item', $item, $order)); ?>">
+					<tr class="shadow <?php echo esc_attr(apply_filters('woocommerce_order_item_class', 'order_item', $item, $order)); ?>">
 						<td class="product-name">
 							<?php
 							echo wp_kses_post(apply_filters('woocommerce_order_item_name', $item->get_name(), $item, false));

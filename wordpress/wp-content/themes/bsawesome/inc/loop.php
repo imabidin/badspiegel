@@ -7,19 +7,7 @@
  * WooCommerce product loop customizations. Features admin interface for hover image configuration,
  * Bootstrap card-based product layouts, and favorites system integration.
  *
- * @package BSAwesome
- * @subpackage Loop
- * @version 2.6.0
- *
- * Features:
- * - Admin meta box for product hover image selection
- * - Hover image display with fallback to gallery images
- * - Bootstrap card-based product loop layout
- * - WooCommerce template overrides for custom styling
- * - Favorites button integration with configuration support
- * - Media uploader with product-specific filtering
- *
- * @todo Combine codes inside woocommerce.php if possible (Legacy note - now separated)
+ * @version 2.7.0
  */
 
 // =============================================================================

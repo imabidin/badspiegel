@@ -6,7 +6,7 @@
  * Renders organized footer navigation with categorized links for products,
  * company information, shop features, and customer support sections.
  *
- * @version 2.6.0
+ * @version 2.7.0
  *
  * Features:
  * - Categorized footer navigation with four main sections

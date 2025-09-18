@@ -35,6 +35,9 @@ const FEEDBACK_MODE = "modal";
 // DEBUG: set to true to enable console tracing
 const DEBUG = false;
 
+// Modal state tracking
+let isModalOpen = false;
+
 function debugLog(...args) {
   if (DEBUG && typeof console !== "undefined" && console.log) {
     console.log("[tv-geraet]", ...args);
@@ -77,13 +80,24 @@ function highlightImportant(escapedMessage) {
 
 /**
  * Show feedback to the user. Uses `alert` or `createModal` depending on FEEDBACK_MODE.
+ * Includes modal state tracking to prevent duplicate modals.
  * @param {string} message
  * @param {string} [title]
  */
 function showFeedback(message, title) {
+  // Prevent showing modal if one is already open
+  if (isModalOpen) {
+    debugLog("Modal already open, skipping showFeedback");
+    return;
+  }
+
   debugLog("showFeedback called", { mode: FEEDBACK_MODE, title });
+
   if (FEEDBACK_MODE === "modal" && typeof window.createModal === "function") {
     try {
+      // Mark modal as open
+      isModalOpen = true;
+
       // Build a Bootstrap-friendly body with FontAwesome icon
       const escaped = escapeHtml(message);
       const highlighted = highlightImportant(escaped);
@@ -101,11 +115,18 @@ function showFeedback(message, title) {
         body: bodyHtml,
         // createFooterButton prefixes with 'btn ' so pass only the modifier
         footer: [{ text: "OK", class: "btn-dark", dismiss: true }],
+        onHidden: () => {
+          // Reset modal state when modal is closed
+          isModalOpen = false;
+          debugLog("Modal closed, resetting isModalOpen flag");
+        }
       });
       debugLog("createModal invoked successfully");
       return;
     } catch (e) {
       console.error("[tv-geraet] createModal threw", e);
+      // Reset modal state on error
+      isModalOpen = false;
       // fallback to alert if modal creation fails
     }
   }
@@ -119,6 +140,8 @@ function showFeedback(message, title) {
 
   // default fallback
   alert(message);
+  // For alert, reset modal state immediately since it's synchronous
+  isModalOpen = false;
 }
 
 // --- Small DOM + state helpers (DRY) -------------------------------------
@@ -205,6 +228,8 @@ function checkSelectedTvSizing() {
   return true;
 }
 
+
+
 // --- Event listeners / initialization (placed near top) ------------------
 document.addEventListener("DOMContentLoaded", () => {
   /**
@@ -240,12 +265,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   if (widthInput) {
-    widthInput.addEventListener("input", () => checkSelectedTvSizing());
     widthInput.addEventListener("change", () => checkSelectedTvSizing());
   }
 
   if (heightInput) {
-    heightInput.addEventListener("input", () => checkSelectedTvSizing());
     heightInput.addEventListener("change", () => checkSelectedTvSizing());
   }
 

@@ -28,8 +28,8 @@ do_action('woocommerce_before_account_payment_methods', $has_methods); ?>
 
 <?php if ($has_methods) : ?>
 
-	<table class="woocommerce-MyAccount-paymentMethods table shop_table table table-light shop_table_responsive account-payment-methods-table">
-		<thead style="--bs-table-bg: var(--bs-dark-bg-subtle);">
+	<table class="woocommerce-MyAccount-paymentMethods table shop_table shadow-sm table table-light shop_table_responsive account-payment-methods-table" style="--bs-table-border-color: var(--bs-body-bg);">
+		<thead>
 			<tr>
 				<?php foreach (wc_get_account_payment_methods_columns() as $column_id => $column_name) : ?>
 					<th class="woocommerce-PaymentMethod woocommerce-PaymentMethod--<?php echo esc_attr($column_id); ?> payment-method-<?php echo esc_attr($column_id); ?>"><span class="nobr"><?php echo esc_html($column_name); ?></span></th>

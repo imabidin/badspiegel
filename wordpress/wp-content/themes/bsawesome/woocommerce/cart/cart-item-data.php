@@ -48,7 +48,7 @@ $hidden_items = array_slice($item_data, $visible_count);
 $has_more_items = !empty($hidden_items);
 ?>
 
-<div class="mb-3">
+<div class="mb-">
 	<?php // Header
 	?>
 	<div class="row g-1">

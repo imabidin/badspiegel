@@ -6,7 +6,7 @@
  * Displays hamburger menu toggle button for mobile navigation control
  * with Bootstrap offcanvas integration for responsive menu display.
  *
- * @version 2.6.0
+ * @version 2.7.0
  *
  * Features:
  * - Mobile-only navigation toggle button (hidden on desktop)

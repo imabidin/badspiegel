@@ -6,7 +6,7 @@
  * Provides advanced subcategory display functionality with SEO-optimized URLs,
  * image filtering, and responsive grid layout for enhanced category navigation.
  *
- * @version 2.6.0
+ * @version 2.7.0
  *
  * Features:
  * - SEO-friendly URL structure (removes parent category slugs)

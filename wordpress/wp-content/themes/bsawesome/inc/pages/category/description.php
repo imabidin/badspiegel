@@ -6,7 +6,7 @@
  * Provides second and third description fields for WooCommerce product categories
  * with rich text editor integration and smart display management.
  *
- * @version 2.6.0
+ * @version 2.7.0
  *
  * Features:
  * - Multiple WYSIWYG editor fields for categories (second and third descriptions)

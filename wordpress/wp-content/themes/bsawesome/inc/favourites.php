@@ -6,51 +6,11 @@
  * Comprehensive favourites management system supporting both authenticated and guest users
  * with WooCommerce integration and product configuration support.
  *
- * @version 2.6.0
+ * @version 2.7.0
  *
  * @todo Add bulk operations for favourites management
  * @todo Implement favourites import/export functionality
  * @todo Add favourites analytics and tracking
- *
- * Features:
- * - Server-side state rendering for optimal performance
- * - Single AJAX endpoint architecture for simplified debugging
- * - Optimistic UI updates for enhanced user experience
- * - Guest favourites with seamless user merge on login/registration
- * - Product configuration code support for complex products
- * - Bulk database operations for improved performance
- * - WordPress object caching integration
- * - Rate limiting and security measures
- * - Cross-product configuration code handling
- * - Auto-cart integration from favourites
- * - Responsive template system with Bootstrap classes
- *
- * Security Measures:
- * - CSRF protection via WordPress nonce verification
- * - Input sanitization for all user data
- * - Product validation before favourites operations
- * - Session-based guest favourites with proper isolation
- * - XSS prevention in template rendering
- * - SQL injection protection through prepared statements
- *
- * Performance Features:
- * - Bulk favourite state queries (single DB call for multiple products)
- * - WordPress object cache integration with smart invalidation
- * - Optimized page product detection for large catalogs
- * - Lazy loading of favourite states only when needed
- * - Database query optimization with proper indexing
- * - Memory-efficient pagination for large favourite lists
- *
- * Supported Request Types:
- * - favourite_toggle: Add/remove product from favourites
- * - add_favourite_with_config: Add configured product to favourites
- * - get_favourite_nonce: Retrieve fresh nonce for AJAX requests
- *
- * Required Dependencies:
- * - WooCommerce: Product management and session handling
- * - WordPress: Core functionality, caching, and database
- * - BSAwesome Theme: Configuration system and pricing functions
- * - inc/session.php: Session initialization for guest users
  */
 
 // =============================================================================

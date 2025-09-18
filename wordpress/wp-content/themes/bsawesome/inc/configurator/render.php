@@ -412,8 +412,10 @@ function render_product_configurator() {
             </div>
 
             <!-- Configuration Summary and Total Price Display // add "show" class to collapse to show summary on pageload -->
-            <div id="productConfiguratorSummary" class="collapse"></div>
-            <div id="productConfiguratorTotal" class="mb-3"></div>
+            <div class="shadow-sm">
+                <div id="productConfiguratorSummary" class="collapse"></div>
+                <div id="productConfiguratorTotal" class="mb-3"></div>
+            </div>
 
         <?php } else {
             // SINGLE-STEP INTERFACE for simple configurations

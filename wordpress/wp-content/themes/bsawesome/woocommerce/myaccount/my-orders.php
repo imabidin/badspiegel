@@ -38,9 +38,9 @@ if ($customer_orders) : ?>
 	<h2><?php echo apply_filters('woocommerce_my_account_my_orders_title', esc_html__('Recent orders', 'woocommerce')); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		?></h2>
 
-	<table class="table table-light shop_table table shop_table_responsive my_account_orders">
+	<table class="table table-light shop_table shadow-sm table shop_table_responsive my_account_orders" style="--bs-table-border-color: var(--bs-body-bg);">
 
-		<thead style="--bs-table-bg: var(--bs-dark-bg-subtle);">
+		<thead>
 			<tr>
 				<?php foreach ($my_orders_columns as $column_id => $column_name) : ?>
 					<th class="<?php echo esc_attr($column_id); ?>"><span class="nobr"><?php echo esc_html($column_name); ?></span></th>

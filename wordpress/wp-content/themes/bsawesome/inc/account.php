@@ -3,24 +3,7 @@
 /**
  * User Account Management and Authentication System
  *
- * Features:
- * - AJAX-based user authentication and registration
- * - Comprehensive security measures including rate limiting and brute force protection
- * - Email validation with blacklist protection
- * - Security headers for AJAX endpoints
- * - Failed login attempt monitoring and IP blocking
- * - WooCommerce integration for customer management
- *
- * Security Measures:
- * - CSRF protection via nonce validation
- * - Rate limiting for login and registration attempts
- * - IP-based and user-based lockout mechanisms
- * - Comprehensive logging for security monitoring
- * - Validation against common attack patterns
- *
- * @package BSAwesome
- * @subpackage Authentication
- * @version 2.6.0
+ * @version 2.7.0
  */
 
 // =============================================================================

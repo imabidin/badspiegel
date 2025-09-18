@@ -6,7 +6,7 @@
  * Renders structured contact information in the footer with responsive
  * layout, accessibility features, and Font Awesome icon integration.
  *
- * @version 2.6.0
+ * @version 2.7.0
  *
  * Features:
  * - Responsive contact information layout with Bootstrap grid

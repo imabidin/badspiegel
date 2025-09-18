@@ -6,7 +6,7 @@
  * Advanced cross-selling implementation using WooCommerce shortcodes and product attributes.
  * Provides modular, configurable cross-selling based on product characteristics.
  *
- * @version 2.5.1
+ * @version 2.7.0
  *
  * @todo Add more attribute configurations as product range expands
  * @todo Implement A/B testing for cross-selling effectiveness

@@ -13,7 +13,7 @@ if (!defined('ABSPATH')) {
  *
  * @package BSAwesome
  * @subpackage Plugins
- * @version 2.6.0
+ * @version 2.7.0
  *
  * Technical Implementation:
  * - Singleton pattern for optimal memory usage

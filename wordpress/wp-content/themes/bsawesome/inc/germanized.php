@@ -6,9 +6,7 @@
  * Provides Bootstrap-compatible styling modifications for WooCommerce Germanized plugin
  * checkout tables. Ensures consistent theme styling across German e-commerce requirements.
  *
- * @package BSAwesome
- * @subpackage Germanized
- * @version 2.6.0
+ * @version 2.7.0
  *
  * @return void Outputs modified checkout tax table HTML with Bootstrap classes
  */

@@ -6,7 +6,7 @@
  * Development tool for debugging product configuration options by outputting
  * raw and processed option data to the browser console for analysis.
  *
- * @version 2.6.0
+ * @version 2.7.0
  *
  * Features:
  * - Configurable option key debugging with easy on/off switching

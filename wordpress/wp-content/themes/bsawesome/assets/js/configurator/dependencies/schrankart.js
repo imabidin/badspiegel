@@ -1,7 +1,7 @@
 /**
- * @version 2.6.0
+ * @version 2.7.0
  *
- * @note Seems to be final, no further changes if not needed
+ * @note Seems to be final, no more changes needed, unless order bugs arise
  */
 
 import { dependenciesValuesXcontainer } from "./../dependencies.js";
@@ -13,39 +13,86 @@ document.addEventListener("DOMContentLoaded", () => {
    *
    * TODO FIX THIS
    */
-  //   dependenciesValuesXvalues(
-  //     "schrankart",
-  //     (value) => {
-  //       return (
-  //         value === "halbeinbau-teilunterputz"
-  //       );
-  //     },
-  //     "einbaurahmen",
-  //     (value) => {
-  //       return (
-  //         value === ""
-  //       );
-  //     }
-  //   );
-
+  dependenciesValuesXcontainer(
+    "schrankart",
+    value => {
+      return value === "einbau_unterputz";
+    },
+    "einbaurahmen"
+  );
   /**
    * Einbaurahmen Tiefe Container - nur bei Halbeinbau sichtbar
    */
   dependenciesValuesXcontainer(
-    "einbaurahmen",
+    "schrankart",
     value => {
-      return value === "ja";
+      return value === "halbeinbau_teilunterputz";
     },
     "einbaurahmen_tiefe"
   );
-  dependenciesValuesXcontainer(
-    "einbaurahmen",
-    value => {
-      return value === "ja";
-    },
-    "einbaurahmen_vorab"
-  );
+  /**
+   * Einbaurahmen Vorab Container - kombinierte Abhängigkeit
+   * Wird nur gezeigt wenn BEIDE Bedingungen erfüllt sind:
+   * 1. schrankart = "halbeinbau_teilunterputz" UND
+   * 2. einbaurahmen = "ja"
+   *
+   * Löst das Problem der doppelten Event-Handler die zu Zurücksetzen/Neusetzen führen
+   */
+  function handleEinbaurahmenVorabVisibility() {
+    const container = document.getElementById('option_einbaurahmen_vorab');
+    if (!container) return;
 
+    const schrankartInput = document.querySelector('input[name="schrankart"]:checked');
+    const einbaurahmenInput = document.querySelector('input[name="einbaurahmen"]:checked');
+
+    const isHalbeinbau = schrankartInput?.value === "halbeinbau_teilunterputz";
+    const isEinbaurahmenJa = einbaurahmenInput?.value === "ja";
+
+    const shouldShow = isHalbeinbau || isEinbaurahmenJa;
+
+    if (shouldShow) {
+      container.classList.remove("d-none");
+
+      // Auto-select first valid option if none selected
+      const inputs = container.querySelectorAll("input");
+      const hasSelection = Array.from(inputs).some(input => input.checked);
+
+      if (!hasSelection) {
+        const firstInput = inputs[0];
+        if (firstInput) {
+          firstInput.checked = true;
+          firstInput.dispatchEvent(new Event("change", { bubbles: true }));
+        }
+      }
+    } else {
+      container.classList.add("d-none");
+
+      // Clear selections
+      const inputs = container.querySelectorAll("input");
+      inputs.forEach(input => {
+        input.checked = false;
+      });
+
+      // Select empty option if available
+      const emptyOption = container.querySelector('input[value=""]');
+      if (emptyOption) {
+        emptyOption.checked = true;
+        emptyOption.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+    }
+  }
+
+  // Event Listener für beide Trigger
+  document.body.addEventListener("change", event => {
+    const target = event.target;
+    if (target.matches('input[name="schrankart"]') || target.matches('input[name="einbaurahmen"]')) {
+      // Kleine Verzögerung um sicherzustellen dass alle Werte aktualisiert sind
+      setTimeout(handleEinbaurahmenVorabVisibility, 10);
+    }
+  });
+
+  // Initial run
+  handleEinbaurahmenVorabVisibility();
   /**
    * Einbaurahmen Tiefe Min/Max von Breite-Input ableiten
    */

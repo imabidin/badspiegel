@@ -1,4 +1,4 @@
-<?php
+<?php defined('ABSPATH') || exit;
 
 /**
  * Modal Content AJAX Handler - DRY Improved Version
@@ -7,57 +7,11 @@
  * security measures, rate limiting, and performance optimizations. This is an
  * improved, modular version that follows DRY principles for better maintainability.
  *
- * @version 2.6.0
+ * @version 2.7.0
  *
  * @todo improve performance, maybe preload all files if debug is false
  *
- * Features:
- * - Modular, DRY-compliant architecture
- * - Secure file loading with path validation
- * - Rate limiting to prevent abuse
- * - WordPress nonce verification
- * - Content caching for performance
- * - Comprehensive error handling
- * - XSS and directory traversal protection
- * - Image modal support with WordPress shortcodes
- * - Unified error handling and validation
- * - Chronologically ordered functions for better dependency management
- *
- * Security Measures:
- * - CSRF protection via WordPress nonce verification
- * - File extension whitelist (HTML only)
- * - Path sanitization and validation
- * - Rate limiting (30 requests per minute per IP)
- * - Directory traversal prevention
- * - File existence and readability checks
- * - Session-based rate limiting with IP tracking
- *
- * Performance Features:
- * - WordPress object caching with TTL
- * - Cache invalidation based on file modification time
- * - Efficient request validation pipeline
- * - Minimal memory footprint through modular functions
- *
- * Supported Request Types:
- * - File modal requests (HTML content)
- * - Image modal requests (WordPress attachments)
- *
- * Required POST Parameters:
- * File Requests:
- * - action: 'load_modal_file'
- * - nonce: WordPress nonce for verification
- * - file_name: Relative path to the content file
- *
- * Image Requests:
- * - action: 'load_image_modal'
- * - nonce: WordPress nonce for verification
- * - image_id: WordPress attachment ID
  */
-
-// Prevent direct access
-if (!defined('ABSPATH')) {
-    exit('Direct access denied.');
-}
 
 // =============================================================================
 // AJAX HOOKS REGISTRATION

@@ -6,7 +6,7 @@
  * Custom product attributes table with organized sections and Bootstrap styling.
  * Replaces WooCommerce default attribute display with categorized sections.
  *
- * @version 2.6.0
+ * @version 2.7.0
  *
  * @todo Add new attribute headings as product range expands
  * @todo Implement responsive table breakpoints for mobile devices
@@ -50,7 +50,24 @@
 // HOOK REGISTRATION
 // =============================================================================
 
-remove_action('woocommerce_product_additional_information', 'wc_display_product_attributes', 10);
+/**
+ * Initialize custom product attributes display
+ * Ensures WooCommerce is loaded before registering hooks
+ */
+function init_custom_product_attributes() {
+    if (!class_exists('WooCommerce')) {
+        return;
+    }
+
+    remove_action('woocommerce_product_additional_information', 'wc_display_product_attributes', 10);
+    add_action('woocommerce_product_additional_information', 'custom_wc_display_product_attributes', 10);
+}
+
+// Hook initialization to run after WooCommerce is loaded
+add_action('woocommerce_init', 'init_custom_product_attributes');
+// Fallback for when WooCommerce is loaded early
+add_action('init', 'init_custom_product_attributes', 20);
+
 // =============================================================================
 // ATTRIBUTE DISPLAY FUNCTIONS
 // =============================================================================
@@ -87,7 +104,12 @@ remove_action('woocommerce_product_additional_information', 'wc_display_product_
  * custom_wc_display_product_attributes($product);
  * // Renders categorized attribute tables
  */
-function custom_wc_display_product_attributes($product) {
+function custom_wc_display_product_attributes($product = null) {
+    // Use global product if parameter is empty
+    if (!$product) {
+        global $product;
+    }
+
     if (!$product) {
         return;
     }

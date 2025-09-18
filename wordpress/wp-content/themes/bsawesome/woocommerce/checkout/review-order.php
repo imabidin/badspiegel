@@ -18,8 +18,8 @@
 
 defined('ABSPATH') || exit;
 ?>
-<table class="table table-light shop_table woocommerce-checkout-review-order-table">
-	<thead style="--bs-table-bg: var(--bs-dark-bg-subtle);">
+<table style="--bs-table-border-color: var(--bs-body-bg);" class="table table-light shop_table shadow-sm woocommerce-checkout-review-order-table" style="--bs-table-border-color: var(--bs-body-bg);">
+	<thead>
 		<tr>
 			<th class="product-name"><?php esc_html_e('Product', 'woocommerce'); ?></th>
 			<th class="product-total text-end"><?php esc_html_e('Subtotal', 'woocommerce'); ?></th>
@@ -34,7 +34,7 @@ defined('ABSPATH') || exit;
 
 			if ($_product && $_product->exists() && $cart_item['quantity'] > 0 && apply_filters('woocommerce_checkout_cart_item_visible', true, $cart_item, $cart_item_key)) {
 		?>
-				<tr class="<?php echo esc_attr(apply_filters('woocommerce_cart_item_class', 'cart_item', $cart_item, $cart_item_key)); ?>">
+				<tr class="<?php echo esc_attr(apply_filters('woocommerce_cart_item_class', 'cart_item', $cart_item, $cart_item_key)); ?>" style="border-color: var(--bs-body-bg);  border-bottom-width: .5rem;">
 					<td class="product-name">
 						<?php echo wp_kses_post(apply_filters('woocommerce_cart_item_name', $_product->get_name(), $cart_item, $cart_item_key)) . '&nbsp;'; ?>
 						<?php echo apply_filters('woocommerce_checkout_cart_item_quantity', ' <strong class="product-quantity">' . sprintf('&times;&nbsp;%s', $cart_item['quantity']) . '</strong>', $cart_item, $cart_item_key); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

@@ -7,10 +7,7 @@
  * Includes conditional loading based on page types, proper versioning for cache
  * busting, and localization of JavaScript variables for AJAX functionality.
  *
- * @package BSAwesome
- * @subpackage Assets
- * @since 1.0.0
- * @version 2.6.0
+ * @version 2.7.0
  */
 
 /**
@@ -19,7 +16,6 @@
  * Loads all necessary CSS and JavaScript files with proper dependencies,
  * versioning, and conditional loading based on page context.
  *
- * @since 1.0.0
  * @return void
  */
 function assets() {

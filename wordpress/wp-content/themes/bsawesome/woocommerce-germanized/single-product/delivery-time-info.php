@@ -22,7 +22,7 @@ if (! defined('ABSPATH')) {
 global $product;
 ?>
 
-<div class="product-short-infos fw-medium bg-light p-3 mt-3">
+<div class="product-short-infos fw-medium bg-light p-3 mt-3 shadow-sm">
 	<?php do_action('woocommerce_germanized_before_product_legal_info'); ?>
 	<?php if (wc_gzd_get_gzd_product($product)->get_delivery_time_html()) : ?>
 		<p class="product-delivery-info"><span class="link-body-emphasis" role="button" tabindex="0" data-modal-link="versand_de" data-modal-title="Versand & Lieferung"><i class="fa-sharp fa-light fa-clock fa-sm fa-fw me-2" aria-hidden="true"></i><?php echo wp_kses_post(wc_gzd_get_product($product)->get_delivery_time_html()); ?></span></p>

@@ -6,7 +6,7 @@
  * Development tool for displaying current Bootstrap 5 breakpoint information
  * in the browser viewport to assist with responsive design testing.
  *
- * @version 2.6.0
+ * @version 2.7.0
  *
  * Features:
  * - Real-time Bootstrap 5 breakpoint display

@@ -183,6 +183,28 @@ if (is_array($pagination_links)) {
 		return $expanded;
 	}
 
+	// Function to get URL for page 1 without /page/1 suffix
+	function get_page_1_url($base) {
+		// Remove /page/%#%/ pattern from base URL to get clean category URL
+		$clean_url = preg_replace('/\/page\/[^\/]+\/?$/', '', $base);
+		// Also handle cases where %#% is at the end
+		$clean_url = str_replace('/%#%', '', $clean_url);
+		// Ensure trailing slash for consistency
+		return trailingslashit($clean_url);
+	}
+
+	// Function to fix prev/next links that point to page/1
+	function fix_page_1_in_link($link, $base) {
+		// Check if this link points to /page/1/
+		if (preg_match('/\/page\/1\//', $link)) {
+			$clean_url = get_page_1_url($base);
+			// Replace the page/1/ URL with clean category URL
+			$fixed_link = preg_replace('/href="[^"]*\/page\/1\/"/', 'href="' . esc_url($clean_url) . '"', $link);
+			return $fixed_link;
+		}
+		return $link;
+	}
+
 	// Function to count hidden pages between two visible pages
 	function count_hidden_between($visible_pages, $start, $end) {
 		if (!$start || !$end || $end <= $start) return 0;
@@ -216,7 +238,8 @@ if (is_array($pagination_links)) {
 	// First render prev/next if they exist
 	foreach ($pages as $page) {
 		if ($page['type'] === 'prev') {
-			echo '<li class="page-item">' . str_replace('page-numbers', 'page-link', $page['link']) . '</li>';
+			$fixed_link = fix_page_1_in_link($page['link'], $base);
+			echo '<li class="page-item">' . str_replace('page-numbers', 'page-link', $fixed_link) . '</li>';
 			break;
 		}
 	}
@@ -272,20 +295,10 @@ if (is_array($pagination_links)) {
 			if ($p === $current) {
 				echo '<li class="page-item active ' . $display_class . '"><span aria-current="page" class="page-link current">' . $p . '</span></li>';
 			} else {
-				// Find original link from pages array or construct
-				$page_link = null;
-				foreach ($pages as $page) {
-					if ($page['type'] === 'page' && $page['page_num'] === $p) {
-						$page_link = $page['link'];
-						break;
-					}
-				}
-				if (!$page_link) {
-					// Construct link if not found
-					$page_url = str_replace('%#%', $p, $base); // <-- KORREKTUR
-					$page_link = '<a class="page-link" href="' . esc_url($page_url) . '">' . $p . '</a>';
-				}
-				echo '<li class="page-item ' . $display_class . '">' . str_replace('page-numbers', 'page-link', $page_link) . '</li>';
+				// For page 1, use clean category URL without /page/1
+				$page_1_url = get_page_1_url($base);
+				$page_link = '<a class="page-link" href="' . esc_url($page_1_url) . '">' . $p . '</a>';
+				echo '<li class="page-item ' . $display_class . '">' . $page_link . '</li>';
 			}
 
 			// Find next visible page for each breakpoint
@@ -447,18 +460,24 @@ if (is_array($pagination_links)) {
 			if ($p === $current) {
 				echo '<li class="page-item active ' . $display_class . '"><span aria-current="page" class="page-link current">' . $p . '</span></li>';
 			} else {
-				// Find original link from pages array or construct
-				$page_link = null;
-				foreach ($pages as $page) {
-					if ($page['type'] === 'page' && $page['page_num'] === $p) {
-						$page_link = $page['link'];
-						break;
+				// Special handling for page 1 - use clean category URL
+				if ($p === 1) {
+					$page_1_url = get_page_1_url($base);
+					$page_link = '<a class="page-link" href="' . esc_url($page_1_url) . '">' . $p . '</a>';
+				} else {
+					// Find original link from pages array or construct
+					$page_link = null;
+					foreach ($pages as $page) {
+						if ($page['type'] === 'page' && $page['page_num'] === $p) {
+							$page_link = $page['link'];
+							break;
+						}
 					}
-				}
-				if (!$page_link) {
-					// Construct link if not found
-					$page_url = str_replace('%#%', $p, $base); // <-- KORREKTUR
-					$page_link = '<a class="page-link" href="' . esc_url($page_url) . '">' . $p . '</a>';
+					if (!$page_link) {
+						// Construct link if not found
+						$page_url = str_replace('%#%', $p, $base);
+						$page_link = '<a class="page-link" href="' . esc_url($page_url) . '">' . $p . '</a>';
+					}
 				}
 				echo '<li class="page-item ' . $display_class . '">' . str_replace('page-numbers', 'page-link', $page_link) . '</li>';
 			}
@@ -468,18 +487,24 @@ if (is_array($pagination_links)) {
 			if ($p === $current) {
 				echo '<li class="page-item active ' . $display_class . '"><span aria-current="page" class="page-link current">' . $p . '</span></li>';
 			} else {
-				// Find original link from pages array or construct
-				$page_link = null;
-				foreach ($pages as $page) {
-					if ($page['type'] === 'page' && $page['page_num'] === $p) {
-						$page_link = $page['link'];
-						break;
+				// Special handling for page 1 - use clean category URL
+				if ($p === 1) {
+					$page_1_url = get_page_1_url($base);
+					$page_link = '<a class="page-link" href="' . esc_url($page_1_url) . '">' . $p . '</a>';
+				} else {
+					// Find original link from pages array or construct
+					$page_link = null;
+					foreach ($pages as $page) {
+						if ($page['type'] === 'page' && $page['page_num'] === $p) {
+							$page_link = $page['link'];
+							break;
+						}
 					}
-				}
-				if (!$page_link) {
-					// Construct link if not found
-					$page_url = str_replace('%#%', $p, $base); // <-- KORREKTUR
-					$page_link = '<a class="page-link" href="' . esc_url($page_url) . '">' . $p . '</a>';
+					if (!$page_link) {
+						// Construct link if not found
+						$page_url = str_replace('%#%', $p, $base);
+						$page_link = '<a class="page-link" href="' . esc_url($page_url) . '">' . $p . '</a>';
+					}
 				}
 				echo '<li class="page-item ' . $display_class . '">' . str_replace('page-numbers', 'page-link', $page_link) . '</li>';
 			}
@@ -489,7 +514,8 @@ if (is_array($pagination_links)) {
 	// Render next button if it exists
 	foreach ($pages as $page) {
 		if ($page['type'] === 'next') {
-			echo '<li class="page-item">' . str_replace('page-numbers', 'page-link', $page['link']) . '</li>';
+			$fixed_link = fix_page_1_in_link($page['link'], $base);
+			echo '<li class="page-item">' . str_replace('page-numbers', 'page-link', $fixed_link) . '</li>';
 			break;
 		}
 	}
